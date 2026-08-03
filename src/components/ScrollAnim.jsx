@@ -42,7 +42,7 @@ export default function ScrollAnim({
   stagger = 0,
   start = 'top 85%',
   end = 'bottom 15%',
-  once = true,
+  once = false,
   markers = false,
   className = '',
   style,
