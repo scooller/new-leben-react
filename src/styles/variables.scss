@@ -1,0 +1,69 @@
+// ============================================================
+// SCSS Variables — New Leben Design System
+// ============================================================
+
+// --- Fonts ---
+$font-primary:   'Lexend Deca', sans-serif;
+$font-secondary: 'Manrope', sans-serif;
+
+$font-weights: (
+  light:    300,
+  regular:  400,
+  medium:   500,
+  semibold: 600,
+  bold:     700,
+);
+
+// --- Brand Colors ---
+$lb-cream:        #f5f2ed;
+$lb-dark:         #1a1a1a;
+$lb-body:         #333333;
+$lb-red:          #d44040;
+$lb-red-light:    #e05a4e;
+$lb-red-dark:     #c22222;
+$lb-green:        #1b5e4a;
+$lb-green-dark:   #38473c;
+$lb-footer:       #1f1f1f;
+
+// --- Neutrals ---
+$lb-gray-100:     #f8f9fa;
+$lb-gray-300:     #dee2e6;
+$lb-gray-400:     #adb5bd;
+$lb-gray-500:     #6c757d;
+$lb-gray-600:     #6b726e;
+$lb-gray-700:     #495057;
+$lb-gray-800:     #343a40;
+$lb-text-muted:   #888888;
+$lb-text-light:   #999999;
+$lb-text-dark:    #2a2a2a;
+
+// --- Bootstrap Overrides ---
+$primary:       $lb-red;
+$secondary:     $lb-green;
+$dark:          $lb-dark;
+$body-bg:       $lb-cream;
+$body-color:    $lb-body;
+$font-family-sans-serif: $font-primary;
+$headings-color: $lb-dark;
+
+// --- Border Radius ---
+$lb-radius-sm:    2px;
+$lb-radius-md:    4px;
+$lb-radius-lg:    100px;
+$lb-radius-pill:  100px;
+
+// --- Shadows ---
+$lb-shadow-soft:    0 4px 24px rgba(0, 0, 0, 0.06);
+$lb-shadow-pill:    0 12px 16px rgba(56, 71, 60, 0.06);
+$lb-shadow-card:    0 8px 32px rgba(0, 0, 0, 0.08);
+
+// --- Breakpoints ---
+$lb-bp-sm:   576px;
+$lb-bp-md:   768px;
+$lb-bp-lg:   992px;
+$lb-bp-xl:   1200px;
+$lb-bp-xxl:  1400px;
+
+// --- Transitions ---
+$lb-transition:     all 0.3s ease;
+$lb-transition-fast: all 0.15s ease;

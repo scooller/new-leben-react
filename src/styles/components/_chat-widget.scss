@@ -1,0 +1,44 @@
+@use '../variables' as *;
+
+.lb-chat-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  z-index: 1080;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+.lb-chat-dialog {
+  position: fixed;
+  bottom: 88px;
+  right: 24px;
+  width: calc(100vw - 48px);
+  max-width: 360px;
+  z-index: 1080;
+  animation: lb-chat-pop 0.2s ease-out;
+}
+
+@keyframes lb-chat-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.lb-chat-avatar {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+}
+
+.lb-chat-body {
+  height: 320px;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.lb-chat-msg {
+  font-size: 14px;
+  line-height: 1.4;
+}

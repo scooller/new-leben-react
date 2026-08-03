@@ -1,0 +1,49 @@
+@use '../variables' as *;
+
+.lb-hero {
+  position: relative;
+  height: 680px;
+  padding: 80px;
+  border-radius: 0 0 120px 120px;
+  overflow: hidden;
+}
+
+.lb-hero-bg-wrap {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 120px 120px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lb-hero-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &:is(video) {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.lb-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.67) 100%);
+}
+
+.lb-hero-title {
+  color: $lb-cream;
+  font-size: 65px;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  max-width: 1044px;
+}
+
+.lb-hero-subtitle {
+  color: $lb-cream;
+  font-size: 13px;
+  font-weight: 400;
+}

@@ -1,0 +1,164 @@
+// ============================================================
+// Global styles — resets, typography, utilities
+// ============================================================
+
+@use 'variables' as *;
+
+// --- Reset ---
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-primary;
+  color: $lb-body;
+  background-color: #fff;
+  line-height: 1.6;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+}
+
+// --- Headings ---
+h1, h2, h3, h4, h5, h6 {
+  color: $lb-dark;
+  font-family: $font-primary;
+  font-weight: 700;
+}
+
+// --- Links ---
+a {
+  color: $lb-red;
+  text-decoration: none;
+  transition: $lb-transition;
+
+  &:hover { color: $lb-red-dark; }
+}
+
+// --- Section spacing ---
+.section { padding-block: 80px; }
+
+// --- Interactive image hover (CSS-only, no JS) ---
+.lb-img-interactive {
+  transition: transform 0.5s ease, filter 0.5s ease;
+  will-change: transform;
+}
+
+.lb-img-trigger {
+  &:hover,
+  &:focus-visible,
+  &:active {
+    .lb-img-interactive {
+      transform: scale(1.06);
+      filter: brightness(1.08);
+    }
+
+    // Subtler zoom for large background images/video
+    .lb-img-interactive.lb-bg-interactive {
+      transform: scale(1.04);
+      filter: brightness(1.05);
+    }
+  }
+}
+
+// --- Utility: uppercase tracking ---
+.text-uppercase-tracking {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+// --- Utility: pill button ---
+.btn-pill {
+  border-radius: $lb-radius-pill !important;
+  padding: 16px 28px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+// --- Global button micro-interactions (hover / focus-visible / active) ---
+.btn,
+button[class],
+button[type] {
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba($lb-red, 0.5);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+    filter: brightness(0.95);
+  }
+
+  // Buttons inside pill forms shouldn't lift — just press
+  &.lb-cta-btn,
+  &.lb-proj-cta-btn {
+    &:hover { transform: none; }
+    &:active { transform: scale(0.96); }
+  }
+
+  // Icon-only round buttons — just press, no lift
+  &.lb-btn-search,
+  &.lb-chat-bubble {
+    &:hover { transform: none; }
+    &:active { transform: scale(0.92); }
+  }
+}
+
+// --- GSAP animation initial states ---
+[data-animate] {
+  opacity: 0;
+}
+
+// --- Custom scrollbar ---
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: $lb-cream; }
+::-webkit-scrollbar-thumb {
+  background: $lb-gray-400;
+  border-radius: 4px;
+}
+
+// --- Loader ---
+.lb-loader { transition: opacity 0.1s linear; }
+
+.lb-loader-logo {
+  animation: lb-pulse 1.2s ease-in-out infinite;
+}
+
+.lb-loader-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $lb-gray-300;
+  border-top-color: $lb-red;
+  border-radius: 50%;
+  animation: lb-spin 0.7s linear infinite;
+}
+
+@keyframes lb-spin { to { transform: rotate(360deg); } }
+@keyframes lb-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+#nosotros{
+  padding-top: 10rem;
+}

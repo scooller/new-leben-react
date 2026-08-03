@@ -1,0 +1,94 @@
+@use '../variables' as *;
+
+.lb-footer {
+  background: $lb-footer;
+}
+
+.lb-legal {
+  font-size: 11px;
+  color: #fff;
+}
+
+.lb-badge {
+  width: 52px;
+  height: 52px;
+  gap: 2px;
+  border-color: #e5e7eb !important;
+}
+
+.lb-badge-label {
+  font-size: 7px;
+  color: #fff;
+}
+
+// --- Footer icons (lucide-animated, motion handles hover animation) ---
+
+.lb-badge-icon,
+.lb-footer-icon {
+  color: #fff;
+}
+
+// --- Social links (fix: red-on-red was caused by global a:hover override) ---
+
+.lb-social {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.25s ease, color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+    background: $lb-red;
+  }
+
+  &:active {
+    background: $lb-red-dark;
+  }
+}
+
+.lb-badge {
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  &:hover, &:active {
+    border-color: $lb-red !important;
+  }
+}
+
+.lb-footer-icon {
+  transition: color 0.3s ease;
+}
+
+a:has(> .lb-footer-icon) {
+  &:hover, &:active {
+    > .lb-footer-icon {
+      color: $lb-red;
+    }
+  }
+}
+
+.lb-col-w { width: 230px; }
+
+.lb-contact {
+  font-size: 13px;
+  color: #fff;
+  line-height: 1.6;
+}
+
+a {
+  .lb-contact { color: inherit; }
+
+  &:hover .lb-contact,
+  &:active .lb-contact { color: $lb-red; }
+}
+
+.lb-social {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease;
+
+  &:hover { background: $lb-red; }
+}

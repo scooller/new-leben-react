@@ -1,0 +1,587 @@
+// ============================================================
+// Proyecto Detalle — individual project page styles
+// ============================================================
+
+@use '../variables' as *;
+
+// --- Shared ---
+.lb-proj-det-section-title {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: $lb-dark;
+}
+
+.lb-proj-det-overview-text {
+  color: $lb-body;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+// Hero reuses lb-proj-hero classes from _proyectos.scss — no duplicate CSS.
+
+// --- Tabs Bar (sticky) ---
+.lb-proj-det-tabs-bar {
+  background: #fff;
+  z-index: 1020;
+  border-bottom: 1px solid $lb-gray-300;
+  transition: box-shadow 0.3s ease;
+}
+
+.lb-proj-det-tabs-stuck {
+  box-shadow: $lb-shadow-soft;
+}
+
+.lb-proj-det-tabs-row {
+  height: 56px;
+  gap: 1rem;
+
+  @media (max-width: $lb-bp-md) {
+    overflow-x: auto;
+    height: auto;
+    padding-block: 12px;
+  }
+}
+
+.lb-proj-det-tab {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-proj-det-tab-label {
+  font-size: 0.7rem;
+  color: $lb-text-muted;
+  letter-spacing: 1px;
+}
+
+.lb-proj-det-tab-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $lb-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// --- Overview ---
+.lb-proj-det-overview {
+  padding-block: 80px;
+}
+
+.lb-proj-det-collage {
+  display: flex;
+  gap: 1rem;
+  height: 500px;
+
+  @media (max-width: $lb-bp-md) {
+    height: auto;
+    flex-direction: column;
+  }
+}
+
+.lb-proj-det-collage-left {
+  flex: 0 0 48%;
+  overflow: hidden;
+  border-radius: $lb-radius-md;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: $lb-bp-md) {
+    flex: 0 0 auto;
+    height: 280px;
+  }
+}
+
+.lb-proj-det-collage-right {
+  flex: 1;
+
+  .lb-img-trigger {
+    overflow: hidden;
+    border-radius: $lb-radius-md;
+    flex: 1;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: $lb-bp-md) {
+    flex-direction: row;
+
+    .lb-img-trigger {
+      height: 200px;
+      width: calc(50% - 0.5rem);
+    }
+  }
+}
+
+.lb-proj-det-stats {
+  gap: 2rem;
+}
+
+.lb-proj-det-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $lb-dark;
+}
+
+.lb-proj-det-stat-label {
+  font-size: 0.8rem;
+  color: $lb-text-muted;
+}
+
+// --- Amenities Strip ---
+.lb-proj-det-amenities {
+  padding-block: 48px;
+  background: $lb-gray-100;
+  border-block: 1px solid $lb-gray-300;
+}
+
+.lb-proj-det-amenities--icons {
+  background: #fff;
+}
+
+.lb-proj-det-amenities-row {
+  @media (max-width: $lb-bp-md) {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+}
+
+.lb-proj-det-amenity {
+  flex: 0 0 auto;
+  min-width: 110px;
+}
+
+.lb-proj-det-amenity-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+
+  i {
+    font-size: 24px;
+    color: $lb-green;
+  }
+}
+
+.lb-proj-det-amenities--icons .lb-proj-det-amenity-icon {
+  width: 40px;
+  height: 40px;
+  background: $lb-cream;
+  border-radius: 50%;
+}
+
+.lb-proj-det-amenity-label {
+  font-size: 0.8rem;
+  color: $lb-body;
+  font-weight: 500;
+}
+
+// --- Floor Plans ---
+.lb-proj-det-floor-plans {
+  padding-block: 80px;
+}
+
+.lb-proj-det-blueprint-wrap {
+  overflow: hidden;
+  border-radius: $lb-radius-md;
+  background: $lb-cream;
+  padding: 2.5rem;
+}
+
+.lb-proj-det-blueprint {
+  border-radius: $lb-radius-md;
+}
+
+// --- Vista 360 / Recorrido Virtual ---
+// Figma 2093:4 — white bg, red eyebrow, dark title, underline tabs
+.lb-proj-det-vista360 {
+  padding-block: 80px;
+  background: #fff;
+
+  .lb-proj-det-vista360-eyebrow {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: $lb-red;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .lb-proj-det-vista360-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: $lb-dark;
+    line-height: 1.1;
+    margin: 0;
+  }
+}
+
+.lb-proj-det-vista360-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid $lb-gray-300;
+}
+
+.lb-proj-det-vista-tab {
+  height: 56px;
+  padding: 0 32px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  margin-bottom: -1px;
+
+  &:hover {
+    color: $lb-dark;
+  }
+
+  &.active {
+    color: $lb-dark;
+    font-weight: 700;
+    border-bottom-color: $lb-dark;
+  }
+}
+
+.lb-proj-det-vista360-viewer {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+// --- Cotizador ---
+.lb-proj-det-cotizador {
+  padding-block: 80px;
+}
+
+.lb-proj-det-cot-title {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: $lb-dark;
+  max-width: 360px;
+}
+
+.lb-proj-det-filter-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  max-width: 100%;
+  padding: 4px 0;
+  border-bottom: 1px solid $lb-gray-400;
+  font-size: 0.875rem;
+  color: $lb-body;
+  cursor: pointer;
+}
+
+.lb-proj-det-cot-main {
+  align-items: flex-start;
+}
+
+.lb-proj-det-cot-map {
+  flex: 0 0 250px;
+
+  @media (max-width: $lb-bp-lg) {
+    flex: 0 0 100%;
+  }
+}
+
+.lb-proj-det-cot-map-canvas {
+  height: 400px;
+  background: $lb-cream;
+  border: 1px solid $lb-gray-300;
+  border-radius: $lb-radius-md;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb-proj-det-cot-map-pin {
+  opacity: 0.4;
+}
+
+.lb-proj-det-cot-plan-card {
+  min-width: 0;
+}
+
+.lb-proj-det-cot-plan-img {
+  border-radius: $lb-radius-md;
+  background: $lb-cream;
+}
+
+.lb-proj-det-cot-thumb {
+  border: 2px solid transparent;
+  border-radius: $lb-radius-sm;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  overflow: hidden;
+
+  img {
+    display: block;
+    object-fit: cover;
+    border-radius: $lb-radius-sm;
+  }
+
+  &--active {
+    border-color: $lb-red;
+  }
+}
+
+.lb-proj-det-cot-details {
+  flex: 0 0 464px;
+  max-width: 100%;
+
+  @media (max-width: $lb-bp-lg) {
+    flex: 0 0 100%;
+  }
+}
+
+.lb-proj-det-cot-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.lb-proj-det-cot-detail-icon i {
+  font-size: 18px;
+  color: $lb-green;
+}
+
+.lb-proj-det-cot-detail-label {
+  font-size: 0.8rem;
+  color: $lb-text-muted;
+}
+
+.lb-proj-det-cot-detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $lb-dark;
+}
+
+.lb-proj-det-cot-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $lb-dark;
+}
+
+// --- Related Projects Table ---
+.lb-proj-det-related {
+  padding-block: 80px;
+}
+
+.lb-proj-det-table-head,
+.lb-proj-det-table-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr 1.5fr 1.5fr 1.5fr;
+  align-items: center;
+  padding: 16px 24px;
+
+  @media (max-width: $lb-bp-lg) {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 16px 0;
+  }
+}
+
+.lb-proj-det-table-head {
+  border-bottom: 2px solid $lb-dark;
+}
+
+.lb-proj-det-table-hdr {
+  font-size: 0.7rem;
+  color: $lb-text-muted;
+  letter-spacing: 1px;
+}
+
+.lb-proj-det-table-row {
+  border-bottom: 1px solid $lb-gray-300;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: $lb-gray-100;
+  }
+}
+
+.lb-proj-det-table-cell {
+  font-size: 0.9rem;
+}
+
+.lb-proj-det-table-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $lb-red;
+  text-decoration: none;
+
+  &:hover {
+    color: $lb-red-dark;
+  }
+}
+
+// --- Alternatives ---
+.lb-proj-det-alternatives {
+  padding-block: 80px;
+  background: $lb-cream;
+}
+
+.lb-proj-det-alt-card {
+  background: #fff;
+  border-radius: $lb-radius-md;
+  overflow: hidden;
+  box-shadow: $lb-shadow-card;
+}
+
+.lb-proj-det-alt-img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.lb-proj-det-alt-body {
+  padding: 24px;
+}
+
+.lb-proj-det-alt-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $lb-dark;
+  margin-bottom: 8px;
+}
+
+.lb-proj-det-alt-meta {
+  font-size: 0.85rem;
+  color: $lb-text-muted;
+}
+
+.lb-proj-det-alt-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $lb-red;
+}
+
+// --- Spaces Gallery ---
+.lb-proj-det-spaces {
+  padding-block: 80px;
+}
+
+.lb-proj-det-space-img {
+  width: 100%;
+  height: 580px;
+  object-fit: cover;
+
+  @media (max-width: $lb-bp-md) {
+    height: 280px;
+  }
+}
+
+.lb-proj-det-spaces-gallery {
+  .lb-img-trigger {
+    overflow: hidden;
+    border-radius: $lb-radius-md;
+  }
+}
+
+.lb-proj-det-designer-avatar {
+  object-fit: cover;
+  width: 56px;
+  height: 56px;
+}
+
+// --- Location ---
+.lb-proj-det-location {
+  padding-block: 80px;
+}
+
+.lb-proj-det-check-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 16px;
+    color: $lb-green;
+  }
+}
+
+.lb-proj-det-map-img {
+  object-fit: cover;
+}
+
+.lb-proj-det-location {
+  .lb-img-trigger {
+    overflow: hidden;
+    border-radius: $lb-radius-md;
+  }
+}
+
+// --- Bottom Gallery ---
+.lb-proj-det-bottom-gallery {
+  padding-block: 40px;
+}
+
+.lb-proj-det-bottom-img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.lb-proj-det-bottom-gallery {
+  .lb-img-trigger {
+    overflow: hidden;
+    border-radius: $lb-radius-md;
+  }
+}
+
+// --- Team / Agents ---
+.lb-proj-det-team {
+  padding-block: 80px;
+}
+
+.lb-proj-det-team-subtitle {
+  max-width: 600px;
+  font-size: 0.95rem;
+  margin-top: 12px;
+}
+
+.lb-proj-det-agent {
+  background: #fff;
+  border: 1px solid $lb-gray-300;
+  border-radius: $lb-radius-md;
+  padding: 24px;
+  min-width: 280px;
+}
+
+.lb-proj-det-agent-avatar {
+  width: 64px;
+  height: 64px;
+  background: $lb-cream;
+  flex-shrink: 0;
+}
