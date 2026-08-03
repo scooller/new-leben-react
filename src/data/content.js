@@ -44,7 +44,7 @@ export const images = {
   projSuecia: img('proj-suecia.jpg'),
   projPiloto: img('proj-piloto.jpg'),
   projCotizador: img('proj-cotizador.jpg'),
-  projInn: img('inn-hero-lake.jpeg'),
+  projInn: img('inn-hero.png'),
   chevronLeft: img('chevron-left.svg'),
   chevronRight: img('chevron-right.svg'),
   user: img('user.svg'),

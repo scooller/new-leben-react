@@ -5,13 +5,13 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1030;
+  z-index: 90;
   padding: 16px 0;
   transition: background 0.3s ease, backdrop-filter 0.3s ease, padding 0.3s ease;
 }
 
 .lb-navbar-scrolled {
-  background: rgba(15, 15, 15, 0.85);
+  background: rgba(15, 15, 15, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 10px 0;
@@ -30,7 +30,7 @@
   padding: 8px 16px;
   transition: color 0.3s ease;
 
-  &:hover { color: #fff; }
+  &:hover { color: $lb-red; }
 }
 
 .lb-nav-cta {

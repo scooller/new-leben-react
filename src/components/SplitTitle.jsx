@@ -51,8 +51,7 @@ export default function SplitTitle({
         <span key={i} className="lb-split-word" style={{ display: 'inline-block', overflow: 'hidden' }}>
           <span style={{ display: 'inline-block', willChange: 'transform' }}>{word}</span>
         </span>
-      ))}
-      {words.length > 0 && '\u00A0'}
+      )).reduce((acc, el, i) => i === 0 ? [el] : [...acc, '\u00A0', el], [])}
       {children}
     </Tag>
   )

@@ -13,13 +13,26 @@ export default function ProjectHero({ data }) {
     <section className="lb-proj-hero container position-relative d-flex align-items-end">
       {/* — Background image — */}
       <div className="lb-proj-hero-bg-wrap">
-        <img
-          src={data.backgroundImage}
-          alt=""
-          className="lb-proj-hero-bg"
-          fetchPriority="high"
-          decoding="async"
-        />
+        {data.backgroundVideo ? (
+          <video
+            src={data.backgroundVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            type="video/mp4"
+            className="lb-proj-hero-bg"
+            fetchPriority="high"
+          />
+        ) : (
+          <img
+            src={data.backgroundImage}
+            alt=""
+            className="lb-proj-hero-bg"
+            fetchPriority="high"
+            decoding="async"
+          />
+        )}
         <div className="lb-proj-hero-overlay" />
       </div>
 

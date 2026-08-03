@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import { Fancybox } from '@fancyapps/ui'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
@@ -5,8 +7,17 @@ import SplitTitle from '../SplitTitle.jsx'
  * Location section: text + checklist + map image.
  */
 export default function LocationSection({ data }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    Fancybox.bind(el, '[data-fancybox="location-map"]', {})
+    return () => Fancybox.unbind(el)
+  }, [])
+
   return (
-    <section className="lb-proj-det-location container" id="ubicacion">
+    <section className="lb-proj-det-location container" id="ubicacion" ref={ref}>
       <div className="row g-5 align-items-center">
         <ScrollAnim as="div" className="col-lg-5" animation="fade-right">
           <span className="lb-eyebrow text-uppercase d-block mb-2">{data.eyebrow}</span>
@@ -30,7 +41,12 @@ export default function LocationSection({ data }) {
           className="col-lg-7"
           animation="fade-left"
         >
-          <div className="lb-img-trigger" tabIndex={0}>
+          <a
+            href={data.mapImage}
+            data-fancybox="location-map"
+            className="lb-img-trigger d-block"
+            tabIndex={0}
+          >
             <img
               src={data.mapImage}
               alt="Mapa de ubicación"
@@ -38,7 +54,7 @@ export default function LocationSection({ data }) {
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </a>
         </ScrollAnim>
       </div>
     </section>

@@ -1,33 +1,40 @@
 import { useState } from 'react'
+import { Ban } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 
 /**
  * Vista 360° / Recorrido Virtual section.
- * Figma 2093:4 — white bg, red eyebrow, dark title,
- * underline-style tabs, viewer image.
+ * Bootstrap nav-tabs. Tabs without content show empty state.
  */
 export default function Vista360({ data }) {
   const [active, setActive] = useState(0)
+  const images = data.images ?? [data.image]
+  const currentImage = images[active]
+  const hasContent = Boolean(currentImage)
 
   return (
     <section className="lb-proj-det-vista360" id="vista360">
       <div className="container">
-        <ScrollAnim as="div" className="lb-proj-det-vista360-header" animation="fade-up">
+        <ScrollAnim as="div" className="lb-proj-det-vista360-header" animation="fade-up" start="center center" end="bottom top" markers={false}>
           <span className="lb-proj-det-vista360-eyebrow d-block mb-3">{data.eyebrow}</span>
           <h2 className="lb-proj-det-vista360-title">{data.title}</h2>
         </ScrollAnim>
 
-        <div className="lb-proj-det-vista360-tabs mt-4">
+        <ul className="nav nav-tabs lb-proj-det-vista360-tabs mt-4" role="tablist">
           {data.tabs.map((tab, i) => (
-            <button
-              key={tab}
-              className={`lb-proj-det-vista-tab${active === i ? ' active' : ''}`}
-              onClick={() => setActive(i)}
-            >
-              {tab}
-            </button>
+            <li className="nav-item" key={tab} role="presentation">
+              <button
+                className={`nav-link lb-proj-det-vista-tab${active === i ? ' active' : ''}`}
+                onClick={() => setActive(i)}
+                role="tab"
+                aria-selected={active === i}
+                type="button"
+              >
+                {tab}
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
 
         <ScrollAnim
           as="div"
@@ -35,13 +42,20 @@ export default function Vista360({ data }) {
           animation="scale"
           key={active}
         >
-          <img
-            src={data.image}
-            alt={`Recorrido virtual — ${data.tabs[active]}`}
-            className="w-100"
-            loading="lazy"
-            decoding="async"
-          />
+          {hasContent ? (
+            <img
+              src={currentImage}
+              alt={`Recorrido virtual — ${data.tabs[active]}`}
+              className="w-100"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div className="lb-proj-det-vista360-empty d-flex flex-column align-items-center justify-content-center gap-3 py-5">
+              <Ban size={48} className="text-muted" />
+              <p className="text-muted mb-0">Sin contenido por el momento</p>
+            </div>
+          )}
         </ScrollAnim>
       </div>
     </section>

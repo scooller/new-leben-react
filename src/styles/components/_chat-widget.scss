@@ -6,7 +6,7 @@
   right: 24px;
   width: 56px;
   height: 56px;
-  z-index: 1080;
+  z-index: 100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   color: #fff;
 }
@@ -17,7 +17,7 @@
   right: 24px;
   width: calc(100vw - 48px);
   max-width: 360px;
-  z-index: 1080;
+  z-index: 100;
   animation: lb-chat-pop 0.2s ease-out;
 }
 

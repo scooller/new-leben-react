@@ -21,6 +21,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  &:is(video) {
+    position: absolute;
+    inset: 0;
+  }
 }
 
 // Gradient overlay from Figma: transparent at 35% → dark at 100%

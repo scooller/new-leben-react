@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectFloorPlan } from '../../store/slices/projectSlice.js'
+import ScrollAnim from '../ScrollAnim.jsx'
 
 /**
  * Cotizador — visual mockup with static data.
@@ -14,10 +15,12 @@ export default function Cotizador({ data }) {
     <section className="lb-proj-det-cotizador" id="cotizador">
       <div className="container">
         {/* Header + Filters */}
-        <div className="lb-proj-det-cot-header d-flex flex-wrap justify-content-between align-items-start gap-4 mb-4">
-          <h2 className="lb-proj-det-cot-title mb-0">{data.title}</h2>
+        <ScrollAnim as="div" className="row align-items-start g-4 mb-4" animation="fade-up">
+          <div className="col-lg-4">
+            <h2 className="lb-proj-det-cot-title mb-0">{data.title}</h2>
+          </div>
 
-          <div className="lb-proj-det-cot-filters">
+          <div className="col-lg-8 lb-proj-det-cot-filters">
             {Object.entries(data.filters).map(([rowKey, row]) => (
               <div key={rowKey} className="d-flex gap-3 mb-2">
                 {row.map((f) => (
@@ -42,12 +45,12 @@ export default function Cotizador({ data }) {
               <button className="btn btn-outline-dark btn-pill">Borrar filtros</button>
             </div>
           </div>
-        </div>
+        </ScrollAnim>
 
         {/* Main: map + plan + details */}
-        <div className="lb-proj-det-cot-main d-flex gap-4 flex-wrap">
+        <ScrollAnim as="div" className="row g-4 lb-proj-det-cot-main" animation="fade-up" delay={0.1}>
           {/* Location map */}
-          <div className="lb-proj-det-cot-map">
+          <div className="col-lg-3 lb-proj-det-cot-map">
             <div className="lb-proj-det-cot-map-canvas">
               <img
                 src={`${import.meta.env.BASE_URL}images/map-pin.svg`}
@@ -61,7 +64,7 @@ export default function Cotizador({ data }) {
           </div>
 
           {/* Floor plan card */}
-          <div className="lb-proj-det-cot-plan-card flex-grow-1">
+          <div className="col-lg-6 lb-proj-det-cot-plan-card">
             <img
               src={data.floorPlan.image}
               alt="Planta del departamento"
@@ -83,7 +86,7 @@ export default function Cotizador({ data }) {
           </div>
 
           {/* Details grid */}
-          <div className="lb-proj-det-cot-details">
+          <div className="col-lg-3 lb-proj-det-cot-details">
             <div className="lb-proj-det-cot-detail-grid">
               {data.details.map((d) => (
                 <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
@@ -125,7 +128,7 @@ export default function Cotizador({ data }) {
               </button>
             </div>
           </div>
-        </div>
+        </ScrollAnim>
       </div>
     </section>
   )

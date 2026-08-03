@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
@@ -51,6 +51,12 @@ export default function App() {
     return () => window.removeEventListener('load', onLoad)
   }, [dispatch])
 
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!location.hash) window.scrollTo(0, 0)
+  }, [location.pathname, location.hash])
+
   return (
     <>
       <Loader />
@@ -76,6 +82,11 @@ export default function App() {
         <Suspense fallback={null}>
           <ProyectoDetalle />
         </Suspense>
+      } />
+      <Route path="/brokers" element={
+        <main className="d-flex align-items-center justify-content-center vh-100">
+          <p className="text-muted">Próximamente</p>
+        </main>
       } />
       </Routes>
       <ChatWidget />

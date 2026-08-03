@@ -1,19 +1,47 @@
-import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
-const navLinks = [
-  { label: 'Inicio', href: '#inicio' },
-  { label: 'Diferenciadores', href: '#nosotros' },
-  { label: 'Testimonios', href: '#testimonios' },
-  { label: 'Proyectos', route: '/proyectos' },
-  { label: 'Contacto', href: '#contacto' },
+const mainLinks = [
+  { label: 'Cotizar', to: '/proyectos' },
+  { label: 'Brokers', to: '/brokers' },
+  { label: 'Clientes', href: 'https://www.pvi.cl/propietarios/leben/propietarios/login/' },
 ]
+
+// Dynamic page menus shown in dropdown
+const pageMenus = {
+  home: [
+    { label: 'Inicio', href: '#inicio' },
+    { label: 'Diferenciadores', href: '#nosotros' },
+    { label: 'Proyectos', href: '#proyectos' },
+  ],
+  proyectos: [
+    { label: 'Todos los Proyectos', route: '/proyectos' },
+  ],
+  proyectoDetalle: [
+    { label: 'Overview', href: '#overview' },
+    { label: 'Cotizador', href: '#cotizador' },
+    { label: 'Plantas', href: '#plantas' },
+    { label: 'Espacios', href: '#espacios' },
+    { label: 'Ubicación', href: '#ubicacion' },
+    { label: 'Vista 360°', href: '#vista360' },
+    { label: 'Alternativas', href: '#alternativas' },
+    { label: 'Relacionados', href: '#relacionados' },
+  ],
+}
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const dropdownRef = useRef(null)
+  const location = useLocation()
+
+  const dropdownLinks = useMemo(() => {
+    const path = location.pathname
+    if (path === '/proyectos') return pageMenus.proyectos
+    if (path.startsWith('/proyectos/')) return pageMenus.proyectoDetalle
+    return pageMenus.home
+  }, [location.pathname])
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -33,7 +61,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 1030 }}>
+    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
       <div className="container d-flex align-items-center justify-content-between">
         {/* Logo group */}
         <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
@@ -47,14 +75,14 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="d-none d-lg-flex align-items-center gap-2">
-          {navLinks.map((link) =>
-            link.route ? (
-              <Link key={link.label} to={link.route} className="lb-nav-link text-decoration-none">
+        <div className="d-none d-lg-flex align-items-center gap-2 ms-auto">
+          {mainLinks.map((link) =>
+            link.to ? (
+              <Link key={link.label} to={link.to} className="lb-nav-link text-decoration-none">
                 {link.label}
               </Link>
             ) : (
-              <a key={link.href} href={link.href} className="lb-nav-link text-decoration-none">
+              <a key={link.label} href={link.href} className="lb-nav-link text-decoration-none">
                 {link.label}
               </a>
             ),
@@ -63,7 +91,7 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="d-flex align-items-center gap-3">
-          <Link to="/" className="btn btn-danger btn-sm rounded-pill lb-nav-cta text-decoration-none">COTIZAR</Link>
+          {/* <Link to="/" className="btn btn-danger btn-sm rounded-pill lb-nav-cta text-decoration-none">COTIZAR</Link> */}
 
           {/* Hamburger dropdown */}
           <div className="position-relative" ref={dropdownRef}>
@@ -79,7 +107,7 @@ export default function Navbar() {
 
             {dropdownOpen && (
               <div className="lb-dropdown position-absolute end-0 bg-white rounded-3 shadow overflow-hidden">
-                {navLinks.map((link) =>
+                {dropdownLinks.map((link) =>
                   link.route ? (
                     <Link
                       key={link.label}

@@ -51,6 +51,18 @@ a {
 // --- Section spacing ---
 .section { padding-block: 80px; }
 
+// --- Container cap: override Bootstrap max-widths at ≥1900px ---
+@media (min-width: 1900px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1850px;
+  }
+}
+
 // --- Interactive image hover (CSS-only, no JS) ---
 .lb-img-interactive {
   transition: transform 0.5s ease, filter 0.5s ease;

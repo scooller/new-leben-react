@@ -4,6 +4,7 @@
 // ============================================================
 
 const img = (name) => `${import.meta.env.BASE_URL}images/${name}`
+const vid = (name) => `${import.meta.env.BASE_URL}video/${name}`
 
 export const projectDetails = {
   inn: {
@@ -21,7 +22,7 @@ export const projectDetails = {
       title: 'Vive la exclusividad frente al lago',
       subtitle: 'Conexión Urbana & Paisajismo Interior',
       location: 'Puerto Varas',
-      backgroundImage: img('inn-hero-lake.jpeg'),
+      backgroundVideo: vid('hero-inn.mp4'),
       logo: img('inn-logo.png'),
     },
 
@@ -78,7 +79,7 @@ export const projectDetails = {
       eyebrow: 'RECORRIDO VIRTUAL',
       title: 'Explora el proyecto',
       tabs: ['Master Plan', 'Pilotos 360°', 'Vista por piso'],
-      image: img('inn-vista360.jpg'),
+      images: [img('inn-vista360.jpg'), null, null],
     },
 
     // --- Cotizador (visual mock) ---
@@ -188,9 +189,13 @@ export const projectDetails = {
 
     // --- Bottom Gallery ---
     bottomGallery: [
-      img('inn-bottom-1.jpg'),
-      img('inn-bottom-2.jpg'),
-      img('inn-bottom-3.jpg'),
+      img('inn/SAUNA.jpg'),
+      img('inn/PISCINA-DUAL.jpg'),
+      img('inn/PADEL.jpg'),
+      img('inn/LIVING.jpg'),
+      img('inn/02_DEPORTE-NAUTICO.jpg'),
+      img('inn/DEPORTE-NAUTICO.jpg'),
+      img('inn/SAUNA.jpg'),
     ],
 
     // --- Team / Agents ---
@@ -198,9 +203,9 @@ export const projectDetails = {
       title: 'Te acompañamos en todo el proceso',
       subtitle: 'Visitanos en: Vicente Pérez Rosales 991, Puerto Varas. Horarios de sala de venta: Lun a Dom. 10:00 a 14:00hrs y 15:00 a 19:00hrs.',
       agents: [
-        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl' },
-        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl' },
-        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl' },
+        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('avatar-patricia-ramirez.png') },
+        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('avatar-catalina-cid.png') },
+        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('avatar-patricia-singh.png') },
       ],
     },
   },

@@ -1,4 +1,5 @@
 import ScrollAnim from '../ScrollAnim.jsx'
+import AgentCard from './AgentCard.jsx'
 
 /**
  * Team / Sales agents section.
@@ -13,19 +14,15 @@ export default function TeamAgents({ data }) {
 
       <ScrollAnim
         as="div"
-        className="lb-proj-det-agents d-flex flex-wrap justify-content-center gap-4 mt-4"
+        id="asesores"
+        className="row row-cols-1 row-cols-md-3 justify-content-center align-items-center g-4 w-50 mt-4 mx-auto"
         animation="fade-up"
         stagger={0.1}
         delay={0.1}
       >
         {data.agents.map((agent) => (
-          <div key={agent.email} className="lb-proj-det-agent d-flex align-items-center gap-3">
-            <div className="lb-proj-det-agent-avatar rounded-circle" />
-            <div className="d-flex flex-column text-start">
-              <span className="fw-bold">{agent.name}</span>
-              <span className="small">{agent.phone}</span>
-              <a href={`mailto:${agent.email}`} className="small text-decoration-none">{agent.email}</a>
-            </div>
+          <div key={agent.email} className="col-md-4 col-6 d-flex">
+            <AgentCard {...agent} className="w-100" />
           </div>
         ))}
       </ScrollAnim>

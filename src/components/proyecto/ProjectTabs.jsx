@@ -22,7 +22,7 @@ export default function ProjectTabs({ tabs }) {
   return (
     <div
       ref={barRef}
-      className={`lb-proj-det-tabs-bar position-sticky top-0${stuck ? ' lb-proj-det-tabs-stuck' : ''}`}
+      className={`lb-proj-det-tabs-bar position-sticky ${stuck ? ' lb-proj-det-tabs-stuck' : ''}`}
     >
       <div className="container">
         <div className="lb-proj-det-tabs-row d-flex align-items-center">
