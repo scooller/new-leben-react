@@ -76,8 +76,8 @@ src/
 ├── store/
 │   ├── store.js
 │   └── slices/
-│       ├── uiSlice.js          # mobileMenuOpen, isLoaded, activeFilter
-│       └── projectSlice.js
+│       ├── uiSlice.js          # isLoaded, activeFilter
+│       └── projectSlice.js    # slug, project, selectedFloorPlan, notFound
 │
 ├── hooks/
 │   └── useGsapAnimations.js    # GSAP + ScrollTrigger hook
@@ -85,9 +85,6 @@ src/
 ├── data/
 │   ├── content.js              # Site content / images
 │   └── projects.js             # Project data
-│
-├── lib/
-│   └── utils.js
 │
 └── styles/
     ├── main.scss               # Entry: imports Bootstrap + all components
@@ -121,12 +118,8 @@ src/
 
 ### Breakpoints
 
-| Token | Value |
-|---|---|
-| `$lb-bp-sm` | `576px` |
-| `$lb-bp-md` | `768px` |
-| `$lb-bp-lg` | `992px` |
-| `$lb-bp-xl` | `1200px` |
+Uses Bootstrap 5.3 default breakpoints via `@include bs.media-breakpoint-down(md)` mixin.
+No custom breakpoint variables.
 
 ---
 
@@ -159,6 +152,35 @@ src/
 
 All notable changes to this project are documented below.
 Dates in `YYYY-MM-DD` format.
+
+---
+
+### 2026-08-04 — Code Cleanup & Debt Reduction
+
+**Removed**
+- `src/lib/utils.js` (`cn()` identity fn) — inlined `className` in 27 icon files
+- Dead Redux state: `mobileMenuOpen`, `activeVistaTab` + their reducers
+- Dead `markers` prop from `ScrollAnim` (never used in production)
+- Dead `end` prop from `ScrollAnim` (never passed by callers)
+- Dead class props (`className`, `classBody`, `classImg`, `classText`) from `AgentCard`
+- Duplicate `gsap.registerPlugin(ScrollTrigger)` calls — centralized to `main.jsx`
+- Footer `hoverOn`/`hoverOff` closure factories + 5 refs — CSS `:has()` handles hover
+- `ProjectTabs` JS scroll listener — CSS `position: sticky` handles shadow
+- `.lb-proj-det-tabs-stuck` class — merged into base `.lb-proj-det-tabs-bar`
+- Dead SCSS: `$font-weights` map, `$lb-bp-*` vars, `.section` utility, duplicate rules
+
+**Changed**
+- `useGsapAnimations`: 4 refresh strategies → 1 (image load + timeout), fixed timeout leak
+- `Navbar`: 3× duplicated link ternary → `Navlink` helper component
+- `SplitTitle`: `.reduce()` nbsp interleaving → CSS `margin-right`
+- All `@media (max-width: 768px)` → `@include bs.media-breakpoint-down(md)` across 10 SCSS files
+- `ScrollAnim`: `once` default `false` → `true` (matching original intent)
+- `useGsapAnimations`: single strategy (image load + timeout), fixed timeout leak
+
+**Fixed**
+- React key warnings: moved `key` to outer `.col` in `Testimonials` and `Proyectos`
+
+**Net: -204 lines across SCSS + JS**
 
 ---
 

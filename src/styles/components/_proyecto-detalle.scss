@@ -730,6 +730,7 @@
   border-radius: $lb-radius-md;
   box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s ease;
+  border: none;
   
   &:hover {
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
