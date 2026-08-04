@@ -151,8 +151,8 @@ export default function Proyectos() {
           </div>
           <div className="row row-cols-1 row-cols-md-3 g-4">
             {valueProps.items.map((item) => (
-              <div className="col">
-              <div className="bg-white lb-vprop-card d-flex flex-column gap-4 h-100" key={item.num}>
+              <div className="col" key={item.num}>
+              <div className="bg-white lb-vprop-card d-flex flex-column gap-4 h-100">
                 <span className="lb-vprop-num">{item.num}</span>
                 <div className="d-flex flex-column gap-2">
                   <h3 className="mb-0 lb-vprop-card-title">{item.title}</h3>
