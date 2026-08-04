@@ -10,6 +10,8 @@
 }
 
 html {
+  // Fluid root: scales 14px→16px from 320px→1024px viewport
+  font-size: clamp(87.5%, 82% + 0.25vw, 100%);
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,7 +20,7 @@ html {
 body {
   font-family: $font-primary;
   color: $lb-body;
-  background-color: #fff;
+  background-color: $lb-white;
   line-height: 1.6;
   overflow-x: hidden;
   margin: 0;
@@ -26,10 +28,17 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 768px) {
+    overflow-x: hidden;
+  }
 }
 
 #root {
   width: 100%;
+  main {
+    width: 100%;
+    overflow-x: clip;  // clip previene scroll horizontal sin romper position: sticky (a diferencia de overflow: hidden)
+  }
 }
 
 // --- Headings ---
@@ -91,6 +100,57 @@ a {
   text-transform: uppercase;
   letter-spacing: 2px;
 }
+
+// --- Utility: directional section radius ---
+// Apply per-corner: .lb-radius-tl .lb-radius-br etc.
+// Composable — stack on any container that needs the decorative section curve.
+.lb-radius-tl-0 { border-top-left-radius:     0; }
+.lb-radius-tr-0 { border-top-right-radius:    0; }
+.lb-radius-bl-0 { border-bottom-left-radius:  0; }
+.lb-radius-br-0 { border-bottom-right-radius: 0; }
+.lb-radius-tl { border-top-left-radius:     $lb-radius-section; }
+.lb-radius-tr { border-top-right-radius:    $lb-radius-section; }
+.lb-radius-bl { border-bottom-left-radius:  $lb-radius-section; }
+.lb-radius-br { border-bottom-right-radius: $lb-radius-section; }
+
+// --- Utility: radius scale ---
+$lb-radius-scale: (
+  sm: $lb-radius-sm,
+  md: $lb-radius-md,
+  lg: $lb-radius-lg,
+  xl: $lb-radius-xl,
+);
+
+$lb-breakpoints: (
+  sm: $lb-bp-sm,
+  md: $lb-bp-md,
+  lg: $lb-bp-lg,
+  xl: $lb-bp-xl,
+);
+
+$lb-radius-corners: (
+  tl: top-left,
+  tr: top-right,
+  bl: bottom-left,
+  br: bottom-right,
+);
+
+@each $size, $radius in $lb-radius-scale {
+  $break: map-get($lb-breakpoints, $size);
+
+  @media (max-width: $break) {
+    .lb-radius-#{$size} { border-radius: $radius; }
+
+    @each $dir, $property in $lb-radius-corners {
+      .lb-radius-#{$size}-#{$dir} {
+        border-#{$property}-radius: $radius;
+      }
+    }
+  }
+}
+
+.lb-radius-pill    { border-radius: $lb-radius-pill; }
+.lb-radius-section { border-radius: $lb-radius-section; }
 
 // --- Utility: pill button ---
 .btn-pill {
@@ -173,4 +233,14 @@ button[type] {
 
 #nosotros{
   padding-top: 10rem;
+}
+
+/*
+  Additional global styles can be added here, but avoid adding component-specific styles.
+  Use the _component.scss files for component-level styles.
+*/
+
+// Shadows
+.lb-shadow {
+  box-shadow: rgba(0, 0, 0, 0.45) 0px -25px 20px -20px;
 }

@@ -14,6 +14,16 @@ $font-weights: (
   bold:     700,
 );
 
+// --- Font Sizes (recurring scale) ---
+$lb-fs-xs:    0.6875rem;  // 11px — badges, micro-labels
+$lb-fs-sm:    0.8125rem;  // 13px — secondary text, meta
+$lb-fs-md:    0.875rem;   // 14px — body, buttons, inputs
+$lb-fs-base:  0.9375rem;  // 15px — card text
+$lb-fs-lg:    1rem;       // 16px — base body
+$lb-fs-xl:    1.125rem;   // 18px — values, subtitles
+$lb-fs-2xl:   1.5rem;     // 24px — card titles
+$lb-fs-3xl:   1.75rem;    // 28px — section titles (md)
+
 // --- Brand Colors ---
 $lb-cream:        #f5f2ed;
 $lb-dark:         #1a1a1a;
@@ -24,6 +34,15 @@ $lb-red-dark:     #c22222;
 $lb-green:        #1b5e4a;
 $lb-green-dark:   #38473c;
 $lb-footer:       #1f1f1f;
+
+// --- Common UI Colors ---
+$lb-white:        #ffffff;
+$lb-ink:          #1f2320;
+$lb-bronze:       #9e6e43;
+$lb-gray-warm:    #6b6964;
+$lb-green-soft:   #a7d4c4;
+$lb-border-cream: #eae7e1;
+$lb-gray-track:   #dbdbdb;
 
 // --- Neutrals ---
 $lb-gray-100:     #f8f9fa;
@@ -47,10 +66,12 @@ $font-family-sans-serif: $font-primary;
 $headings-color: $lb-dark;
 
 // --- Border Radius ---
-$lb-radius-sm:    2px;
-$lb-radius-md:    4px;
-$lb-radius-lg:    100px;
-$lb-radius-pill:  100px;
+$lb-radius-sm:      2px;
+$lb-radius-md:      4px;
+$lb-radius-lg:      100px;
+$lb-radius-xl:      12px;
+$lb-radius-pill:    100px;
+$lb-radius-section: clamp(2rem, 8vw, 7.5rem);
 
 // --- Shadows ---
 $lb-shadow-soft:    0 4px 24px rgba(0, 0, 0, 0.06);

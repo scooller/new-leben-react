@@ -3,16 +3,23 @@
 .lb-hero {
   position: relative;
   height: 100dvh;
-  min-height: 680px;
-  padding: 80px;
-  border-radius: 0 0 120px 120px;
+  min-height: 42.5rem;
+  padding: clamp(1rem, 5vw, 5rem);
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-height: 100dvh;
+    border-radius: 0;
+
+    .lb-hero-bg-wrap {
+      border-radius: 0;
+    }
+  }
 }
 
 .lb-hero-bg-wrap {
   position: absolute;
   inset: 0;
-  border-radius: 0 0 120px 120px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -36,15 +43,15 @@
 
 .lb-hero-title {
   color: $lb-cream;
-  font-size: 65px;
+  font-size: clamp(1.75rem, 6vw, 4.0625rem);
   font-weight: 300;
   line-height: 1.2;
-  letter-spacing: -0.5px;
-  max-width: 1044px;
+  letter-spacing: -0.03125rem;
+  max-width: 65.25rem;
 }
 
 .lb-hero-subtitle {
   color: $lb-cream;
-  font-size: 13px;
+  font-size: clamp(0.75rem, 2vw, 0.8125rem);
   font-weight: 400;
 }
