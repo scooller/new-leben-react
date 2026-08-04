@@ -10,7 +10,7 @@ export default function FloorPlans({ data }) {
     <section className="lb-proj-det-floor-plans container" id="plantas">
       <div className="row align-items-center g-5">
         <ScrollAnim as="div" className="col-lg-5" animation="fade-right">
-          <span className="lb-eyebrow text-uppercase d-block mb-2">{data.eyebrow}</span>
+          <span className="lb-eyebrow text-uppercase d-block mb-2 text-danger">{data.eyebrow}</span>
           <SplitTitle as="h2" className="lb-proj-det-section-title" text={data.title} stagger={0.06} />
           <p className="lb-proj-det-overview-text mt-3">{data.description}</p>
 

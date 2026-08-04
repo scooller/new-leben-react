@@ -17,7 +17,7 @@ export default function Cotizador({ data }) {
         {/* Header + Filters */}
         <ScrollAnim as="div" className="row align-items-start g-4 mb-4" animation="fade-up">
           <div className="col-lg-4">
-            <h2 className="lb-proj-det-cot-title mb-0">{data.title}</h2>
+            <h2 className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: data.title }} />
           </div>
 
           <div className="col-lg-8 lb-proj-det-cot-filters">
@@ -52,12 +52,15 @@ export default function Cotizador({ data }) {
           {/* Location map */}
           <div className="col-lg-3 lb-proj-det-cot-map">
             <div className="lb-proj-det-cot-map-canvas">
-              <img
-                src={`${import.meta.env.BASE_URL}images/map-pin.svg`}
-                alt=""
-                width="28"
-                height="28"
-                className="lb-proj-det-cot-map-pin"
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.2084684106285!2d-72.97051429999999!3d-41.32608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x961826c26e474ddf%3A0x96e78b5431548404!2sVicente%20P%C3%A9rez%20Rosales%20991%2C%205550034%20Puerto%20Varas%2C%20Los%20Lagos!5e0!3m2!1ses!2scl!4v1785872845121!5m2!1ses!2scl"
+                width="600"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Ubicación Edificio INN"
               />
             </div>
             <p className="lb-proj-det-cot-map-caption text-muted small mt-2">{data.mapCaption}</p>

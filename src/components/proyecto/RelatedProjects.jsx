@@ -3,45 +3,58 @@ import ScrollAnim from '../ScrollAnim.jsx'
 
 /**
  * Related projects table.
- * Reuses Bootstrap table classes.
  */
 export default function RelatedProjects({ data }) {
   return (
-    <section className="lb-proj-det-related container" id="relacionados">
-      <ScrollAnim as="div" animation="fade-up">
-        <span className="lb-eyebrow text-uppercase d-block mb-2">{data.eyebrow}</span>
-        <h2 className="lb-proj-det-section-title">{data.title}</h2>
-      </ScrollAnim>
+    <section className="lb-proj-det-related" id="relacionados">
+      <div className="container">
+        <ScrollAnim as="div" animation="fade-up">
+          <span className="lb-eyebrow text-uppercase d-block mb-2">{data.eyebrow}</span>
+          <h2 className="lb-proj-det-section-title">{data.title}</h2>
+        </ScrollAnim>
 
-      <ScrollAnim as="div" className="lb-proj-det-related-table mt-4" animation="fade-up" delay={0.1}>
-        <div className="lb-proj-det-table-head d-none d-lg-flex">
-          {data.columns.map((col) => (
-            <span key={col} className="lb-proj-det-table-hdr text-uppercase">{col}</span>
-          ))}
+        <ScrollAnim as="div" className="mt-4" animation="fade-up" delay={0.1}>
+          <table className="table table-hover lb-proj-det-table align-middle">
+            <thead className="d-lg-table-row-group">
+              <tr>
+                <th className="text-uppercase lb-proj-det-table-hdr">Proyecto</th>
+                <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Ubicación</th>
+                <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Tipología</th>
+                <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Superficie</th>
+                <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Precio</th>
+                <th className="text-uppercase lb-proj-det-table-hdr"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.rows.map((row) => (
+                <tr key={row.name}>
+                  <td className="fw-semibold">{row.name}</td>
+                  <td className="d-none d-lg-table-cell">{row.location}</td>
+                  <td className="d-none d-lg-table-cell">{row.tipologia}</td>
+                  <td className="d-none d-lg-table-cell">{row.superficie}</td>
+                  <td className="d-none d-lg-table-cell">{row.precio}</td>
+                  <td>
+                    <Link to="/proyectos" className="lb-proj-det-table-link">
+                      Ver proyecto
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/arrow-right.svg`}
+                        alt=""
+                        width="14"
+                        height="14"
+                        loading="lazy"
+                      />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollAnim>
+
+        <div className="d-flex justify-content-end mt-4">
+          <Link to="/proyectos" className="btn lb-btn-gallery text-decoration-none">Ver todos los proyectos</Link>
         </div>
-
-        {data.rows.map((row) => (
-          <div key={row.name} className="lb-proj-det-table-row d-flex align-items-center">
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--name fw-semibold">{row.name}</span>
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--location">{row.location}</span>
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--tipo">{row.tipologia}</span>
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--sup">{row.superficie}</span>
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--price">{row.precio}</span>
-            <span className="lb-proj-det-table-cell lb-proj-det-table-cell--action">
-              <Link to="/proyectos" className="lb-proj-det-table-link">
-                Ver proyecto
-                <img
-                  src={`${import.meta.env.BASE_URL}images/arrow-right.svg`}
-                  alt=""
-                  width="14"
-                  height="14"
-                  loading="lazy"
-                />
-              </Link>
-            </span>
-          </div>
-        ))}
-      </ScrollAnim>
+      </div>
     </section>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
@@ -6,6 +6,10 @@ const mainLinks = [
   { label: 'Cotizar', to: '/proyectos' },
   { label: 'Brokers', to: '/brokers' },
   { label: 'Clientes', href: 'https://www.pvi.cl/propietarios/leben/propietarios/login/' },
+]
+
+const mainMobileLinks = [
+  { label: 'Cotizar', to: '/proyectos' },
 ]
 
 // Dynamic page menus shown in dropdown
@@ -31,9 +35,7 @@ const pageMenus = {
 }
 
 export default function Navbar() {
-  const [dropdownOpen, setDropdownOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const dropdownRef = useRef(null)
   const location = useLocation()
 
   const dropdownLinks = useMemo(() => {
@@ -42,16 +44,6 @@ export default function Navbar() {
     if (path.startsWith('/proyectos/')) return pageMenus.proyectoDetalle
     return pageMenus.home
   }, [location.pathname])
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -89,15 +81,31 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Mobile nav */}
+        <div className="d-lg-none d-flex align-items-center gap-2 ms-auto">
+          {mainMobileLinks.map((link) =>
+            link.to ? (
+              <Link key={link.label} to={link.to} className="lb-nav-link text-decoration-none">
+                {link.label}
+              </Link>
+            ) : (
+              <a key={link.label} href={link.href} className="lb-nav-link text-decoration-none">
+                {link.label}
+              </a>
+            ),
+          )}
+        </div>
+
         {/* Right side */}
         <div className="d-flex align-items-center gap-3">
           {/* <Link to="/" className="btn btn-danger btn-sm rounded-pill lb-nav-cta text-decoration-none">COTIZAR</Link> */}
 
-          {/* Hamburger dropdown */}
-          <div className="position-relative" ref={dropdownRef}>
+          {/* Hamburger dropdown — Bootstrap native */}
+          <div className="dropdown">
             <button
-              className={`btn btn-sm lb-hamburger ${dropdownOpen ? 'open' : ''}`}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="btn btn-sm lb-hamburger dropdown-toggle"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="true"
               aria-label="Menu"
             >
               <span className="lb-burger-line" />
@@ -105,31 +113,43 @@ export default function Navbar() {
               <span className="lb-burger-line" />
             </button>
 
-            {dropdownOpen && (
-              <div className="lb-dropdown position-absolute end-0 bg-white rounded-3 shadow overflow-hidden">
-                {dropdownLinks.map((link) =>
-                  link.route ? (
-                    <Link
-                      key={link.label}
-                      to={link.route}
-                      className="lb-dropdown-link d-block text-decoration-none"
-                      onClick={() => setDropdownOpen(false)}
-                    >
+            <div className="dropdown-menu lb-dropdown end-0 rounded-3 shadow overflow-hidden">
+              {/* Mobile: show main links first */}
+              <div className="d-lg-none">
+                {mainLinks.map((link) =>
+                  link.to ? (
+                    <Link key={link.label} to={link.to} className="lb-dropdown-link dropdown-item text-decoration-none">
                       {link.label}
                     </Link>
                   ) : (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className="lb-dropdown-link d-block text-decoration-none"
-                      onClick={() => setDropdownOpen(false)}
-                    >
+                    <a key={link.label} href={link.href} className="lb-dropdown-link dropdown-item text-decoration-none">
                       {link.label}
                     </a>
                   ),
                 )}
+                {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />}
               </div>
-            )}
+              {/* Page section links (all breakpoints) */}
+              {dropdownLinks.map((link) =>
+                link.route ? (
+                  <Link
+                    key={link.label}
+                    to={link.route}
+                    className="lb-dropdown-link dropdown-item text-decoration-none"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="lb-dropdown-link dropdown-item text-decoration-none"
+                  >
+                    {link.label}
+                  </a>
+                ),
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -60,7 +60,6 @@ export default function ProyectoDetalle() {
         <RelatedProjects data={project.relatedProjects} />
         <Alternatives data={project.alternatives} />
         <SpacesGallery data={project.spacesGallery} />
-        <AmenitiesStrip items={project.amenitiesBottom} variant="icons" />
         <LocationSection data={project.location} />
         <BottomGallery images={project.bottomGallery} />
         <TeamAgents data={project.team} />

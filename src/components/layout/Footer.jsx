@@ -78,7 +78,7 @@ export default function Footer() {
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-start mb-2 text-decoration-none"
+              className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
               onMouseEnter={hoverOn(mapPinRef)}
               onMouseLeave={hoverOff(mapPinRef)}
             >
@@ -92,7 +92,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="lb-col-w">
-            <div className="d-flex gap-2 align-items-start mb-2">
+            <div className="d-flex gap-2 align-items-center mb-2">
               <ClockIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <div className="d-flex flex-column lb-contact">
                 {schedule.map((line) => <span key={line}>{line}</span>)}
@@ -102,7 +102,7 @@ export default function Footer() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-start mb-2 text-decoration-none"
+              className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
               onMouseEnter={hoverOn(phoneRef)}
               onMouseLeave={hoverOff(phoneRef)}
             >
@@ -111,7 +111,7 @@ export default function Footer() {
             </a>
             <a
               href={`mailto:${email}`}
-              className="d-flex gap-2 align-items-start text-decoration-none"
+              className="d-flex gap-2 align-items-center text-decoration-none"
               onMouseEnter={hoverOn(mailRef)}
               onMouseLeave={hoverOff(mailRef)}
             >

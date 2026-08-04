@@ -24,7 +24,7 @@ export default function ProjectOverview({ data }) {
               decoding="async"
             />
           </div>
-          <div className="lb-proj-det-collage-right d-flex flex-column gap-3">
+          <div className="lb-proj-det-collage-right d-flex flex-md-column gap-3">
             <div className="lb-img-trigger" tabIndex={0}>
               <img
                 src={data.collage.rightTop}
@@ -48,7 +48,7 @@ export default function ProjectOverview({ data }) {
 
         {/* Details */}
         <ScrollAnim as="div" className="col-lg-6" animation="fade-left">
-          <span className="lb-eyebrow text-uppercase d-block mb-2">{data.eyebrow}</span>
+          <span className="lb-eyebrow text-uppercase d-block mb-2 text-danger">{data.eyebrow}</span>
           <SplitTitle as="h2" className="lb-proj-det-section-title" text={data.title} stagger={0.06} />
           <p className="lb-proj-det-overview-text mt-3">{data.description}</p>
 

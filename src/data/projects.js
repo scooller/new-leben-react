@@ -84,7 +84,7 @@ export const projectDetails = {
 
     // --- Cotizador (visual mock) ---
     cotizador: {
-      title: 'Cotiza tu próximo depto en Edificio INN',
+      title: 'Cotiza tu próximo depto en <span class="text-danger">Edificio INN</span>',
       filters: {
         row1: [
           { label: 'Todas las tipologías', options: ['2 Dorms', '3 Dorms', '4 Dorms'] },
@@ -125,8 +125,8 @@ export const projectDetails = {
 
     // --- Related Projects (table) ---
     relatedProjects: {
-      eyebrow: 'OTROS PROYECTOS EN PUERTO VARAS',
-      title: 'Proyectos relacionados',
+      eyebrow: 'Alternativas a Edificio INN • Puerto Varas',
+      title: 'Proyectos similares que te pueden interesar',
       columns: ['Proyecto', 'Ubicación', 'Tipología', 'Superficie', 'Precio', ''],
       rows: [
         { name: 'Edificio Mood', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '60-90 m²', precio: 'UF 6.200*' },
@@ -151,10 +151,19 @@ export const projectDetails = {
       title: 'VIVIR PARA DISFRUTAR EL SILENCIO',
       description:
         'La volumetría exterior y el diseño de interiores de INN han sido diseñados meticulosamente por Sofia Iturralde. "La fluidez espacial y el uso de luz natural cenital crean una atmósfera de calma y desconexión en medio de la ciudad."',
+      amenities: [
+        { icon: 'laptop', label: 'Cowork & Lounge' },
+        { icon: 'flame', label: 'Quincho en Rooftop' },
+        { icon: 'dumbbell', label: 'Training Zone' },
+        { icon: 'waves', label: 'Piscina' },
+        { icon: 'smile', label: 'Juegos Infantiles' },
+      ],
       images: [
         img('inn-space-1.jpg'),
         img('inn-space-2.jpg'),
         img('inn-space-3.jpg'),
+        img('inn-space-4.jpg'),
+        img('inn-space-5.jpg'),
       ],
       designer: {
         name: 'Sofia Iturralde',

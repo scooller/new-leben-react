@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
+import ProjectCard from '../components/ProjectCard.jsx'
 import { proyectosHero, projectGroups, valueProps, proyectosCta, searchFilters, images } from '../data/content.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 
@@ -58,8 +59,8 @@ export default function Proyectos() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="lb-proj-hero container position-relative d-flex align-items-end">
-          <div className="lb-proj-hero-bg-wrap">
+        <section className="lb-proj-hero container position-relative d-flex align-items-end lb-radius-bl lb-radius-br">
+          <div className="lb-proj-hero-bg-wrap lb-radius-bl lb-radius-br">
             <img src={images.proyectosHero} alt="" className="lb-proj-hero-bg" />
             <div className="lb-proj-hero-overlay" />
           </div>
@@ -126,43 +127,11 @@ export default function Proyectos() {
                 <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
               </ScrollAnim>
 
-              <ScrollAnim as="div" className="d-flex gap-4" animation="fade-up" stagger={0.15} delay={0.1}>
+              <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
                 {group.projects.map((project) => (
-                  <Link key={project.name} to={`/proyectos/${project.slug || project.name.toLowerCase().replace(/\s+/g, '-').replace(/edificio-/i, '')}`} className="flex-fill bg-white lb-proj-card d-flex flex-column justify-content-between text-decoration-none">
-                    <div className="d-flex flex-column">
-                      <div className="lb-proj-img-wrap">
-                        <img src={images[project.image]} alt={project.name} className="lb-proj-img" />
-                      </div>
-                      <div className="d-flex flex-column gap-2 p-4">
-                        <div className="lb-location">{project.location}</div>
-                        <h3 className="mb-0 lb-proj-name">{project.name}</h3>
-                        <p className="mb-0 lb-proj-meta">
-                          <span>Entrega: </span>
-                          <strong>{project.entrega}</strong>
-                          {'     '}
-                          <span>Tipología: </span>
-                          <strong>{project.tipologia}</strong>
-                          {project.equipacion && (
-                            <>
-                              {'     '}
-                              <span>Equipación: </span>
-                              <strong>{project.equipacion}</strong>
-                            </>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="border-top lb-proj-bottom d-flex align-items-center justify-content-between p-4">
-                      <div className="d-flex flex-column">
-                        <span className="lb-price-label">Desde</span>
-                        <span className="lb-price-value">{project.price}</span>
-                      </div>
-                      <div className="lb-explore d-flex align-items-center gap-1">
-                        <span>Ver Proyecto</span>
-                        <img src={images.arrowRight} alt="" width="14" height="14" />
-                      </div>
-                    </div>
-                  </Link>
+                  <div key={project.name} className="col">
+                    <ProjectCard project={project} />
+                  </div>
                 ))}
               </ScrollAnim>
             </div>
@@ -180,14 +149,16 @@ export default function Proyectos() {
             <span className="lb-vprops-eyebrow">{valueProps.eyebrow}</span>
             <h2 className="text-center mb-0 lb-vprops-title">{valueProps.title}</h2>
           </div>
-          <div className="d-flex gap-4">
+          <div className="row row-cols-1 row-cols-md-3 g-4">
             {valueProps.items.map((item) => (
-              <div className="flex-fill bg-white lb-vprop-card d-flex flex-column gap-4" key={item.num}>
+              <div className="col">
+              <div className="bg-white lb-vprop-card d-flex flex-column gap-4 h-100" key={item.num}>
                 <span className="lb-vprop-num">{item.num}</span>
                 <div className="d-flex flex-column gap-2">
                   <h3 className="mb-0 lb-vprop-card-title">{item.title}</h3>
                   <p className="mb-0 lb-vprop-text">{item.text}</p>
                 </div>
+              </div>
               </div>
             ))}
           </div>
@@ -202,7 +173,7 @@ export default function Proyectos() {
             <h2 className="mb-0 lb-proj-cta-title">{proyectosCta.title}</h2>
             <p className="mb-0 lb-proj-cta-subtitle">{proyectosCta.subtitle}</p>
           </div>
-          <form className="position-relative d-flex gap-3 lb-proj-cta-form" style={{ zIndex: 1 }} onSubmit={(e) => e.preventDefault()}>
+          <form className="position-relative d-flex flex-column flex-md-row gap-3 lb-proj-cta-form" style={{ zIndex: 1 }} onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"
               className="form-control border-0 lb-proj-cta-input"

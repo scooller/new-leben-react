@@ -6,8 +6,8 @@ export default function CTASection() {
   const { title, subtitle, inputLabel, inputPlaceholder, buttonText } = ctaContent
 
   return (
-    <ScrollAnim as="section" className="lb-cta container d-flex align-items-start lb-img-trigger" animation="fade-up" duration={1} tabIndex={0}>
-      <div className="lb-cta-bg-wrap">
+    <ScrollAnim as="section" className="lb-cta container d-flex align-items-start lb-img-trigger lb-radius-br" animation="fade-up" duration={1} tabIndex={0}>
+      <div className="lb-cta-bg-wrap lb-radius-br">
         <img src={images.ctaSection} alt="" className="lb-cta-bg lb-img-interactive lb-bg-interactive" loading="lazy" decoding="async" />
         <div className="lb-cta-gradient" />
       </div>

@@ -2,13 +2,13 @@
 
 .lb-search-filter {
   background: $lb-cream;
-  padding: 24px 0 48px;
+  padding: 1.5rem 0 3rem;
 }
 
 .lb-filter-bar {
   border-radius: $lb-radius-lg;
   box-shadow: $lb-shadow-soft;
-  padding: 12px;
+  padding: 0.75rem;
 }
 
 .lb-filter-item {
@@ -26,9 +26,9 @@
 }
 
 .lb-form-select {
-  padding: 12px 16px;
+  padding: 0.75rem 1rem;
   font-family: $font-secondary;
-  font-size: 14px;
+  font-size: $lb-fs-md;
   cursor: pointer;
   appearance: none;
   background-image: none;
@@ -38,22 +38,22 @@
 
 .lb-filter-label {
   font-family: $font-secondary;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.0625rem;
   color: $lb-gray-600;
-  margin-bottom: 2px;
-  padding-left: 16px;
+  margin-bottom: 0.125rem;
+  padding-left: 1rem;
 }
 
 .lb-btn-search {
   background: $lb-red;
-  color: #fff;
+  color: $lb-white;
   border: none;
   border-radius: $lb-radius-lg;
-  width: 52px;
-  height: 52px;
+  width: 3.25rem;
+  height: 3.25rem;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -68,6 +68,6 @@
   font-size: 13px;
   color: $lb-text-muted;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
+  letter-spacing: 0.125rem;
+  margin-bottom: 0.75rem;
 }

@@ -4,8 +4,8 @@ import SplitTitle from '../SplitTitle.jsx'
 
 export default function Hero() {
   return (
-    <section className="lb-hero container d-flex flex-column align-items-center justify-content-end" id="inicio">
-      <div className="lb-hero-bg-wrap">
+    <section className="lb-hero container d-flex flex-column align-items-center justify-content-end lb-radius-bl lb-radius-br" id="inicio">
+      <div className="lb-hero-bg-wrap lb-radius-bl lb-radius-br">
         <video src={videos.hero} autoPlay muted loop playsInline className="lb-hero-bg" fetchPriority="high" />
         <div className="lb-hero-overlay" />
       </div>

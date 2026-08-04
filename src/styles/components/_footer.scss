@@ -5,41 +5,41 @@
 }
 
 .lb-legal {
-  font-size: 11px;
-  color: #fff;
+  font-size: $lb-fs-xs;
+  color: $lb-white;
 }
 
 .lb-badge {
-  width: 52px;
-  height: 52px;
-  gap: 2px;
-  border-color: #e5e7eb !important;
+  width: 3.25rem;
+  height: 3.25rem;
+  gap: 0.125rem;
+  border-color: $lb-border-cream !important;
 }
 
 .lb-badge-label {
-  font-size: 7px;
-  color: #fff;
+  font-size: 0.4375rem;
+  color: $lb-white;
 }
 
 // --- Footer icons (lucide-animated, motion handles hover animation) ---
 
 .lb-badge-icon,
 .lb-footer-icon {
-  color: #fff;
+  color: $lb-white;
 }
 
 // --- Social links (fix: red-on-red was caused by global a:hover override) ---
 
 .lb-social {
-  width: 36px;
-  height: 36px;
-  color: #fff;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: $lb-white;
   background: rgba(255, 255, 255, 0.08);
   transition: background 0.25s ease, color 0.25s ease;
 
   &:hover,
   &:focus-visible {
-    color: #fff;
+    color: $lb-white;
     background: $lb-red;
   }
 
@@ -69,11 +69,17 @@ a:has(> .lb-footer-icon) {
   }
 }
 
-.lb-col-w { width: 230px; }
+.lb-col-w {
+  width: 14.375rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
 
 .lb-contact {
-  font-size: 13px;
-  color: #fff;
+  font-size: $lb-fs-sm;
+  color: $lb-white;
   line-height: 1.6;
 }
 
@@ -85,8 +91,8 @@ a {
 }
 
 .lb-social {
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   background: rgba(255, 255, 255, 0.1);
   transition: background 0.3s ease;
 

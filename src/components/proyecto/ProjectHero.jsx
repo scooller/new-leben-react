@@ -10,9 +10,9 @@ import ScrollAnim from '../ScrollAnim.jsx'
  */
 export default function ProjectHero({ data }) {
   return (
-    <section className="lb-proj-hero container position-relative d-flex align-items-end">
+    <section className="lb-proj-hero container position-relative d-flex align-items-end lb-radius-bl lb-radius-br">
       {/* — Background image — */}
-      <div className="lb-proj-hero-bg-wrap">
+      <div className="lb-proj-hero-bg-wrap lb-radius-bl lb-radius-br">
         {data.backgroundVideo ? (
           <video
             src={data.backgroundVideo}

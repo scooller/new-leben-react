@@ -1,8 +1,9 @@
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
+import ProjectCard from '../ProjectCard.jsx'
 
 /**
- * Alternative projects cards — "¿Buscas otras opciones?"
+ * Alternative projects — reuses ProjectCard in a responsive grid.
  */
 export default function Alternatives({ data }) {
   return (
@@ -11,32 +12,13 @@ export default function Alternatives({ data }) {
         <SplitTitle as="h2" className="lb-proj-det-section-title" text={data.title} stagger={0.04} />
       </ScrollAnim>
 
-      <div className="row g-4 mt-2">
+      <ScrollAnim as="div" className="row row-cols-1 row-cols-md-3 g-4 mt-2" animation="fade-up" stagger={0.1}>
         {data.cards.map((card) => (
-          <ScrollAnim
-            as="div"
-            className="col-md-4"
-            animation="fade-up"
-            stagger={0.1}
-            key={card.name}
-          >
-            <div className="lb-proj-det-alt-card lb-img-trigger" tabIndex={0}>
-              <img
-                src={card.image}
-                alt={card.name}
-                className="lb-proj-det-alt-img lb-img-interactive w-100"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="lb-proj-det-alt-body">
-                <h3 className="lb-proj-det-alt-name">{card.name}</h3>
-                <p className="lb-proj-det-alt-meta mb-0">{card.tipologia}</p>
-                <span className="lb-proj-det-alt-price">{card.price}</span>
-              </div>
-            </div>
-          </ScrollAnim>
+          <div className="col" key={card.name}>
+            <ProjectCard project={card} />
+          </div>
         ))}
-      </div>
+      </ScrollAnim>
     </section>
   )
 }

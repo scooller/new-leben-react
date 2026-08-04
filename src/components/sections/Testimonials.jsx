@@ -6,13 +6,13 @@ export default function Testimonials() {
   const { title, certTitle, certClients, ratingLabel, ratingScore, reviews } = testimonials
 
   return (
-    <ScrollAnim as="section" className="lb-testimonials container" animation="fade-up" duration={1}>
+    <ScrollAnim as="section" id="testimonials" className="lb-testimonials container lb-shadow lb-radius-tr" animation="fade-up" duration={1}>
       <div className="d-flex flex-column gap-4">
         {/* Header */}
         <SplitTitle as="h2" className="text-center mb-0 lb-testimonials-title" text={title} />
 
         {/* Certification banner */}
-        <div className="bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-between lb-cert p-3 px-4">
+        <div className="bg-white rounded-3 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 lb-cert p-3 px-4">
           <div className="d-flex align-items-center gap-3">
             <div className="lb-bptl d-flex flex-column align-items-center justify-content-center rounded text-white">
               <span className="lb-bptl-line">Best</span>
@@ -47,9 +47,10 @@ export default function Testimonials() {
         </div>
 
         {/* Review cards */}
-        <ScrollAnim as="div" className="d-flex gap-3" animation="fade-up" stagger={0.15} delay={0.2}>
+        <ScrollAnim as="div" className="row row-cols-1 row-cols-md-3 g-3" animation="fade-up" stagger={0.15} delay={0.2}>
           {reviews.map((review) => (
-            <div className="flex-fill bg-white rounded-3 shadow-sm lb-review-card d-flex flex-column gap-3 lb-img-trigger" key={review.id} tabIndex={0}>
+            <div className="col">
+            <div className="bg-white rounded-3 shadow-sm lb-review-card d-flex flex-column gap-3 lb-img-trigger h-100" key={review.id} tabIndex={0}>
               <div className="d-flex align-items-center gap-2">
                 <img src={images[review.avatar]} alt={review.name} width="44" height="44" className="rounded-circle flex-shrink-0 lb-img-interactive" style={{ objectFit: 'cover' }} loading="lazy" decoding="async" />
                 <div className="d-flex flex-column">
@@ -79,6 +80,7 @@ export default function Testimonials() {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           ))}
         </ScrollAnim>

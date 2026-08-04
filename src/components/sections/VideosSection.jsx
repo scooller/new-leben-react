@@ -42,7 +42,7 @@ export default function VideosSection() {
     <>
       <div className="lb-videos-spacer" />
       <div ref={sectionRef}>
-      <ScrollAnim as="section" className="lb-videos container" id="proyectos" animation="fade-up" duration={1}>
+      <ScrollAnim as="section" className="lb-videos container lb-radius-tl lb-radius-tr" id="proyectos" animation="fade-up" duration={1}>
         <div className="d-flex flex-column gap-3">
           <div className="d-flex justify-content-between align-items-center lb-section-header lb-parallax-text">
             <span className="lb-month-label text-uppercase">{monthLabel}</span>
@@ -85,12 +85,12 @@ export default function VideosSection() {
             </div>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center pt-4 lb-parallax-text">
-            <div className="d-flex flex-column gap-1">
+          <div className="row justify-content-between align-items-center pt-4 lb-parallax-text">
+            <div className="d-flex flex-column gap-1 col-md-6 col-12 mb-3 mb-md-0">
               <SplitTitle as="h3" className="lb-gallery-title mb-0" text={gallery.title} />
               <p className="lb-gallery-subtitle mb-0">{gallery.subtitle}</p>
             </div>
-            <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center gap-3 col-md-6 col-12 justify-content-md-end justify-content-center">
               <Link to="/proyectos/inn" className="btn btn-outline-dark btn-pill text-decoration-none lb-btn-view-project">Ver proyecto</Link>
               <Link to="/proyectos" className="btn lb-btn-gallery text-decoration-none">{gallery.buttonText}</Link>
             </div>

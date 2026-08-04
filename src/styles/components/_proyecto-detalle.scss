@@ -14,7 +14,7 @@
 
 .lb-proj-det-overview-text {
   color: $lb-body;
-  font-size: 1rem;
+  font-size: $lb-fs-lg;
   line-height: 1.7;
 }
 
@@ -22,7 +22,7 @@
 
 // --- Tabs Bar (sticky) ---
 .lb-proj-det-tabs-bar {
-  background: #fff;
+  background: $lb-white;
   z-index: 80;
   top: $lb-navbar-height;
   border-bottom: 1px solid $lb-gray-300;
@@ -34,13 +34,13 @@
 }
 
 .lb-proj-det-tabs-row {
-  height: 56px;
+  height: 3.5rem;
   gap: 1rem;
 
   @media (max-width: $lb-bp-md) {
     overflow-x: auto;
     height: auto;
-    padding-block: 12px;
+    padding-block: 0.75rem;
   }
 }
 
@@ -52,11 +52,11 @@
 .lb-proj-det-tab-label {
   font-size: 0.7rem;
   color: $lb-text-muted;
-  letter-spacing: 1px;
+  letter-spacing: 0.0625rem;
 }
 
 .lb-proj-det-tab-value {
-  font-size: 0.875rem;
+  font-size: $lb-fs-md;
   font-weight: 600;
   color: $lb-dark;
   white-space: nowrap;
@@ -66,13 +66,13 @@
 
 // --- Overview ---
 .lb-proj-det-overview {
-  padding-block: 80px;
+  padding-block: 5rem;
 }
 
 .lb-proj-det-collage {
   display: flex;
   gap: 1rem;
-  height: 500px;
+  height: 31.25rem;
 
   @media (max-width: $lb-bp-md) {
     height: auto;
@@ -93,7 +93,7 @@
 
   @media (max-width: $lb-bp-md) {
     flex: 0 0 auto;
-    height: 280px;
+    height: 17.5rem;
   }
 }
 
@@ -116,7 +116,7 @@
     flex-direction: row;
 
     .lb-img-trigger {
-      height: 200px;
+      height: 12.5rem;
       width: calc(50% - 0.5rem);
     }
   }
@@ -127,7 +127,7 @@
 }
 
 .lb-proj-det-stat-value {
-  font-size: 1.75rem;
+  font-size: $lb-fs-3xl;
   font-weight: 700;
   color: $lb-dark;
 }
@@ -139,45 +139,45 @@
 
 // --- Amenities Strip ---
 .lb-proj-det-amenities {
-  padding-block: 48px;
+  padding-block: 3rem;
   background: $lb-gray-100;
   border-block: 1px solid $lb-gray-300;
 }
 
 .lb-proj-det-amenities--icons {
-  background: #fff;
+  background: $lb-white;
 }
 
 .lb-proj-det-amenities-row {
   @media (max-width: $lb-bp-md) {
     justify-content: flex-start;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding-bottom: 0.5rem;
   }
 }
 
 .lb-proj-det-amenity {
   flex: 0 0 auto;
-  min-width: 110px;
+  min-width: 6.875rem;
 }
 
 .lb-proj-det-amenity-icon {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 
   i {
-    font-size: 24px;
+    font-size: $lb-fs-2xl;
     color: $lb-green;
   }
 }
 
 .lb-proj-det-amenities--icons .lb-proj-det-amenity-icon {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: $lb-cream;
   border-radius: 50%;
 }
@@ -190,7 +190,7 @@
 
 // --- Floor Plans ---
 .lb-proj-det-floor-plans {
-  padding-block: 80px;
+  padding-block: 5rem;
 }
 
 .lb-proj-det-blueprint-wrap {
@@ -207,21 +207,21 @@
 // --- Vista 360 / Recorrido Virtual ---
 // Figma 2093:4 — white bg, red eyebrow, dark title, underline tabs
 .lb-proj-det-vista360 {
-  padding-block: 80px;
-  background: #fff;
+  padding-block: 5rem;
+  background: $lb-white;
 
   .lb-proj-det-vista360-eyebrow {
     font-family: 'Outfit', sans-serif;
-    font-size: 14px;
+    font-size: $lb-fs-md;
     font-weight: 700;
     color: $lb-red;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.03125rem;
   }
 
   .lb-proj-det-vista360-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 800;
     color: $lb-dark;
     line-height: 1.1;
@@ -236,15 +236,15 @@
 }
 
 .lb-proj-det-vista-tab {
-  height: 56px;
-  padding: 0 32px;
+  height: 3.5rem;
+  padding: 0 2rem;
   border: none;
   border-bottom: 2px solid transparent;
   background: transparent;
   font-family: 'Outfit', sans-serif;
-  font-size: 15px;
+  font-size: $lb-fs-base;
   font-weight: 500;
-  color: #666;
+  color: $lb-gray-warm;
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease;
   margin-bottom: -1px;
@@ -263,7 +263,7 @@
 .lb-proj-det-vista360-viewer {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 1.5rem;
 
   img {
     width: 100%;
@@ -273,31 +273,32 @@
 }
 
 .lb-proj-det-vista360-empty {
-  min-height: 300px;
+  min-height: 18.75rem;
   color: $lb-gray-500;
 }
 
 // --- Cotizador ---
 .lb-proj-det-cotizador {
-  padding-block: 80px;
+  padding-block: 5rem;
+  background: $lb-cream;
 }
 
 .lb-proj-det-cot-title {
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 700;
   color: $lb-dark;
-  max-width: 360px;
+  max-width: 22.5rem;
 }
 
 .lb-proj-det-filter-dropdown {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 300px;
+  width: 18.75rem;
   max-width: 100%;
-  padding: 4px 0;
+  padding: 0.25rem 0;
   border-bottom: 1px solid $lb-gray-400;
-  font-size: 0.875rem;
+  font-size: $lb-fs-md;
   color: $lb-body;
   cursor: pointer;
 }
@@ -313,14 +314,19 @@
 }
 
 .lb-proj-det-cot-map-canvas {
-  height: 400px;
+  height: 25rem;
   background: $lb-cream;
   border: 1px solid $lb-gray-300;
   border-radius: $lb-radius-md;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
 }
 
 .lb-proj-det-cot-map-pin {
@@ -364,7 +370,7 @@
 }
 
 .lb-proj-det-cot-detail-icon i {
-  font-size: 18px;
+  font-size: $lb-fs-xl;
   color: $lb-green;
 }
 
@@ -387,50 +393,44 @@
 
 // --- Related Projects Table ---
 .lb-proj-det-related {
-  padding-block: 80px;
+  padding-block: 5rem;
+  background: $lb-cream;
 }
 
-.lb-proj-det-table-head,
-.lb-proj-det-table-row {
-  display: grid;
-  grid-template-columns: 3fr 2fr 2fr 1.5fr 1.5fr 1.5fr;
-  align-items: center;
-  padding: 16px 24px;
+.lb-proj-det-table {
+  margin-bottom: 0;
 
-  @media (max-width: $lb-bp-lg) {
-    grid-template-columns: 1fr;
-    gap: 4px;
-    padding: 16px 0;
+  thead th {
+    font-size: 0.7rem;
+    color: $lb-text-muted;
+    letter-spacing: 0.0625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 2px solid $lb-dark;
+    padding: 0.75rem 1rem;
   }
-}
 
-.lb-proj-det-table-head {
-  border-bottom: 2px solid $lb-dark;
-}
-
-.lb-proj-det-table-hdr {
-  font-size: 0.7rem;
-  color: $lb-text-muted;
-  letter-spacing: 1px;
-}
-
-.lb-proj-det-table-row {
-  border-bottom: 1px solid $lb-gray-300;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: $lb-gray-100;
+  tbody td {
+    font-size: 0.9rem;
+    color: $lb-dark;
+    border-bottom: 1px solid $lb-gray-300;
+    padding: 1rem;
+    vertical-align: middle;
   }
-}
 
-.lb-proj-det-table-cell {
-  font-size: 0.9rem;
+  tbody tr {
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: $lb-gray-100;
+    }
+  }
 }
 
 .lb-proj-det-table-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
   color: $lb-red;
@@ -443,31 +443,30 @@
 
 // --- Alternatives ---
 .lb-proj-det-alternatives {
-  padding-block: 80px;
-  background: $lb-cream;
+  padding-block: 5rem;
 }
 
 .lb-proj-det-alt-card {
-  background: #fff;
+  background: $lb-white;
   border-radius: $lb-radius-md;
   overflow: hidden;
   box-shadow: $lb-shadow-card;
 }
 
 .lb-proj-det-alt-img {
-  height: 220px;
+  height: 13.75rem;
   object-fit: cover;
 }
 
 .lb-proj-det-alt-body {
-  padding: 24px;
+  padding: 1.5rem;
 }
 
 .lb-proj-det-alt-name {
   font-size: 1.25rem;
   font-weight: 700;
   color: $lb-dark;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .lb-proj-det-alt-meta {
@@ -476,54 +475,144 @@
 }
 
 .lb-proj-det-alt-price {
-  font-size: 1rem;
+  font-size: $lb-fs-lg;
   font-weight: 600;
   color: $lb-red;
 }
 
-// --- Spaces Gallery ---
+// --- Spaces Gallery (amenity-linked) ---
 .lb-proj-det-spaces {
-  padding-block: 80px;
+  padding-block: 5rem;
+}
+
+// Amenity selector buttons
+.lb-proj-det-space-btn {
+  background: transparent;
+  border: 1px solid $lb-gray-300;
+  border-radius: $lb-radius-md;
+  padding: 1rem 1.25rem;
+  min-width: 8.125rem;
+  cursor: pointer;
+  color: $lb-green;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+
+  &:hover,
+  &:focus {
+    color: $lb-green-dark;
+    border-color: $lb-green;
+    background: rgba($lb-green, 0.05);
+  }
+
+  &.active {
+    color: $lb-green-dark;
+    border-color: $lb-green;
+    background: rgba($lb-green, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $lb-green;
+    outline-offset: 2px;
+  }
+}
+
+.lb-proj-det-space-btn-icon {
+  color: inherit;
+}
+
+.lb-proj-det-space-btn-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: inherit;
+}
+
+// Gallery scroller — 3 visible by default, 100% when amenity selected
+.lb-proj-det-spaces-scroller {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.lb-proj-det-space-slide {
+  flex: 0 0 calc(33.333% - 0.375rem);
+  scroll-snap-align: start;
+  overflow: hidden;
+  border-radius: $lb-radius-md;
+  transition: flex-basis 0.4s ease, opacity 0.3s ease;
+
+  .is-focused & {
+    flex-basis: 0;
+    opacity: 0;
+    pointer-events: none;
+
+    &.active {
+      flex-basis: 100%;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
 }
 
 .lb-proj-det-space-img {
   width: 100%;
-  height: 580px;
+  height: 36.25rem;
   object-fit: cover;
 
   @media (max-width: $lb-bp-md) {
-    height: 280px;
-  }
-}
-
-.lb-proj-det-spaces-gallery {
-  .lb-img-trigger {
-    overflow: hidden;
-    border-radius: $lb-radius-md;
+    height: 17.5rem;
   }
 }
 
 .lb-proj-det-designer-avatar {
   object-fit: cover;
-  width: 56px;
-  height: 56px;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+// --- Mobile fixes: Spaces + Amenities ---
+@media (max-width: $lb-bp-md) {
+  .lb-proj-det-spaces-amenities {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .lb-proj-det-space-btn {
+    flex: 0 0 auto;
+    min-width: 6.875rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .lb-proj-det-space-slide {
+    flex: 0 0 calc(33.333% - 0.375rem);
+  }
+
+  .lb-proj-det-team {
+    .row { --bs-gutter-x: 0.75rem; }
+  }
 }
 
 // --- Location ---
 .lb-proj-det-location {
-  padding-block: 80px;
+  padding-block: 5rem;
 }
 
 .lb-proj-det-check-icon {
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 
   i {
-    font-size: 16px;
+    font-size: $lb-fs-lg;
     color: $lb-green;
   }
 }
@@ -542,7 +631,7 @@
 // --- Bottom Gallery ---
 .lb-proj-det-bottom-gallery {
   position: relative;
-  padding-block: 40px;
+  padding-block: 2.5rem;
 }
 
 .lb-proj-det-bottom-scroller {
@@ -573,7 +662,7 @@
 
 .lb-proj-det-bottom-img {
   width: 100%;
-  height: 320px;
+  height: 20rem;
   object-fit: cover;
   filter: grayscale(100%);
   transition: all 0.5s ease;
@@ -591,8 +680,8 @@
 }
 
 .lb-proj-det-bottom-nav {
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0 !important;
   display: flex;
   align-items: center;
@@ -603,55 +692,57 @@
   transform: translateY(-50%) !important;
   z-index: 10;
   background: rgba(0, 0, 0, 0.55) !important;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.25rem);
   border: none !important;
-  color: #fff !important;
+  color: $lb-white !important;
   opacity: 0.7;
   transition: opacity 0.2s ease !important;
 
   &:hover {
     opacity: 1;
-    color: #fff !important;
+    color: $lb-white !important;
     background: rgba(0, 0, 0, 0.55) !important;
     border-color: transparent !important;
     transform: translateY(-50%) !important;
   }
 
-  &--prev { left: 8px; }
-  &--next { right: 8px; }
-
-  @media (max-width: $lb-bp-md) {
-    display: none;
-  }
+  &--prev { left: 0.5rem; }
+  &--next { right: 0.5rem; }
 }
 
 // --- Team / Agents ---
+#asesores {
+  width: 50%;
+  @media (max-width: $lb-bp-md) {
+    width: 100%;
+  }
+}
 .lb-proj-det-team {
-  padding-block: 80px;
+  padding-block: 5rem;
 }
 
 .lb-proj-det-team-subtitle {
-  max-width: 600px;
+  max-width: 37.5rem;
   font-size: 0.95rem;
-  margin-top: 12px;
+  margin-top: 0.75rem;
 }
 
 .lb-proj-det-agent-card {
   border-radius: $lb-radius-md;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s ease;
-
+  
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   }
 
   .card-body {
-    padding: 20px 24px;
+    padding: 1.25rem 1.5rem;
   }
 }
 
 .lb-proj-det-agent-avatar {
-  width: 64px;
-  height: 64px;
+  width: 4rem;
+  height: 4rem;
   object-fit: cover;
 }

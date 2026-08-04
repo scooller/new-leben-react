@@ -8,6 +8,7 @@ import { useGsapAnimations } from './hooks/useGsapAnimations.js'
 import Navbar from './components/layout/Navbar.jsx'
 import Footer from './components/layout/Footer.jsx'
 import Loader from './components/Loader.jsx'
+import PageLoader from './components/PageLoader.jsx'
 import ChatWidget from './components/ChatWidget.jsx'
 
 // Home sections
@@ -74,12 +75,12 @@ export default function App() {
         }
       />
       <Route path="/proyectos" element={
-        <Suspense fallback={null}>
+        <Suspense fallback={<PageLoader />}>
           <Proyectos />
         </Suspense>
       } />
       <Route path="/proyectos/:slug" element={
-        <Suspense fallback={null}>
+        <Suspense fallback={<PageLoader />}>
           <ProyectoDetalle />
         </Suspense>
       } />

@@ -12,8 +12,8 @@ export const videos = {
 
 export const images = {
   capa21: img('capa21.png'),
-  logoIcon: img('group1.svg'),
-  logoText: img('group.svg'),
+  logoIcon: img('icon.svg'),
+  logoText: img('leben.svg'),
   sello9: img('sello9.png'),
   sello4: img('sello4.png'),
   sello91: img('sello91.png'),

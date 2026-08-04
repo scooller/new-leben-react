@@ -15,14 +15,14 @@ export default function TeamAgents({ data }) {
       <ScrollAnim
         as="div"
         id="asesores"
-        className="row row-cols-1 row-cols-md-3 justify-content-center align-items-center g-4 w-50 mt-4 mx-auto"
+        className="row g-4 mt-4 mx-auto"
         animation="fade-up"
         stagger={0.1}
         delay={0.1}
       >
         {data.agents.map((agent) => (
-          <div key={agent.email} className="col-md-4 col-6 d-flex">
-            <AgentCard {...agent} className="w-100" />
+          <div key={agent.email} className="col-md-4 col-12 d-flex">
+            <AgentCard {...agent} />
           </div>
         ))}
       </ScrollAnim>
