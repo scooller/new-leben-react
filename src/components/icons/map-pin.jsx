@@ -1,6 +1,5 @@
 import { motion, useAnimation } from 'motion/react'
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react'
-import { cn } from '../../lib/utils.js'
 
 const SVG_VARIANTS = {
   normal: {
@@ -68,7 +67,7 @@ const MapPinIcon = forwardRef(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

@@ -52,7 +52,7 @@ const KeyIcon = forwardRef<KeyIconHandle, KeyIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

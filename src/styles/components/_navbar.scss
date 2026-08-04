@@ -1,4 +1,5 @@
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 .lb-navbar {
   z-index: 90;
@@ -81,7 +82,7 @@
   padding: 0.5rem 0;
   min-width: 12.5rem;
 
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     right: 0;
     max-width: calc(100vw - 2rem);
   }

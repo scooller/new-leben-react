@@ -1,15 +1,9 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
-
-/**
- * Refresh ScrollTrigger AFTER images are loaded.
- * Multiple fallbacks: image load events, window load, ResizeObserver, timeout.
- */
+/** Refresh ScrollTrigger after images load + cleanup on route change */
 export function useGsapAnimations() {
   const isLoaded = useSelector((s) => s.ui.isLoaded)
   const { pathname } = useLocation()
@@ -17,62 +11,38 @@ export function useGsapAnimations() {
   useEffect(() => {
     if (!isLoaded) return
 
-    let refreshed = false
-    const timeouts = []
-    const cleanups = []
+    const pending = Array.from(document.querySelectorAll('img')).filter((img) => !img.complete)
+    let done = false
 
     const refresh = () => {
-      if (refreshed) return
-      refreshed = true
+      if (done) return
+      done = true
       ScrollTrigger.refresh()
     }
-
-    const scheduleRefresh = (ms) => {
-      timeouts.push(setTimeout(refresh, ms))
-    }
-
-    // Strategy 1: immediate + short delays (catches fast loads)
-    scheduleRefresh(100)
-    scheduleRefresh(500)
-
-    // Strategy 2: wait for all images to finish loading
-    const imgs = Array.from(document.querySelectorAll('img'))
-    const pending = imgs.filter((img) => !img.complete)
 
     if (pending.length === 0) {
-      scheduleRefresh(200)
-    } else {
-      let remaining = pending.length
-      const onDone = () => {
-        if (--remaining === 0) {
-          scheduleRefresh(100)
-        }
-      }
-      pending.forEach((img) => {
-        img.addEventListener('load', onDone, { once: true })
-        img.addEventListener('error', onDone, { once: true })
-      })
-      cleanups.push(() => {
-        pending.forEach((img) => {
-          img.removeEventListener('load', onDone)
-          img.removeEventListener('error', onDone)
-        })
-      })
+      const t = setTimeout(refresh, 200)
+      return () => clearTimeout(t)
     }
 
-    // Strategy 3: ResizeObserver — catches layout shifts from lazy images
-    const ro = new ResizeObserver(() => {
-      ScrollTrigger.refresh()
-    })
-    ro.observe(document.body)
-    cleanups.push(() => ro.disconnect())
+    let remaining = pending.length
+    const onDone = () => {
+      if (--remaining === 0) {
+        const t = setTimeout(refresh, 100)
+        // ponytail: timeout only, no ResizeObserver; add if lazy images cause layout shift recalcs
+      }
+    }
 
-    // Strategy 4: hard timeout fallback (3s) — last resort
-    scheduleRefresh(3000)
+    pending.forEach((img) => {
+      img.addEventListener('load', onDone, { once: true })
+      img.addEventListener('error', onDone, { once: true })
+    })
 
     return () => {
-      timeouts.forEach(clearTimeout)
-      cleanups.forEach((fn) => fn())
+      pending.forEach((img) => {
+        img.removeEventListener('load', onDone)
+        img.removeEventListener('error', onDone)
+      })
       ScrollTrigger.getAll().forEach((st) => st.kill())
     }
   }, [isLoaded, pathname])

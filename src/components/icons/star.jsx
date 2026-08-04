@@ -1,6 +1,5 @@
 import { motion, useAnimation } from 'motion/react'
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react'
-import { cn } from '../../lib/utils.js'
 
 const STAR_VARIANTS = {
   normal: {
@@ -57,7 +56,7 @@ const StarIcon = forwardRef(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

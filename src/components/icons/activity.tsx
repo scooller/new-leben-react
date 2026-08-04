@@ -75,7 +75,7 @@ const ActivityIcon = forwardRef<ActivityIconHandle, ActivityIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

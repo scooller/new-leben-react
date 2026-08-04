@@ -61,7 +61,7 @@ const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

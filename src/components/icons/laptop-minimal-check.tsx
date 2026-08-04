@@ -74,7 +74,7 @@ const LaptopMinimalCheckIcon = forwardRef<
 
   return (
     <div
-      className={cn(className)}
+      className={className}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}

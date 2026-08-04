@@ -69,7 +69,7 @@ const DumbbellIcon = forwardRef<DumbbellIconHandle, DumbbellIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

@@ -1,4 +1,5 @@
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 // ============================================================
 // Proyectos Hero
@@ -6,7 +7,7 @@
 .lb-proj-hero {
   height: 48.75rem;
   overflow: hidden;
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     min-height: 50dvh;
     border-radius: 0;
 
@@ -108,21 +109,16 @@
   font-size: $lb-fs-md;
   font-weight: 600;
   text-transform: uppercase;
-color: $lb-white !important;
-    border-color: $lb-white !important;
 
   &:hover {
     background: $lb-white;
-    color: $lb-dark !important;
+    color: $lb-dark;
   }
 }
 
-@media (max-width: 768px) {
+@include bs.media-breakpoint-down(md) {
   .lb-proj-hero {
     height: 32.5rem;
-  }
-
-  .lb-proj-hero-bg-wrap {
   }
 
   .lb-proj-hero-content {
@@ -329,13 +325,14 @@ color: $lb-white !important;
   white-space: nowrap;
   transition: opacity 0.3s ease;
 
-  &:hover { opacity: 0.85; }
+  &:hover { transform: none; opacity: 0.85; }
+  &:active { transform: scale(0.96); }
 }
 
 // ============================================================
 // Mobile responsive
 // ============================================================
-@media (max-width: 768px) {
+@include bs.media-breakpoint-down(md) {
   .lb-featured { padding-block: 3rem; }
 
   .lb-group-zone { font-size: $lb-fs-3xl; }

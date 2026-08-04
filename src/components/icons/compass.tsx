@@ -52,7 +52,7 @@ const CompassIcon = forwardRef<CompassIconHandle, CompassIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

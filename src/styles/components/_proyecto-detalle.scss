@@ -3,6 +3,7 @@
 // ============================================================
 
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 // --- Shared ---
 .lb-proj-det-section-title {
@@ -37,7 +38,7 @@
   height: 3.5rem;
   gap: 1rem;
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     overflow-x: auto;
     height: auto;
     padding-block: 0.75rem;
@@ -74,7 +75,7 @@
   gap: 1rem;
   height: 31.25rem;
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     height: auto;
     flex-direction: column;
   }
@@ -91,7 +92,7 @@
     object-fit: cover;
   }
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     flex: 0 0 auto;
     height: 17.5rem;
   }
@@ -112,7 +113,7 @@
     object-fit: cover;
   }
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     flex-direction: row;
 
     .lb-img-trigger {
@@ -149,7 +150,7 @@
 }
 
 .lb-proj-det-amenities-row {
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 0.5rem;
@@ -308,7 +309,7 @@
 }
 
 .lb-proj-det-cot-map {
-  @media (max-width: $lb-bp-lg) {
+  @include bs.media-breakpoint-down(lg) {
     margin-bottom: 1rem;
   }
 }
@@ -559,7 +560,7 @@
   height: 36.25rem;
   object-fit: cover;
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     height: 17.5rem;
   }
 }
@@ -571,7 +572,7 @@
 }
 
 // --- Mobile fixes: Spaces + Amenities ---
-@media (max-width: $lb-bp-md) {
+@include bs.media-breakpoint-down(md) {
   .lb-proj-det-spaces-amenities {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -651,11 +652,11 @@
   border-radius: $lb-radius-md;
   display: block;
 
-  @media (max-width: $lb-bp-lg) {
+  @include bs.media-breakpoint-down(lg) {
     flex: 0 0 calc((100% - 0.5rem) / 2);
   }
 
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     flex: 0 0 100%;
   }
 }
@@ -713,7 +714,7 @@
 // --- Team / Agents ---
 #asesores {
   width: 50%;
-  @media (max-width: $lb-bp-md) {
+  @include bs.media-breakpoint-down(md) {
     width: 100%;
   }
 }

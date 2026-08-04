@@ -6,14 +6,6 @@
 $font-primary:   'Lexend Deca', sans-serif;
 $font-secondary: 'Manrope', sans-serif;
 
-$font-weights: (
-  light:    300,
-  regular:  400,
-  medium:   500,
-  semibold: 600,
-  bold:     700,
-);
-
 // --- Font Sizes (recurring scale) ---
 $lb-fs-xs:    0.6875rem;  // 11px — badges, micro-labels
 $lb-fs-sm:    0.8125rem;  // 13px — secondary text, meta
@@ -56,14 +48,8 @@ $lb-text-muted:   #888888;
 $lb-text-light:   #999999;
 $lb-text-dark:    #2a2a2a;
 
-// --- Bootstrap Overrides ---
-$primary:       $lb-red;
-$secondary:     $lb-green;
-$dark:          $lb-dark;
-$body-bg:       $lb-cream;
-$body-color:    $lb-body;
-$font-family-sans-serif: $font-primary;
-$headings-color: $lb-dark;
+// Note: Bootstrap overrides ($primary, $secondary, $dark, etc.) are configured
+// directly in main.scss via @use 'bootstrap/scss/bootstrap' with (...).
 
 // --- Border Radius ---
 $lb-radius-sm:      2px;
@@ -77,13 +63,6 @@ $lb-radius-section: clamp(2rem, 8vw, 7.5rem);
 $lb-shadow-soft:    0 4px 24px rgba(0, 0, 0, 0.06);
 $lb-shadow-pill:    0 12px 16px rgba(56, 71, 60, 0.06);
 $lb-shadow-card:    0 8px 32px rgba(0, 0, 0, 0.08);
-
-// --- Breakpoints ---
-$lb-bp-sm:   576px;
-$lb-bp-md:   768px;
-$lb-bp-lg:   992px;
-$lb-bp-xl:   1200px;
-$lb-bp-xxl:  1400px;
 
 // --- Transitions ---
 $lb-transition:     all 0.3s ease;

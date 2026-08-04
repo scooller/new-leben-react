@@ -108,7 +108,7 @@ const SmileIcon = forwardRef<SmileIconHandle, SmileIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

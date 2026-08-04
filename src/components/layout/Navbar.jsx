@@ -8,10 +8,6 @@ const mainLinks = [
   { label: 'Clientes', href: 'https://www.pvi.cl/propietarios/leben/propietarios/login/' },
 ]
 
-const mainMobileLinks = [
-  { label: 'Cotizar', to: '/proyectos' },
-]
-
 // Dynamic page menus shown in dropdown
 const pageMenus = {
   home: [
@@ -83,7 +79,7 @@ export default function Navbar() {
 
         {/* Mobile nav */}
         <div className="d-lg-none d-flex align-items-center gap-2 ms-auto">
-          {mainMobileLinks.map((link) =>
+          {mainLinks.filter((l) => l.to).map((link) =>
             link.to ? (
               <Link key={link.label} to={link.to} className="lb-nav-link text-decoration-none">
                 {link.label}

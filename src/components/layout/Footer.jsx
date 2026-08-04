@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { footerContent } from '../../data/content.js'
 import { ShieldCheckIcon } from '../icons/shield-check.jsx'
 import { AwardIcon } from '../icons/award.jsx'
@@ -23,21 +22,11 @@ const socialIcons = {
   linkedin: LinkedinIcon,
 }
 
-/** Hover handlers that delegate to a lucide-animated icon ref */
-const hoverOn = (ref, i) => () => (i != null ? ref.current[i] : ref.current)?.startAnimation()
-const hoverOff = (ref, i) => () => (i != null ? ref.current[i] : ref.current)?.stopAnimation()
-
 export default function Footer() {
   const { legal, badges, address, schedule, phone, email, social } = footerContent
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.street}, ${address.city}`)}`
   const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}`
-
-  const badgeRefs = useRef([])
-  const mapPinRef = useRef(null)
-  const phoneRef = useRef(null)
-  const mailRef = useRef(null)
-  const socialRefs = useRef([])
 
   return (
     <footer className="lb-footer container-fluid">
@@ -61,10 +50,8 @@ export default function Footer() {
                   <div
                     key={b.label}
                     className={`lb-badge d-inline-flex flex-column align-items-center justify-content-center rounded border lb-badge-${b.icon}`}
-                    onMouseEnter={hoverOn(badgeRefs, i)}
-                    onMouseLeave={hoverOff(badgeRefs, i)}
                   >
-                    <Icon ref={(el) => { badgeRefs.current[i] = el }} size={20} className="lb-badge-icon" />
+                    <Icon size={20} className="lb-badge-icon" />
                     <span className="lb-badge-label">{b.label}</span>
                   </div>
                 )
@@ -79,10 +66,8 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
-              onMouseEnter={hoverOn(mapPinRef)}
-              onMouseLeave={hoverOff(mapPinRef)}
             >
-              <MapPinIcon ref={mapPinRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <MapPinIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <div className="d-flex flex-column lb-contact">
                 <span className="fw-semibold">{address.street}</span>
                 <span>{address.city}</span>
@@ -103,19 +88,15 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
-              onMouseEnter={hoverOn(phoneRef)}
-              onMouseLeave={hoverOff(phoneRef)}
             >
-              <PhoneIcon ref={phoneRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <PhoneIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <span className="lb-contact">{phone}</span>
             </a>
             <a
               href={`mailto:${email}`}
               className="d-flex gap-2 align-items-center text-decoration-none"
-              onMouseEnter={hoverOn(mailRef)}
-              onMouseLeave={hoverOff(mailRef)}
             >
-              <MailCheckIcon ref={mailRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <MailCheckIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <span className="lb-contact">{email}</span>
             </a>
           </div>
@@ -131,10 +112,8 @@ export default function Footer() {
                 href="#"
                 aria-label={s}
                 className="lb-social d-inline-flex align-items-center justify-content-center rounded-circle"
-                onMouseEnter={hoverOn(socialRefs, i)}
-                onMouseLeave={hoverOff(socialRefs, i)}
               >
-                <Ic ref={(el) => { socialRefs.current[i] = el }} size={16} />
+                <Ic size={16} />
               </a>
             )
           })}

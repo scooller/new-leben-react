@@ -1,4 +1,5 @@
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 .lb-footer {
   background: $lb-footer;
@@ -23,9 +24,13 @@
 
 // --- Footer icons (lucide-animated, motion handles hover animation) ---
 
-.lb-badge-icon,
+.lb-badge-icon {
+  color: $lb-white;
+}
+
 .lb-footer-icon {
   color: $lb-white;
+  transition: color 0.3s ease;
 }
 
 // --- Social links (fix: red-on-red was caused by global a:hover override) ---
@@ -57,10 +62,6 @@
   }
 }
 
-.lb-footer-icon {
-  transition: color 0.3s ease;
-}
-
 a:has(> .lb-footer-icon) {
   &:hover, &:active {
     > .lb-footer-icon {
@@ -72,7 +73,7 @@ a:has(> .lb-footer-icon) {
 .lb-col-w {
   width: 14.375rem;
 
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     width: 100%;
   }
 }

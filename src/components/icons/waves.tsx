@@ -52,7 +52,7 @@ const WavesIcon = forwardRef<WavesIconHandle, WavesIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

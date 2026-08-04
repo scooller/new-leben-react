@@ -28,9 +28,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (max-width: 768px) {
-    overflow-x: hidden;
-  }
 }
 
 #root {
@@ -56,9 +53,6 @@ a {
 
   &:hover { color: $lb-red-dark; }
 }
-
-// --- Section spacing ---
-.section { padding-block: 80px; }
 
 // --- Container cap: override Bootstrap max-widths at ≥1900px ---
 @media (min-width: 1900px) {
@@ -95,70 +89,18 @@ a {
   }
 }
 
-// --- Utility: uppercase tracking ---
-.text-uppercase-tracking {
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
 // --- Utility: directional section radius ---
 // Apply per-corner: .lb-radius-tl .lb-radius-br etc.
-// Composable — stack on any container that needs the decorative section curve.
-.lb-radius-tl-0 { border-top-left-radius:     0; }
-.lb-radius-tr-0 { border-top-right-radius:    0; }
-.lb-radius-bl-0 { border-bottom-left-radius:  0; }
-.lb-radius-br-0 { border-bottom-right-radius: 0; }
 .lb-radius-tl { border-top-left-radius:     $lb-radius-section; }
 .lb-radius-tr { border-top-right-radius:    $lb-radius-section; }
 .lb-radius-bl { border-bottom-left-radius:  $lb-radius-section; }
 .lb-radius-br { border-bottom-right-radius: $lb-radius-section; }
 
-// --- Utility: radius scale ---
-$lb-radius-scale: (
-  sm: $lb-radius-sm,
-  md: $lb-radius-md,
-  lg: $lb-radius-lg,
-  xl: $lb-radius-xl,
-);
-
-$lb-breakpoints: (
-  sm: $lb-bp-sm,
-  md: $lb-bp-md,
-  lg: $lb-bp-lg,
-  xl: $lb-bp-xl,
-);
-
-$lb-radius-corners: (
-  tl: top-left,
-  tr: top-right,
-  bl: bottom-left,
-  br: bottom-right,
-);
-
-@each $size, $radius in $lb-radius-scale {
-  $break: map-get($lb-breakpoints, $size);
-
-  @media (max-width: $break) {
-    .lb-radius-#{$size} { border-radius: $radius; }
-
-    @each $dir, $property in $lb-radius-corners {
-      .lb-radius-#{$size}-#{$dir} {
-        border-#{$property}-radius: $radius;
-      }
-    }
-  }
-}
-
 .lb-radius-pill    { border-radius: $lb-radius-pill; }
 .lb-radius-section { border-radius: $lb-radius-section; }
 
 // --- Utility: pill button ---
-.btn-pill {
-  border-radius: $lb-radius-pill !important;
-  padding: 16px 28px !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-}
+.btn-pill { border-radius: $lb-radius-pill !important; }
 
 // --- Global button micro-interactions (hover / focus-visible / active) ---
 .btn,
@@ -179,13 +121,6 @@ button[type] {
   &:active {
     transform: translateY(0) scale(0.97);
     filter: brightness(0.95);
-  }
-
-  // Buttons inside pill forms shouldn't lift — just press
-  &.lb-cta-btn,
-  &.lb-proj-cta-btn {
-    &:hover { transform: none; }
-    &:active { transform: scale(0.96); }
   }
 
   // Icon-only round buttons — just press, no lift

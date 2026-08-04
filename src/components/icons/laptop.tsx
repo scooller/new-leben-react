@@ -69,7 +69,7 @@ const LaptopIcon = forwardRef<LaptopIconHandle, LaptopIconProps>(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

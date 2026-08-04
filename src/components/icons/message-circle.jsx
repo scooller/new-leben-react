@@ -1,6 +1,5 @@
 import { motion, useAnimation } from 'motion/react'
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react'
-import { cn } from '../../lib/utils.js'
 
 const ICON_VARIANTS = {
   normal: {
@@ -61,7 +60,7 @@ const MessageCircleIcon = forwardRef(
 
     return (
       <div
-        className={cn(className)}
+        className={className}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

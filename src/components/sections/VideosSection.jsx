@@ -7,8 +7,6 @@ import { videosContent, images } from '../../data/content.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
-gsap.registerPlugin(ScrollTrigger)
-
 export default function VideosSection() {
   const { monthLabel, countLabel, project, gallery } = videosContent
   const sectionRef = useRef(null)

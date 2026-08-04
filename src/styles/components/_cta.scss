@@ -1,10 +1,11 @@
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 .lb-cta {
   position: relative;
   min-height: 43.75rem;
 
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     min-height: auto;
     padding: 4rem 1.25rem 5rem;
   }
@@ -28,7 +29,7 @@
   inset: 0;
   background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
 
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     background: linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 100%);
   }
 }
@@ -40,7 +41,7 @@
   padding: 6.875rem 1.25rem 5rem 5rem;
   justify-content: center;
 
-  @media (max-width: 768px) {
+  @include bs.media-breakpoint-down(md) {
     padding: 0;
     width: 100%;
   }
@@ -101,8 +102,11 @@
 
   &:hover,
   &:focus-visible {
+    transform: none;
     background: $lb-green;
     border-color: $lb-green;
     opacity: 0.92;
   }
+
+  &:active { transform: scale(0.96); }
 }
