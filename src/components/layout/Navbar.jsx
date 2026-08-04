@@ -2,6 +2,14 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
+/** Render a link from {label, to?, href?, route?} config */
+function Navlink({ link, className }) {
+  const to = link.to || link.route
+  return to
+    ? <Link key={link.label} to={to} className={className}>{link.label}</Link>
+    : <a key={link.label} href={link.href} className={className}>{link.label}</a>
+}
+
 const mainLinks = [
   { label: 'Cotizar', to: '/proyectos' },
   { label: 'Brokers', to: '/brokers' },
@@ -65,30 +73,14 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="d-none d-lg-flex align-items-center gap-2 ms-auto">
           {mainLinks.map((link) =>
-            link.to ? (
-              <Link key={link.label} to={link.to} className="lb-nav-link text-decoration-none">
-                {link.label}
-              </Link>
-            ) : (
-              <a key={link.label} href={link.href} className="lb-nav-link text-decoration-none">
-                {link.label}
-              </a>
-            ),
+            <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
           )}
         </div>
 
         {/* Mobile nav */}
         <div className="d-lg-none d-flex align-items-center gap-2 ms-auto">
-          {mainLinks.filter((l) => l.to).map((link) =>
-            link.to ? (
-              <Link key={link.label} to={link.to} className="lb-nav-link text-decoration-none">
-                {link.label}
-              </Link>
-            ) : (
-              <a key={link.label} href={link.href} className="lb-nav-link text-decoration-none">
-                {link.label}
-              </a>
-            ),
+          {mainLinks.map((link) =>
+            <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
           )}
         </div>
 
@@ -113,37 +105,13 @@ export default function Navbar() {
               {/* Mobile: show main links first */}
               <div className="d-lg-none">
                 {mainLinks.map((link) =>
-                  link.to ? (
-                    <Link key={link.label} to={link.to} className="lb-dropdown-link dropdown-item text-decoration-none">
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a key={link.label} href={link.href} className="lb-dropdown-link dropdown-item text-decoration-none">
-                      {link.label}
-                    </a>
-                  ),
+                  <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
                 )}
                 {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />}
               </div>
               {/* Page section links (all breakpoints) */}
               {dropdownLinks.map((link) =>
-                link.route ? (
-                  <Link
-                    key={link.label}
-                    to={link.route}
-                    className="lb-dropdown-link dropdown-item text-decoration-none"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="lb-dropdown-link dropdown-item text-decoration-none"
-                  >
-                    {link.label}
-                  </a>
-                ),
+                <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
               )}
             </div>
           </div>

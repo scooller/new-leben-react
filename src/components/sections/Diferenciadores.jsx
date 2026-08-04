@@ -2,12 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { diferenciadores, diferenciadoresTitle, searchFilters, images } from '../../data/content.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function Diferenciadores() {
   const navigate = useNavigate()

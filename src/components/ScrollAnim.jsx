@@ -1,11 +1,10 @@
 import { useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 /**
  * Reusable GSAP ScrollTrigger animation wrapper.
- * Props: as, animation (preset), duration, delay, stagger, start, once, markers, className, style, children
+ * Props: as, animation (preset), duration, delay, stagger, start, once, className, style, children
  */
 const PRESETS = {
   'fade-up':    { from: { opacity: 0, y: 50 },  to: { opacity: 1, y: 0 } },
@@ -24,7 +23,6 @@ export default function ScrollAnim({
   stagger = 0,
   start = 'top 85%',
   once = true,
-  markers = false,
   className = '',
   style,
   children,
@@ -55,7 +53,6 @@ export default function ScrollAnim({
           scrollTrigger: {
             trigger: el,
             start,
-            markers,
             toggleActions: once ? 'play none none none' : 'play reverse play reverse',
           },
         }
@@ -63,7 +60,7 @@ export default function ScrollAnim({
     }, el)
 
     return () => ctx.revert()
-  }, [animation, duration, delay, stagger, start, once, markers, isLoaded])
+  }, [animation, duration, delay, stagger, start, once, isLoaded])
 
   return (
     <Tag ref={ref} className={className} style={style} {...rest}>

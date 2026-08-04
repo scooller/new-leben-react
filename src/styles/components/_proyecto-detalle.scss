@@ -21,16 +21,14 @@
 
 // Hero reuses lb-proj-hero classes from _proyectos.scss — no duplicate CSS.
 
+.lb-split-word { margin-right: 0.25em; }
+
 // --- Tabs Bar (sticky) ---
 .lb-proj-det-tabs-bar {
   background: $lb-white;
   z-index: 80;
   top: $lb-navbar-height;
   border-bottom: 1px solid $lb-gray-300;
-  transition: box-shadow 0.3s ease;
-}
-
-.lb-proj-det-tabs-stuck {
   box-shadow: $lb-shadow-soft;
 }
 

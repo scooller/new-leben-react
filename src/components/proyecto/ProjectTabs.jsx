@@ -4,7 +4,7 @@
  */
 export default function ProjectTabs({ tabs }) {
   return (
-    <div className="lb-proj-det-tabs-bar position-sticky lb-proj-det-tabs-stuck">
+    <div className="lb-proj-det-tabs-bar position-sticky">
       <div className="container">
         <div className="lb-proj-det-tabs-row d-flex align-items-center">
           {tabs.map((tab) => (

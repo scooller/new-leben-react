@@ -15,7 +15,7 @@ export default function Vista360({ data }) {
   return (
     <section className="lb-proj-det-vista360" id="vista360">
       <div className="container">
-        <ScrollAnim as="div" className="lb-proj-det-vista360-header" animation="fade-up" start="center center" end="bottom top" markers={false}>
+        <ScrollAnim as="div" className="lb-proj-det-vista360-header" animation="fade-up" start="center center">
           <span className="lb-proj-det-vista360-eyebrow d-block mb-3">{data.eyebrow}</span>
           <h2 className="lb-proj-det-vista360-title">{data.title}</h2>
         </ScrollAnim>

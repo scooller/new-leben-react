@@ -26,10 +26,11 @@ export function useGsapAnimations() {
     }
 
     let remaining = pending.length
+    let t
     const onDone = () => {
       if (--remaining === 0) {
-        const t = setTimeout(refresh, 100)
         // ponytail: timeout only, no ResizeObserver; add if lazy images cause layout shift recalcs
+        t = setTimeout(refresh, 100)
       }
     }
 
@@ -39,6 +40,7 @@ export function useGsapAnimations() {
     })
 
     return () => {
+      clearTimeout(t)
       pending.forEach((img) => {
         img.removeEventListener('load', onDone)
         img.removeEventListener('error', onDone)

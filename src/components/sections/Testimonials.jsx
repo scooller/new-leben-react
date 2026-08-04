@@ -49,8 +49,8 @@ export default function Testimonials() {
         {/* Review cards */}
         <ScrollAnim as="div" className="row row-cols-1 row-cols-md-3 g-3" animation="fade-up" stagger={0.15} delay={0.2}>
           {reviews.map((review) => (
-            <div className="col">
-            <div className="bg-white rounded-3 shadow-sm lb-review-card d-flex flex-column gap-3 lb-img-trigger h-100" key={review.id} tabIndex={0}>
+            <div className="col" key={review.id}>
+            <div className="bg-white rounded-3 shadow-sm lb-review-card d-flex flex-column gap-3 lb-img-trigger h-100" tabIndex={0}>
               <div className="d-flex align-items-center gap-2">
                 <img src={images[review.avatar]} alt={review.name} width="44" height="44" className="rounded-circle flex-shrink-0 lb-img-interactive" style={{ objectFit: 'cover' }} loading="lazy" decoding="async" />
                 <div className="d-flex flex-column">

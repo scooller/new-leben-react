@@ -40,7 +40,7 @@ export default function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // ponytail: wait for window.load (all images synced) + 800ms min display
+    // ponytail: 800ms arbitrary, replace with LCP-based timing if bounce rate on fast connections rises
     const onLoad = () => setTimeout(() => dispatch(setLoaded()), 800)
 
     if (document.readyState === 'complete') {

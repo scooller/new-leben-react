@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 /**
  * Splits text into words and animates them on scroll.
@@ -38,7 +37,7 @@ export default function SplitTitle({
   return (
     <Tag ref={ref} className={className} {...rest}>
       {words.map((word, i) => (
-        <span key={i} className="lb-split-word" style={{ display: 'inline-block', overflow: 'hidden', marginRight: '0.25em' }}>
+        <span key={i} className="lb-split-word" style={{ display: 'inline-block', overflow: 'hidden' }}>
           <span style={{ display: 'inline-block', willChange: 'transform' }}>{word}</span>
         </span>
       ))}

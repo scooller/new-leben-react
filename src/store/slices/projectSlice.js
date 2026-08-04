@@ -5,7 +5,6 @@ const initialState = {
   slug: null,
   project: null,
   selectedFloorPlan: 0, // index into cotizador.floorPlan.thumbnails
-  activeVistaTab: 0, // index into vista360.tabs
   notFound: false,
 }
 
@@ -20,7 +19,6 @@ const projectSlice = createSlice({
         state.slug = slug
         state.project = project
         state.selectedFloorPlan = 0
-        state.activeVistaTab = 0
         state.notFound = false
       } else {
         state.slug = slug
@@ -31,11 +29,8 @@ const projectSlice = createSlice({
     selectFloorPlan: (state, action) => {
       state.selectedFloorPlan = action.payload
     },
-    setVistaTab: (state, action) => {
-      state.activeVistaTab = action.payload
-    },
   },
 })
 
-export const { loadProject, selectFloorPlan, setVistaTab } = projectSlice.actions
+export const { loadProject, selectFloorPlan } = projectSlice.actions
 export default projectSlice.reducer
