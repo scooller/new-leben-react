@@ -38,29 +38,27 @@ export default function Cotizador({ data }) {
               </div>
             ))}
             <div className="d-flex flex-column gap-2 mt-2">
-              <button className="btn btn-dark btn-pill">
+              <button className="btn btn-dark">
                 <img src={`${import.meta.env.BASE_URL}images/chevron-down.svg`} alt="" width="16" height="16" />
                 {' '}Filtrar
               </button>
-              <button className="btn btn-outline-dark btn-pill">Borrar filtros</button>
+              <button className="btn btn-outline-dark">Borrar filtros</button>
             </div>
           </div>
         </ScrollAnim>
 
         {/* Main: map + plan + details */}
         <ScrollAnim as="div" className="row g-4 lb-proj-det-cot-main" animation="fade-up" delay={0.1}>
-          {/* Location map */}
+          {/* Location sketch */}
           <div className="col-lg-3 lb-proj-det-cot-map">
             <div className="lb-proj-det-cot-map-canvas">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.2084684106285!2d-72.97051429999999!3d-41.32608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x961826c26e474ddf%3A0x96e78b5431548404!2sVicente%20P%C3%A9rez%20Rosales%20991%2C%205550034%20Puerto%20Varas%2C%20Los%20Lagos!5e0!3m2!1ses!2scl!4v1785872845121!5m2!1ses!2scl"
-                width="600"
-                height="450"
-                style={{ border: 0 }}
-                allowFullScreen
+              <img
+                src={data.mapImage}
+                alt="Esquicio del edificio"
+                className="w-100 h-100"
+                style={{ objectFit: 'contain' }}
                 loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
-                title="Ubicación Edificio INN"
+                decoding="async"
               />
             </div>
             <p className="lb-proj-det-cot-map-caption text-muted small mt-2">{data.mapCaption}</p>
@@ -106,7 +104,7 @@ export default function Cotizador({ data }) {
 
             <div className="d-flex gap-2 mt-3">
               {data.actions.map((a) => (
-                <button key={a} className="btn btn-outline-dark btn-pill flex-grow-1">{a}</button>
+                <button key={a} className="btn btn-outline-dark flex-grow-1">{a}</button>
               ))}
             </div>
 
@@ -126,7 +124,7 @@ export default function Cotizador({ data }) {
                   />
                 </div>
               </div>
-              <button className="btn btn-danger btn-pill w-100 mt-3 lb-proj-det-cot-cta">
+              <button className="btn btn-danger w-100 mt-3 lb-proj-det-cot-cta">
                 {data.ctaText}
               </button>
             </div>

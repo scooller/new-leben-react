@@ -17,6 +17,7 @@ export default function RelatedProjects({ data }) {
           <table className="table table-hover lb-proj-det-table align-middle">
             <thead className="d-lg-table-row-group">
               <tr>
+                <th className="text-uppercase lb-proj-det-table-hdr">Departamento</th>
                 <th className="text-uppercase lb-proj-det-table-hdr">Proyecto</th>
                 <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Ubicación</th>
                 <th className="d-none d-lg-table-cell text-uppercase lb-proj-det-table-hdr">Tipología</th>
@@ -28,6 +29,7 @@ export default function RelatedProjects({ data }) {
             <tbody>
               {data.rows.map((row) => (
                 <tr key={row.name}>
+                  <td className="fw-semibold">{row.dpto}</td>
                   <td className="fw-semibold">{row.name}</td>
                   <td className="d-none d-lg-table-cell">{row.location}</td>
                   <td className="d-none d-lg-table-cell">{row.tipologia}</td>
@@ -50,10 +52,6 @@ export default function RelatedProjects({ data }) {
             </tbody>
           </table>
         </ScrollAnim>
-
-        <div className="d-flex justify-content-end mt-4">
-          <Link to="/proyectos" className="btn lb-btn-gallery text-decoration-none">Ver todos los proyectos</Link>
-        </div>
       </div>
     </section>
   )

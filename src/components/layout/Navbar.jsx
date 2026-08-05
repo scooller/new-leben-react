@@ -16,6 +16,10 @@ const mainLinks = [
   { label: 'Clientes', href: 'https://www.pvi.cl/propietarios/leben/propietarios/login/' },
 ]
 
+const mainMobileLinks = [
+  { label: 'Cotizar', to: '/proyectos' },
+]
+
 // Dynamic page menus shown in dropdown
 const pageMenus = {
   home: [
@@ -58,7 +62,7 @@ export default function Navbar() {
 
   return (
     <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
-      <div className="container d-flex align-items-center justify-content-between">
+      <div className="container d-flex align-items-center justify-content-between g-5">
         {/* Logo group */}
         <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
           <img src={images.logoIcon} alt="" width="23" height="22" className="flex-shrink-0" fetchPriority="high" />
@@ -79,7 +83,7 @@ export default function Navbar() {
 
         {/* Mobile nav */}
         <div className="d-lg-none d-flex align-items-center gap-2 ms-auto">
-          {mainLinks.map((link) =>
+          {mainMobileLinks.map((link) =>
             <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
           )}
         </div>

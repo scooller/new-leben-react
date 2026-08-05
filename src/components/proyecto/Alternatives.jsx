@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import ProjectCard from '../ProjectCard.jsx'
@@ -19,6 +20,9 @@ export default function Alternatives({ data }) {
           </div>
         ))}
       </ScrollAnim>
+      <div className="d-flex justify-content-end mt-4">
+        <Link to="/proyectos" className="btn lb-btn-gallery text-decoration-none">Ver todos los proyectos</Link>
+      </div> 
     </section>
   )
 }

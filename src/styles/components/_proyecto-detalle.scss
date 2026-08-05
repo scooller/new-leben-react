@@ -8,7 +8,6 @@
 // --- Shared ---
 .lb-proj-det-section-title {
   font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: 700;
   line-height: 1.15;
   color: $lb-dark;
 }
@@ -263,12 +262,6 @@
   position: relative;
   overflow: hidden;
   border-radius: 1.5rem;
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
 }
 
 .lb-proj-det-vista360-empty {
@@ -484,6 +477,51 @@
   padding-block: 5rem;
 }
 
+// --- Spaces grid: 1 full-width + 2 half-width ---
+.lb-proj-det-spaces-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lb-proj-det-spaces-grid-main {
+  display: block;
+  overflow: hidden;
+  border-radius: $lb-radius-md;
+
+  img {
+    width: 100%;
+    height: 24rem;
+    object-fit: cover;
+
+    @include bs.media-breakpoint-down(md) {
+      height: 17.5rem;
+    }
+  }
+}
+
+.lb-proj-det-spaces-grid-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.lb-proj-det-spaces-grid-half {
+  flex: 1 1 50%;
+  display: block;
+  overflow: hidden;
+  border-radius: $lb-radius-md;
+
+  img {
+    width: 100%;
+    height: 12.5rem;
+    object-fit: cover;
+
+    @include bs.media-breakpoint-down(md) {
+      height: 12.5rem;
+    }
+  }
+}
+
 // Amenity selector buttons
 .lb-proj-det-space-btn {
   background: transparent;
@@ -531,6 +569,44 @@
   scrollbar-width: none;
 
   &::-webkit-scrollbar { display: none; }
+}
+
+// Gallery nav arrows (terminaciones) — overlay on images like bottom-gallery
+.lb-proj-det-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(0.25rem);
+  border: none !important;
+  color: $lb-white !important;
+  opacity: 0.7;
+  transition: opacity 0.2s ease !important;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    opacity: 1;
+    color: $lb-white !important;
+    background: $lb-red !important;
+    transform: translateY(-50%) !important;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &--prev { left: 0.5rem; }
+  &--next { right: 0.5rem; }
 }
 
 .lb-proj-det-space-slide {
@@ -711,7 +787,7 @@
 
 // --- Team / Agents ---
 #asesores {
-  width: 50%;
+  width: 60%;
   @include bs.media-breakpoint-down(md) {
     width: 100%;
   }

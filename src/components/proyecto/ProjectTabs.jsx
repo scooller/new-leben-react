@@ -6,7 +6,7 @@ export default function ProjectTabs({ tabs }) {
   return (
     <div className="lb-proj-det-tabs-bar position-sticky">
       <div className="container">
-        <div className="lb-proj-det-tabs-row d-flex align-items-center">
+        <div className="lb-proj-det-tabs-row d-flex align-items-center text-center mx-auto w-75">
           {tabs.map((tab) => (
             <div key={tab.id} className="lb-proj-det-tab d-flex flex-column">
               <span className="lb-proj-det-tab-label text-uppercase">{tab.label}</span>

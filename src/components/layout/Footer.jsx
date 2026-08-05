@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { footerContent } from '../../data/content.js'
 import { ShieldCheckIcon } from '../icons/shield-check.jsx'
 import { AwardIcon } from '../icons/award.jsx'
@@ -9,6 +10,12 @@ import { MailCheckIcon } from '../icons/mail-check.jsx'
 import { FacebookIcon } from '../icons/facebook.jsx'
 import { InstagramIcon } from '../icons/instagram.jsx'
 import { LinkedinIcon } from '../icons/linkedin.jsx'
+
+/** Spread on a link/button to trigger a ref'd icon's animation on hover */
+const hover = (ref) => ({
+  onMouseEnter: () => ref.current?.startAnimation(),
+  onMouseLeave: () => ref.current?.stopAnimation(),
+})
 
 const badgeIcons = {
   shieldCheck: ShieldCheckIcon,
@@ -23,28 +30,34 @@ const socialIcons = {
 }
 
 export default function Footer() {
-  const { legal, badges, address, schedule, phone, email, social } = footerContent
+  const { legal, badges, address, schedule, phone, email, social, socialLinks, legalLinks, copyright, copyrightLinks } = footerContent
+
+  const mapRef = useRef(null)
+  const clockRef = useRef(null)
+  const phoneRef = useRef(null)
+  const mailRef = useRef(null)
+  const socialRefs = useRef([])
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.street}, ${address.city}`)}`
   const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}`
 
   return (
     <footer className="lb-footer container-fluid">
-      <div className="container text-white">
+      <div className="container text-white pt-4">
         {/* Legal band */}
-        <div className="py-3 px-4 px-md-5">
+        <div className="py-3 px-4 px-md-5 mb-3">
           <p className="mb-0 lh-lg lb-legal">{legal}</p>
         </div>
 
-        {/* Main footer */}
-        <div className="d-flex flex-wrap justify-content-between align-items-start gap-4 px-4 px-md-5 py-4">
-          {/* Logo + badges */}
-          <div className="d-flex flex-column gap-3">
+        {/* Main footer — 5 columns per Figma */}
+        <div className="row g-4 px-4 px-md-5 py-4">
+          {/* Col 1: Logo + badges */}
+          <div className="col-6 col-md d-flex flex-column gap-3">
             <div className="fs-2 fw-bold">
-              <span className="text-danger">i</span><span className="text-white">Leben</span>
+              <img src="/images/leben_bptl_pro.svg" alt="" className="flex-shrink-0 img-logo" fetchPriority="high" />
             </div>
             <div className="d-flex gap-2">
-              {badges.map((b, i) => {
+              {badges.map((b) => {
                 const Icon = badgeIcons[b.icon] || StarIcon
                 return (
                   <div
@@ -59,26 +72,27 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Address */}
-          <div className="lb-col-w">
+          {/* Col 2: Address */}
+          <div className="col-6 col-md">
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
+              className="d-flex gap-2 align-items-start text-decoration-none"
+              {...hover(mapRef)}
             >
-              <MapPinIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <MapPinIcon ref={mapRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <div className="d-flex flex-column lb-contact">
-                <span className="fw-semibold">{address.street}</span>
+                <span>{address.street}</span>
                 <span>{address.city}</span>
               </div>
             </a>
           </div>
 
-          {/* Contact */}
-          <div className="lb-col-w">
-            <div className="d-flex gap-2 align-items-center mb-2">
-              <ClockIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+          {/* Col 3: Contact */}
+          <div className="col-6 col-md">
+            <div className="d-flex gap-2 align-items-start mb-3" {...hover(clockRef)}>
+              <ClockIcon ref={clockRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
               <div className="d-flex flex-column lb-contact">
                 {schedule.map((line) => <span key={line}>{line}</span>)}
               </div>
@@ -87,36 +101,66 @@ export default function Footer() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
+              className="d-flex gap-2 align-items-center mb-3 text-decoration-none"
+              {...hover(phoneRef)}
             >
-              <PhoneIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <PhoneIcon ref={phoneRef} size={16} className="lb-footer-icon flex-shrink-0" />
               <span className="lb-contact">{phone}</span>
             </a>
             <a
               href={`mailto:${email}`}
               className="d-flex gap-2 align-items-center text-decoration-none"
+              {...hover(mailRef)}
             >
-              <MailCheckIcon size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <MailCheckIcon ref={mailRef} size={16} className="lb-footer-icon flex-shrink-0" />
               <span className="lb-contact">{email}</span>
             </a>
           </div>
+
+          {/* Col 4: Legal & Acceso */}
+          <div className="col-6 col-md">
+            <h3 className="lb-footer-title">Legal &amp; Acceso</h3>
+            <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+              {legalLinks.map((link) => (
+                <li key={link}>
+                  <a href="#" className="lb-footer-link">{link}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 5: Síguenos */}
+          <div className="col-6 col-md">
+            <h3 className="lb-footer-title">Síguenos</h3>
+            <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+              {social.map((s, i) => {
+                const Ic = socialIcons[s] || FacebookIcon
+                return (
+                  <li key={s}>
+                    <a
+                      href="#"
+                      className="lb-social-row d-inline-flex align-items-center gap-2 text-decoration-none"
+                      onMouseEnter={() => socialRefs.current[i]?.startAnimation()}
+                      onMouseLeave={() => socialRefs.current[i]?.stopAnimation()}
+                    >
+                      <Ic ref={(el) => { socialRefs.current[i] = el }} size={18} />
+                      <span className="lb-contact">{socialLinks[s]}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
 
-        {/* Social */}
-        <div className="d-flex gap-3 px-4 px-md-5 py-3 border-top border-secondary border-opacity-10">
-          {social.map((s, i) => {
-            const Ic = socialIcons[s] || FacebookIcon
-            return (
-              <a
-                key={s}
-                href="#"
-                aria-label={s}
-                className="lb-social d-inline-flex align-items-center justify-content-center rounded-circle"
-              >
-                <Ic size={16} />
-              </a>
-            )
-          })}
+        {/* Copyright strip */}
+        <div className="d-flex flex-wrap justify-content-between align-items-center px-4 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-copyright-strip">
+          <span className="lb-copyright">{copyright}</span>
+          <div className="d-flex gap-3">
+            {copyrightLinks.map((link) => (
+              <a key={link} href="#" className="lb-footer-link">{link}</a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

@@ -11,7 +11,7 @@ export const videos = {
 }
 
 export const images = {
-  capa21: img('capa21.png'),
+  capa21: img('Prueba fondo.png'),
   logoIcon: img('icon.svg'),
   logoText: img('leben.svg'),
   sello9: img('sello9.png'),
@@ -160,7 +160,7 @@ export const ctaContent = {
 }
 
 export const videosContent = {
-  monthLabel: 'Proyecto del mes',
+  monthLabel: 'Proyecto destacado del mes',
   countLabel: '06 Obras seleccionadas',
   project: {
     name: 'Edificio INN',
@@ -192,6 +192,21 @@ export const footerContent = {
   phone: '+569 9129 7804',
   email: 'info@ileben.cl',
   social: ['facebook', 'instagram', 'linkedin'],
+  socialLinks: {
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    linkedin: 'LinkedIn',
+  },
+  legalLinks: [
+    'Canal de Denuncias y Consultas',
+    'Acceso Colaboradores',
+    'Proceso Reserva en Línea',
+    'Información de la Empresa',
+    'Bases Legales',
+    'Trabaja en Leben',
+  ],
+  copyright: '© 2024 Ileben Real Estate. Todos los derechos reservados.',
+  copyrightLinks: ['Privacidad', 'Términos', 'Cookies'],
 }
 
 // ============================================================

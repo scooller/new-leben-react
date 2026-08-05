@@ -1,19 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Fancybox } from '@fancyapps/ui'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
-import AMENITY_ICONS from '../icons/amenities.jsx'
 
 /**
- * Spaces gallery linked to amenities.
- * Amenity buttons animate on hover/focus/active and select a gallery image.
+ * Spaces gallery — 3-image grid layout:
+ * 1 full-width image + 2 half-width below.
  * Click on image opens Fancybox lightbox.
  */
 export default function SpacesGallery({ data }) {
-  const [activeIdx, setActiveIdx] = useState(null)
   const sectionRef = useRef(null)
-  const iconRefs = useRef([])
 
   useEffect(() => {
     const el = sectionRef.current
@@ -22,17 +19,7 @@ export default function SpacesGallery({ data }) {
     return () => Fancybox.unbind(el)
   }, [])
 
-  // Init all icons to "normal" (drawn) on mount so they're always visible
-  useEffect(() => {
-    iconRefs.current.forEach((ref) => ref?.stopAnimation())
-  }, [])
-
-  useEffect(() => {
-    iconRefs.current.forEach((ref, i) => {
-      if (i === activeIdx) ref?.startAnimation()
-      else ref?.stopAnimation()
-    })
-  }, [activeIdx])
+  const images = data.images || []
 
   return (
     <section className="lb-proj-det-spaces container" id="espacios" ref={sectionRef}>
@@ -42,24 +29,57 @@ export default function SpacesGallery({ data }) {
           className="col-lg-6 order-md-0 order-1 lb-proj-det-spaces-gallery"
           animation="fade-right"
         >
-          <div className={`lb-proj-det-spaces-scroller d-flex gap-2${activeIdx !== null ? ' is-focused' : ''}`}>
-            {(data.images || []).map((src, i) => (
+          <div className="lb-proj-det-spaces-grid">
+            {images[0] && (
               <a
-                key={i}
-                href={src}
+                href={images[0]}
                 data-fancybox="spaces-gallery"
-                className={`lb-img-trigger lb-proj-det-space-slide${i === activeIdx ? ' active' : ''}`}
+                className="lb-img-trigger lb-proj-det-spaces-grid-main"
                 tabIndex={0}
               >
                 <img
-                  src={src}
-                  alt={`Espacio ${i + 1}`}
-                  className="lb-proj-det-space-img lb-img-interactive"
+                  src={images[0]}
+                  alt={`Espacio 1`}
+                  className="lb-img-interactive"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-            ))}
+            )}
+            <div className="lb-proj-det-spaces-grid-row d-flex gap-2">
+              {images[1] && (
+                <a
+                  href={images[1]}
+                  data-fancybox="spaces-gallery"
+                  className="lb-img-trigger lb-proj-det-spaces-grid-half"
+                  tabIndex={0}
+                >
+                  <img
+                    src={images[1]}
+                    alt={`Espacio 2`}
+                    className="lb-img-interactive"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              )}
+              {images[2] && (
+                <a
+                  href={images[2]}
+                  data-fancybox="spaces-gallery"
+                  className="lb-img-trigger lb-proj-det-spaces-grid-half"
+                  tabIndex={0}
+                >
+                  <img
+                    src={images[2]}
+                    alt={`Espacio 3`}
+                    className="lb-img-interactive"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              )}
+            </div>
           </div>
         </ScrollAnim>
 
@@ -84,31 +104,6 @@ export default function SpacesGallery({ data }) {
           </div>
         </ScrollAnim>
       </div>
-
-      {/* Amenity buttons — below gallery */}
-      <ScrollAnim as="div" className="lb-proj-det-spaces-amenities d-flex flex-wrap justify-content-center gap-3 mt-5" animation="fade-up" stagger={0.08}>
-        {(data.amenities || []).map((item, i) => {
-          const Icon = AMENITY_ICONS[item.icon]
-          return (
-            <button
-              key={item.label}
-              type="button"
-              className={`lb-proj-det-space-btn d-flex flex-column align-items-center gap-2${i === activeIdx ? ' active' : ''}`}
-              aria-pressed={i === activeIdx}
-              onMouseEnter={() => iconRefs.current[i]?.startAnimation()}
-              onMouseLeave={() => { if (i !== activeIdx) iconRefs.current[i]?.stopAnimation() }}
-              onFocus={() => iconRefs.current[i]?.startAnimation()}
-              onBlur={() => { if (i !== activeIdx) iconRefs.current[i]?.stopAnimation() }}
-              onClick={() => setActiveIdx(i === activeIdx ? null : i)}
-            >
-              <span className="lb-proj-det-space-btn-icon">
-                {Icon && <Icon ref={(el) => (iconRefs.current[i] = el)} size={32} />}
-              </span>
-              <span className="lb-proj-det-space-btn-label">{item.label}</span>
-            </button>
-          )
-        })}
-      </ScrollAnim>
     </section>
   )
 }

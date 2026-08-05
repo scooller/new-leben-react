@@ -1,13 +1,25 @@
+import { useEffect, useRef } from 'react'
+import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
 /**
  * Overview section: 3-image collage + text + stats grid.
- * Reuses lb-img-trigger / lb-img-interactive.
+ * Click on image opens Fancybox lightbox.
  */
 export default function ProjectOverview({ data }) {
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    Fancybox.bind(el, '[data-fancybox="overview-gallery"]', {})
+    return () => Fancybox.unbind(el)
+  }, [])
+
   return (
-    <section className="lb-proj-det-overview container" id="overview">
+    <section className="lb-proj-det-overview container" id="overview" ref={sectionRef}>
       <div className="row align-items-center g-5">
         {/* Collage */}
         <ScrollAnim
@@ -15,7 +27,12 @@ export default function ProjectOverview({ data }) {
           className="col-lg-6 lb-proj-det-collage"
           animation="fade-right"
         >
-          <div className="lb-proj-det-collage-left lb-img-trigger" tabIndex={0}>
+          <a
+            href={data.collage.left}
+            data-fancybox="overview-gallery"
+            className="lb-proj-det-collage-left lb-img-trigger"
+            tabIndex={0}
+          >
             <img
               src={data.collage.left}
               alt=""
@@ -23,9 +40,14 @@ export default function ProjectOverview({ data }) {
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </a>
           <div className="lb-proj-det-collage-right d-flex flex-md-column gap-3">
-            <div className="lb-img-trigger" tabIndex={0}>
+            <a
+              href={data.collage.rightTop}
+              data-fancybox="overview-gallery"
+              className="lb-img-trigger"
+              tabIndex={0}
+            >
               <img
                 src={data.collage.rightTop}
                 alt=""
@@ -33,8 +55,13 @@ export default function ProjectOverview({ data }) {
                 loading="lazy"
                 decoding="async"
               />
-            </div>
-            <div className="lb-img-trigger" tabIndex={0}>
+            </a>
+            <a
+              href={data.collage.rightBottom}
+              data-fancybox="overview-gallery"
+              className="lb-img-trigger"
+              tabIndex={0}
+            >
               <img
                 src={data.collage.rightBottom}
                 alt=""
@@ -42,7 +69,7 @@ export default function ProjectOverview({ data }) {
                 loading="lazy"
                 decoding="async"
               />
-            </div>
+            </a>
           </div>
         </ScrollAnim>
 

@@ -5,6 +5,7 @@
 
 const img = (name) => `${import.meta.env.BASE_URL}images/${name}`
 const vid = (name) => `${import.meta.env.BASE_URL}video/${name}`
+const iframe = (src) => src
 
 export const projectDetails = {
   inn: {
@@ -19,7 +20,7 @@ export const projectDetails = {
 
     // --- Hero ---
     hero: {
-      title: 'Vive la exclusividad frente al lago',
+      title: 'El Sur se vive frente al lago',
       subtitle: 'Conexión Urbana & Paisajismo Interior',
       location: 'Puerto Varas',
       backgroundVideo: vid('hero-inn.mp4'),
@@ -28,11 +29,11 @@ export const projectDetails = {
 
     // --- Tabs (sticky bar) ---
     tabs: [
-      { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991' },
+      { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
       { id: 'tipologia', label: 'Tipología', value: '2-3-4 Dorms' },
       { id: 'metraje', label: 'Metraje', value: 'Desde 85 m²' },
       { id: 'precio', label: 'Precio desde', value: 'UF 9.816' },
-      { id: 'estado', label: 'Estado', value: 'En Venta' },
+      { id: 'estado', label: 'Estado', value: 'Venta en Verde' },
     ],
 
     // --- Overview ---
@@ -47,8 +48,8 @@ export const projectDetails = {
         rightBottom: img('inn-overview-3.jpg'),
       },
       stats: [
-        { value: '2-3-4', label: 'Dormitorios' },
-        { value: 'XX a XX m²', label: 'Superficie útil' },
+        { value: '2 • 3 • 4', label: 'Dormitorios' },
+        { value: 'Desde 85 m²', label: 'Superficie útil' },
         { value: 'Franke', label: 'Equipación en cocina' },
       ],
     },
@@ -64,14 +65,32 @@ export const projectDetails = {
       { icon: 'compass', label: 'Bicicleteros' },
     ],
 
-    // --- Floor Plans ---
+    // --- Floor Plans / Terminaciones ---
     floorPlans: {
       eyebrow: '2. TERMINACIONES | Diseñadas para durar',
-      title: 'ENCUENTRA TU DISTRIBUCIÓN IDEAL',
+      title: 'TERMINACIONES',
       description:
-        'Cada departamento cuenta con piso vinílico resistente al agua, ventanas termopanel de PVC, cubiertas de cuarzo en cocinas y un equipamiento completo con horno, encimera vitrocerámica y campana retráctil.',
-      blueprint: img('inn-blueprint.jpg'),
-      buttons: ['Ver Modelos 2D', 'Ver Modelos 3D', 'Ver Modelos 4D'],
+        'Equipamiento premium marca Franke: horno, horno microondas, lavavajillas panelable, encimera y campana. Cubierta de cocina ultra compacto terminación Travertino.',
+      images: [
+        img('inn/terminacion-horno.jpg'),
+        img('inn/terminacion-microondas.jpg'),
+        img('inn/terminacion-lavavajillas.jpg'),
+        img('inn/terminacion-encimera-campana.jpg'),
+        img('inn/terminacion-cubierta-cocina.jpg'),
+        img('inn/terminacion-griferia-cocina.jpg'),
+        img('inn/terminacion-griferia-bano.jpg'),
+        img('inn/terminacion-puertas.jpg'),
+      ],
+      items: [
+        { label: 'Horno Franke' },
+        { label: 'Horno Microondas Franke' },
+        { label: 'Lavavajillas Panelable Franke' },
+        { label: 'Encimera y Campana Franke' },
+        { label: 'Cubierta Cocina Travertino' },
+        { label: 'Grifería Cocina' },
+        { label: 'Grifería Baño Principal' },
+        { label: 'Puertas Enchape' },
+      ],
     },
 
     // --- Vista 360 ---
@@ -79,7 +98,7 @@ export const projectDetails = {
       eyebrow: 'RECORRIDO VIRTUAL',
       title: 'Explora el proyecto',
       tabs: ['Master Plan', 'Pilotos 360°', 'Vista por piso'],
-      images: [img('inn-vista360.jpg'), null, null],
+      images: [img('inn-vista360.jpg'), iframe('https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0'), iframe('https://www.lanube360.com/ileben1/')],
     },
 
     // --- Cotizador (visual mock) ---
@@ -87,8 +106,8 @@ export const projectDetails = {
       title: 'Cotiza tu próximo depto en <span class="text-danger">Edificio INN</span>',
       filters: {
         row1: [
-          { label: 'Todas las tipologías', options: ['2 Dorms', '3 Dorms', '4 Dorms'] },
-          { label: 'Todos los tipos de producto', options: ['Departamento', 'Dúplex', 'Dúplex con Patio'] },
+          { label: 'Todas las tipologías', options: ['2D+2B', '2D+3B', '3D+2B', '3D+3B', '3D+4B', '4D+4B'] },
+          { label: 'Todos los tipos de producto', options: ['Departamento'] },
         ],
         row2: [
           { label: 'Todos los pisos', options: ['Piso 1-5', 'Piso 6-10', 'Piso 11+'] },
@@ -96,6 +115,7 @@ export const projectDetails = {
         ],
       },
       mapCaption: 'Ubicación del edificio en Puerto Varas',
+      mapImage: img('inn/esquicio.png'),
       floorPlan: {
         image: img('inn-cotizador-planta.jpg'),
         thumbnails: [
@@ -129,9 +149,9 @@ export const projectDetails = {
       title: 'Proyectos similares que te pueden interesar',
       columns: ['Proyecto', 'Ubicación', 'Tipología', 'Superficie', 'Precio', ''],
       rows: [
-        { name: 'Edificio Mood', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '60-90 m²', precio: 'UF 6.200*' },
-        { name: 'Edificio Sol', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '70-100 m²', precio: 'UF 7.100*' },
-        { name: 'Edificio Luz', location: 'Puerto Varas', tipologia: '1-2 Dorms', superficie: '45-70 m²', precio: 'UF 4.800*' },
+        { dpto: 'Piso 1', name: 'Edificio Mood', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '60-90 m²', precio: 'UF 6.200*' },
+        { dpto: 'Piso 10', name: 'Edificio Sol', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '70-100 m²', precio: 'UF 7.100*' },
+        { dpto: 'Piso Duplex', name: 'Edificio Luz', location: 'Puerto Varas', tipologia: '1-2 Dorms', superficie: '45-70 m²', precio: 'UF 4.800*' },
       ],
     },
 
@@ -148,22 +168,13 @@ export const projectDetails = {
     // --- Spaces Gallery ---
     spacesGallery: {
       eyebrow: '4. ESPACIOS | Diseño de vanguardia',
-      title: 'VIVIR PARA DISFRUTAR EL SILENCIO',
+      title: 'VIVE LOS ESPACIOS DISEÑADOS PARA TÍ',
       description:
-        'La volumetría exterior y el diseño de interiores de INN han sido diseñados meticulosamente por Sofia Iturralde. "La fluidez espacial y el uso de luz natural cenital crean una atmósfera de calma y desconexión en medio de la ciudad."',
-      amenities: [
-        { icon: 'laptop', label: 'Cowork & Lounge' },
-        { icon: 'flame', label: 'Quincho en Rooftop' },
-        { icon: 'dumbbell', label: 'Training Zone' },
-        { icon: 'waves', label: 'Piscina' },
-        { icon: 'smile', label: 'Juegos Infantiles' },
-      ],
+        'Departamentos diseñados para aprovechar al máximo la luz natural y las vistas al lago. Terrazas, dormitorios y baños con terminaciones premium.',
       images: [
-        img('inn-space-1.jpg'),
+        img('inn/render.jpeg'),
         img('inn-space-2.jpg'),
         img('inn-space-3.jpg'),
-        img('inn-space-4.jpg'),
-        img('inn-space-5.jpg'),
       ],
       designer: {
         name: 'Sofia Iturralde',
@@ -184,14 +195,22 @@ export const projectDetails = {
     // --- Location ---
     location: {
       eyebrow: '5. UBICACIÓN | Conectividad Total',
-      title: 'CONOCE TU ENTORNO',
+      title: 'UBICACIÓN PRIVILEGIADA EN PUERTO VARAS',
       description:
-        'INN se emplaza en una de las zonas residenciales más tranquilas y tradicionales de Puerto Varas, a pasos de la costanera y de una vista única frente al lago Llanquihue.',
+        'INN se emplaza en primera línea frente al lago Llanquihue, en una de las zonas más privilegiadas de Puerto Varas, roderado de los principales atractivos de la ciudad.',
       checklist: [
-        'A pasos de la costanera peatonal de Puerto Varas',
-        'Cercano a Mall y Supermercado',
-        'A minutos del Casino de Puerto Varas',
-        'Cercano al centro urbano de la ciudad',
+        'Museo Pablo Fierro',
+        'Monumento Héroes Patrios',
+        'Casino',
+        'Centro de Puerto Varas',
+        'Mall - Supermercado',
+        'Costanera',
+        'Muelle Piedralplen',
+        'Muelle Puerto Varas',
+        'Mesa Tropera',
+        'Hotel Cumbres',
+        'Cassis',
+        'La Olla',
       ],
       mapImage: img('inn-map.jpg'),
     },

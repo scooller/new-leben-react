@@ -11,6 +11,7 @@ export default function Vista360({ data }) {
   const images = data.images ?? [data.image]
   const currentImage = images[active]
   const hasContent = Boolean(currentImage)
+  const isIframe = typeof currentImage === 'string' && /^https?:\/\//.test(currentImage)
 
   return (
     <section className="lb-proj-det-vista360" id="vista360">
@@ -43,13 +44,25 @@ export default function Vista360({ data }) {
           key={active}
         >
           {hasContent ? (
-            <img
-              src={currentImage}
-              alt={`Recorrido virtual — ${data.tabs[active]}`}
-              className="w-100"
-              loading="lazy"
-              decoding="async"
-            />
+            isIframe ? (
+              <div className="ratio ratio-16x9">
+                <iframe
+                  src={currentImage}
+                  title={`Recorrido virtual — ${data.tabs[active]}`}
+                  style={{ minHeight: '500px', border: 'none' }}
+                  allowFullScreen
+                  loading="lazy"
+                  />
+              </div>
+            ) : (
+              <img
+                src={currentImage}
+                alt={`Recorrido virtual — ${data.tabs[active]}`}
+                className="img-fluid"
+                loading="lazy"
+                decoding="async"
+              />
+            )
           ) : (
             <div className="lb-proj-det-vista360-empty d-flex flex-column align-items-center justify-content-center gap-3 py-5">
               <Ban size={48} className="text-muted" />

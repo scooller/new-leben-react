@@ -16,7 +16,10 @@ export default function CTASection() {
           <SplitTitle as="h2" className="lb-cta-title mb-0" text={title} />
           <p className="lb-cta-subtitle mb-0">{subtitle}</p>
         </div>
-        <form className="d-flex align-items-center justify-content-between lb-cta-pill" onSubmit={(e) => e.preventDefault()}>
+        <button type="submit" className="btn lb-cta-btn text-white flex-shrink-0">
+            {buttonText}
+          </button>
+        {/* <form className="d-flex align-items-center justify-content-between lb-cta-pill" onSubmit={(e) => e.preventDefault()}>
           <div className="d-flex flex-column gap-1 flex-grow-1 ps-4">
             <label className="lb-cta-label">{inputLabel}</label>
             <input
@@ -29,7 +32,7 @@ export default function CTASection() {
           <button type="submit" className="btn lb-cta-btn text-white flex-shrink-0">
             {buttonText}
           </button>
-        </form>
+        </form> */}
       </div>
     </ScrollAnim>
   )

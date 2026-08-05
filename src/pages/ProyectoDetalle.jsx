@@ -53,7 +53,7 @@ export default function ProyectoDetalle() {
         <ProjectHero data={project.hero} />
         <ProjectTabs tabs={project.tabs} />
         <ProjectOverview data={project.overview} />
-        <AmenitiesStrip items={project.amenitiesTop} />
+        {/* <AmenitiesStrip items={project.amenitiesTop} /> */}
         <FloorPlans data={project.floorPlans} />
         <Vista360 data={project.vista360} />
         <Cotizador data={project.cotizador} />

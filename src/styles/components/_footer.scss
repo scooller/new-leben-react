@@ -70,14 +70,6 @@ a:has(> .lb-footer-icon) {
   }
 }
 
-.lb-col-w {
-  width: 14.375rem;
-
-  @include bs.media-breakpoint-down(md) {
-    width: 100%;
-  }
-}
-
 .lb-contact {
   font-size: $lb-fs-sm;
   color: $lb-white;
@@ -98,4 +90,44 @@ a {
   transition: background 0.3s ease;
 
   &:hover { background: $lb-red; }
+}
+
+// --- New: column titles, link lists, copyright strip (per Figma) ---
+
+.lb-footer-title {
+  font-size: $lb-fs-xs;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: $lb-white;
+  margin-bottom: 0.75rem;
+}
+
+.lb-footer-link {
+  font-size: $lb-fs-sm;
+  color: $lb-white;
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: $lb-red;
+  }
+}
+
+.lb-social-row {
+  transition: color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    .lb-contact { color: $lb-red; }
+  }
+}
+
+.lb-copyright-strip {
+  gap: 1rem;
+}
+
+.lb-copyright {
+  font-size: $lb-fs-xs;
+  color: rgba($lb-white, 0.7);
 }
