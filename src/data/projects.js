@@ -54,17 +54,6 @@ export const projectDetails = {
       ],
     },
 
-    // --- Amenities Strip (upper) ---
-    amenitiesTop: [
-      { icon: 'key', label: 'Conserjería 24/7' },
-      { icon: 'droplet', label: 'Piscina Lounge' },
-      { icon: 'activity', label: 'Gimnasio Fit' },
-      { icon: 'users', label: 'Sala Gourmet' },
-      { icon: 'sun', label: 'Rooftop & BBQ' },
-      { icon: 'box', label: 'E-Commerce Lockers' },
-      { icon: 'compass', label: 'Bicicleteros' },
-    ],
-
     // --- Floor Plans / Terminaciones ---
     floorPlans: {
       eyebrow: '2. TERMINACIONES | Diseñadas para durar',
@@ -72,14 +61,14 @@ export const projectDetails = {
       description:
         'Equipamiento premium marca Franke: horno, horno microondas, lavavajillas panelable, encimera y campana. Cubierta de cocina ultra compacto terminación Travertino.',
       images: [
-        img('inn/terminacion-horno.jpg'),
-        img('inn/terminacion-microondas.jpg'),
-        img('inn/terminacion-lavavajillas.jpg'),
-        img('inn/terminacion-encimera-campana.jpg'),
-        img('inn/terminacion-cubierta-cocina.jpg'),
-        img('inn/terminacion-griferia-cocina.jpg'),
-        img('inn/terminacion-griferia-bano.jpg'),
-        img('inn/terminacion-puertas.jpg'),
+        img('inn/Horno.jpg'),
+        img('inn/Horno-microondas.jpg'),
+        img('inn/Lavavajillas-panelable-scaled.jpg'),
+        img('inn/Encimera-y-campana-scaled.jpg'),
+        img('inn/Cubierta-cocina-scaled.jpg'),
+        img('inn/Griferia-cocina.jpg'),
+        img('inn/Griferia-bano-principal.jpg'),
+        img('inn/Puertas-scaled.jpg'),
       ],
       items: [
         { label: 'Horno Franke' },
@@ -115,15 +104,15 @@ export const projectDetails = {
         ],
       },
       mapCaption: 'Ubicación del edificio en Puerto Varas',
-      mapImage: img('inn/esquicio.png'),
+      mapImage: img('inn/esquicio.jpg'),
       floorPlan: {
-        image: img('inn-cotizador-planta.jpg'),
         thumbnails: [
-          img('inn-thumb-1.jpg'),
-          img('inn-thumb-2.jpg'),
-          img('inn-thumb-3.jpg'),
-          img('inn-thumb-4.jpg'),
-          img('inn-thumb-5.jpg'),
+          img('inn/planta/planta.jpg'),
+          img('inn/planta/Cocina-Comedor-1.jpg'),
+          img('inn/planta/Comedor-2.jpg'),
+          img('inn/planta/Hall-de-acceso.jpg'),
+          img('inn/planta/Living-Comedor-2.jpg'),
+          img('inn/planta/Living-Comedor-3.jpg'),
         ],
       },
       details: [
@@ -150,8 +139,8 @@ export const projectDetails = {
       columns: ['Proyecto', 'Ubicación', 'Tipología', 'Superficie', 'Precio', ''],
       rows: [
         { dpto: 'Piso 1', name: 'Edificio Mood', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '60-90 m²', precio: 'UF 6.200*' },
-        { dpto: 'Piso 10', name: 'Edificio Sol', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '70-100 m²', precio: 'UF 7.100*' },
-        { dpto: 'Piso Duplex', name: 'Edificio Luz', location: 'Puerto Varas', tipologia: '1-2 Dorms', superficie: '45-70 m²', precio: 'UF 4.800*' },
+        { dpto: 'Piso 10', name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '70-100 m²', precio: 'UF 7.100*' },
+        { dpto: 'Piso Duplex', name: 'Edificio Nordico', location: 'Puerto Varas', tipologia: '1-2 Dorms', superficie: '45-70 m²', precio: 'UF 4.800*' },
       ],
     },
 
@@ -159,9 +148,9 @@ export const projectDetails = {
     alternatives: {
       title: '¿Buscas otras opciones en el sur de Chile?',
       cards: [
-        { name: 'Edificio Índigo I', location: 'Puerto Varas', tipologia: '2-3 Dormitorios — Entrega Inmediata', price: 'Desde UF 8.906*', image: img('inn-alt-1.jpg') },
-        { name: 'Edificio Nórdico I', location: 'Puerto Varas', tipologia: '1-2-3 Dormitorios — Futuro Proyecto', price: 'Desde UF 4.746*', image: img('inn-alt-2.jpg') },
-        { name: 'Edificio Bold I', location: 'Valdivia', tipologia: '1-2 Dormitorios — Entrega Inmediata', price: 'Desde UF 3.521*', image: img('inn-alt-3.jpg') },
+        { name: 'Edificio Índigo', location: 'Puerto Varas', tipologia: '2-3 Dormitorios — Entrega Inmediata', price: 'Desde UF 8.906*', image: img('inn-alt-1.jpg') },
+        { name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '1-2-3 Dormitorios — Futuro Proyecto', price: 'Desde UF 4.746*', image: img('inn-alt-2.jpg') },
+        { name: 'Edificio Bold', location: 'Valdivia', tipologia: '1-2 Dormitorios — Entrega Inmediata', price: 'Desde UF 3.521*', image: img('inn-alt-3.jpg') },
       ],
     },
 
@@ -172,25 +161,16 @@ export const projectDetails = {
       description:
         'Departamentos diseñados para aprovechar al máximo la luz natural y las vistas al lago. Terrazas, dormitorios y baños con terminaciones premium.',
       images: [
-        img('inn/render.jpeg'),
+        img('inn/render.jpg'),
         img('inn-space-2.jpg'),
         img('inn-space-3.jpg'),
       ],
       designer: {
         name: 'Sofia Iturralde',
         role: 'Interiorista - Directora de Arte',
-        avatar: img('inn-designer.jpg'),
+        avatar: img('inn/sofia.jpg'),
       },
     },
-
-    // --- Amenities Icons Strip (lower) ---
-    amenitiesBottom: [
-      { icon: 'laptop', label: 'Cowork & Lounge' },
-      { icon: 'flame', label: 'Quincho en Rooftop' },
-      { icon: 'dumbbell', label: 'Training Zone' },
-      { icon: 'waves', label: 'Piscina' },
-      { icon: 'smile', label: 'Juegos Infantiles' },
-    ],
 
     // --- Location ---
     location: {
@@ -217,23 +197,22 @@ export const projectDetails = {
 
     // --- Bottom Gallery ---
     bottomGallery: [
-      img('inn/SAUNA.jpg'),
-      img('inn/PISCINA-DUAL.jpg'),
-      img('inn/PADEL.jpg'),
-      img('inn/LIVING.jpg'),
-      img('inn/02_DEPORTE-NAUTICO.jpg'),
-      img('inn/DEPORTE-NAUTICO.jpg'),
-      img('inn/SAUNA.jpg'),
+      img('inn/galeria1.jpg'),
+      img('inn/galeria2.jpg'),
+      img('inn/galeria3.jpg'),
+      img('inn/galeria4.jpg'),
+      img('inn/galeria5.jpg'),
     ],
 
     // --- Team / Agents ---
     team: {
       title: 'Te acompañamos en todo el proceso',
       subtitle: 'Visitanos en: Vicente Pérez Rosales 991, Puerto Varas. Horarios de sala de venta: Lun a Dom. 10:00 a 14:00hrs y 15:00 a 19:00hrs.',
+      wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
       agents: [
-        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('avatar-patricia-ramirez.png') },
-        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('avatar-catalina-cid.png') },
-        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('avatar-patricia-singh.png') },
+        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('Patricia-Ramirez.jpg') },
+        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('catalina.jpg') },
+        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('Patricia-Singh.jpg') },
       ],
     },
   },

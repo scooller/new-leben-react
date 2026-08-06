@@ -10,7 +10,6 @@ import Footer from '../components/layout/Footer.jsx'
 import ProjectHero from '../components/proyecto/ProjectHero.jsx'
 import ProjectTabs from '../components/proyecto/ProjectTabs.jsx'
 import ProjectOverview from '../components/proyecto/ProjectOverview.jsx'
-import AmenitiesStrip from '../components/proyecto/AmenitiesStrip.jsx'
 import FloorPlans from '../components/proyecto/FloorPlans.jsx'
 import Vista360 from '../components/proyecto/Vista360.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
@@ -53,7 +52,6 @@ export default function ProyectoDetalle() {
         <ProjectHero data={project.hero} />
         <ProjectTabs tabs={project.tabs} />
         <ProjectOverview data={project.overview} />
-        {/* <AmenitiesStrip items={project.amenitiesTop} /> */}
         <FloorPlans data={project.floorPlans} />
         <Vista360 data={project.vista360} />
         <Cotizador data={project.cotizador} />

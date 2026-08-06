@@ -1,18 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Fancybox } from '@fancyapps/ui'
+import { Layers, Expand, Home, Sun, Compass, Maximize } from 'lucide-react'
 import { selectFloorPlan } from '../../store/slices/projectSlice.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 
-/**
- * Cotizador — visual mockup with static data.
- * Interactive floor plan thumbnail selection via RTK.
- */
+const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, compass: Compass, maximize: Maximize }
+
 export default function Cotizador({ data }) {
   const dispatch = useDispatch()
   const selected = useSelector((s) => s.project.selectedFloorPlan)
+  const ref = useRef(null)
+  const [showCotizar, setShowCotizar] = useState(false)
+
+  const planImage = data.floorPlan.thumbnails[selected] ?? data.floorPlan.thumbnails[0]
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    Fancybox.bind(el, '[data-fancybox="cotizador-plan"]', {})
+    return () => Fancybox.unbind(el)
+  }, [])
+
+  const mainImage = data.floorPlan.thumbnails[selected] ?? data.floorPlan.image
 
   return (
-    <section className="lb-proj-det-cotizador" id="cotizador">
+    <section className="lb-proj-det-cotizador" id="cotizador" ref={ref}>
       <div className="container">
         {/* Header + Filters */}
         <ScrollAnim as="div" className="row align-items-start g-4 mb-4" animation="fade-up">
@@ -66,13 +80,15 @@ export default function Cotizador({ data }) {
 
           {/* Floor plan card */}
           <div className="col-lg-6 lb-proj-det-cot-plan-card">
-            <img
-              src={data.floorPlan.image}
-              alt="Planta del departamento"
-              className="lb-proj-det-cot-plan-img w-100"
-              loading="lazy"
-              decoding="async"
-            />
+            <a href={mainImage} data-fancybox="cotizador-plan" className="lb-img-trigger d-block" tabIndex={0}>
+              <img
+                src={mainImage}
+                alt="Planta del departamento"
+                className="lb-proj-det-cot-plan-img w-100 lb-img-interactive"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
             <div className="lb-proj-det-cot-thumbs d-flex gap-2 mt-3">
               {data.floorPlan.thumbnails.map((thumb, i) => (
                 <button
@@ -92,7 +108,7 @@ export default function Cotizador({ data }) {
               {data.details.map((d) => (
                 <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
                   <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
-                    <i className={`lucide lucide-${d.icon}`} />
+                    {(() => { const Icon = DETAIL_ICONS[d.icon] ?? Layers; return <Icon size={24} /> })()}
                   </span>
                   <div className="d-flex flex-column">
                     <span className="lb-proj-det-cot-detail-label">{d.label}</span>
@@ -124,13 +140,122 @@ export default function Cotizador({ data }) {
                   />
                 </div>
               </div>
-              <button className="btn btn-danger w-100 mt-3 lb-proj-det-cot-cta">
+              <button
+                className="btn btn-danger w-100 mt-3 lb-proj-det-cot-cta"
+                onClick={() => setShowCotizar(true)}
+              >
                 {data.ctaText}
               </button>
             </div>
           </div>
         </ScrollAnim>
       </div>
+
+      {showCotizar && createPortal(
+        <div className="modal d-block" tabIndex="-1" onClick={() => setShowCotizar(false)}>
+          <div className="modal-dialog modal-lg modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content lb-cotizar-modal">
+              <div className="modal-header border-0">
+                <h5 className="modal-title">Cotizar departamento</h5>
+                <button type="button" className="btn-close" onClick={() => setShowCotizar(false)} aria-label="Cerrar" />
+              </div>
+              <div className="modal-body">
+                {/* Planta seleccionada + selector rápido */}
+                <div className="row g-3 mb-3">
+                  <div className="col-md-5">
+                    <img src={planImage} alt="Planta seleccionada" className="img-fluid rounded" />
+                  </div>
+                  <div className="col-md-7">
+                    <label className="form-label fw-semibold">Planta</label>
+                    <select
+                      className="form-select"
+                      value={selected}
+                      onChange={(e) => dispatch(selectFloorPlan(Number(e.target.value)))}
+                    >
+                      {data.floorPlan.thumbnails.map((_, i) => (
+                        <option key={i} value={i}>Planta {String.fromCharCode(65 + i)}</option>
+                      ))}
+                    </select>
+                    <div className="mt-3">
+                      <label className="form-label fw-semibold">Bodega</label>
+                      <select className="form-select" defaultValue="">
+                        <option value="" disabled>Sin bodega</option>
+                        <option value="small">Bodega 4 m² — UF 250</option>
+                        <option value="medium">Bodega 6 m² — UF 350</option>
+                        <option value="large">Bodega 8 m² — UF 450</option>
+                      </select>
+                    </div>
+                    <div className="mt-3">
+                      <label className="form-label fw-semibold">Estacionamiento</label>
+                      <select className="form-select" defaultValue="">
+                        <option value="" disabled>Sin estacionamiento</option>
+                        <option value="covered">Techado — UF 1.800</option>
+                        <option value="uncovered">Descubierto — UF 1.200</option>
+                        <option value="double">Doble — UF 3.200</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Datos personales */}
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Nombre</label>
+                    <input type="text" className="form-control" required />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Apellido</label>
+                    <input type="text" className="form-control" required />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Email</label>
+                    <input type="email" className="form-control" required />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Teléfono</label>
+                    <input type="tel" className="form-control" required />
+                  </div>
+                  <div className="col-12">
+                    <label className="form-label fw-semibold">Rango de renta</label>
+                    <select className="form-select" defaultValue="">
+                      <option value="" disabled>Selecciona un rango</option>
+                      <option>Hasta $800.000</option>
+                      <option>$800.000 — $1.500.000</option>
+                      <option>$1.500.000 — $2.500.000</option>
+                      <option>$2.500.000 — $4.000.000</option>
+                      <option>Más de $4.000.000</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Checkboxes */}
+                <div className="mt-3 d-flex flex-column gap-2">
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="cotizarPoliticas" required />
+                    <label className="form-check-label" htmlFor="cotizarPoliticas">
+                      He leído las políticas de privacidad
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="cotizarContacto" required />
+                    <label className="form-check-label" htmlFor="cotizarContacto">
+                      Acepto ser contactado con mi email y teléfono
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer border-0">
+                <button type="button" className="btn btn-light" onClick={() => setShowCotizar(false)}>
+                  Cancelar
+                </button>
+                <button type="button" className="btn btn-danger" onClick={() => setShowCotizar(false)}>
+                  Enviar cotización
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>, document.body)
+      }
     </section>
   )
 }

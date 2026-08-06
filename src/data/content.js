@@ -7,22 +7,22 @@ const img = (name) => `${import.meta.env.BASE_URL}images/${name}`
 const vid = (name) => `${import.meta.env.BASE_URL}video/${name}`
 
 export const videos = {
-  hero: vid('video_prueba.mp4'),
+  hero: vid('Banner-Hero-Desktop.mp4'),
 }
 
 export const images = {
   capa21: img('Prueba fondo.png'),
   logoIcon: img('icon.svg'),
   logoText: img('leben.svg'),
+  logoBest: img('sello.png'),
   sello9: img('sello9.png'),
   sello4: img('sello4.png'),
-  sello91: img('sello91.png'),
   sello10: img('sello10.png'),
   sello11: img('sello11.png'),
   avatarHerman: img('avatar-herman.jpg'),
   avatarFernanda: img('avatar-fernanda.jpg'),
   avatarMaximiliano: img('avatar-maximiliano.jpg'),
-  ctaSection: img('cta-section.jpg'),
+  ctaSection: img('banner.jpg'),
   img1Main: img('img1-main.jpg'),
   img1Right: img('img1-right.jpg'),
   chevronDown: img('chevron-down.svg'),
@@ -44,7 +44,7 @@ export const images = {
   projSuecia: img('proj-suecia.jpg'),
   projPiloto: img('proj-piloto.jpg'),
   projCotizador: img('proj-cotizador.jpg'),
-  projInn: img('inn-hero.png'),
+  projInn: img('inn-hero-lake.jpeg'),
   chevronLeft: img('chevron-left.svg'),
   chevronRight: img('chevron-right.svg'),
   user: img('user.svg'),
@@ -64,9 +64,7 @@ export const images = {
 }
 
 export const heroContent = {
-  titlePart1: 'Creando espacios',
-  titlePart2: ' donde lo cotidiano se vuelve extraordinario',
-  subtitle: 'Inmobiliaria Leben',
+  title: 'Creando espacios donde lo cotidiano se vuelve extraordinario',
 }
 
 export const diferenciadoresTitle = {
@@ -76,16 +74,15 @@ export const diferenciadoresTitle = {
 }
 
 export const diferenciadores = [
-  { image: 'sello9', text: 'No lo decimos nosotros, lo dicen nuestros clientes. 6to año certificados. Solo aquellos que entregamos los mejores productos y servicios de toda Latinoamérica.', width: 857 },
-  { image: 'sello4', text: '4tos en Chile, proyectos respaldados por calidad y confianza.', width: 715 },
-  { image: 'sello91', text: '9nos en Latinoamérica, acompañamos a nuestros clientes en cada etapa del proceso de compra, brindándote la tranquilidad de tomar decisiones informadas y seguras.', width: 688 },
-  { image: 'sello10', text: 'Nuestros proyectos certificados con eficiencia energética (CEV) MINVU. Ahorro en calefacción y refrigeración y con tasa preferencial en bancos asociados.', width: 643 },
-  { image: 'sello11', text: 'Por 4to año obtuvimos sello pro, por CCHC.', width: 588 },
+  { image: 'sello9', text: 'Gracias a la excelente evaluación de nuestros clientes hemos sido certificados por 6 años consecutivos por Best Place to Live como una de las mejores inmobiliarias para vivir en Chile y Latinoamérica.', width: 857 },
+  { image: 'sello11', text: 'Hemos sido certificados por la Cámara Chilena de la Construcción (Cchc) con el Sello Pro por trabajar bajo los mejores estándares de sostenibilidad siendo uno de los pocos grupos inmobiliarios en la industria en obtener este sello consecutivamente.', width: 588 },
+  { image: 'sello4', text: 'Certificados como la 4ta mejor inmobiliaria para vivir en Chile y 9na en Latinoamérica gracias al acompañamiento y la experiencia brindada a nuestros clientes en su proceso de compra o inversión. ', width: 715 },
+  { image: 'sello10', text: 'Prácticamente todos nuestros proyectos cuentan con Calificación Energética de Viviendas (CEV) lo que te permite acceder a una tasa rebajada en bancos asociados mientras contribuyes al medio ambiente ahorrando en calefacción y refrigeración.', width: 643 },
 ]
 
 export const searchFilters = {
-  title1: 'Descubre el depto. ',
-  title2: 'para tu inversión',
+  title1: 'Descubre',
+  title2: ' nuestros proyectos',
   filters: [
     {
       id: 'ubicacion',
@@ -93,29 +90,29 @@ export const searchFilters = {
       placeholder: 'Todas',
       options: ['Santiago Centro', 'La Florida', 'Providencia', 'Las Condes'],
     },
-    {
-      id: 'tipo',
-      label: 'Tipo',
-      placeholder: 'Todos',
-      options: ['1-2 Dorms', '2-3 Dorms'],
-    },
+    // {
+    //   id: 'tipo',
+    //   label: 'Tipo',
+    //   placeholder: 'Todos',
+    //   options: ['1-2 Dorms', '2-3 Dorms'],
+    // },
     {
       id: 'precio',
       label: 'Precio UF',
       placeholder: 'Todos',
       options: ['Hasta 3.000 UF', '3.000-6.000 UF', '6.000+ UF'],
     },
-    {
-      id: 'estado',
-      label: 'Estado proyectos',
-      placeholder: 'Todos',
-      options: ['Inmediata'],
-    },
+    // {
+    //   id: 'estado',
+    //   label: 'Estado proyectos',
+    //   placeholder: 'Todos',
+    //   options: ['Inmediata'],
+    // },
   ],
 }
 
 export const testimonials = {
-  title: 'Así nos evalúan nuestros clientes a través de Best Place to Live®',
+  title: 'Nuestros propios clientes nos avalan',
   certTitle: 'Certificada 2025-2026',
   certClients: '164 clientes evaluados',
   ratingLabel: 'Rating Best Place to Live®',
@@ -166,9 +163,9 @@ export const videosContent = {
     name: 'Edificio INN',
     year: '2027',
     location: 'Puerto Varas, Chile',
-    price: 'UF x.xxx',
-    mainImage: 'img1Main',
-    sideImage: 'img1Right',
+    price: 'UF 9.816',
+    mainImage: img('img1-main.jpg'),
+    sideImage: img('img1-right.jpg'),
   },
   gallery: {
     title: 'Proyectos Leben',

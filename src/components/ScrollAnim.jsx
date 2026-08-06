@@ -8,11 +8,9 @@ import { gsap } from 'gsap'
  */
 const PRESETS = {
   'fade-up':    { from: { opacity: 0, y: 50 },  to: { opacity: 1, y: 0 } },
-  'fade-down':  { from: { opacity: 0, y: -50 }, to: { opacity: 1, y: 0 } },
   'fade-left':  { from: { opacity: 0, x: -50 }, to: { opacity: 1, x: 0 } },
   'fade-right': { from: { opacity: 0, x: 50 },  to: { opacity: 1, x: 0 } },
   'scale':      { from: { opacity: 0, scale: 0.9 }, to: { opacity: 1, scale: 1 } },
-  'fade':       { from: { opacity: 0 }, to: { opacity: 1 } },
 }
 
 export default function ScrollAnim({

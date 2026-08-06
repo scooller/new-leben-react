@@ -148,6 +148,36 @@ No custom breakpoint variables.
 
 ---
 
+## API Integration (iLeben)
+
+La página de Proyectos consume la API de iLeben (`dev.ileben.cl`). La API requiere:
+
+1. **Bearer token** (Sanctum) en header `Authorization`
+2. **Origin/Referer válido** — el middleware `token.origin` compara contra `authorized_url` del token
+
+### Configuración
+
+| Ambiente | API | authorized_url | Cómo funciona |
+|---|---|---|---|
+| **Dev (Vite)** | `dev.ileben.cl` | `test.ileben.cl` | Vite proxy en `vite.config.js` intercepta `/api/*` e inyecta headers |
+| **Producción (cPanel)** | `dev.ileben.cl` | `test.ileben.cl` | `.htaccess` rutea `/api/*` → `api-proxy.php` (cURL) |
+
+### Archivos clave
+
+- **`vite.config.js`** — proxy dev con headers `Authorization`, `Origin`, `Referer`
+- **`public/api-proxy.php`** — proxy PHP para producción (cURL a `dev.ileben.cl`), no requiere `mod_proxy`
+- **`public/.htaccess`** — `RewriteRule ^api/(.*)$ api-proxy.php [L]` + SPA fallback
+- **`src/pages/Proyectos.jsx`** — `fetch('/api/v1/proyectos')` (sin trailing slash, Laravel responde 301 con `/`)
+
+### Notas
+
+- El token debe crearse en el panel admin de Leben-site (`admin.ileben.cl` → API Tokens) con `authorized_url` correcta
+- El endpoint es `/api/v1/proyectos` **sin slash final** — Laravel redirige 301 si lleva `/`
+- `api-proxy.php` habilita `CURLOPT_FOLLOWLOCATION` como red de seguridad ante redirecciones
+- Respuesta API: estructura paginada de Laravel (`{ data: [...], current_page, ... }`)
+
+---
+
 ## Changelog
 
 All notable changes to this project are documented below.

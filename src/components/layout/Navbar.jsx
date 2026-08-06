@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
 /** Render a link from {label, to?, href?, route?} config */
@@ -16,42 +16,23 @@ const mainLinks = [
   { label: 'Clientes', href: 'https://www.pvi.cl/propietarios/leben/propietarios/login/' },
 ]
 
+const fixedMenuLinks = [
+  { label: 'Proyectos realizados', href: '#' },
+  { label: 'Sala de ventas', href: '#' },
+  { label: 'Servicio al cliente', href: '#' },
+  { label: 'Portal de proveedores', href: '#' },
+  { label: 'Preguntas frecuentes', href: '#' },
+  { label: 'Pagar reserva', href: '#' },
+  { label: 'Prevención del delito', href: '#' },
+  { label: 'Contáctanos', href: '#' },
+]
+
 const mainMobileLinks = [
   { label: 'Cotizar', to: '/proyectos' },
 ]
 
-// Dynamic page menus shown in dropdown
-const pageMenus = {
-  home: [
-    { label: 'Inicio', href: '#inicio' },
-    { label: 'Diferenciadores', href: '#nosotros' },
-    { label: 'Proyectos', href: '#proyectos' },
-  ],
-  proyectos: [
-    { label: 'Todos los Proyectos', route: '/proyectos' },
-  ],
-  proyectoDetalle: [
-    { label: 'Overview', href: '#overview' },
-    { label: 'Cotizador', href: '#cotizador' },
-    { label: 'Plantas', href: '#plantas' },
-    { label: 'Espacios', href: '#espacios' },
-    { label: 'Ubicación', href: '#ubicacion' },
-    { label: 'Vista 360°', href: '#vista360' },
-    { label: 'Alternativas', href: '#alternativas' },
-    { label: 'Relacionados', href: '#relacionados' },
-  ],
-}
-
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const location = useLocation()
-
-  const dropdownLinks = useMemo(() => {
-    const path = location.pathname
-    if (path === '/proyectos') return pageMenus.proyectos
-    if (path.startsWith('/proyectos/')) return pageMenus.proyectoDetalle
-    return pageMenus.home
-  }, [location.pathname])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -69,8 +50,7 @@ export default function Navbar() {
           <img src={images.logoText} alt="iLeben" height="22" className="flex-shrink-0" fetchPriority="high" />
           <span className="lb-nav-separator" />
           <span className="d-flex align-items-baseline gap-1 lh-1">
-            <span className="fs-6 fw-bolder text-white">4TO</span>
-            <span className="fs-6 fw-semibold text-white">Bptl</span>
+            <img src={images.logoBest} alt="iLeben" height="22" className="flex-shrink-0" fetchPriority="high" />
           </span>
         </Link>
 
@@ -111,10 +91,16 @@ export default function Navbar() {
                 {mainLinks.map((link) =>
                   <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
                 )}
-                {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />}
+                {/* {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />} */}
+                <hr className="lb-dropdown-divider my-1" />
               </div>
-              {/* Page section links (all breakpoints) */}
+              {/* TEMP: Page section links disabled — using fixedMenuLinks
               {dropdownLinks.map((link) =>
+                <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
+              )}
+              */}
+              {/* Fixed menu links (all breakpoints) */}
+              {fixedMenuLinks.map((link) =>
                 <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
               )}
             </div>

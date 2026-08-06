@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import { X, Bot } from 'lucide-react'
+import { X } from 'lucide-react'
+import { BotIcon } from './icons/bot.jsx'
 import { MessageCircleIcon } from './icons/message-circle.jsx'
 import { SendIcon } from './icons/send.jsx'
 
@@ -63,7 +64,7 @@ export default function ChatWidget() {
             <div className="card-header bg-danger text-white d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center gap-2">
                 <div className="lb-chat-avatar rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center">
-                  <Bot size={20} />
+                  <BotIcon size={20} />
                 </div>
                 <div className="d-flex flex-column">
                   <span className="fw-bold fs-6">LebenBot</span>

@@ -4,7 +4,7 @@
 .lb-testimonials {
   background: $lb-cream;
   margin-top: -3.75rem;
-  padding: clamp(3rem, 8vw, 7.8125rem) clamp(1.25rem, 7vw, 6.5rem) 4.0625rem;
+  padding: 3rem clamp(1.25rem, 7vw, 6.5rem) 4.0625rem;
   position: relative;
   z-index: 3;
   @include bs.media-breakpoint-down(md) {

@@ -38,6 +38,11 @@ body {
   }
 }
 
+.modal.d-block{
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+}
+
 // --- Headings ---
 h1, h2, h3, h4, h5, h6 {
   color: $lb-dark;
@@ -129,11 +134,6 @@ button[type] {
     &:hover { transform: none; }
     &:active { transform: scale(0.92); }
   }
-}
-
-// --- GSAP animation initial states ---
-[data-animate] {
-  opacity: 0;
 }
 
 // --- Custom scrollbar ---

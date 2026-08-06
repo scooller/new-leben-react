@@ -3,26 +3,20 @@ import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react'
 
 const PATH_VARIANTS = {
   normal: {
-    opacity: 1,
     pathLength: 1,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      opacity: { duration: 0.1 },
-    },
+    pathOffset: 0,
+    opacity: 1,
+    transition: { duration: 0.4, opacity: { duration: 0.1 } },
   },
   animate: {
-    opacity: [0, 1],
     pathLength: [0, 1],
-    scale: [0.5, 1],
-    transition: {
-      duration: 0.4,
-      opacity: { duration: 0.1 },
-    },
+    pathOffset: [1, 0],
+    opacity: [0, 1],
+    transition: { duration: 0.6, ease: 'linear', opacity: { duration: 0.1 } },
   },
 }
 
-const ShieldCheckIcon = forwardRef(
+const MailIcon = forwardRef(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation()
     const isControlledRef = useRef(false)
@@ -75,10 +69,10 @@ const ShieldCheckIcon = forwardRef(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+          <rect height="16" rx="2" width="20" x="2" y="4" />
           <motion.path
             animate={controls}
-            d="m9 12 2 2 4-4"
+            d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
             initial="normal"
             variants={PATH_VARIANTS}
           />
@@ -88,6 +82,6 @@ const ShieldCheckIcon = forwardRef(
   }
 )
 
-ShieldCheckIcon.displayName = 'ShieldCheckIcon'
+MailIcon.displayName = 'MailIcon'
 
-export { ShieldCheckIcon }
+export { MailIcon }

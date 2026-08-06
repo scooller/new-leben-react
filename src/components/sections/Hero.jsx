@@ -10,8 +10,7 @@ export default function Hero() {
         <div className="lb-hero-overlay" />
       </div>
       <ScrollAnim as="div" className="position-relative d-flex flex-column align-items-center w-100 text-center" animation="fade-up" stagger={0.15} start="top 90%">
-        <SplitTitle as="h1" className="lb-hero-title mb-0" text={`${heroContent.titlePart1} ${heroContent.titlePart2}`} stagger={0.08} />
-        {/* <p className="lb-hero-subtitle text-uppercase mb-0">{heroContent.subtitle}</p> */}
+        <SplitTitle as="h1" className="lb-hero-title mb-0" text={`${heroContent.title}`} stagger={0.08} />
       </ScrollAnim>
     </section>
   )

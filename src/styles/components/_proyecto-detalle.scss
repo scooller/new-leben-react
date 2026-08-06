@@ -361,8 +361,7 @@
   gap: 1rem;
 }
 
-.lb-proj-det-cot-detail-icon i {
-  font-size: $lb-fs-xl;
+.lb-proj-det-cot-detail-icon svg {
   color: $lb-green;
 }
 
@@ -641,8 +640,8 @@
 
 .lb-proj-det-designer-avatar {
   object-fit: cover;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 6.5rem;
+  height: 6.5rem;
 }
 
 // --- Mobile fixes: Spaces + Amenities ---
@@ -686,9 +685,17 @@
   justify-content: center;
   flex-shrink: 0;
 
-  i {
-    font-size: $lb-fs-lg;
+  svg {
     color: $lb-green;
+  }
+}
+
+.lb-proj-det-location-checklist {
+  columns: 2;
+  column-gap: 2rem;
+
+  li {
+    break-inside: avoid;
   }
 }
 
@@ -821,4 +828,22 @@
   width: 4rem;
   height: 4rem;
   object-fit: cover;
+}
+
+// --- Schedule modal ---
+.lb-schedule-modal {
+  border-radius: $lb-radius-md;
+  border: none;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.lb-btn-agent-card {
+  border-radius: $lb-radius-sm;
+}
+
+// --- Cotizar modal ---
+.lb-cotizar-modal {
+  border-radius: $lb-radius-md;
+  border: none;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
 }

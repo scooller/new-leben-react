@@ -72,12 +72,12 @@ export default function Diferenciadores() {
       </ScrollAnim>
 
       {/* List */}
-      <ScrollAnim as="div" className="position-relative d-flex flex-column gap-3 align-items-end lb-diff-list" animation="fade-left" stagger={0.12}>
+      <ScrollAnim as="div" className="position-relative d-flex flex-column gap-3 align-items-start lb-diff-list" animation="fade-left" stagger={0.12}>
         {diferenciadores.map((item, i) => (
           <div
             className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger"
             key={i}
-            style={{ width: item.width }}
+            style={{ width: item.width, marginLeft: `${i * 12}%` }}
             tabIndex={0}
           >
             <div className="flex-shrink-0 lb-diff-badge d-flex align-items-center justify-content-center">

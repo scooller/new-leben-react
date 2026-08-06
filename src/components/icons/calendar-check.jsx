@@ -1,28 +1,23 @@
 import { motion, useAnimation } from 'motion/react'
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react'
 
-const PATH_VARIANTS = {
+const CHECK_VARIANTS = {
   normal: {
-    opacity: 1,
     pathLength: 1,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      opacity: { duration: 0.1 },
-    },
+    opacity: 1,
+    transition: { duration: 0.3 },
   },
   animate: {
-    opacity: [0, 1],
     pathLength: [0, 1],
-    scale: [0.5, 1],
+    opacity: [0, 1],
     transition: {
-      duration: 0.4,
-      opacity: { duration: 0.1 },
+      pathLength: { duration: 0.4, ease: 'easeInOut' },
+      opacity: { duration: 0.4, ease: 'easeInOut' },
     },
   },
 }
 
-const ShieldCheckIcon = forwardRef(
+const CalendarCheckIcon = forwardRef(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation()
     const isControlledRef = useRef(false)
@@ -75,12 +70,16 @@ const ShieldCheckIcon = forwardRef(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+          <path d="M8 2v4" />
+          <path d="M16 2v4" />
+          <rect height="18" rx="2" width="18" x="3" y="4" />
+          <path d="M3 10h18" />
           <motion.path
             animate={controls}
-            d="m9 12 2 2 4-4"
+            d="m9 16 2 2 4-4"
             initial="normal"
-            variants={PATH_VARIANTS}
+            style={{ transformOrigin: 'center' }}
+            variants={CHECK_VARIANTS}
           />
         </svg>
       </div>
@@ -88,6 +87,6 @@ const ShieldCheckIcon = forwardRef(
   }
 )
 
-ShieldCheckIcon.displayName = 'ShieldCheckIcon'
+CalendarCheckIcon.displayName = 'CalendarCheckIcon'
 
-export { ShieldCheckIcon }
+export { CalendarCheckIcon }

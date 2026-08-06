@@ -61,7 +61,7 @@ export default function VideosSection() {
               </div>
               <div className="lb-thumb-main-wrap">
                 <img
-                  src={images[project.mainImage]}
+                  src={project.mainImage}
                   alt={project.name}
                   className="lb-thumb-main lb-img-interactive"
                   data-fancybox="gallery"
@@ -72,7 +72,7 @@ export default function VideosSection() {
             </div>
             <div className="flex-fill rounded lb-video-side lb-img-trigger" tabIndex={0}>
               <img
-                src={images[project.sideImage]}
+                src={project.sideImage}
                 alt="Vista adicional"
                 className="lb-thumb-side lb-img-interactive"
                 data-fancybox="gallery"

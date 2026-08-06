@@ -12,7 +12,7 @@ export default function ProjectCard({ project, to, className = '' }) {
   const link = to || `/proyectos/${project.slug || project.name.toLowerCase().replace(/\s+/g, '-').replace(/edificio-/i, '')}`
 
   // Support both key-based images (from content.js) and full URL paths (from projects.js)
-  const imgSrc = typeof project.image === 'string' && project.image.startsWith('/')
+  const imgSrc = typeof project.image === 'string' && (project.image.startsWith('http') || project.image.startsWith('/'))
     ? project.image
     : images[project.image]
 

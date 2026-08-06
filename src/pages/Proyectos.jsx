@@ -1,24 +1,72 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
-import { proyectosHero, projectGroups, valueProps, proyectosCta, searchFilters, images } from '../data/content.js'
+import { proyectosHero, valueProps, proyectosCta, searchFilters, images } from '../data/content.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
+
+// Token is injected server-side by api-proxy.php / vite proxy headers
+
+const ETAPA_LABELS = {
+  postventa: 'Entrega Inmediata',
+  inicio_obra: 'En Construcción',
+  obra_gruesa: 'En Construcción',
+  terminaciones: 'Próxima Entrega',
+  recepcion_municipal_y_copropiedad: 'Entrega Inmediata',
+}
+
+/** Fetch projects from API, group by comuna. Returns null on error (renders empty list). */
+function useApiProjects() {
+  const [groups, setGroups] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/v1/proyectos')
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((json) => {
+        if (!json?.data) throw new Error('No data')
+        const map = {}
+        for (const p of json.data) {
+          const zone = (p.comuna || 'Otros').trim()
+          if (!map[zone]) map[zone] = []
+          map[zone].push({
+            name: p.name,
+            location: p.direccion,
+            image: p.salesforce_portada_url || '',
+            entrega: ETAPA_LABELS[p.etapa] || p.etapa,
+            tipologia: '',
+            price: '',
+            slug: p.name.toLowerCase().replace(/edificio\s+/i, '').replace(/\s+/g, '-'),
+          })
+        }
+        const result = Object.entries(map).map(([zone, projects]) => ({ zone, projects }))
+        setGroups(result)
+      })
+      .catch((err) => {
+        console.error('[Proyectos] Fetch failed:', err.message)
+        setGroups(null)
+      })
+  }, [])
+
+  return groups
+}
 
 /** Parse UF price string like "UF 3.756*" → number */
 const parseUf = (s) => parseFloat(s.replace(/[^\d.]/g, '').replace(/\.(?=\d{3}\D*$)/g, '')) || 0
 
 /** Sort + filter project groups */
-function useFilteredGroups(searchParams, sortBy) {
+function useFilteredGroups(searchParams, sortBy, sourceGroups) {
   return useMemo(() => {
     const ubicacion = searchParams.get('ubicacion')
     const tipo = searchParams.get('tipo')
     const precio = searchParams.get('precio')
 
-    const groups = projectGroups
-      .filter((g) => !ubicacion || g.zone === ubicacion)
+    const groups = (sourceGroups || [])
+      .filter((g) => !ubicacion || g.zone.toLowerCase().includes(ubicacion.toLowerCase()))
       .map((g) => ({
         ...g,
         projects: [...g.projects].filter((p) => {
@@ -44,14 +92,15 @@ function useFilteredGroups(searchParams, sortBy) {
     })
 
     return groups
-  }, [searchParams, sortBy])
+  }, [searchParams, sortBy, sourceGroups])
 }
 
 export default function Proyectos() {
   useGsapAnimations()
   const [searchParams, setSearchParams] = useSearchParams()
   const [sortBy, setSortBy] = useState('mayor')
-  const filteredGroups = useFilteredGroups(searchParams, sortBy)
+  const apiGroups = useApiProjects()
+  const filteredGroups = useFilteredGroups(searchParams, sortBy, apiGroups || [])
   const hasFilters = [...searchParams.keys()].length > 0
 
   return (
