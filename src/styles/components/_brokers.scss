@@ -1,0 +1,624 @@
+// ============================================================
+// Brokers Page Styles — from Figma "Brokers" (node 2260:2)
+// ============================================================
+
+@use '../variables' as *;
+
+.lb-brokers {
+  background: $lb-white;
+  overflow-x: hidden;
+
+  // --- Shared ---
+  .lb-eyebrow {
+    font-size: $lb-fs-md;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: $lb-red;
+    margin-bottom: 0.5rem;
+  }
+
+  .lb-brokers-section-title {
+    font-size: $lb-heading-2;
+    font-weight: $lb-heading-weight;
+    color: $lb-heading-color;
+    line-height: 1.25;
+  }
+
+  // ============================================================
+  // HERO
+  // ============================================================
+  &-hero {
+    position: relative;
+    min-height: 680px;
+    overflow: hidden;
+
+    .container {
+      position: relative;
+      z-index: 1;
+      padding-top: 140px;
+      padding-bottom: 80px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding-top: 120px;
+        padding-bottom: 3rem;
+      }
+      min-height: 600px;
+    }
+
+    &__bg {
+      position: absolute;
+      inset: 0;
+      border-bottom-left-radius: $lb-radius-section;
+      border-bottom-right-radius: $lb-radius-section;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.27) 60%, rgba(0, 0, 0, 0.6));
+      border-bottom-left-radius: $lb-radius-section;
+      border-bottom-right-radius: $lb-radius-section;
+    }
+
+    &__content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    &__title {
+      font-size: $lb-heading-1;
+      font-weight: $lb-heading-weight;
+      line-height: 1.25;
+      color: $lb-white;
+    }
+
+    &__subtitle {
+      font-size: $lb-fs-xl;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  // ============================================================
+  // BENEFITS
+  // ============================================================
+  &-benefits {
+    padding: 6rem 0;
+
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+    }
+
+    &__photo {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 480 / 400;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+  }
+
+  &-benefit-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &-benefit-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: $lb-red;
+    color: $lb-white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-benefit-text {
+    font-size: $lb-fs-base;
+    line-height: 1.4;
+    color: $lb-dark;
+  }
+
+  // ============================================================
+  // TIERS TABLE
+  // ============================================================
+  &-tiers {
+    padding: 4rem 0;
+
+    &__table {
+      margin-top: 2.5rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: $lb-shadow-card;
+    }
+
+    &__header {
+      display: grid;
+      grid-template-columns: 580px repeat(3, 1fr);
+      min-height: 100px;
+
+      @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__col-label {
+      padding: 1.5rem;
+      background: $lb-gray-100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    &__col-title {
+      font-size: $lb-fs-md;
+      font-weight: 700;
+      color: $lb-dark;
+    }
+
+    &__col-sub {
+      font-size: $lb-fs-sm;
+      color: $lb-gray-500;
+    }
+
+    &__col-tier {
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+
+      &--0 { background: #f0f0f0; }
+      &--1 { background: #fdf4e3; }
+      &--2 { background: #1a1a1a; }
+    }
+
+    &__tier-name {
+      font-size: $lb-fs-md;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    &__col-tier--2 &__tier-name {
+      color: $lb-white;
+    }
+
+    &__tier-sub {
+      font-size: $lb-fs-xs;
+      line-height: 1.4;
+      color: $lb-gray-600;
+
+      br { display: none; }
+    }
+
+    &__col-tier--2 &__tier-sub {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__row {
+      display: grid;
+      grid-template-columns: 580px repeat(3, 1fr);
+      min-height: 52px;
+      border-top: 1px solid $lb-border-cream;
+
+      &:nth-child(odd) {
+        background: rgba(245, 242, 237, 0.4);
+      }
+
+      @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+        padding: 0.75rem;
+      }
+    }
+
+    &__row-label {
+      padding: 1rem 1.5rem;
+      font-size: $lb-fs-sm;
+      font-weight: 600;
+      color: $lb-dark;
+      display: flex;
+      align-items: center;
+    }
+
+    &__cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__check {
+      color: $lb-green;
+    }
+
+    &__na {
+      font-size: $lb-fs-xs;
+      color: $lb-text-muted;
+      font-weight: 600;
+    }
+  }
+
+  // ============================================================
+  // KAM INFO BAR
+  // ============================================================
+  &-kam {
+    padding: 3rem 0;
+
+    &__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    &__prompt {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: $lb-heading-3;
+      font-weight: $lb-heading-weight;
+      color: $lb-heading-color;
+    }
+
+    &__chevrons {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+    }
+
+    &__chevron-group {
+      display: flex;
+      align-items: center;
+    }
+
+    &__chevron-sep {
+      color: $lb-gray-400;
+      margin: 0 0.5rem;
+      flex-shrink: 0;
+    }
+
+    &__chevron {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.625rem 1.75rem;
+      min-width: 160px;
+
+      &--0 { background: #e5e7eb; }
+      &--1 { background: linear-gradient(135deg, #e5e7eb, #d4af37); }
+      &--2 { background: #1a1a1a; color: $lb-white; }
+    }
+
+    &__chevron__label {
+      font-size: $lb-fs-xs;
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+
+    &__chevron__name {
+      font-size: $lb-heading-3;
+      font-weight: $lb-heading-weight;
+    }
+
+    &__labels {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    &__label-item {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: $lb-fs-xs;
+      font-weight: 500;
+      color: $lb-gray-500;
+    }
+
+    &__dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+
+      &--0 { background: #c0c0c0; }
+      &--1 { background: #d4af37; }
+      &--2 { background: $lb-dark; }
+    }
+
+    &__arrow {
+      opacity: 0.4;
+      margin-left: 0.25rem;
+    }
+
+    &__footnote {
+      font-size: $lb-fs-xs;
+      font-weight: 700;
+      color: $lb-text-light;
+      text-align: center;
+    }
+  }
+
+  // ============================================================
+  // REGISTRATION
+  // ============================================================
+  &-registration {
+    position: relative;
+    padding: 6rem 0;
+
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+    }
+
+    &__bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        inset: -20% 0;
+        width: 100%;
+        height: 140%;
+        object-fit: cover;
+        will-change: transform;
+      }
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    &__form-card {
+      max-width: 840px;
+      margin: 0 auto;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 3rem;
+
+      @media (max-width: 768px) {
+        padding: 1.5rem;
+      }
+    }
+
+    &__title {
+      font-size: $lb-heading-2;
+      font-weight: $lb-heading-weight;
+      color: $lb-white;
+      line-height: 1.25;
+    }
+
+    &__desc {
+      font-size: $lb-fs-md;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 1rem 0 2rem;
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    &__footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    &__disclaimer {
+      font-size: $lb-fs-sm;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+    }
+  }
+
+  // Form fields
+  &-field__label {
+    display: block;
+    font-size: $lb-fs-sm;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.5rem;
+  }
+
+  &-field__input {
+    background: $lb-white !important;
+    border: 1px solid $lb-white !important;
+    border-radius: 6px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: $lb-fs-md !important;
+    color: $lb-dark !important;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba($lb-red, 0.5) !important;
+      border-color: $lb-red !important;
+    }
+  }
+
+  // ============================================================
+  // EVENTS
+  // ============================================================
+  &-events {
+    padding: 6rem 0;
+    background: $lb-white;
+
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+    }
+
+    &__tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 2rem 0;
+    }
+
+    &__tab {
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: none;
+      font-size: $lb-fs-md;
+      font-weight: 700;
+      background: #e5e7eb;
+      color: #666;
+      cursor: pointer;
+      transition: $lb-transition;
+
+      &.is-active {
+        background: $lb-red;
+        color: $lb-white;
+      }
+    }
+  }
+
+  &-event-card {
+    background: #faf9f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 100%;
+    transition: $lb-transition;
+
+    &:hover {
+      box-shadow: $lb-shadow-card;
+      transform: translateY(-4px);
+    }
+
+    &__image {
+      height: 200px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__title {
+      font-size: $lb-heading-4;
+      font-weight: $lb-heading-weight;
+      color: $lb-heading-color;
+    }
+
+    &__desc {
+      font-size: $lb-fs-md;
+      line-height: 1.4;
+      color: #666;
+    }
+  }
+
+  // ============================================================
+  // ALLIANCES
+  // ============================================================
+  &-alliances {
+    padding: 3rem 0;
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+      align-items: center;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  &-alliance-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    min-height: 84px;
+
+    img {
+      max-height: 60px;
+      width: auto;
+      opacity: 0.6;
+      transition: $lb-transition;
+    }
+
+    &:hover img {
+      opacity: 1;
+    }
+  }
+}
+
+// Shared section heading block
+.lb-brokers-section-heading {
+  margin-bottom: 2rem;
+
+  .lb-eyebrow {
+    margin-bottom: 0.75rem;
+  }
+}
+
+// Radius helpers for hero
+.lb-radius-bl-br {
+  border-bottom-left-radius: $lb-radius-section;
+  border-bottom-right-radius: $lb-radius-section;
+}

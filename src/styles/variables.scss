@@ -1,0 +1,90 @@
+// ============================================================
+// SCSS Variables — New Leben Design System
+// ============================================================
+
+// --- Fonts ---
+$font-primary:   'Lato', sans-serif;
+$font-secondary: 'Manrope', sans-serif;
+$font-title: $font-secondary;
+
+// --- Font Sizes (recurring scale) ---
+$lb-fs-xs:    0.6875rem;  // 11px — badges, micro-labels
+$lb-fs-sm:    0.8125rem;  // 13px — secondary text, meta
+$lb-fs-md:    0.875rem;   // 14px — body, buttons, inputs
+$lb-fs-base:  0.9375rem;  // 15px — card text
+$lb-fs-lg:    1rem;       // 16px — base body
+$lb-fs-xl:    1.125rem;   // 18px — values, subtitles
+$lb-fs-2xl:   1.375rem;   // 22px — card titles
+$lb-fs-3xl:   1.625rem;   // 26px — section titles
+
+// --- Heading Scale (clamp = fluid, desktop max smaller) ---
+// Usage: section hero, page title, section title, card title, sub-card title
+$lb-heading-display:  clamp(1.75rem, 4.5vw, 2.5rem);   // 40px max — hero (home/landing)
+$lb-heading-1:        clamp(1.5rem, 3.5vw, 2rem);       // 32px max — page hero (projects, brokers)
+$lb-heading-2:        clamp(1.25rem, 2.5vw, 1.625rem);  // 26px max — section title
+$lb-heading-3:        clamp(1.125rem, 2vw, 1.375rem);   // 22px max — card title
+$lb-heading-4:        $lb-fs-xl;                         // 18px — sub-card / event title
+
+// --- Heading common properties ---
+$lb-heading-weight:   600;
+$lb-heading-color:    #1a1a1a; // same as $lb-dark (defined below)
+
+// --- Brand Colors ---
+$lb-cream:        #f5f2ed;
+$lb-dark:         #1a1a1a;
+$lb-body:         #333333;
+$lb-red:          #d44040;
+$lb-red-light:    #e05a4e;
+$lb-red-dark:     #c22222;
+$lb-green:        #1b5e4a;
+$lb-green-dark:   #38473c;
+$lb-footer:       #1f1f1f;
+
+// --- Common UI Colors ---
+$lb-white:        #ffffff;
+$lb-ink:          #1f2320;
+$lb-bronze:       #9e6e43;
+$lb-gray-warm:    #6b6964;
+$lb-green-soft:   #a7d4c4;
+$lb-border-cream: #eae7e1;
+$lb-gray-track:   #dbdbdb;
+
+// --- Neutrals ---
+$lb-gray-100:     #f8f9fa;
+$lb-gray-300:     #dee2e6;
+$lb-gray-400:     #adb5bd;
+$lb-gray-500:     #6c757d;
+$lb-gray-600:     #6b726e;
+$lb-gray-700:     #495057;
+$lb-gray-800:     #343a40;
+$lb-text-muted:   #888888;
+$lb-text-light:   #999999;
+$lb-text-dark:    #2a2a2a;
+
+// Note: Bootstrap overrides ($primary, $secondary, $dark, etc.) are configured
+// directly in main.scss via @use 'bootstrap/scss/bootstrap' with (...).
+
+// --- Border Radius ---
+$lb-radius-sm:      2px;
+$lb-radius-md:      4px;
+$lb-radius-lg:      100px;
+$lb-radius-xl:      12px;
+$lb-radius-pill:    100px;
+$lb-radius-section: clamp(2rem, 8vw, 7.5rem);
+
+// --- Shadows ---
+$lb-shadow-soft:    0 4px 24px rgba(0, 0, 0, 0.06);
+$lb-shadow-pill:    0 12px 16px rgba(56, 71, 60, 0.06);
+$lb-shadow-card:    0 8px 32px rgba(0, 0, 0, 0.08);
+
+// --- Transitions ---
+$lb-transition:     all 0.3s ease;
+$lb-transition-fast: all 0.15s ease;
+
+// --- Layout ---
+$lb-navbar-height:    72px;
+
+// --- Section Spacing ---
+$lb-section-pad:      5rem;     // default section vertical padding
+$lb-section-pad-lg:   6.25rem;  // large / featured sections
+$lb-section-pad-sm:   3rem;     // compact sections / mobile

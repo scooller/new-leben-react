@@ -1,0 +1,120 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+// ============================================================
+// Cotizador General Page
+// ============================================================
+
+.lb-cot-gen {
+  // Toggle buttons
+  .lb-cot-gen-toggle-btn {
+    min-width: 10rem;
+    font-weight: 600;
+    border-radius: $lb-radius-sm;
+    transition: all 0.2s ease;
+  }
+
+  // Wizard
+  .lb-cot-gen-wizard-card {
+    border: 1px solid $lb-gray-300;
+  }
+
+  // Wizard card image header
+  .lb-cot-gen-wizard-img-wrap {
+    position: relative;
+    height: 14rem;
+    overflow: hidden;
+
+    .lb-cot-gen-wizard-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .lb-cot-gen-wizard-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
+    }
+  }
+
+  // Step indicator
+  .lb-cot-gen-step-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: $lb-gray-100;
+    color: $lb-text-muted;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+
+    &.active {
+      background: $lb-dark;
+      color: $lb-white;
+    }
+  }
+
+  .lb-cot-gen-step-label {
+    font-size: 0.85rem;
+    color: $lb-text-muted;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &.active {
+      color: $lb-dark;
+    }
+  }
+
+  .lb-cot-gen-step-line {
+    width: 1.5rem;
+    height: 1px;
+    background: $lb-gray-300;
+  }
+
+  // Project card grid (selección directa)
+  .lb-cot-gen-proj-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid $lb-gray-300;
+
+    img {
+      height: 12rem;
+      object-fit: cover;
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $lb-shadow-card;
+    }
+  }
+}
+
+// Plantas relacionadas cards (inside Cotizador)
+.lb-proj-det-cot-plantas-title {
+  font-size: $lb-heading-4;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+}
+
+.lb-proj-det-cot-planta-card {
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+
+  img {
+    height: 10rem;
+    object-fit: cover;
+  }
+
+  &:hover {
+    box-shadow: $lb-shadow-card;
+  }
+
+  &.selected {
+    border-color: $lb-red;
+  }
+}

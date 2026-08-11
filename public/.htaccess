@@ -1,0 +1,15 @@
+# Redirect all requests to index.html for React Router
+# This allows direct access to routes like /proyectos without 404
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Route /api/* to PHP proxy (must be before SPA fallback)
+  RewriteRule ^api/ api-proxy.php [L,QSA]
+
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

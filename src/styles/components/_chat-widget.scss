@@ -1,0 +1,44 @@
+@use '../variables' as *;
+
+.lb-chat-bubble {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  z-index: 100;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
+  color: $lb-white;
+}
+
+.lb-chat-dialog {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.5rem;
+  width: calc(100vw - 3rem);
+  max-width: 22.5rem;
+  z-index: 100;
+  animation: lb-chat-pop 0.2s ease-out;
+}
+
+@keyframes lb-chat-pop {
+  from { opacity: 0; transform: translateY(0.5rem) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.lb-chat-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  color: $lb-white;
+}
+
+.lb-chat-body {
+  height: 20rem;
+  overflow-y: auto;
+  background: $lb-gray-100;
+}
+
+.lb-chat-msg {
+  font-size: $lb-fs-md;
+  line-height: 1.4;
+}

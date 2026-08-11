@@ -1,0 +1,106 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+.lb-project-month {
+  position: relative;
+  padding-block: $lb-section-pad;
+  background: $lb-white;
+  background-image: url(/images/fondo.jpeg);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-attachment: fixed;
+  background-size: cover;
+
+  .container { z-index: 1; }
+
+  .lb-project-month-photo {
+    img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+    }
+  }
+
+  .lb-project-month-copy {
+    max-width: 37rem;
+    background-color: rgba($color: #ffffff, $alpha: 0.9);
+  }
+
+  .lb-project-month-eyebrow {
+    display: block;
+    font-size: $lb-fs-md;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  .lb-project-month-title {
+    font-family: $font-title;
+    font-size: $lb-heading-display;
+    font-weight: 400;
+    line-height: 1.1;
+    color: $lb-heading-color;
+    margin-bottom: 1.5rem;
+  }
+
+  .lb-project-month-text {
+    color: #666;
+    font-size: $lb-fs-base;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .lb-project-month-visual {
+    position: relative;
+    max-width: 70%;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // --- iPhone video mask + frame overlay ---
+  .lb-iphone-video-shell {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    width: 85%;
+    aspect-ratio: 371 / 750;
+    -webkit-mask-image: url('/images/iphone-back-mask.png');
+    mask-image: url('/images/iphone-back-mask.png');
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background: $lb-dark;
+  }
+
+  .lb-iphone-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lb-iphone-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  @include bs.media-breakpoint-down(md) {
+    padding-block: $lb-section-pad-sm;
+
+    .lb-project-month-band { display: none; }
+    .lb-project-month-photo { max-width: 14rem; margin-inline: auto; }
+    .lb-project-month-visual { max-width: 10rem; }
+  }
+}

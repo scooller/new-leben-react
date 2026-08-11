@@ -1,0 +1,49 @@
+// ============================================================
+// Main SCSS — imports Bootstrap + custom layers
+// ============================================================
+
+// --- Bootstrap (with variable overrides) ---
+@use 'bootstrap/scss/bootstrap' as * with (
+  $primary:       #d44040,
+  $secondary:     #1b5e4a,
+  $dark:          #1a1a1a,
+  $body-bg:       #f5f2ed,
+  $body-color:    #333333,
+  $font-family-sans-serif: ('Lexend Deca', sans-serif),
+  $headings-color: #1a1a1a,
+  $border-radius:    2px,
+  $border-radius-sm: 2px,
+  $border-radius-lg: 4px,
+  $container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: 1394px
+  ),
+);
+
+// --- Custom variables (non-Bootstrap) ---
+@use 'variables' as *;
+
+// --- Custom global styles ---
+@use 'global';
+
+// --- Component styles ---
+@use 'components/navbar';
+@use 'components/hero';
+@use 'components/diferenciadores';
+@use 'components/testimonials';
+@use 'components/cta';
+@use 'components/project-of-month';
+@use 'components/videos';
+@use 'components/footer';
+@use 'components/proyectos';
+@use 'components/proyecto-detalle';
+@use 'components/brokers';
+@use 'components/chat-widget';
+@use 'components/perfil';
+@use 'components/cotizador-general';
+
+// --- Vendor ---
+@use 'vendor/fancybox';

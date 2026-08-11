@@ -1,0 +1,21 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vscode/*
+!.vscode/extensions.json
+.env
+.env.*
+!.env.example
+/.agents
+/.github
+/graphify-out
+/public/images/
+/public/video/
+hero-img-5.jpeg
+hero-img-4.png
+hero-img-3.jpeg
+hero-img-2.gif
+hero-img-1.png
+vite.config.js
+/assets high

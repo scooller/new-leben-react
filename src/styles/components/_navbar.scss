@@ -1,0 +1,118 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+.lb-navbar {
+  z-index: 90;
+  padding: 1rem 0;
+  overflow-x: clip;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, padding 0.3s ease;
+}
+
+.lb-navbar-scrolled {
+  background: rgba(15, 15, 15, 0.5);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  padding: 0.625rem 0;
+}
+
+.lb-nav-separator {
+  width: 1px;
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.lb-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: $lb-fs-md;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+
+  &:hover { color: $lb-red; }
+}
+
+.lb-nav-cta {
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03125rem;
+  background: $lb-red !important;
+  border-color: $lb-red !important;
+
+  &:hover { background: $lb-red-dark !important; border-color: $lb-red-dark !important; }
+}
+
+.lb-hamburger {
+  background: none !important;
+  border: none !important;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3125rem;
+  cursor: pointer;
+
+  .lb-burger-line {
+    display: block;
+    width: 1.25rem;
+    height: 2px;
+    background: $lb-white;
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+  }
+
+  &.show,
+  &[aria-expanded="true"] {
+    .lb-burger-line:nth-child(1) { transform: translateY(0.4375rem) rotate(45deg); }
+    .lb-burger-line:nth-child(2) { opacity: 0; }
+    .lb-burger-line:nth-child(3) { transform: translateY(-0.4375rem) rotate(-45deg); }
+  }
+}
+
+.dropdown{
+  .dropdown-toggle::after {
+    display: none!important;
+  }
+}
+
+.dropdown-menu.lb-dropdown {
+  margin-top: 0.5rem !important;
+  border: none;
+  padding: 0.5rem 0;
+  min-width: 12.5rem;
+
+  @include bs.media-breakpoint-down(md) {
+    right: 0;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+.lb-dropdown-link {
+  padding: 0.75rem 1.25rem;
+  font-size: $lb-fs-md;
+  font-weight: 500;
+  color: $lb-dark;
+  transition: background 0.2s ease;
+
+  &:hover, &:focus { background: rgba(0, 0, 0, 0.05); }
+}
+
+.lb-dropdown-divider {
+  border-color: $lb-gray-300;
+  opacity: 1;
+}
+
+.lb-dropdown-group {
+  padding: 0.25rem 0;
+}
+
+.lb-dropdown-header-text {
+  display: block;
+  padding: 0.5rem 1.25rem 0.25rem;
+  font-size: $lb-fs-sm;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: $lb-red;
+}
+

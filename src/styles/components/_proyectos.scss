@@ -1,0 +1,406 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+// ============================================================
+// Proyectos Hero
+// ============================================================
+.lb-proj-hero {
+  height: 85dvh;
+  overflow: hidden;
+  @include bs.media-breakpoint-down(md) {
+    min-height: 50dvh;
+    border-radius: 0;
+
+    .lb-proj-hero-bg-wrap {
+      border-radius: 0;
+    }
+  }
+}
+
+.lb-proj-hero-bg-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lb-proj-hero-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &:is(video) {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+// Gradient overlay from Figma: transparent at 35% → dark at 100%
+.lb-proj-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.65) 100%);
+}
+
+// Logo — centered-left at mid-height (Figma: x:80, y:305 within 1400×680)
+.lb-proj-hero-logo {
+  left: 5rem;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 8.5rem;
+  height: auto;
+  object-fit: contain;
+}
+
+// hero-content — bottom-left (Figma: x:80, y:481)
+.lb-proj-hero-content {
+  z-index: 2;
+  padding: 0 5rem 3.5rem;
+  width: 100%;
+}
+
+.lb-eyebrow {
+  font-size: $lb-fs-md;
+  font-weight: 600;
+  color: $lb-gray-track;
+  letter-spacing: 0.0625rem;
+}
+
+// Title — Lexend Deca ExtraLight from Figma
+.lb-proj-hero-title {
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: $lb-heading-display;
+  font-weight: 300;
+  color: $lb-white;
+  line-height: 1.1;
+  max-width: 56.25rem;
+}
+
+// Meta row — subtitle • dot • location
+.lb-proj-hero-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: $lb-fs-lg;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.lb-proj-hero-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: $lb-red;
+  flex-shrink: 0;
+}
+
+.lb-proj-hero-subtitle {
+  font-size: $lb-fs-xl;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+  max-width: 40rem;
+}
+
+.lb-proj-hero-btn {
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+  padding: 0.875rem 1.75rem;
+  font-size: $lb-fs-md;
+  font-weight: 600;
+
+  &:hover {
+    background: $lb-white;
+    color: $lb-dark;
+  }
+}
+
+@include bs.media-breakpoint-down(md) {
+  .lb-proj-hero {
+    height: 32.5rem;
+  }
+
+  .lb-proj-hero-content {
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .lb-proj-hero-title {
+    font-size: $lb-heading-1;
+  }
+
+  .lb-proj-hero-logo {
+    left: 1.5rem;
+    width: 5rem;
+  }
+
+  .lb-proj-hero-meta {
+    font-size: $lb-fs-sm;
+  }
+}
+
+// ============================================================
+// Featured Projects
+// ============================================================
+.lb-featured {
+  background: $lb-cream;
+  padding-block: $lb-section-pad-lg;
+}
+
+.lb-group-zone {
+  font-size: $lb-heading-1;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+}
+
+.lb-filter-pill {
+  border: 1px solid $lb-border-cream;
+  border-radius: 0.375rem;
+  padding: 0.625rem 1.25rem;
+  font-size: $lb-fs-md;
+  font-weight: 500;
+  color: $lb-dark;
+  cursor: pointer;
+}
+
+.lb-proj-card {
+  border: 1px solid $lb-border-cream;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    transform: translateY(-0.25rem);
+  }
+}
+
+// ============================================================
+// Skeleton loading
+// ============================================================
+.lb-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(158, 110, 67, 0.08);
+  border-radius: 0.25rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    animation: lb-shimmer 1.4s infinite;
+  }
+}
+
+.lb-skeleton-img {
+  height: 17.5rem;
+  border-radius: 0;
+}
+
+.lb-skeleton-card {
+  pointer-events: none;
+
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+@keyframes lb-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.lb-proj-card > .lb-proj-img {
+  height: 17.5rem;
+  object-fit: cover;
+}
+
+.lb-location {
+  background: rgba(158, 110, 67, 0.07);
+  border-radius: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  font-size: $lb-fs-xs;
+  font-weight: 600;
+  color: $lb-bronze;
+  align-self: flex-start;
+}
+
+.lb-proj-name {
+  font-size: $lb-heading-3;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+}
+
+.lb-proj-meta {
+  font-size: $lb-fs-md;
+  color: $lb-gray-warm;
+
+  strong {
+    color: $lb-dark;
+    font-weight: 600;
+  }
+}
+
+.lb-proj-bottom {
+  background: rgba(158, 110, 67, 0.04);
+  border-top: 1px solid $lb-border-cream;
+}
+
+.lb-price-label {
+  font-size: $lb-fs-xs;
+  color: $lb-gray-warm;
+}
+
+.lb-price-value {
+  font-size: $lb-fs-xl;
+  font-weight: 700;
+  color: $lb-bronze;
+}
+
+.lb-explore {
+  font-size: $lb-fs-md;
+  font-weight: 600;
+  color: $lb-dark;
+  cursor: pointer;
+}
+
+// ============================================================
+// Value Props
+// ============================================================
+.lb-vprops {
+  background: $lb-cream;
+  border-top: 1px solid $lb-border-cream;
+  border-bottom: 1px solid $lb-border-cream;
+  padding-block: 1.1875rem $lb-section-pad-lg;
+}
+
+.lb-vprops-eyebrow {
+  font-size: $lb-fs-md;
+  font-weight: 600;
+  color: $lb-bronze;
+}
+
+.lb-vprops-title {
+  font-size: $lb-heading-2;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+  max-width: 71.5rem;
+}
+
+.lb-vprop-card {
+  border: 1px solid $lb-border-cream;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  height: 17.8125rem;
+}
+
+.lb-vprop-num {
+  font-size: $lb-heading-1;
+  font-weight: 400;
+  color: $lb-bronze;
+}
+
+.lb-vprop-card-title {
+  font-size: $lb-heading-3;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+}
+
+.lb-vprop-text {
+  font-size: $lb-fs-base;
+  color: $lb-gray-warm;
+  line-height: 1.5;
+}
+
+// ============================================================
+// CTA Banner
+// ============================================================
+.lb-proj-cta {
+  padding-block: $lb-section-pad-lg + 1.25rem;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.72) 100%),
+    var(--lb-cta-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  &-bg-wrap{
+    background-color: rgba($color: #000000, $alpha: 0.3);
+  }
+  .lb-price-label {
+    color: $lb-white;
+  }
+}
+
+.lb-proj-cta-title {
+  font-size: $lb-heading-1;
+  font-weight: $lb-heading-weight;
+  color: $lb-white;
+}
+
+.lb-proj-cta-subtitle {
+  font-size: $lb-fs-lg;
+  color: $lb-white;
+  max-width: 32.5rem;
+}
+
+.lb-proj-cta-form { width: 31.25rem; }
+
+.lb-proj-cta-input {
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.875rem 1.25rem;
+  font-size: $lb-fs-md;
+  color: $lb-dark;
+
+  &::placeholder { color: $lb-gray-warm; }
+}
+
+.lb-proj-cta-btn {
+  border-radius: 0.25rem;
+  padding: 0.875rem 1.75rem;
+  font-size: $lb-fs-md;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+
+  &:hover { transform: none; opacity: 0.85; }
+  &:active { transform: scale(0.96); }
+}
+
+// ============================================================
+// Mobile responsive
+// ============================================================
+@include bs.media-breakpoint-down(md) {
+  .lb-featured { padding-block: $lb-section-pad-sm; }
+
+  .lb-group-zone { font-size: $lb-heading-2; }
+
+  .lb-proj-name { font-size: $lb-heading-4; }
+
+  .lb-vprops { padding-block: $lb-section-pad-sm; }
+
+  .lb-vprops-title { font-size: $lb-heading-3; }
+
+  .lb-vprop-card { padding: 1.25rem; height: auto; }
+
+  .lb-vprop-num { font-size: $lb-heading-3; }
+
+  .lb-vprop-card-title { font-size: $lb-fs-xl; }
+
+  .lb-proj-cta { padding-block: $lb-section-pad-sm + 0.75rem; }
+
+  .lb-proj-cta-title { font-size: $lb-heading-2; }
+
+  .lb-proj-cta-subtitle { font-size: $lb-fs-md; }
+
+  .lb-proj-cta-form { width: 100%; max-width: 100%; }
+
+  .lb-filter-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    .form-select { width: 100% !important; }
+  }
+}

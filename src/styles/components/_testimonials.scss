@@ -1,0 +1,105 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+.lb-testimonials {
+  background: $lb-cream;
+  margin-top: -3.75rem;
+  padding: 3rem clamp(1.25rem, 7vw, 6.5rem) 4.0625rem;
+  position: relative;
+  z-index: 3;
+  @include bs.media-breakpoint-down(md) {
+    margin-top: 0;
+  }
+}
+
+.lb-testimonials-title {
+  font-size: $lb-heading-3;
+  font-weight: $lb-heading-weight;
+  color: $lb-heading-color;
+  line-height: 1.25;
+}
+
+// --- Certification banner ---
+.lb-cert {
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.04);
+}
+
+.lb-bptl {
+  background: $lb-green;
+  width: 4rem;
+  height: 4rem;
+  padding: 0.5rem;
+  gap: 0;
+}
+
+.lb-bptl-line {
+  font-size: 0.4375rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lb-bptl-reg {
+  font-size: 0.3125rem;
+  color: $lb-green-soft;
+  line-height: 1.2;
+}
+
+.lb-bptl-cert {
+  font-size: 0.3125rem;
+  font-weight: 400;
+  color: $lb-green-soft;
+  margin-top: 0.25rem;
+}
+
+.lb-info {
+  background: $lb-gray-300;
+  border-radius: 0.5625rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  font-size: $lb-fs-xs;
+  color: $lb-text-light;
+}
+
+.lb-rating-badge {
+  background: $lb-cream;
+  padding: 0.5rem 0.75rem;
+}
+
+.lb-score {
+  background: $lb-green;
+  width: 2.25rem;
+  height: 2rem;
+  font-size: $lb-fs-lg;
+}
+
+.lb-share-cert {
+  background: $lb-green;
+  width: 2rem;
+  height: 2rem;
+}
+
+// --- Review cards ---
+.lb-review-card {
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+}
+
+.lb-reviewer-name { font-size: $lb-fs-base; }
+.lb-reviewer-role { font-size: $lb-fs-sm; }
+
+.lb-review-text {
+  font-size: $lb-fs-md;
+  color: $lb-body;
+  line-height: 1.6;
+}
+
+.lb-review-time {
+  font-size: 0.75rem;
+  color: $lb-text-light;
+}
+
+.lb-share-sm {
+  background: $lb-green;
+  width: 1.75rem;
+  height: 1.75rem;
+}
