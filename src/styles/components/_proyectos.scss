@@ -212,9 +212,16 @@
   }
 }
 
-.lb-proj-card > .lb-proj-img {
+.lb-proj-card > .lb-proj-img-wrap > .lb-proj-img {
   height: 17.5rem;
   object-fit: cover;
+}
+
+.lb-proj-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  z-index: 1;
 }
 
 .lb-location {

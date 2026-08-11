@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectCardSkeleton from '../components/ProjectCardSkeleton.jsx'
+import ProjectCard from '../components/ProjectCard.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import ValueProps from '../components/sections/ValueProps.jsx'
@@ -14,6 +15,7 @@ import { LayoutGridIcon } from '../components/icons/layout-grid.jsx'
 import { cotizadorHero, images } from '../data/content.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
+import { groupByComuna } from '../lib/projectUtils.js'
 
 const SUELDOS = ['Hasta $800.000', '$800.000 — $1.500.000', '$1.500.000 — $2.500.000', '$2.500.000 — $4.000.000', 'Más de $4.000.000']
 
@@ -58,6 +60,62 @@ export default function CotizadorGeneral() {
 
   const scrollToSection = () =>
     sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+  // Directo mode filters — same as /proyectos
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Build dynamic filter options from real API data
+  const dynamicFilters = useMemo(() => {
+    if (!apiProjects) return []
+    const comunas = [...new Set(apiProjects.map((p) => (p.comuna || 'Otros').trim()))].sort()
+    const tipologias = [...new Set(
+      apiProjects.flatMap((p) => (p.tipologias || []).map((t) => t.programa).filter((t) => t && t !== 'LOCAL'))
+    )].sort()
+    const precios = apiProjects.map((p) => p.precio_desde).filter(Boolean)
+    const minUF = Math.floor(Math.min(...precios) / 1000) * 1000
+    const maxUF = Math.ceil(Math.max(...precios) / 1000) * 1000
+    const rangos = []
+    for (let lo = minUF; lo < maxUF; lo += 2000) {
+      const hi = lo + 2000
+      rangos.push(`${lo.toLocaleString('es-CL')}-${hi.toLocaleString('es-CL')} UF`)
+    }
+    rangos.push(`${maxUF.toLocaleString('es-CL')}+ UF`)
+    return [
+      { id: 'ubicacion', label: 'Ubicación', options: comunas },
+      { id: 'tipo', label: 'Tipología', options: tipologias },
+      { id: 'precio', label: 'Precio UF', options: rangos },
+    ]
+  }, [apiProjects])
+
+  const filteredGroups = useMemo(() => {
+    if (!apiProjects) return []
+    const ubicacion = searchParams.get('ubicacion')
+    const tipo = searchParams.get('tipo')
+    const precio = searchParams.get('precio')
+
+    // Filter raw projects before grouping
+    const filtered = apiProjects.filter((p) => {
+      if (ubicacion && !(p.comuna || 'Otros').trim().toLowerCase().includes(ubicacion.toLowerCase())) return false
+      if (tipo && !(p.tipologias || []).some((t) => t.programa === tipo)) return false
+      if (precio) {
+        const uf = p.precio_desde || 0
+        if (precio.endsWith('+ UF')) {
+          const min = parseInt(precio.replace(/[^\d]/g, ''), 10)
+          if (uf < min) return false
+        } else {
+          const [lo, hi] = precio.replace(' UF', '').split('-').map((s) => parseInt(s.replace(/\./g, ''), 10))
+          if (uf < lo || uf >= hi) return false
+        }
+      }
+      return true
+    })
+
+    let groups = groupByComuna(filtered)
+    groups.forEach((g) => g.projects.sort((a, b) => a.name.localeCompare(b.name)))
+    return groups
+  }, [apiProjects, searchParams])
+
+  const hasFilters = mode === 'directo' && [...searchParams.keys()].length > 0
 
   // Auto-select project + scroll when arriving from RelatedProjects "Cotizar"
   useEffect(() => {
@@ -395,7 +453,7 @@ export default function CotizadorGeneral() {
             </div>
           )}
 
-          {/* DIRECTO MODE — project grid */}
+          {/* DIRECTO MODE — grouped by comuna, same as /proyectos */}
           {mode === 'directo' && !selectedProject && !navProyectoId && (
             <div className="lb-cot-gen-grid">
               {projectsLoading ? (
@@ -412,27 +470,66 @@ export default function CotizadorGeneral() {
                     Reintentar
                   </button>
                 </div>
-              ) : apiProjects?.length === 0 ? (
+              ) : !apiProjects || apiProjects.length === 0 ? (
                 <p className="text-center text-muted py-5">No hay proyectos disponibles.</p>
               ) : (
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                  {apiProjects.map((p) => (
-                    <div key={p.id} className="col">
+                <>
+                  {hasFilters && (
+                    <div className="d-flex align-items-center justify-content-end mb-3">
                       <button
-                        className="card h-100 lb-cot-gen-proj-card"
-                        onClick={() => setSelectedProject(p)}
+                        className="btn btn-outline-secondary btn-sm rounded-pill"
+                        onClick={() => setSearchParams()}
                       >
-                        {p.salesforce_portada_url && (
-                          <img src={p.salesforce_portada_url} alt={p.name} className="card-img-top" loading="lazy" />
-                        )}
-                        <div className="card-body">
-                          <h5 className="card-title mb-1">{p.name}</h5>
-                          <p className="card-text text-muted small mb-0">{p.comuna} · {p.direccion}</p>
-                        </div>
+                        Resetear filtros
                       </button>
                     </div>
+                  )}
+                  {/* Filter bar */}
+                  <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3 mb-4">
+                    <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
+                      {dynamicFilters.map((f) => (
+                        <select
+                          key={f.id}
+                          className="form-select form-select-sm border-0 bg-transparent"
+                          style={{ width: 'auto' }}
+                          value={searchParams.get(f.id) || ''}
+                          onChange={(e) => {
+                            const next = new URLSearchParams(searchParams)
+                            if (e.target.value) next.set(f.id, e.target.value)
+                            else next.delete(f.id)
+                            setSearchParams(next)
+                          }}
+                        >
+                          <option value="">{f.label}</option>
+                          {f.options.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      ))}
+                    </div>
+                  </div>
+                  {filteredGroups.map((group, gi) => (
+                    <div className="d-flex flex-column gap-4 mb-4" key={group.zone}>
+                      <ScrollAnim as="div" className="d-flex align-items-center justify-content-between" animation="fade-right" delay={gi * 0.1}>
+                        <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
+                      </ScrollAnim>
+                      <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
+                        {group.projects.map((project) => (
+                          <div key={project.name} className="col">
+                            <ProjectCard
+                              project={project}
+                              onClick={(p) => setSelectedProject(p._raw)}
+                              ctaLabel="Cotizar"
+                            />
+                          </div>
+                        ))}
+                      </ScrollAnim>
+                    </div>
                   ))}
-                </div>
+                  {filteredGroups.length === 0 && (
+                    <p className="text-center text-muted py-5">No se encontraron proyectos con los filtros seleccionados.</p>
+                  )}
+                </>
               )}
             </div>
           )}

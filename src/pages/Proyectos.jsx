@@ -6,19 +6,12 @@ import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import ProjectCardSkeleton from '../components/ProjectCardSkeleton.jsx'
 import ValueProps from '../components/sections/ValueProps.jsx'
-import { proyectosHero, proyectosCta, searchFilters, images } from '../data/content.js'
+import { proyectosHero, proyectosCta, images } from '../data/content.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
+import { groupByComuna } from '../lib/projectUtils.js'
 
-// Token is injected server-side by api-proxy.php / vite proxy headers
-
-const etapaLabel = (etapa) =>
-  /venta|recepcion/.test(etapa) ? 'Entrega Inmediata'
-  : /obra/.test(etapa) ? 'En Construcción'
-  : /terminacion/.test(etapa) ? 'Próxima Entrega'
-  : etapa
-
-/** Fetch projects from API, group by comuna. */
+/** Fetch raw projects from API. */
 function useApiProjects() {
   const [state, setState] = useState({ data: null, loading: true, error: null })
 
@@ -30,21 +23,7 @@ function useApiProjects() {
         setState({ data: null, loading: false, error })
         return
       }
-      const map = {}
-      for (const p of all) {
-        const zone = (p.comuna || 'Otros').trim()
-        if (!map[zone]) map[zone] = []
-        map[zone].push({
-          name: p.name,
-          location: p.direccion,
-          comuna: zone,
-          image: p.salesforce_portada_url || '',
-          entrega: etapaLabel(p.etapa),
-          slug: p.name.toLowerCase().replace(/edificio\s+/i, '').replace(/\s+/g, '-'),
-        })
-      }
-      const result = Object.entries(map).map(([zone, projects]) => ({ zone, projects }))
-      setState({ data: result, loading: false, error: null })
+      setState({ data: all, loading: false, error: null })
     })
     return () => { cancelled = true }
   }, [])
@@ -52,28 +31,66 @@ function useApiProjects() {
   return state
 }
 
-/** Sort + filter project groups */
-function useFilteredGroups(searchParams, sourceGroups) {
+/** Build dynamic filter options from real API data */
+function useDynamicFilters(rawProjects) {
+  return useMemo(() => {
+    if (!rawProjects) return []
+    const comunas = [...new Set(rawProjects.map((p) => (p.comuna || 'Otros').trim()))].sort()
+    const tipologias = [...new Set(
+      rawProjects.flatMap((p) => (p.tipologias || []).map((t) => t.programa).filter((t) => t && t !== 'LOCAL'))
+    )].sort()
+    const precios = rawProjects.map((p) => p.precio_desde).filter(Boolean)
+    const minUF = Math.floor(Math.min(...precios) / 1000) * 1000
+    const maxUF = Math.ceil(Math.max(...precios) / 1000) * 1000
+    const rangos = []
+    for (let lo = minUF; lo < maxUF; lo += 2000) {
+      const hi = lo + 2000
+      rangos.push(`${lo.toLocaleString('es-CL')}-${hi.toLocaleString('es-CL')} UF`)
+    }
+    rangos.push(`${maxUF.toLocaleString('es-CL')}+ UF`)
+    return [
+      { id: 'ubicacion', label: 'Ubicación', options: comunas },
+      { id: 'tipo', label: 'Tipología', options: tipologias },
+      { id: 'precio', label: 'Precio UF', options: rangos },
+    ]
+  }, [rawProjects])
+}
+
+/** Filter raw projects by searchParams, then group by comuna */
+function useFilteredGroups(searchParams, rawProjects) {
   return useMemo(() => {
     const ubicacion = searchParams.get('ubicacion')
+    const tipo = searchParams.get('tipo')
+    const precio = searchParams.get('precio')
 
-    const groups = (sourceGroups || [])
-      .filter((g) => !ubicacion || g.zone.toLowerCase().includes(ubicacion.toLowerCase()))
-
-    // Sort within each group (alphabetical — API has no price field)
-    groups.forEach((g) => {
-      g.projects.sort((a, b) => a.name.localeCompare(b.name))
+    const filtered = (rawProjects || []).filter((p) => {
+      if (ubicacion && !(p.comuna || 'Otros').trim().toLowerCase().includes(ubicacion.toLowerCase())) return false
+      if (tipo && !(p.tipologias || []).some((t) => t.programa === tipo)) return false
+      if (precio) {
+        const uf = p.precio_desde || 0
+        if (precio.endsWith('+ UF')) {
+          const min = parseInt(precio.replace(/[^\d]/g, ''), 10)
+          if (uf < min) return false
+        } else {
+          const [lo, hi] = precio.replace(' UF', '').split('-').map((s) => parseInt(s.replace(/\./g, ''), 10))
+          if (uf < lo || uf >= hi) return false
+        }
+      }
+      return true
     })
 
+    const groups = groupByComuna(filtered)
+    groups.forEach((g) => g.projects.sort((a, b) => a.name.localeCompare(b.name)))
     return groups
-  }, [searchParams, sourceGroups])
+  }, [searchParams, rawProjects])
 }
 
 export default function Proyectos() {
   useGsapAnimations()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { data: apiGroups, loading: projectsLoading, error: projectsError } = useApiProjects()
-  const filteredGroups = useFilteredGroups(searchParams, apiGroups || [])
+  const { data: rawProjects, loading: projectsLoading, error: projectsError } = useApiProjects()
+  const dynamicFilters = useDynamicFilters(rawProjects)
+  const filteredGroups = useFilteredGroups(searchParams, rawProjects)
   const hasFilters = [...searchParams.keys()].length > 0
 
   return (
@@ -113,7 +130,7 @@ export default function Proyectos() {
           {/* Filter bar */}
           <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3">
             <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
-              {searchFilters.filters.map((f) => (
+              {dynamicFilters.map((f) => (
                 <select
                   key={f.id}
                   className="form-select form-select-sm border-0 bg-transparent"
