@@ -85,6 +85,9 @@ export default function Navbar() {
   const location = useLocation()
   const pageLinks = getPageLinks(location.pathname)
 
+  // Pages without hero need the navbar always in "scrolled" state
+  const forceScrolled = location.pathname === '/cotizador'
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     onScroll()
@@ -93,7 +96,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
+    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled || forceScrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
       <div className="container d-flex align-items-center justify-content-between g-5">
         {/* Logo group */}
         <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">

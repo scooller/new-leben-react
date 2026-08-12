@@ -7,6 +7,7 @@
 
 // --- Shared ---
 .lb-proj-det-section-title {
+  font-family: $font-title;
   font-size: $lb-heading-1;
   line-height: 1.25;
   color: $lb-heading-color;
@@ -209,7 +210,7 @@
   background: $lb-white;
 
   .lb-proj-det-vista360-eyebrow {
-    font-family: 'Outfit', sans-serif;
+    font-family: $font-secondary;
     font-size: $lb-fs-md;
     font-weight: 700;
     color: $lb-red;
@@ -217,7 +218,7 @@
   }
 
   .lb-proj-det-vista360-title {
-    font-family: 'Outfit', sans-serif;
+    font-family: $font-title;
     font-size: $lb-heading-2;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
@@ -238,7 +239,7 @@
   border: none;
   border-bottom: 2px solid transparent;
   background: transparent;
-  font-family: 'Outfit', sans-serif;
+  font-family: $font-secondary;
   font-size: $lb-fs-base;
   font-weight: 500;
   color: $lb-gray-warm;
@@ -344,7 +345,7 @@
 
 .lb-proj-det-cot-map-canvas {
   height: 25rem;
-  background: $lb-cream;
+  background: $lb-white;
   border: 1px solid $lb-gray-300;
   border-radius: $lb-radius-md;
   position: relative;

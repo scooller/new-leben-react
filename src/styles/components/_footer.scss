@@ -95,6 +95,7 @@ a {
 // --- New: column titles, link lists, copyright strip (per Figma) ---
 
 .lb-footer-title {
+  font-family: $font-title;
   font-size: $lb-fs-md;
   font-weight: 700;
   letter-spacing: 0.05em;

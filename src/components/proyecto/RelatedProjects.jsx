@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
 
@@ -13,12 +14,18 @@ const ORIENTACION_LABELS = {
 /**
  * Related projects table — fetches real plantas from API.
  */
-export default function RelatedProjects({ data }) {
+export default function RelatedProjects({ data, onCotizar }) {
   const [rows, setRows] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const PAGE_SIZE = 5
   const navigate = useNavigate()
 
   const handleCotizar = (row) => {
+    if (onCotizar) {
+      onCotizar(row._planta)
+      return
+    }
     navigate('/cotizador', {
       state: {
         planta: row._planta,
@@ -31,11 +38,12 @@ export default function RelatedProjects({ data }) {
     if (!data.apiId) return
     let cancelled = false
     setLoading(true)
+    setPage(0)
     apiFetch(`/api/v1/plantas?proyecto_id=${data.apiId}`).then(({ data: all, error }) => {
       if (cancelled) return
       setLoading(false)
       if (error || !Array.isArray(all)) return
-      const plantas = all.filter((p) => p.is_available).slice(0, 10)
+      const plantas = all.filter((p) => p.is_available)
       if (!plantas.length) return
       setRows(plantas
         .map((p) => ({
@@ -88,7 +96,7 @@ export default function RelatedProjects({ data }) {
                     <td><span className="placeholder col-6" /></td>
                   </tr>
                 ))
-              ) : (rows || []).map((row, i) => (
+              ) : (rows || []).slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((row, i) => (
                 <tr key={i}>
                   <td className="fw-semibold">{row.proyecto}</td>
                   <td className="fw-semibold">{row.nombre}</td>
@@ -116,6 +124,32 @@ export default function RelatedProjects({ data }) {
               ))}
             </tbody>
           </table>
+
+          {/* Pager */}
+          {!loading && rows.length > PAGE_SIZE && (
+            <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+              <span className="text-muted small">
+                {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, rows.length)} de {rows.length}
+              </span>
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  className="btn btn-outline-dark btn-sm"
+                  disabled={page === 0}
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="small fw-semibold">{page + 1} / {Math.ceil(rows.length / PAGE_SIZE)}</span>
+                <button
+                  className="btn btn-outline-dark btn-sm"
+                  disabled={(page + 1) * PAGE_SIZE >= rows.length}
+                  onClick={() => setPage((p) => p + 1)}
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
         </ScrollAnim>
       </div>
     </section>

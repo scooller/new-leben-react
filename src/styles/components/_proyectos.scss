@@ -67,9 +67,9 @@
   letter-spacing: 0.0625rem;
 }
 
-// Title — Lexend Deca ExtraLight from Figma
+// Title — hero title
 .lb-proj-hero-title {
-  font-family: 'Lexend Deca', sans-serif;
+  font-family: $font-title;
   font-size: $lb-heading-display;
   font-weight: 300;
   color: $lb-white;
@@ -79,7 +79,7 @@
 
 // Meta row — subtitle • dot • location
 .lb-proj-hero-meta {
-  font-family: 'DM Sans', sans-serif;
+  font-family: $font-secondary;
   font-size: $lb-fs-lg;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.95);

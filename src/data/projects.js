@@ -103,7 +103,7 @@ export const projectDetails = {
           { label: 'Todas las plantas', options: ['Planta A', 'Planta B', 'Planta C'] },
         ],
       },
-      mapCaption: 'Esquicio',
+      mapCaption: 'Ubicación del departamento en el edificio',
       mapImage: img('inn/esquicio.jpg'),
       floorPlan: {
         thumbnails: [
