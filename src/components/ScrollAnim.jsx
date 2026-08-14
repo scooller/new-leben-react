@@ -36,7 +36,8 @@ export default function ScrollAnim({
     if (!el) return
 
     const preset = PRESETS[animation] || PRESETS['fade-up']
-    const targets = stagger > 0 ? el.children : el
+    const targets = stagger > 0 ? Array.from(el.children) : el
+    if (Array.isArray(targets) && targets.length === 0) return
 
     const ctx = gsap.context(() => {
       gsap.fromTo(

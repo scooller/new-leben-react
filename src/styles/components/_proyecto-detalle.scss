@@ -334,7 +334,16 @@
 }
 
 .lb-proj-det-cot-main {
-  align-items: flex-start;
+  align-items: stretch;
+
+  > [class*="col"]:not(.col-12):not(.lb-proj-det-cot-bottom) {
+    max-height: 400px;
+  }
+}
+
+.lb-proj-det-cot-bottom {
+  padding-top: 1rem;
+  border-top: 1px solid $lb-gray-300;
 }
 
 .lb-proj-det-cot-map {
@@ -365,6 +374,14 @@
 
 .lb-proj-det-cot-plan-card {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-proj-det-cot-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 // Overflow hidden so the zoom stays clipped inside the card
@@ -375,7 +392,7 @@
 
 .lb-proj-det-cot-plan-img {
   border-radius: $lb-radius-md;
-  background: $lb-cream;
+  background: $lb-white;
 }
 
 .lb-proj-det-cot-thumb {

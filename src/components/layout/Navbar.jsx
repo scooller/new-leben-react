@@ -86,7 +86,7 @@ export default function Navbar() {
   const pageLinks = getPageLinks(location.pathname)
 
   // Pages without hero need the navbar always in "scrolled" state
-  const forceScrolled = location.pathname === '/cotizador'
+  const forceScrolled = location.pathname.startsWith('/cotizador')
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)

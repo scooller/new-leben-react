@@ -35,14 +35,28 @@ export default function RelatedProjects({ data, onCotizar }) {
   }
 
   useEffect(() => {
-    if (!data.apiId) return
+    if (!data.apiId && !data.comuna) return
     let cancelled = false
     setLoading(true)
     setPage(0)
-    apiFetch(`/api/v1/plantas?proyecto_id=${data.apiId}`).then(({ data: all, error }) => {
+
+    // Fetch by comuna (universal mode) or by single project, paginating through all results
+    const baseParams = data.comuna
+      ? `comuna=${encodeURIComponent(data.comuna)}&disponible=1`
+      : `proyecto_id=${data.apiId}`
+
+    ;(async () => {
+      const all = []
+      let pg = 1
+      while (true) {
+        const { data: page, error } = await apiFetch(`/api/v1/plantas?${baseParams}&perPage=100&page=${pg}`)
+        if (cancelled || error || !Array.isArray(page)) break
+        all.push(...page)
+        if (page.length < 100) break
+        pg++
+      }
       if (cancelled) return
       setLoading(false)
-      if (error || !Array.isArray(all)) return
       const plantas = all.filter((p) => p.is_available)
       if (!plantas.length) return
       setRows(plantas
@@ -56,9 +70,9 @@ export default function RelatedProjects({ data, onCotizar }) {
           precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}*`,
           _planta: p,
         })))
-    })
+    })()
     return () => { cancelled = true }
-  }, [data.apiId, data.projectName])
+  }, [data.apiId, data.comuna, data.projectName])
 
   return (
     <section className="lb-proj-det-related" id="relacionados">

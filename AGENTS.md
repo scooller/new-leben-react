@@ -23,6 +23,8 @@
     └── FUNDING.yml           # Funding/sponsorship configuration
 ```
 
+> **Note:** The repo also contains `.eslintrc.cjs` (legacy) and `eslint.config.cjs` (flat config, active). The flat config is the one Vite/ESLint uses.
+
 ***
 
 ## Agent Roles (CaveCrew)
@@ -140,4 +142,4 @@ When an agent needs to report a bug, request a feature, or log a finding:
 
 ***
 
-*Last updated: 2026-07-29*
+*Last updated: 2026-08-13*

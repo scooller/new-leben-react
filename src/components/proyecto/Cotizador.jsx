@@ -1,9 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import { Layers, Expand, Home, Sun, Compass, Maximize } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
+import { SendIcon } from '../icons/send.jsx'
+import { WhatsAppIcon } from '../icons/whatsapp.jsx'
+import { FacebookIcon } from '../icons/facebook.jsx'
+import { LinkedinIcon } from '../icons/linkedin.jsx'
+import { MailIcon } from '../icons/mail.jsx'
+import { hover } from '../icons/animated-icon.jsx'
+
+/** Reusable share button with animated icon + hover */
+function ShareButton({ icon: Icon, label, href, onClick }) {
+  const ref = useRef(null)
+  return (
+    <a
+      href={href}
+      target={href ? '_blank' : undefined}
+      rel={href ? 'noopener noreferrer' : undefined}
+      onClick={onClick}
+      className="d-flex flex-column align-items-center gap-2 text-decoration-none text-dark p-3 rounded-3 lb-share-btn"
+      {...hover(ref)}
+    >
+      <Icon ref={ref} size={32} />
+      <span className="small fw-semibold">{label}</span>
+    </a>
+  )
+}
 
 const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, compass: Compass, maximize: Maximize }
 
@@ -12,6 +38,16 @@ const ORIENTACION_LABELS = {
   NE: 'Nor-Oriente', NO: 'Nor-Poniente',
   SE: 'Sur-Oriente', SO: 'Sur-Poniente',
 }
+
+// Mockup gallery images — fallback when project data has no thumbnails
+const MOCKUP_THUMBNAILS = [
+  `${import.meta.env.BASE_URL}images/inn/planta/planta.jpg`,
+  `${import.meta.env.BASE_URL}images/inn/planta/Cocina-Comedor-1.jpg`,
+  `${import.meta.env.BASE_URL}images/inn/planta/Comedor-2.jpg`,
+  `${import.meta.env.BASE_URL}images/inn/planta/Hall-de-acceso.jpg`,
+  `${import.meta.env.BASE_URL}images/inn/planta/Living-Comedor-2.jpg`,
+  `${import.meta.env.BASE_URL}images/inn/planta/Living-Comedor-3.jpg`,
+]
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
@@ -27,7 +63,6 @@ function plantaToDetails(p) {
     pricing: {
       label: 'Precio',
       price: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}`,
-      shareLabel: 'Compartir',
     },
     floorPlanImage: p.interior_image_url || null,
   }
@@ -42,6 +77,23 @@ const ETAPA_RANK = {
   postventa: 5,
 }
 const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
+
+const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '' })
+const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
+
+/** Paginate through all available plantas from a base URL */
+async function fetchPages(baseUrl) {
+  const all = []
+  let page = 1
+  while (true) {
+    const { data, error } = await apiFetch(`${baseUrl}&perPage=100&page=${page}`)
+    if (error || !Array.isArray(data) || data.length === 0) break
+    all.push(...data)
+    if (data.length < 100) break
+    page++
+  }
+  return all.filter((p) => p.is_available)
+}
 
 /** Dropdown filter component */
 function FilterDropdown({ label, options, selected, onSelect }) {
@@ -89,24 +141,54 @@ function FilterDropdown({ label, options, selected, onSelect }) {
 export default function Cotizador({ data, plantasRelacionadas, apiId, initialFilters, universal, projects, onProjectChange, externalPlanta }) {
   const [activeData, setActiveData] = useState(data)
   const [selected, setSelected] = useState(0)
+  const [imgIndex, setImgIndex] = useState(0)
   const ref = useRef(null)
+  const shareIconRef = useRef(null)
   const [showCotizar, setShowCotizar] = useState(false)
+  const [showShare, setShowShare] = useState(false)
+  const [copied, setCopied] = useState(false)
 
-  const EMPTY_FILTERS = universal
-    ? { comuna: '', proyecto: '', tipologia: '', orientacion: '' }
-    : { tipologia: '', producto: '', piso: '', planta: '' }
+  // Resolve planta ID + project slug from URL — read once on mount
+  const [urlParams] = useState(() => {
+    const m = window.location.pathname.match(/\/cotizador\/proyecto\/([^/]+)(?:\/planta\/(\d+))?/)
+    return { slug: m?.[1] || null, plantaId: m?.[2] ? parseInt(m[2], 10) : null }
+  })
+  const urlPlantaId = urlParams.plantaId
+
+  const updateUrl = (plantaId, projectSlug) => {
+    const slug = projectSlug || urlParams.slug
+    if (!slug) return
+    const path = plantaId
+      ? `/cotizador/proyecto/${slug}/planta/${plantaId}`
+      : `/cotizador/proyecto/${slug}`
+    window.history.replaceState(null, '', `${path}${window.location.search}${window.location.hash}`)
+  }
+
+  const copyLink = () => {
+    navigator.clipboard?.writeText(shareUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const EMPTY_FILTERS = universal ? EMPTY_FILTERS_UNIVERSAL : EMPTY_FILTERS_PROJECT
 
   // API plantas
   const [plantas, setPlantas] = useState([])
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState(initialFilters || EMPTY_FILTERS)
+  const [filtering, setFiltering] = useState(false)
 
-  // Build a comuna lookup from projects array
-  const comunaByProjectId = useMemo(() => {
-    const map = {}
-    ;(projects || []).forEach((p) => { if (p.id != null) map[String(p.id)] = (p.comuna || '').trim() })
-    return map
-  }, [projects])
+  // Clear filtering flag after filters settle
+  useEffect(() => {
+    if (!filtering) return
+    const t = setTimeout(() => setFiltering(false), 300)
+    return () => clearTimeout(t)
+  }, [filters]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const selectFilter = (updater) => {
+    setFiltering(true)
+    setFilters(updater)
+  }
 
   // Lookup project etapa by name for smart ordering
   const projectEtapaByName = useMemo(() => {
@@ -115,26 +197,29 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     return map
   }, [projects])
 
-  // Enrich each planta with comuna from project data, then sort so plantas
-  // from actively-selling projects appear first (drives the default display).
-  // API embeds proyecto.id (not proyecto_id), so look up by proyecto.id too
+  // Normalize string for reliable comparison across API objects
+  const norm = (s) => (s || '').trim().toLowerCase()
+
+  // Enrich + sort: actively-selling projects first (drives default display)
   const enrichedPlantas = useMemo(() =>
     plantas
       .map((p) => ({
         ...p,
         proyecto_id: p.proyecto_id || p.proyecto?.id,
-        _comuna: p.proyecto?.comuna || comunaByProjectId[String(p.proyecto_id || p.proyecto?.id)] || '',
+        _comuna: (p.proyecto?.comuna || '').trim(),
+        _comunaNorm: norm(p.proyecto?.comuna),
       }))
       .sort((a, b) =>
         etapaRank(projectEtapaByName[(a.proyecto?.name || '').trim().toLowerCase()])
         - etapaRank(projectEtapaByName[(b.proyecto?.name || '').trim().toLowerCase()])
       ),
-    [plantas, comunaByProjectId, projectEtapaByName])
+    [plantas, projectEtapaByName])
 
   // Sync when parent swaps data
   useEffect(() => {
     setActiveData(data); setSelected(0)
-    setFilters(initialFilters || (universal ? { comuna: '', proyecto: '', tipologia: '', orientacion: '' } : { tipologia: '', producto: '', piso: '', planta: '' }))
+    setFilters(initialFilters || EMPTY_FILTERS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, initialFilters, universal])
 
   // Fetch plantas from API — universal paginates through ALL available, otherwise per-project
@@ -143,35 +228,14 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     let cancelled = false
     setLoading(true)
 
-    async function loadAll() {
-      if (universal) {
-        // API caps at 100 per page regardless of perPage — paginate through all
-        const all = []
-        let page = 1
-        while (true) {
-          const { data, error } = await apiFetch(`/api/v1/plantas?disponible=1&perPage=100&page=${page}`)
-          if (cancelled || error || !Array.isArray(data) || data.length === 0) break
-          all.push(...data)
-          if (data.length < 100) break
-          page++
-        }
-        if (!cancelled) setPlantas(all.filter((p) => p.is_available))
-      } else {
-        // Per-project: paginate through available plantas only
-        const all = []
-        let page = 1
-        while (true) {
-          const { data, error } = await apiFetch(`/api/v1/plantas?proyecto_id=${apiId}&disponible=1&perPage=100&page=${page}`)
-          if (cancelled || error || !Array.isArray(data) || data.length === 0) break
-          all.push(...data)
-          if (data.length < 100) break
-          page++
-        }
-        if (!cancelled) setPlantas(all.filter((p) => p.is_available))
-      }
-    }
+    const url = universal
+      ? '/api/v1/plantas?disponible=1'
+      : `/api/v1/plantas?proyecto_id=${apiId}&disponible=1`
 
-    loadAll().finally(() => { if (!cancelled) setLoading(false) })
+    fetchPages(url).then((all) => {
+      if (!cancelled) setPlantas(all)
+    }).finally(() => { if (!cancelled) setLoading(false) })
+
     return () => { cancelled = true }
   }, [apiId, universal])
 
@@ -183,14 +247,16 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
 
       // Step 2: proyectos filtered by selected comuna (from projects, not just plantas)
       const afterComunaProjects = filters.comuna
-        ? (projects || []).filter((p) => (p.comuna || '').trim() === filters.comuna)
+        ? (projects || []).filter((p) => norm(p.comuna) === norm(filters.comuna))
         : (projects || [])
       const proyecto = [...new Set(afterComunaProjects.map((p) => p.name).filter(Boolean))].sort()
 
       // Step 3: tipologías + orientaciones filtered by selected proyecto (from plantas)
       const afterProyecto = filters.proyecto
-        ? enrichedPlantas.filter((p) => p.proyecto?.name === filters.proyecto)
-        : enrichedPlantas
+        ? enrichedPlantas.filter((p) => norm(p.proyecto?.name) === norm(filters.proyecto))
+        : (filters.comuna
+          ? enrichedPlantas.filter((p) => p._comunaNorm === norm(filters.comuna))
+          : enrichedPlantas)
       const tipologia = [...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort()
       const orientacion = [...new Set(
         afterProyecto.map((p) => p.orientacion).filter(Boolean)
@@ -212,8 +278,8 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     if (universal) {
       return enrichedPlantas
         .filter((p) =>
-          (!filters.comuna || p._comuna === filters.comuna) &&
-          (!filters.proyecto || p.proyecto?.name === filters.proyecto) &&
+          (!filters.comuna || p._comunaNorm === norm(filters.comuna)) &&
+          (!filters.proyecto || norm(p.proyecto?.name) === norm(filters.proyecto)) &&
           (!filters.tipologia || p.programa === filters.tipologia) &&
           (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion)
         )
@@ -228,6 +294,9 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
       )
       .sort((a, b) => (parseFloat(a.precio_lista) || Infinity) - (parseFloat(b.precio_lista) || Infinity))
   }, [enrichedPlantas, plantas, filters, universal])
+
+  // Active planta object — derived from selected index
+  const activePlanta = filteredPlantas[Math.min(selected, filteredPlantas.length - 1)]
 
   // Whether any filter is currently applied
   const hasFilters = universal
@@ -249,6 +318,17 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
       || null
   }, [universal, hasFilters, filters.proyecto, filteredPlantas, projects])
 
+  // Share URL with active planta ID so recipients land on the right departamento
+  const shareUrl = (() => {
+    const slug = activeProject?.slug || urlParams.slug
+    if (!slug) return window.location.href
+    const plantaId = activePlanta?.id
+    const path = plantaId
+      ? `/cotizador/proyecto/${slug}/planta/${plantaId}`
+      : `/cotizador/proyecto/${slug}`
+    return `${window.location.origin}${path}`
+  })()
+
   useEffect(() => {
     if (universal && onProjectChange) {
       onProjectChange(activeProject)
@@ -262,7 +342,8 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   }), [activeData])
 
   // Universal mode: show placeholder until filters produce results
-  const showEmptyState = universal && (!hasFilters || filteredPlantas.length === 0)
+  // Respect urlPlantaId — if URL has a specific planta, never show empty state
+  const showEmptyState = universal && !urlPlantaId && !urlParams.slug && (!hasFilters || filteredPlantas.length === 0)
 
   // Active details: from filtered planta if available, else from data
   // Thumbnails: real planta image first, then the original mockup gallery
@@ -271,9 +352,12 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     const planta = filteredPlantas[Math.min(selected, filteredPlantas.length - 1)]
     if (!planta) return { ...safeActiveData, details: [], pricing: { ...safeActiveData.pricing, price: 'Sin resultados' } }
     const enriched = plantaToDetails(planta)
+    const mockups = safeActiveData.floorPlan.thumbnails.length
+      ? safeActiveData.floorPlan.thumbnails
+      : MOCKUP_THUMBNAILS
     const thumbnails = enriched.floorPlanImage
-      ? [enriched.floorPlanImage, ...safeActiveData.floorPlan.thumbnails]
-      : safeActiveData.floorPlan.thumbnails
+      ? [enriched.floorPlanImage, ...mockups]
+      : mockups
     return {
       ...safeActiveData,
       details: enriched.details,
@@ -282,13 +366,41 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     }
 }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
-  // Reset thumbnail selection when filtered plantas change
-  useEffect(() => { setSelected(0) }, [filteredPlantas])
+  // Resolve selected index from URL planta ID once filteredPlantas load
+  useEffect(() => {
+    if (!filteredPlantas.length) return
+    const idx = urlPlantaId != null
+      ? Math.max(0, filteredPlantas.findIndex((p) => p.id === urlPlantaId))
+      : 0
+    const valid = idx >= 0 ? idx : 0
+    setSelected(valid)
+    setImgIndex(0)
+    if (urlPlantaId != null || urlParams.slug) {
+      const planta = filteredPlantas.find((p) => p.id === urlPlantaId)
+      if (planta) {
+        setFilters({
+          comuna: planta.proyecto?.comuna || '',
+          proyecto: planta.proyecto?.name || '',
+          tipologia: '',
+          orientacion: '',
+        })
+      }
+    }
+  }, [filteredPlantas, urlPlantaId, urlParams.slug])
+
+  // Update URL when selection changes — only if user navigated to a specific planta or has filters
+  useEffect(() => {
+    if (urlPlantaId != null || hasFilters) {
+      updateUrl(activePlanta?.id, activeProject?.slug)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, filteredPlantas, activeProject])
 
   // External planta selection (from RelatedProjects Cotizar button)
   useEffect(() => {
     if (!universal || !externalPlanta) return
     const planta = externalPlanta
+    setFiltering(true)
     setFilters({
       comuna: planta.proyecto?.comuna || '',
       proyecto: planta.proyecto?.name || '',
@@ -299,14 +411,14 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [universal, externalPlanta])
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    Fancybox.bind(el, '[data-fancybox="cotizador-plan"]', {})
-    return () => Fancybox.unbind(el)
-  }, [])
+  const openGallery = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const images = displayData.floorPlan.thumbnails.map((src) => ({ src, type: 'image' }))
+    Fancybox.show(images, { startIndex: imgIndex })
+  }
 
-  const mainImage = displayData.floorPlan.thumbnails[selected] ?? displayData.floorPlan.image
+  const mainImage = displayData.floorPlan.thumbnails[imgIndex] ?? displayData.floorPlan.image
 
   return (
     <section className="lb-proj-det-cotizador" id="cotizador" ref={ref}>
@@ -332,25 +444,25 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                       label="Todas las comunas"
                       options={filterOptions.comuna}
                       selected={filters.comuna}
-                      onSelect={(v) => setFilters({ comuna: v, proyecto: '', tipologia: '', orientacion: '' })}
+                      onSelect={(v) => selectFilter({ comuna: v, proyecto: '', tipologia: '', orientacion: '' })}
                     />
                     <FilterDropdown
                       label="Todos los proyectos"
                       options={filterOptions.proyecto}
                       selected={filters.proyecto}
-                      onSelect={(v) => setFilters((prev) => ({ ...prev, proyecto: v, tipologia: '', orientacion: '' }))}
+                      onSelect={(v) => selectFilter((prev) => ({ ...prev, proyecto: v, tipologia: '', orientacion: '' }))}
                     />
                     <FilterDropdown
                       label="Todas las tipologías"
                       options={filterOptions.tipologia}
                       selected={filters.tipologia}
-                      onSelect={(v) => setFilters((f) => ({ ...f, tipologia: v }))}
+                      onSelect={(v) => selectFilter((f) => ({ ...f, tipologia: v }))}
                     />
                     <FilterDropdown
                       label="Todas las orientaciones"
                       options={filterOptions.orientacion}
                       selected={filters.orientacion}
-                      onSelect={(v) => setFilters((f) => ({ ...f, orientacion: v }))}
+                      onSelect={(v) => selectFilter((f) => ({ ...f, orientacion: v }))}
                     />
                   </>) : (<>
                     <FilterDropdown
@@ -363,30 +475,34 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                       label="Todos los tipos de producto"
                       options={apiId ? filterOptions.producto : displayData.filters.row1[1].options}
                       selected={filters.producto}
-                      onSelect={(v) => setFilters((f) => ({ ...f, producto: v }))}
+                      onSelect={(v) => selectFilter((f) => ({ ...f, producto: v }))}
                     />
                     <FilterDropdown
                       label="Todos los pisos"
                       options={apiId ? filterOptions.piso.map(String) : displayData.filters.row2[0].options}
                       selected={filters.piso ? String(filters.piso) : ''}
-                      onSelect={(v) => setFilters((f) => ({ ...f, piso: v }))}
+                      onSelect={(v) => selectFilter((f) => ({ ...f, piso: v }))}
                     />
                     <FilterDropdown
                       label="Todas las plantas"
                       options={apiId ? filterOptions.planta : displayData.filters.row2[1].options}
                       selected={filters.planta}
-                      onSelect={(v) => setFilters((f) => ({ ...f, planta: v }))}
+                      onSelect={(v) => selectFilter((f) => ({ ...f, planta: v }))}
                     />
                   </>)}
                 </div>
                 <div className="d-flex align-items-center gap-3 mt-2">
                   <span className="badge bg-secondary">
-                    {(universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
+                    {(loading || filtering) ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
                   </span>
                   <button
                     className="btn btn-link btn-sm text-decoration-none px-0"
                     disabled={!hasFilters}
-                    onClick={() => setFilters(universal ? { comuna: '', proyecto: '', tipologia: '', orientacion: '' } : { tipologia: '', producto: '', piso: '', planta: '' })}
+                    onClick={() => {
+                      selectFilter(EMPTY_FILTERS)
+                      sessionStorage.clear()
+                      window.history.replaceState(null, '', '/cotizador/')
+                    }}
                   >
                     <i className="fa-solid fa-rotate-left me-1" />Borrar filtros
                   </button>
@@ -398,27 +514,30 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
         </div>
 
         {/* Main row: esquicio + plan + details (or empty state) */}
-        <div className="row g-4 mb-4 lb-proj-det-cot-main">
+        {/* Main row: map always visible + content area changes (skeleton/empty/plan) */}
+        <div className="row g-4 mb-4 lb-proj-det-cot-main" id="detalle-cot">
 
-          {/* Esquicio — always visible (mockup) */}
-          {displayData.mapImage && (
+          {/* Esquicio — hidden during empty state (no planta selected) */}
+          {showEmptyState ? null : (
           <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
-            <div className="lb-proj-det-cot-map-canvas">
-              <img
-                src={displayData.mapImage}
-                alt="Esquicio del edificio"
-                className="w-100 h-100"
-                style={{ objectFit: 'contain' }}
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p className="lb-proj-det-cot-map-caption text-muted small mt-2">{displayData.mapCaption}</p>
+            {(loading || filtering) ? (
+              <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
+            ) : displayData.mapImage ? (
+              <div className="lb-proj-det-cot-map-canvas">
+                <img
+                  src={displayData.mapImage}
+                  alt="Esquicio del edificio"
+                  className="w-100 h-100 object-fit-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            ) : null}
           </ScrollAnim>
           )}
 
-          {/* Empty state — universal mode, no filters or no results */}
-          {loading && !showEmptyState ? (
+          {/* Content: skeleton | empty state | floor plan + details */}
+          {(loading || filtering) ? (
             <div className="col-lg-9">
               <div className="row g-3">
                 {/* Skeleton: floor plan image */}
@@ -461,26 +580,15 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
 
           {/* Floor plan card */}
           <div className="col-lg-6 lb-proj-det-cot-plan-card">
-            <ScrollAnim as="a" href={mainImage} data-fancybox="cotizador-plan" className="lb-img-trigger d-block" tabIndex={0}>
+            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: 'pointer' }} role="button" tabIndex={0}>
               <img
                 src={mainImage}
                 alt="Planta del departamento"
-                className="lb-proj-det-cot-plan-img w-100 lb-img-interactive"
+                className="lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain"
                 loading="lazy"
                 decoding="async"
               />
-            </ScrollAnim>
-            <ScrollAnim as="div" className="lb-proj-det-cot-thumbs d-flex gap-2 mt-3">
-              {displayData.floorPlan.thumbnails.map((thumb, i) => (
-                <button
-                  key={i}
-                  className={`lb-proj-det-cot-thumb${selected === i ? ' lb-proj-det-cot-thumb--active' : ''}`}
-                  onClick={() => setSelected(i)}
-                >
-                  <img src={thumb} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
-                </button>
-              ))}
-            </ScrollAnim>
+            </div>
           </div>
 
           {/* Details grid */}
@@ -501,14 +609,6 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
             </ScrollAnim>
             )}
 
-            {displayData.actions?.length > 0 && (
-            <ScrollAnim as="div" className="d-flex gap-2 mt-3">
-              {displayData.actions.map((a) => (
-                <button key={a} className="btn btn-outline-dark flex-grow-1">{a}</button>
-              ))}
-            </ScrollAnim>
-            )}
-
             {/* Pricing */}
             <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
               <span className="lb-proj-det-cot-price-label">{displayData.pricing.label}</span>
@@ -516,22 +616,44 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                 <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>
                 <div className="d-flex align-items-center gap-2">
                   <span className="small">{displayData.pricing.shareLabel}</span>
-                  <img
-                    src={`${import.meta.env.BASE_URL}images/share.svg`}
-                    alt="Compartir"
-                    width="24"
-                    height="24"
-                    loading="lazy"
-                  />
+                  <button
+                    className="btn btn-link text-decoration-none p-0 lb-share-trigger d-flex align-items-center"
+                    onClick={() => setShowShare(true)}
+                    aria-label="Compartir"
+                  >
+                    <SendIcon ref={shareIconRef} size={24} />
+                  </button>
                 </div>
               </div>
-              <button
-                className="btn btn-danger w-100 mt-3 lb-proj-det-cot-cta"
-                onClick={() => setShowCotizar(true)}
-              >
-                {displayData.ctaText}
-              </button>
             </ScrollAnim>
+          </div>
+
+          {/* Bottom row: map caption + thumbnails + CTA */}
+          {displayData.mapImage && (
+            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center">
+              <p className="lb-proj-det-cot-map-caption text-muted small mb-0">{displayData.mapCaption}</p>
+            </div>
+          )}
+          <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
+            <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
+              {displayData.floorPlan.thumbnails.map((thumb, i) => (
+                <button
+                  key={i}
+                  className={`lb-proj-det-cot-thumb${imgIndex === i ? ' lb-proj-det-cot-thumb--active' : ''}`}
+                  onClick={() => setImgIndex(i)}
+                >
+                  <img src={thumb} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
+            <button
+              className="btn btn-danger w-100 lb-proj-det-cot-cta"
+              onClick={() => setShowCotizar(true)}
+            >
+              {displayData.ctaText}
+            </button>
           </div>
           </>
           )}
@@ -563,6 +685,44 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
         onClose={() => setShowCotizar(false)}
         thumbnails={displayData.floorPlan.thumbnails}
       />
+
+      {showShare && createPortal(
+        <div className="modal d-block" tabIndex="-1" onClick={() => setShowShare(false)}>
+          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content lb-share-modal">
+              <div className="modal-header border-0">
+                <h5 className="modal-title">Compartir</h5>
+                <button type="button" className="btn-close" onClick={() => setShowShare(false)} aria-label="Cerrar" />
+              </div>
+              <div className="modal-body">
+                <div className="row g-3 text-center">
+                  <div className="col-6 col-md-3">
+                    <ShareButton icon={WhatsAppIcon} label="WhatsApp" href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`} />
+                  </div>
+                  <div className="col-6 col-md-3">
+                    <ShareButton icon={FacebookIcon} label="Facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} />
+                  </div>
+                  <div className="col-6 col-md-3">
+                    <ShareButton icon={LinkedinIcon} label="LinkedIn" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} />
+                  </div>
+                  <div className="col-6 col-md-3">
+                    <ShareButton icon={MailIcon} label="Email" href={`mailto:?subject=Mira%20este%20departamento&body=${encodeURIComponent(shareUrl)}`} />
+                  </div>
+                  <div className="col-12">
+                    <div className="input-group">
+                      <input type="text" className="form-control" readOnly value={shareUrl} aria-label="Enlace para copiar" />
+                      <button className="btn btn-outline-dark" type="button" onClick={copyLink}>
+                        {copied ? '✓ Copiado' : 'Copiar'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </section>
   )
 }

@@ -54,9 +54,10 @@ export default function CotizadorGeneral() {
             <>
               <RelatedProjects
                 data={{
-                  eyebrow: `Alternativas a ${activeProject.name} • ${activeProject.comuna || ''}`.trim(),
+                  eyebrow: `Alternativas en ${activeProject.comuna || ''}`.trim(),
                   title: 'Proyectos similares que te pueden interesar',
                   apiId: activeProject.id,
+                  comuna: activeProject.comuna,
                   projectName: activeProject.name,
                 }}
                 onCotizar={handleCotizarPlanta}

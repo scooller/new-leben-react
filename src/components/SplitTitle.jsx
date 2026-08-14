@@ -20,7 +20,7 @@ export default function SplitTitle({
   const words = (text ?? '').split(' ').filter(Boolean)
 
   useEffect(() => {
-    if (!isLoaded || !ref.current) return
+    if (!isLoaded || !ref.current || words.length === 0) return
     const ctx = gsap.context(() => {
       gsap.from(ref.current.querySelectorAll('.lb-split-word'), {
         opacity: 0,

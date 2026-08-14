@@ -88,12 +88,27 @@ export default function App() {
           <ProyectoDetalle />
         </Suspense>
       } />
+      <Route path="/proyectos/:slug/planta/:plantaId" element={
+        <Suspense fallback={<PageLoader />}>
+          <ProyectoDetalle />
+        </Suspense>
+      } />
       <Route path="/brokers" element={
         <Suspense fallback={<PageLoader />}>
           <Brokers />
         </Suspense>
       } />
       <Route path="/cotizador" element={
+        <Suspense fallback={<PageLoader />}>
+          <CotizadorGeneral />
+        </Suspense>
+      } />
+      <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={
+        <Suspense fallback={<PageLoader />}>
+          <CotizadorGeneral />
+        </Suspense>
+      } />
+      <Route path="/cotizador/proyecto/:proyectoSlug" element={
         <Suspense fallback={<PageLoader />}>
           <CotizadorGeneral />
         </Suspense>

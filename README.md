@@ -15,7 +15,7 @@ Built with React 19, Vite 6, Redux Toolkit, Bootstrap 5, GSAP, and Motion.
 | **Styling** | SCSS + Bootstrap 5.3 (custom variable overrides) |
 | **Animation** | GSAP + ScrollTrigger, Motion (formerly Framer Motion) |
 | **Lightbox** | Fancybox (`@fancyapps/ui`) |
-| **Icons** | Lucide React, Font Awesome 7 |
+| **Icons** | Animated pqoqubbw icons (Motion), Lucide React, Font Awesome 7 |
 
 ---
 
@@ -48,51 +48,88 @@ src/
 │   ├── layout/
 │   │   ├── Navbar.jsx          # Fixed nav with hamburger dropdown
 │   │   └── Footer.jsx          # Footer with social links + badges
+│   │
 │   ├── sections/               # Home page sections
-│   │   ├── Hero.jsx
-│   │   ├── Diferenciadores.jsx  # Search + value props
-│   │   ├── Testimonials.jsx
-│   │   ├── CTASection.jsx
-│   │   └── VideosSection.jsx
+│   │   ├── Hero.jsx            # Hero banner with GSAP animations
+│   │   ├── Diferenciadores.jsx # Search + value props
+│   │   ├── ValueProps.jsx      # Value proposition cards
+│   │   ├── Testimonials.jsx    # Client testimonials carousel
+│   │   ├── CTASection.jsx      # Call-to-action band
+│   │   ├── VideosSection.jsx   # Video showcase
+│   │   └── ProjectOfMonthSection.jsx
+│   │
 │   ├── proyecto/               # Project detail page components
-│   │   ├── ProjectHero.jsx
-│   │   ├── ProjectOverview.jsx
-│   │   ├── ProjectTabs.jsx
+│   │   ├── ProjectHero.jsx     # Project hero banner
+│   │   ├── ProjectOverview.jsx # Summary + key stats
+│   │   ├── ProjectTabs.jsx     # Sticky tab navigation
 │   │   ├── SpacesGallery.jsx   # Gallery + interactive amenities
+│   │   ├── FloorPlans.jsx      # Floor plan display
+│   │   ├── Vista360.jsx        # 360° view embed
+│   │   ├── LocationSection.jsx # Map + surroundings
 │   │   ├── AgentCard.jsx       # Agent with WhatsApp link
-│   │   ├── TeamAgents.jsx
-│   │   ├── Cotizador.jsx
-│   │   └── ...
+│   │   ├── TeamAgents.jsx      # Agent grid
+│   │   ├── Cotizador.jsx       # Project-level cotizador
+│   │   ├── CotizadorForm.jsx   # Cotizador form fields
+│   │   ├── RelatedProjects.jsx # Related projects table + "Cotizar" button
+│   │   ├── Alternatives.jsx    # Alternative units
+│   │   └── BottomGallery.jsx   # Bottom gallery strip
+│   │
+│   ├── icons/                  # Animated pqoqubbw icons (Motion-powered SVGs)
+│   │   ├── animated-icon.jsx   # Factory: createAnimatedIcon
+│   │   ├── home.jsx, bell.jsx, bot.jsx, star.jsx, send.jsx, phone.jsx
+│   │   ├── mail.jsx, mail-check.jsx, shield-check.jsx, user-check.jsx
+│   │   ├── flame.jsx, droplet.jsx, fan.jsx, shower-head.jsx
+│   │   ├── cooking-pot.jsx, soup.jsx, washing-machine.jsx, clock.jsx
+│   │   ├── calendar-check.jsx, map-pin.jsx, badge-percent.jsx
+│   │   ├── award.jsx, frame.jsx, party-popper.jsx, sparkles.jsx
+│   │   ├── layout-grid.jsx, message-circle.jsx
+│   │   └── facebook.jsx, instagram.jsx, linkedin.jsx, whatsapp.jsx
+│   │
 │   ├── ChatWidget.jsx          # Floating chat bubble
 │   ├── Loader.jsx              # Full-screen initial loader
 │   ├── PageLoader.jsx          # Suspense fallback spinner
 │   ├── ProjectCard.jsx         # Reusable project listing card
-│   └── icons/                  # Animated Lucide icons
+│   ├── ProjectCardSkeleton.jsx # Skeleton loader (shimmer) for project cards
+│   ├── ScrollAnim.jsx          # GSAP scroll animation wrapper
+│   └── SplitTitle.jsx          # Word-split text for GSAP reveals
 │
 ├── pages/
-│   ├── Proyectos.jsx           # Project listing page
-│   └── ProyectoDetalle.jsx     # Project detail page
+��   ├── Proyectos.jsx           # Project listing page (API-driven)
+│   ├── ProyectoDetalle.jsx     # Project detail page (lazy)
+│   ├── CotizadorGeneral.jsx    # Universal cotizador (/cotizador, lazy)
+│   ├── Brokers.jsx             # Brokers listing page (lazy)
+│   ├── Login.jsx               # Auth login page (lazy)
+│   ├── Perfil.jsx              # Profile redirect (lazy)
+│   ├── PerfilBroker.jsx        # Broker profile page (lazy)
+│   └── PerfilComprador.jsx     # Buyer profile page (lazy)
 │
 ├── store/
-│   ├── store.js
+│   ├── store.js                # Redux Toolkit store config
 │   └── slices/
 │       ├── uiSlice.js          # isLoaded, activeFilter
-│       └── projectSlice.js    # slug, project, notFound
+│       └── authSlice.js        # user, token, isAuthenticated
 │
 ├── hooks/
 │   └── useGsapAnimations.js    # GSAP + ScrollTrigger hook
 │
 ├── data/
 │   ├── content.js              # Site content / images
-│   └── projects.js             # Project data
+│   ├── projects.js             # Project data
+│   ├── brokers.js              # Broker data
+│   └── users.js                # User data
 │
 └── styles/
     ├── main.scss               # Entry: imports Bootstrap + all components
     ├── global.scss             # Resets, fluid root font-size
     ├── variables.scss          # Design tokens (colors, breakpoints, etc.)
-    ├── components/             # Component-specific SCSS partials
+    ├── components/             # 15 SCSS partials:
+    │                           #   _brokers, _chat-widget, _cotizador-general,
+    │                           #   _cta, _diferenciadores, _footer, _hero,
+    │                           #   _navbar, _perfil, _project-of-month,
+    │                           #   _proyecto-detalle, _proyectos,
+    │                           #   _search-filter, _testimonials, _videos
     └── vendor/
-        └── _fancybox.scss
+        └── _fancybox.scss      # Fancybox lightbox overrides
 ```
 
 ---
@@ -130,7 +167,7 @@ No custom breakpoint variables.
 - **Interactive SpacesGallery** — amenity icon buttons focus individual gallery slides
 - **WhatsApp integration** on agent cards (`wa.me` links)
 - **GSAP animations** — parallax, scroll reveals, hero motion
-- **Animated Lucide icons** — motion-controlled hover states
+- **Animated pqoqubbw icons** — Motion-powered SVG icons with hover states (replaces static Lucide icons in UI)
 - **Fancybox lightbox** for galleries and location images
 - **Fluid typography** via `clamp()` and rem-based sizing throughout
 - **Cotizador general** (`/cotizador`) — asistente guiado (wizard) + selección directa de proyectos
@@ -345,6 +382,34 @@ if (user) return null
 
 All notable changes to this project are documented below.
 Dates in `YYYY-MM-DD` format.
+
+---
+
+### 2026-08-13 — Cotizador Fixes: Fancybox, GSAP Warnings, Gallery Separation
+
+**Fixed**
+- Bug: Fancybox no abría desde imagen grande del Cotizador — `new Fancybox(images, opts)` crea instancia pero no la muestra. Cambio a `Fancybox.show(images, opts)` (método estático, [API oficial](https://fancyapps.com/fancybox/api/methods/))
+- Bug: Fancybox sin estilos en Cotizador — faltaba `import '@fancyapps/ui/dist/fancybox/fancybox.css'`. Container se creaba en DOM pero invisible (sin `position: fixed`, sin `z-index`, sin overlay)
+- Bug: GSAP "target not found" en `ScrollAnim.jsx` — `el.children` vacío cuando `stagger > 0` generaba warning. Guard de early return si targets es array vacío
+- Bug: GSAP "target not found" en `SplitTitle.jsx` — `querySelectorAll('.lb-split-word')` sin resultados cuando `text` vacío. Guard `words.length === 0` en `useEffect`
+- Bug: loop infinito de re-renders (`Maximum update depth exceeded`) — `urlPlantaId` recalculado cada render como IIFE. Cambio a `useState(() => ...)` (calculado una vez en mount)
+- Bug: URL con doble slash (`/cotizador//planta/22`) — `.replace(/\/$/, '')` en base path de `updateUrl` y `shareUrl`
+- Bug: click en thumbnail cambiaba URL de planta — índices mezclados. Separación de `selected` (índice de planta, controla URL/detalles) e `imgIndex` (índice de imagen de galería, controla imagen principal)
+- Bug: `ScrollAnim` interceptaba `onClick` del plan card — reemplazado wrapper `ScrollAnim as="div"` por `div` plano con `onClick={openGallery}`
+- Bug: Fancybox abría múltiples instancias — guard `document.querySelector('.fancybox__container')` removido, `Fancybox.show()` maneja instancia única nativamente
+
+**Changed**
+- `openGallery` — removido `Fancybox.bind`, reemplazado por `onClick` manual con `Fancybox.show(images, { startIndex: imgIndex })`
+- `MOCKUP_THUMBNAILS` — constante con 6 imágenes de fallback desde `/images/inn/planta/` para CotizadorGeneral
+- `fetchPages(baseUrl)` — helper que deduplica loop de paginación
+- Removido `comunaByProjectId` useMemo (API ya trae `proyecto.comuna`)
+- Removidos 3 guards SSR `typeof window === 'undefined'` (SPA puro, innecesarios)
+- Removido bloque `displayData.actions` muerto
+- Removido `shareLabel` de `plantaToDetails`
+- Removido prop `planta` de `CotizadorForm`
+- `CotizadorForm` ahora recibe solo `show`, `onClose`, `thumbnails`
+
+**Net: ~50 líneas removidas (ponytail audit)**
 
 ---
 
