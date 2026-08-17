@@ -356,3 +356,35 @@ export const cotizadorHero = {
   subtitle: 'Encuentra la planta perfecta y cotiza tu próximo hogar en simples pasos.',
   ctaText: 'Comenzar',
 }
+
+export const splitCarousel = {
+  slides: [
+    {
+      id: 1,
+      title: 'Diseño que se integra con la naturaleza',
+      text: 'Proyectos diseñados para integrarse armónicamente con el entorno, donde cada detalle constructivo evoca calidez, luz y trascendencia.',
+      ctaLabel: 'Ver proyectos',
+      ctaHref: '/proyectos',
+      imageUrl: img('img1-main.jpg'),
+      imageAlt: 'Proyecto Leben',
+    },
+    {
+      id: 2,
+      title: 'Áreas comunes de otro nivel',
+      text: 'Arquitectura, diseño e iluminación pensados para hacer de cada día una experiencia comparable a un hotel de lujo.',
+      ctaLabel: 'Ver proyecto INN',
+      ctaHref: '/proyectos/inn',
+      imageUrl: img('inn-overview-1.jpg'),
+      imageAlt: 'Áreas comunes INN',
+    },
+    {
+      id: 3,
+      title: 'Ubicaciones privilegiadas',
+      text: 'Departamentos frente al lago en Puerto Varas y proyectos en las mejores zonas del sur de Chile.',
+      ctaLabel: 'Cotiza tu hogar',
+      ctaHref: '/cotizador',
+      imageUrl: img('inn-hero-lake.jpeg'),
+      imageAlt: 'Vista al lago',
+    },
+  ],
+}

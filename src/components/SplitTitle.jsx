@@ -32,7 +32,7 @@ export default function SplitTitle({
       })
     }, ref)
     return () => ctx?.revert()
-  }, [isLoaded, stagger, y])
+  }, [isLoaded, stagger, y, words.length])
 
   return (
     <Tag ref={ref} className={className} {...rest}>

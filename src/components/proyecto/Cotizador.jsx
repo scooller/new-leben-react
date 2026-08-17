@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
-import { Layers, Expand, Home, Sun, Compass, Maximize } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
@@ -177,6 +177,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState(initialFilters || EMPTY_FILTERS)
   const [filtering, setFiltering] = useState(false)
+  const [switching, setSwitching] = useState(false)
 
   // Clear filtering flag after filters settle
   useEffect(() => {
@@ -345,6 +346,10 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   // Respect urlPlantaId — if URL has a specific planta, never show empty state
   const showEmptyState = universal && !urlPlantaId && !urlParams.slug && (!hasFilters || filteredPlantas.length === 0)
 
+  // Skeleton while fetching/searching — EXCEPT the initial no-filter state,
+  // where the empty-state message renders right away (no skeleton flash)
+  const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
+
   // Active details: from filtered planta if available, else from data
   // Thumbnails: real planta image first, then the original mockup gallery
   const displayData = useMemo(() => {
@@ -418,7 +423,26 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     Fancybox.show(images, { startIndex: imgIndex })
   }
 
+  // Navigate between plantas — show loading effect until the new image loads
+  const changePlanta = (dir) => {
+    const next = Math.min(filteredPlantas.length - 1, Math.max(0, selected + dir))
+    if (next === selected || switching) return
+    setSwitching(true)
+    setSelected(next)
+    setImgIndex(0)
+  }
+
+  // Safety: never get stuck in loading state (cached or failed images)
+  useEffect(() => {
+    if (!switching) return
+    const t = setTimeout(() => setSwitching(false), 2000)
+    return () => clearTimeout(t)
+  }, [switching, selected])
+
   const mainImage = displayData.floorPlan.thumbnails[imgIndex] ?? displayData.floorPlan.image
+  // Planta (floor plan) renders contained; gallery/mockup images render covered
+  const plantaImageUrl = activePlanta?.interior_image_url || null
+  const planFitClass = mainImage && mainImage === plantaImageUrl ? 'object-fit-contain' : 'object-fit-cover'
 
   return (
     <section className="lb-proj-det-cotizador" id="cotizador" ref={ref}>
@@ -493,7 +517,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                 </div>
                 <div className="d-flex align-items-center gap-3 mt-2">
                   <span className="badge bg-secondary">
-                    {(loading || filtering) ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
+                    {showSkeleton ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
                   </span>
                   <button
                     className="btn btn-link btn-sm text-decoration-none px-0"
@@ -520,7 +544,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
           {/* Esquicio — hidden during empty state (no planta selected) */}
           {showEmptyState ? null : (
           <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
-            {(loading || filtering) ? (
+            {showSkeleton ? (
               <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
             ) : displayData.mapImage ? (
               <div className="lb-proj-det-cot-map-canvas">
@@ -537,43 +561,53 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
           )}
 
           {/* Content: skeleton | empty state | floor plan + details */}
-          {(loading || filtering) ? (
-            <div className="col-lg-9">
-              <div className="row g-3">
-                {/* Skeleton: floor plan image */}
-                <div className="col-lg-8">
-                  <div className="lb-skeleton" style={{ width: '100%', height: '300px', borderRadius: '0.5rem' }} />
-                  <div className="d-flex gap-2 mt-3">
-                    {Array.from({ length: 4 }).map((_, i) => (
-                      <div key={i} className="lb-skeleton" style={{ width: '64px', height: '64px', borderRadius: '0.375rem' }} />
-                    ))}
-                  </div>
-                </div>
-                {/* Skeleton: details + pricing */}
-                <div className="col-lg-4 d-flex flex-column gap-3">
-                  {Array.from({ length: 5 }).map((_, i) => (
+          {/* Empty state renders immediately — initial fetch with no filters shouldn't skeleton */}
+          {showSkeleton ? (
+            <>
+              {/* Skeleton: floor plan card */}
+              <div className="col-lg-6 lb-proj-det-cot-plan-card">
+                <div className="lb-skeleton" style={{ width: '100%', height: '300px', borderRadius: '0.5rem' }} />
+              </div>
+
+              {/* Skeleton: details grid (2 cols, 6 items) + pricing */}
+              <div className="col-lg-3 lb-proj-det-cot-details">
+                <div className="lb-proj-det-cot-detail-grid">
+                  {Array.from({ length: 6 }).map((_, i) => (
                     <div key={i} className="d-flex align-items-center gap-2">
                       <div className="lb-skeleton rounded-circle" style={{ width: '24px', height: '24px', flexShrink: 0 }} />
                       <div className="flex-grow-1">
-                        <div className="lb-skeleton" style={{ width: '5rem', height: '0.75rem' }} />
-                        <div className="lb-skeleton mt-1" style={{ width: '7rem', height: '1rem' }} />
+                        <div className="lb-skeleton" style={{ width: '4rem', height: '0.75rem' }} />
+                        <div className="lb-skeleton mt-1" style={{ width: '5.5rem', height: '1rem' }} />
                       </div>
                     </div>
                   ))}
-                  <div className="mt-3">
-                    <div className="lb-skeleton" style={{ width: '6rem', height: '0.75rem' }} />
-                    <div className="lb-skeleton mt-1" style={{ width: '8rem', height: '1.5rem' }} />
-                    <div className="lb-skeleton mt-3" style={{ width: '100%', height: '2.5rem', borderRadius: '0.375rem' }} />
-                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="lb-skeleton" style={{ width: '6rem', height: '0.75rem' }} />
+                  <div className="lb-skeleton mt-1" style={{ width: '8rem', height: '1.5rem' }} />
                 </div>
               </div>
-            </div>
+
+              {/* Skeleton: bottom row — thumbnails + CTA */}
+              <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
+                <div className="d-flex gap-2 flex-wrap">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="lb-skeleton" style={{ width: '64px', height: '64px', borderRadius: '0.375rem' }} />
+                  ))}
+                </div>
+              </div>
+              <div className="col-lg-3 lb-proj-det-cot-bottom">
+                <div className="lb-skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '0.375rem' }} />
+              </div>
+            </>
           ) : showEmptyState ? (
-            <div className="col-lg-9 text-center py-5 lb-cot-empty-state">
-              <p className="text-muted mb-1">{hasFilters ? 'Sin resultados para tu búsqueda.' : 'Usa los filtros para encontrar tu departamento ideal.'}</p>
-              {hasFilters && (
+            <div className="col-lg-9 offset-lg-4 text-start py-5 lb-cot-empty-state">
+              <div className="alert alert-warning d-inline-block text-center" role="alert">
+                <p className="text-muted mb-1">{hasFilters ? 'Sin resultados para tu búsqueda.' : 'Usa los filtros para encontrar tu departamento ideal.'}</p>
+                {hasFilters && (
                 <p className="text-muted small">Prueba con otra combinación de filtros.</p>
-              )}
+                )}
+              </div>
             </div>
           ) : (
           <>
@@ -581,14 +615,34 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
           {/* Floor plan card */}
           <div className="col-lg-6 lb-proj-det-cot-plan-card">
             <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: 'pointer' }} role="button" tabIndex={0}>
+              {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
                 src={mainImage}
                 alt="Planta del departamento"
-                className="lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain"
+                className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
+                onLoad={() => setSwitching(false)}
                 loading="lazy"
                 decoding="async"
               />
             </div>
+            {filteredPlantas.length > 1 && (<>
+              <button
+                className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
+                onClick={() => changePlanta(-1)}
+                disabled={selected <= 0}
+                aria-label="Planta anterior"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
+                onClick={() => changePlanta(1)}
+                disabled={selected >= filteredPlantas.length - 1}
+                aria-label="Planta siguiente"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>)}
           </div>
 
           {/* Details grid */}

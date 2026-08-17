@@ -92,7 +92,7 @@ export const projectDetails = {
 
     // --- Cotizador (visual mock) ---
     cotizador: {
-      title: 'Cotiza tu próximo depto en <span class="text-danger">Edificio INN</span>',
+      title: 'Cotiza tu próximo departamento',
       filters: {
         row1: [
           { label: 'Todas las tipologías', options: ['2D+2B', '2D+3B', '3D+2B', '3D+3B', '3D+4B', '4D+4B'] },
@@ -104,7 +104,7 @@ export const projectDetails = {
         ],
       },
       mapCaption: 'Ubicación del departamento en el edificio',
-      mapImage: img('inn/esquicio.jpg'),
+      mapImage: img('inn/new-esquicio.jpeg'),
       floorPlan: {
         thumbnails: [
           img('inn/planta/planta.jpg'),

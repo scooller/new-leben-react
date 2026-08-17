@@ -1,0 +1,96 @@
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+/* Split Carousel — port of WP block bs-split-carousel */
+.lb-split-carousel,
+.bs-split-carousel {
+  position: relative;
+  padding-bottom: 6rem; // space for indicators
+
+  // GSAP handles all animation — kill Bootstrap CSS transitions
+  .carousel-item {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .split-text-col {
+    position: relative;
+    z-index: 2;
+  }
+
+  .split-text-card {
+    background-color: bs.$body-bg;
+    color: bs.$body-color;
+    min-height: 26rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 3rem 3rem 2rem;
+    // overlap right column image
+    margin-right: -10rem;
+    position: relative;
+    z-index: 2;
+
+    h3 {
+      font-family: $font-title;
+      font-size: $lb-heading-3;
+      font-weight: $lb-heading-weight;
+      color: $lb-heading-color;
+    }
+
+    p {
+      font-size: $lb-fs-base;
+      color: $lb-body;
+    }
+  }
+
+  .split-image-col {
+    position: relative;
+
+    img {
+      border-radius: $lb-radius-xl;
+    }
+  }
+
+  .split-carousel-indicators {
+    position: absolute;
+    bottom: 2.5rem;
+    left: bs.$container-padding-x;
+    z-index: 5;
+
+    button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $lb-gray-300;
+      border: none;
+      margin: 0 4px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+
+      &.active {
+        opacity: 1;
+        background-color: $lb-dark;
+      }
+    }
+  }
+}
+
+@include bs.media-breakpoint-down(lg) {
+  .bs-split-carousel {
+    .split-text-card {
+      margin-right: 0;
+      margin-bottom: -2rem;
+      min-height: 18rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .split-carousel-indicators {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+}

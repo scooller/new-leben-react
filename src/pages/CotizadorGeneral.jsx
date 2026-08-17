@@ -6,16 +6,17 @@ import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import Alternatives from '../components/proyecto/Alternatives.jsx'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
+import { getProjectBySlug } from '../data/projects.js'
 
 const COTIZADOR_DATA = {
-  title: 'Cotiza tu próximo departamento',
+  title: getProjectBySlug('inn')?.cotizador?.title || 'Cotiza tu próximo departamento',
   filters: { row1: [], row2: [] },
-  mapCaption: 'Ubicación del departamento en el edificio',
-  mapImage: `${import.meta.env.BASE_URL}images/inn/esquicio.jpg`,
+  mapCaption: getProjectBySlug('inn')?.cotizador?.mapCaption || '',
+  mapImage: getProjectBySlug('inn')?.cotizador?.mapImage || null,
   floorPlan: { thumbnails: [] },
   details: [],
-  pricing: { label: 'Precios desde', price: '—', shareLabel: 'Compartir' },
-  ctaText: 'Cotizar',
+  pricing: { label: getProjectBySlug('inn')?.cotizador?.pricing?.label || 'Precios desde', price: '—', shareLabel: 'Compartir' },
+  ctaText: getProjectBySlug('inn')?.cotizador?.ctaText || 'Cotizar',
 }
 
 /** Fetch projects from API */
