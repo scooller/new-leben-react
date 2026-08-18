@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { apiFetch } from '../../lib/apiFetch.js'
+import { tipologiaSummary } from '../../lib/projectUtils.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import ProjectCard from '../ProjectCard.jsx'
@@ -25,12 +26,22 @@ export default function Alternatives({ data }) {
       const SUR_COMUNAS = ['PUERTO VARAS', 'VALDIVIA', 'PUERTO MONTT']
       const others = all.filter((p) => p.name !== data.excludeName)
       const picks = others.filter((p) => SUR_COMUNAS.includes((p.comuna || '').trim().toUpperCase())).slice(0, 3)
+      // Precio desde real: mínimos de tipologías válidas (evita basura como LOCAL UF 70), fallback al del proyecto
+      const minTipPrecio = (p) => {
+        const prices = (p.tipologias || [])
+          .filter((t) => t.programa && t.programa !== 'LOCAL' && t.tipo_producto !== 'LOCAL' && t.precio_desde)
+          .map((t) => t.precio_desde)
+        return prices.length ? Math.min(...prices) : p.precio_desde
+      }
+
       const mapped = picks.map((p) => ({
           name: p.name,
-          location: p.direccion,
+          location: [p.direccion, (p.comuna || '').trim()].filter(Boolean).join(', ') || p.comuna?.trim(),
           comuna: (p.comuna || '').trim(),
           image: p.salesforce_portada_url || '',
           entrega: etapaLabel(p.etapa),
+          tipologia: tipologiaSummary(p.tipologias),
+          precioDesde: minTipPrecio(p) ? `UF ${Math.round(minTipPrecio(p)).toLocaleString('es-CL')}` : undefined,
           slug: p.name.toLowerCase().replace(/edificio\s+/i, '').replace(/\s+/g, '-'),
         }))
       setCards(mapped)

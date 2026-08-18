@@ -23,9 +23,9 @@ const TABS = [
 ]
 
 const SLIDES = [
-  { img: 'images/inn/render.jpg', alt: 'Render Edificio INN frente al lago' },
-  { img: 'images/inn/galeria1.jpg', alt: 'Vista del edificio INN' },
-  { img: 'images/inn/galeria2.jpg', alt: 'Fachada del edificio INN' },
+  { img: 'images/inn/slides/02_DEPORTE-NAUTICO.jpg', alt: 'Deportes náuticos' },
+  { img: 'images/inn/slides/foto1.jpg', alt: 'Trekking' },
+  { img: 'images/inn/slides/foto2.jpg', alt: 'Pesca' },
 ]
 
 const base = import.meta.env.BASE_URL
@@ -75,7 +75,7 @@ export default function Inn() {
         {/* Botonera pinneada debajo del header (sticky se confina al padre, por eso vive fuera del hero) */}
         <nav className="lb-inn-hero-tabs mx-auto" aria-label="Secciones del proyecto">
           <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner shadow-lg">
-            <div className="card-body py-4 px-5">
+            <div className="card-body py-4 px-4">
               <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-5">
                 {TABS.map((t) => (
                   <li className="nav-item" key={t.id}>

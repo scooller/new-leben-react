@@ -423,10 +423,14 @@
     display: block;
     object-fit: cover;
     border-radius: $lb-radius-sm;
+    filter: grayscale(1);
   }
 
-  &--active {
+  &--active, &:hover {
     border-color: $lb-red;
+    img{
+      filter: grayscale(0);
+    }
   }
 }
 
@@ -456,6 +460,7 @@
   font-size: $lb-heading-1;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
+  line-height: 1;
 }
 
 // --- Related Projects Table ---

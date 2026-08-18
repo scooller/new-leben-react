@@ -2,16 +2,18 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
-import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { SendIcon } from '../icons/send.jsx'
+import { HeartHandshakeIcon } from '../icons/heart-handshake.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { FacebookIcon } from '../icons/facebook.jsx'
 import { LinkedinIcon } from '../icons/linkedin.jsx'
 import { MailIcon } from '../icons/mail.jsx'
 import { hover } from '../icons/animated-icon.jsx'
+import { DownloadIcon } from '../icons/download.jsx'
+import { TelescopeIcon } from '../icons/telescope.jsx'
 
 /** Reusable share button with animated icon + hover */
 function ShareButton({ icon: Icon, label, href, onClick }) {
@@ -27,6 +29,21 @@ function ShareButton({ icon: Icon, label, href, onClick }) {
     >
       <Icon ref={ref} size={32} />
       <span className="small fw-semibold">{label}</span>
+    </a>
+  )
+}
+
+/** Reusable action button with animated icon + hover */
+function ActionButton({ icon: Icon, children }) {
+  const ref = useRef(null)
+  return (
+    <a
+      href='#'
+      className="btn btn-outline-dark d-flex align-items-center justify-content-center gap-2"
+      {...hover(ref)}
+    >
+      <Icon ref={ref} size={24} />
+      {children}
     </a>
   )
 }
@@ -366,7 +383,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     return {
       ...safeActiveData,
       details: enriched.details,
-      pricing: enriched.pricing,
+      pricing: { ...safeActiveData.pricing, ...enriched.pricing },
       floorPlan: { ...safeActiveData.floorPlan, thumbnails },
     }
 }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
@@ -528,7 +545,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                       window.history.replaceState(null, '', '/cotizador/')
                     }}
                   >
-                    <i className="fa-solid fa-rotate-left me-1" />Borrar filtros
+                    <RotateCcw size={14} className="me-1" />Borrar filtros
                   </button>
                 </div>
               </>)}
@@ -664,28 +681,41 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
             )}
 
             {/* Pricing */}
-            <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
-              <span className="lb-proj-det-cot-price-label">{displayData.pricing.label}</span>
-              <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
-                <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="small">{displayData.pricing.shareLabel}</span>
-                  <button
-                    className="btn btn-link text-decoration-none p-0 lb-share-trigger d-flex align-items-center"
-                    onClick={() => setShowShare(true)}
-                    aria-label="Compartir"
-                  >
-                    <SendIcon ref={shareIconRef} size={24} />
-                  </button>
+              <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
+                <div className="row align-items-end">
+                  <div className="col-md">
+                    <span className="lb-proj-det-cot-price-label">{displayData.pricing.label}</span>
+                    <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
+                      <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>                      
+                    </div>
+                  </div>
+                  <div className="col-md">
+                    <button
+                      className="btn btn-danger w-100 lb-proj-det-cot-cta"
+                      onClick={() => setShowCotizar(true)}
+                    >
+                      {displayData.ctaText}
+                    </button>      
+                  </div>
                 </div>
-              </div>
-            </ScrollAnim>
+              </ScrollAnim>
           </div>
 
           {/* Bottom row: map caption + thumbnails + CTA */}
           {displayData.mapImage && (
-            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center">
+            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
               <p className="lb-proj-det-cot-map-caption text-muted small mb-0">{displayData.mapCaption}</p>
+              <div className="d-flex align-items-center gap-2">                
+                <button
+                  className="btn btn-link text-decoration-none p-0 lb-share-trigger d-flex align-items-center"
+                  onClick={() => setShowShare(true)}
+                  aria-label="Compartir"
+                  {...hover(shareIconRef)}
+                >
+                  <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
+                  <HeartHandshakeIcon ref={shareIconRef} size={24} />
+                </button>
+              </div>
             </div>
           )}
           <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
@@ -702,12 +732,14 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
             </div>
           </div>
           <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
-            <button
-              className="btn btn-danger w-100 lb-proj-det-cot-cta"
-              onClick={() => setShowCotizar(true)}
-            >
-              {displayData.ctaText}
-            </button>
+            <div className="btn-group w-100" role="group" aria-label="Acciones">
+              <ActionButton icon={DownloadIcon}>
+                Descargar Brochure
+              </ActionButton>
+              <ActionButton icon={TelescopeIcon}>
+                Vistas por piso de tu Dpto
+              </ActionButton>
+            </div>
           </div>
           </>
           )}

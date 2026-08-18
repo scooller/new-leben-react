@@ -55,7 +55,8 @@ export default function CotizadorGeneral() {
             <>
               <RelatedProjects
                 data={{
-                  eyebrow: `Alternativas en ${activeProject.comuna || ''}`.trim(),
+                  eyebrow: `Alternativas en `.trim(),
+                  highlight: activeProject.comuna || '',
                   title: 'Proyectos similares que te pueden interesar',
                   apiId: activeProject.id,
                   comuna: activeProject.comuna,

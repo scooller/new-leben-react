@@ -71,7 +71,7 @@ $inn-gris-dark: #101010;
   position: sticky;
   top: $lb-navbar-height;
   z-index: 80;
-  width: min(92%, 60dvw);
+  width: min(90%, 53dvw);
   margin-inline: auto;
   margin-top: -2.5rem;
 
@@ -153,6 +153,7 @@ $inn-gris-dark: #101010;
   &__frame {
     border-radius: 4px;
     overflow: hidden;
+    aspect-ratio: 4 / 3;
   }
 
   .carousel {
