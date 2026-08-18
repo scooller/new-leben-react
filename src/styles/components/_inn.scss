@@ -1,0 +1,176 @@
+// INN (/inn-test) — solo lo que Bootstrap no cubre
+@use '../variables' as *;
+
+$inn-gold: #d8b35cff;
+$inn-gold-dark: #422c15;
+$inn-gris: #808080;
+$inn-gris-dark: #101010;
+
+.lb-inn{
+  color: $inn-gris-dark;
+}
+
+// --- HERO ---
+.lb-inn-hero {
+  position: relative;
+  height: 92dvh;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+
+  &__bg-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__logo {
+    width: clamp(6rem, 12vw, 10rem);
+    margin-bottom: 1.5rem;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.45) 100%);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: clamp(2rem, 6vh, 4.5rem);
+  }
+
+  &__title {
+    color: $lb-white;
+    font-size: clamp(2rem, 4.6vw, 4.2rem);
+    font-family: $font-title;
+    margin: 0;
+    padding-inline: 1rem;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    font-weight: 100;
+    line-height: 1;
+    margin-top: 1.5rem;
+    margin-bottom: 8rem;
+  }
+}
+
+// Botonera flotante (card + nav-pills de Bootstrap; solo skin dorada)
+.lb-inn-hero-tabs {
+  position: sticky;
+  top: $lb-navbar-height;
+  z-index: 80;
+  width: min(92%, 60dvw);
+  margin-inline: auto;
+  margin-top: -2.5rem;
+
+  &__inner {
+    border-radius: $lb-radius-pill;
+
+    .nav-link {
+      border-radius: $lb-radius-pill;
+      font-size: $lb-fs-xs;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: $inn-gris;
+
+      &__border {
+        border: 1px solid;
+        border-color: $lb-dark;
+      }
+
+      &:hover, &.active {
+        background: $inn-gold;
+        background: linear-gradient(180deg,rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        color: $lb-white;
+        border-color: $inn-gold;
+      }
+    }
+  }
+}
+
+// --- DATOS ---
+.lb-inn-info {
+  background: #fff;
+  padding: 5.5rem 0 2.25rem;
+
+  .col:not(:last-child) {
+    border-right: 1px solid $lb-dark;
+  }
+
+  &__label {
+    letter-spacing: 0.14em;
+    color: $inn-gris;
+    font-weight: 700;
+  }
+}
+
+// --- PROYECTO ---
+.lb-inn-proyecto {
+  background: #fff;
+  padding: 4.5rem 0 5.5rem;
+
+  .container.lb-shadow-box{
+    margin-bottom: 7rem;
+    background-image: url(/images/inn/bg-montain.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 5%;
+    background-size: cover;
+    background-size: 80%;
+  }
+
+  &__eyebrow {
+    font-size: $lb-heading-4;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-size: $lb-heading-display;
+    font-family: $font-title;
+    color: $inn-gold;
+    margin-bottom: 1.75rem;
+  }
+
+  &__text {
+    font-size: $lb-fs-md;
+    color: $inn-gris-dark;
+    margin-bottom: 1.1rem;
+  }
+
+  &__frame {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .carousel {
+    margin-bottom: -8rem; // para que el carrusel se superponga al footer y no quede espacio en blanco;
+  }
+
+  // dots debajo de los textos (columna izquierda)
+  &__indicators {
+    position: static;
+    margin: 1.75rem 0 0;
+    justify-content: flex-start;
+
+    [data-bs-target] {
+      width: 0.8rem;
+      height: 0.8rem;
+      --bs-carousel-indicator-active-bg: #{$inn-gris-dark};
+      border-radius: $lb-radius-pill;
+      border: none;
+    }
+  }
+}

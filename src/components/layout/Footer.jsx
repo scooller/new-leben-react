@@ -1,9 +1,6 @@
 import { useRef } from 'react'
 import { footerContent } from '../../data/content.js'
 import { hover } from '../icons/animated-icon.jsx'
-import { ShieldCheckIcon } from '../icons/shield-check.jsx'
-import { AwardIcon } from '../icons/award.jsx'
-import { StarIcon } from '../icons/star.jsx'
 import { MapPinIcon } from '../icons/map-pin.jsx'
 import { ClockIcon } from '../icons/clock.jsx'
 import { PhoneIcon } from '../icons/phone.jsx'
@@ -12,12 +9,6 @@ import { FacebookIcon } from '../icons/facebook.jsx'
 import { InstagramIcon } from '../icons/instagram.jsx'
 import { LinkedinIcon } from '../icons/linkedin.jsx'
 
-const badgeIcons = {
-  shieldCheck: ShieldCheckIcon,
-  award: AwardIcon,
-  starFooter: StarIcon,
-}
-
 const socialIcons = {
   facebook: FacebookIcon,
   instagram: InstagramIcon,
@@ -25,7 +16,7 @@ const socialIcons = {
 }
 
 export default function Footer() {
-  const { legal, badges, address, schedule, phone, email, social, socialLinks, legalLinks, copyright, copyrightLinks } = footerContent
+  const { legal, address, schedule, phone, email, social, socialLinks, copyright, copyrightLinks } = footerContent
 
   const mapRef = useRef(null)
   const clockRef = useRef(null)
@@ -52,7 +43,7 @@ export default function Footer() {
               <img src="/images/leben_bptl_pro.svg" alt="" className="flex-shrink-0 img-logo" fetchPriority="high" />
             </div>
             <div className="d-flex gap-2">
-              {badges.map((b) => {
+              {/* {badges.map((b) => {
                 const Icon = badgeIcons[b.icon] || StarIcon
                 return (
                   <div
@@ -63,12 +54,27 @@ export default function Footer() {
                     <span className="lb-badge-label">{b.label}</span>
                   </div>
                 )
+              })} */}
+              {social.map((s, i) => {
+                const Ic = socialIcons[s] || FacebookIcon
+                return (
+                  <a
+                    key={s}
+                    href="#"
+                    className={`lb-badge lb-badge-${s} d-inline-flex flex-column align-items-center justify-content-center rounded border text-decoration-none`}
+                    onMouseEnter={() => socialRefs.current[i]?.startAnimation()}
+                    onMouseLeave={() => socialRefs.current[i]?.stopAnimation()}
+                  >
+                    <Ic ref={(el) => { socialRefs.current[i] = el }} size={20} className="lb-badge-icon" />
+                    <span className="lb-badge-label">{socialLinks[s]}</span>
+                  </a>
+                )
               })}
             </div>
           </div>
 
           {/* Col 2: Address */}
-          <div className="col-6 col-md">
+          <div className="col-6 col-md-3 offset-md-3">
             <h3 className="lb-footer-title">&nbsp;</h3>
             <a
               href={mapsUrl}
@@ -115,7 +121,7 @@ export default function Footer() {
           </div>
 
           {/* Col 4: Legal & Acceso */}
-          <div className="col-6 col-md">
+          {/* <div className="col-6 col-md">
             <h3 className="lb-footer-title">Legal &amp; Acceso</h3>
             <ul className="list-unstyled d-flex flex-column gap-1 mb-0">
               {legalLinks.map((link) => (
@@ -124,10 +130,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Col 5: Síguenos */}
-          <div className="col-6 col-md">
+          {/* <div className="col-6 col-md">
             <h3 className="lb-footer-title">Síguenos</h3>
             <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
               {social.map((s, i) => {
@@ -147,7 +153,7 @@ export default function Footer() {
                 )
               })}
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {/* Copyright strip */}

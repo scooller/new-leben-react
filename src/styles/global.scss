@@ -179,5 +179,13 @@ button[type] {
 .lb-shadow-down {
   box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
 }
+.lb-shadow-box{
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 15px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
 
-// Width utility: .lb-w-85, .lb-w-90, .lb-w-95
+//top utility: 1:0.25rem, 2:0.5rem, 3:1rem, 4:1.5rem, 5:3rem
+$lb-top-steps: (6:6rem, 7:9.5rem, 8:13rem);
+
+@each $step, $value in $lb-top-steps {
+  .pt-#{$step} { padding-top: $value !important; }
+}

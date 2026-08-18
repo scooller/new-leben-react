@@ -25,6 +25,7 @@ const Brokers = lazy(() => import('./pages/Brokers.jsx'))
 const Login = lazy(() => import('./pages/Login.jsx'))
 const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
+const Inn = lazy(() => import('./pages/Inn.jsx'))
 
 function Home() {
   return (
@@ -78,6 +79,11 @@ export default function App() {
           </>
         }
       />
+      <Route path="/inn-test" element={
+        <Suspense fallback={<PageLoader />}>
+          <Inn />
+        </Suspense>
+      } />
       <Route path="/proyectos" element={
         <Suspense fallback={<PageLoader />}>
           <Proyectos />

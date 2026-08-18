@@ -2,7 +2,7 @@ import { heroContent, videos } from '../../data/content.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
-export default function Hero() {
+export default function Hero({ title, bottom }) {
   return (
     <section className="lb-hero container d-flex flex-column align-items-center justify-content-end lb-radius-bl lb-radius-br" id="inicio">
       <div className="lb-hero-bg-wrap lb-radius-bl lb-radius-br">
@@ -10,7 +10,8 @@ export default function Hero() {
         <div className="lb-hero-overlay" />
       </div>
       <ScrollAnim as="div" className="position-relative d-flex flex-column align-items-center w-100 text-center" animation="fade-up" stagger={0.15} start="top 90%">
-        <SplitTitle as="h1" className="lb-hero-title mb-5" text={`${heroContent.title}`} stagger={0.08} />
+        <SplitTitle as="h1" className="lb-hero-title mb-4" text={title ?? heroContent.title} stagger={0.08} />
+        {bottom}
       </ScrollAnim>
     </section>
   )
