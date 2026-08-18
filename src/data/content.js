@@ -160,7 +160,7 @@ export const projectOfMonthContent = {
   title: 'María Gracia en ',
   titleHighlight: 'Leben',
   text: 'La creadora de contenido y conductora María Gracia Subercaseaux visitó junto a su marido Waldemar Méndez nuestro proyecto INN en Puerto Varas y quedó maravillada con sus espacios interiores, terminaciones, diseño y la calidez de los ambientes. Una visita muy especial que nos permite mostrar cómo este edificio no solo propone departamentos frente al lago, sino una nueva forma de disfrutar el sur con sofisticación. ',
-  photo: img('inn/maria-gracia.png'),
+  photo: img('inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg'),
   video: vid('maria gracia.mp4'),
   buttonText: 'Ver proyecto INN',
   buttonLink: '/proyectos/inn',

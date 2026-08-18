@@ -8,7 +8,7 @@ export default function ProjectOfMonthSection() {
         <div className="row align-items-center gy-4">
           <div className="col-lg-4">
             <ScrollAnim as="div" animation="fade-up" duration={1} className="lb-project-month-photo">
-              <img src={content.photo} alt={content.title} />
+              <img src={content.photo} alt={content.title} className='rounded-4' />
             </ScrollAnim>
           </div>
 
