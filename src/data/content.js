@@ -15,6 +15,7 @@ export const images = {
   logoIcon: img('icon.svg'),
   logoText: img('leben.svg'),
   logoBest: img('sello.png'),
+  sello5: img('sello-5.svg'),
   sello9: img('sello9.png'),
   sello4: img('sello4.png'),
   sello10: img('sello10.png'),
@@ -74,9 +75,9 @@ export const diferenciadoresTitle = {
 }
 
 export const diferenciadores = [
-  { image: 'sello9', text: 'Gracias a la excelente evaluación de nuestros clientes hemos sido certificados por 6 años consecutivos por Best Place to Live como una de las mejores inmobiliarias para vivir en Chile y Latinoamérica.' },
-  { image: 'sello11', text: 'Hemos sido certificados por la Cámara Chilena de la Construcción (Cchc) con el Sello Pro por trabajar bajo los mejores estándares de sostenibilidad siendo uno de los pocos grupos inmobiliarios en la industria en obtener este sello consecutivamente.' },
+  { image: 'sello5', text: 'Gracias a la excelente evaluación de nuestros clientes hemos sido certificados por 6 años consecutivos por Best Place to Live como una de las mejores inmobiliarias para vivir en Chile y Latinoamérica.' },
   { image: 'sello4', text: 'Certificados como la 4ta mejor inmobiliaria para vivir en Chile y 9na en Latinoamérica gracias al acompañamiento y la experiencia brindada a nuestros clientes en su proceso de compra o inversión. ' },
+  { image: 'sello11', text: 'Hemos sido certificados por la Cámara Chilena de la Construcción (Cchc) con el Sello Pro por trabajar bajo los mejores estándares de sostenibilidad siendo uno de los pocos grupos inmobiliarios en la industria en obtener este sello consecutivamente.' },
   { image: 'sello10', text: 'Prácticamente todos nuestros proyectos cuentan con Calificación Energética de Viviendas (CEV) lo que te permite acceder a una tasa rebajada en bancos asociados mientras contribuyes al medio ambiente ahorrando en calefacción y refrigeración.' },
 ]
 
