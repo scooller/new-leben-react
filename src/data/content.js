@@ -193,10 +193,10 @@ export const footerContent = {
     { icon: 'starFooter', label: 'RATED' },
   ],
   address: {
-    street: 'Dr. Manuel Barros Borgoño 386',
+    street: 'Dr. Manuel Barros Borgoño 386 ',
     city: 'Providencia, Santiago, Chile',
   },
-  schedule: ['Lun a Vie: 09:00 a 14:00 hrs', 'y 15:00 a 18:00 hrs'],
+  schedule: ['Lun a Vie: 09:00 a 14:00 hrs ', 'y 15:00 a 18:00 hrs'],
   phone: '+569 9129 7804',
   email: 'info@ileben.cl',
   social: ['facebook', 'instagram', 'linkedin'],

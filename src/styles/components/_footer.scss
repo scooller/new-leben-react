@@ -33,6 +33,12 @@
   transition: color 0.3s ease;
 }
 
+.lb-border-red{
+  height: 75%;
+  width: 1px;
+  background-color: $lb-red;
+}
+
 // --- Social links (fix: red-on-red was caused by global a:hover override) ---
 
 .lb-social {
@@ -73,7 +79,7 @@ a:has(> .lb-footer-icon) {
 .lb-contact {
   font-size: $lb-fs-sm;
   color: $lb-white;
-  line-height: 1.6;
+  line-height: 1.2;
 }
 
 a {

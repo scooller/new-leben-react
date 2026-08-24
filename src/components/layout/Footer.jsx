@@ -74,40 +74,38 @@ export default function Footer() {
           </div>
 
           {/* Col 2: Address */}
-          <div className="col-6 col-md-3 offset-md-3">
-            <h3 className="lb-footer-title">&nbsp;</h3>
+          <div className="col-6 col-md-4 offset-md-2 d-flex flex-row align-items-start justify-content-between">
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-start text-decoration-none"
+              className="d-flex gap-2 align-items-center text-decoration-none"
               {...hover(mapRef)}
             >
-              <MapPinIcon ref={mapRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+              <MapPinIcon ref={mapRef} size={13} className="lb-footer-icon flex-shrink-0 d-inline-flex" />
               <div className="d-flex flex-column lb-contact">
-                <span>{address.street}</span>
-                <span>{address.city}</span>
+                <span>{address.street} {address.city}</span>
               </div>
             </a>
+            <div className='lb-border-red me-4' />
           </div>
 
           {/* Col 3: Contact */}
-          <div className="col-6 col-md">
-            <h3 className="lb-footer-title">&nbsp;</h3>
-            <div className="d-flex gap-2 align-items-start mb-3" {...hover(clockRef)}>
-              <ClockIcon ref={clockRef} size={16} className="lb-footer-icon flex-shrink-0 mt-1" />
+          <div className="col-6 col-md-3">
+            <div className="d-flex gap-2 align-items-center mb-2" {...hover(clockRef)}>
+              <ClockIcon ref={clockRef} size={13} className="lb-footer-icon flex-shrink-0 d-inline-flex" />
               <div className="d-flex flex-column lb-contact">
-                {schedule.map((line) => <span key={line}>{line}</span>)}
+                <span>{schedule}</span>
               </div>
             </div>
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="d-flex gap-2 align-items-center mb-3 text-decoration-none"
+              className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
               {...hover(phoneRef)}
             >
-              <PhoneIcon ref={phoneRef} size={16} className="lb-footer-icon flex-shrink-0" />
+              <PhoneIcon ref={phoneRef} size={13} className="lb-footer-icon flex-shrink-0 d-inline-flex" />
               <span className="lb-contact">{phone}</span>
             </a>
             <a
@@ -115,7 +113,7 @@ export default function Footer() {
               className="d-flex gap-2 align-items-center text-decoration-none"
               {...hover(mailRef)}
             >
-              <MailCheckIcon ref={mailRef} size={16} className="lb-footer-icon flex-shrink-0" />
+              <MailCheckIcon ref={mailRef} size={13} className="lb-footer-icon flex-shrink-0 d-inline-flex" />
               <span className="lb-contact">{email}</span>
             </a>
           </div>
