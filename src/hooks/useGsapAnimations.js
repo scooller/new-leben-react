@@ -30,7 +30,6 @@ export function useGsapAnimations(deps = []) {
     return () => {
       clearTimeout(t)
       imgs.forEach((img) => img.removeEventListener('load', refresh))
-      ScrollTrigger.getAll().forEach((st) => st.kill())
     }
   }, [isLoaded, pathname, ...deps]) // eslint-disable-line react-hooks/exhaustive-deps
 }

@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
-import Carousel from 'bootstrap/js/dist/carousel'
-import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
+import { useState } from 'react'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
+import CarouselNav from '../components/sections/CarouselNav.jsx'
+import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.jsx'
+import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 
 const INFO = [
   { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991' },
@@ -28,32 +28,41 @@ const SLIDES = [
   { img: 'images/inn/slides/foto2.jpg', alt: 'Pesca' },
 ]
 
+const EQUIPMENT_LOGOS = [
+  { src: 'images/logos/franke.png', alt: 'Franke' },
+  { src: 'images/logos/mk.png', alt: 'MK' },
+  { src: 'images/logos/paini.png', alt: 'Paini' },
+  { src: 'images/logos/hansgrohe.png', alt: 'Hansgrohe' },
+]
+
+const EQUIPMENT_SLIDES = [
+  { img: 'images/inn/terminacion-puertas.jpg', alt: 'Refrigerador' },
+  { img: 'images/inn/terminacion-horno.jpg', alt: 'Horno' },
+  { img: 'images/inn/terminacion-microondas.jpg', alt: 'Microondas' },
+  { img: 'images/inn/terminacion-encimera-campana.jpg', alt: 'Encimera y campana' },
+  { img: 'images/inn/terminacion-lavavajillas.jpg', alt: 'Lavavajillas' },
+  { img: 'images/inn/terminacion-cubierta-cocina.jpg', alt: 'Cubierta cocina' },
+  { img: 'images/inn/terminacion-griferia-cocina.jpg', alt: 'Grifería cocina' },
+  { img: 'images/inn/terminacion-griferia-bano.jpg', alt: 'Grifería baño' },
+]
+
+const EQUIPMENT_NAV_ITEMS = [
+  { label: 'Refrigerador', icon: 'images/logos/refrigerador.svg' },
+  { label: 'Horno', icon: 'images/logos/horno.svg' },
+  { label: 'Microondas', icon: 'images/logos/microhondas.svg' },
+  { label: 'Encimera y campana', icon: 'images/logos/encimera.svg' },
+  { label: 'Lavavajillas', icon: 'images/logos/lavavajillas.svg' },
+  { label: 'Cubierta cocina', icon: 'images/logos/cubierta cocina.svg' },
+  { label: 'Grifería cocina', icon: 'images/logos/griferia.svg' },
+  { label: 'Grifería baño', icon: 'images/logos/bano.svg' },
+]
+
 const base = import.meta.env.BASE_URL
 
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [activeSlide, setActiveSlide] = useState(0)
-  const carouselEl = useRef(null)
-
-  useEffect(() => {
-    // React nulifica los refs antes de correr los cleanups: capturar el nodo localmente
-    const el = carouselEl.current
-    if (!el) return
-    // Bootstrap no auto-inicializa carruseles montados por React Router
-    const c = new Carousel(el, { interval: 5000, ride: 'carousel' })
-    // Click en imagen del carrusel abre Fancybox (mismo patrón que BottomGallery)
-    Fancybox.bind(el, '[data-fancybox="inn-carousel"]', {
-      Toolbar: { display: { left: [], right: ['close'] } },
-    })
-    // Bootstrap solo sincroniza los indicators internos: sync manual del estado
-    const onSlid = (e) => setActiveSlide(e.to)
-    el.addEventListener('slid.bs.carousel', onSlid)
-    return () => {
-      el.removeEventListener('slid.bs.carousel', onSlid)
-      Fancybox.unbind(el)
-      c.dispose()
-    }
-  }, [])
+  const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
 
   return (
     <>
@@ -109,67 +118,46 @@ export default function Inn() {
           </div>
         </section>
 
-        {/* PROYECTO — texto izquierda + carrusel Bootstrap derecha */}
-        <section className="lb-inn-proyecto" id="proyecto" aria-label="Proyecto">
-          <div className="container lb-shadow-box px-5 py-4 pt-8">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-5 align-self-stretch position-relative">
-                <div className='h-100 pe-4' animation="fade-up">
-                  <ScrollAnim as="span" className="lb-inn-proyecto__eyebrow">
-                    1<span className="mx-2">|</span>Proyecto
-                  </ScrollAnim>
-                  <ScrollAnim as="h2" className="lb-inn-proyecto__title">
-                    EXCLUSIVIDAD
-                    <br />
-                    FRENTE AL LAGO
-                  </ScrollAnim>
-                  <ScrollAnim as="p" className="lb-inn-proyecto__text">
-                    Descubre el privilegio de vivir en primera línea con vistas incomparables y
-                    despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en el edificio
-                    más moderno y exclusivo de Puerto Varas.
-                  </ScrollAnim>
-                  <ScrollAnim as="p" className="fw-bold">
-                    Departamentos, dúplex y deptos. con patio privado.
-                  </ScrollAnim>
-                  <div className="carousel-indicators position-absolute bottom-0 left-0 lb-inn-proyecto__indicators">
-                    {SLIDES.map((s, i) => (
-                      <button
-                        type="button"
-                        data-bs-target="#innCarousel"
-                        data-bs-slide-to={i}
-                        className={i === activeSlide ? 'active' : ''}
-                        aria-label={`Imagen ${i + 1}`}
-                        key={s.img}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <ScrollAnim className="col-lg-7">
-                <div ref={carouselEl} id="innCarousel" className="carousel slide carousel-fade">
-                  <div className="carousel-inner lb-inn-proyecto__frame">
-                    {SLIDES.map((s, i) => (
-                      <div
-                        className={`carousel-item ${i === 0 ? 'active' : ''}`}
-                        data-bs-interval="5000"
-                        key={s.img}
-                      >
-                        <a
-                          href={`${base}${s.img}`}
-                          data-fancybox="inn-carousel"
-                          tabIndex={0}
-                        >
-                          <img src={`${base}${s.img}`} className="d-block w-100" alt={s.alt} />
-                        </a>
-                      </div>
-                    ))}
-                  </div>
+        <ProjectFeatureSection
+          eyebrow={<>1<span className="mx-2">|</span>Proyecto</>}
+          title={<>EXCLUSIVIDAD<br />FRENTE AL LAGO</>}
+          description="Descubre el privilegio de vivir en primera línea con vistas incomparables y despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en el edificio más moderno y exclusivo de Puerto Varas."
+          highlight="Departamentos, dúplex y deptos. con patio privado."
+          slides={SLIDES}
+          carouselId="innCarousel"
+          activeSlide={activeSlide}
+          onSlideChange={setActiveSlide}
+          id="proyecto"
+          ariaLabel="Proyecto"
+        />
 
-                </div>
-              </ScrollAnim>
-            </div>
-          </div>
-        </section>
+        <VideoTextSection
+          text="Edificio de solo 8 pisos, 78 departamentos exclusivosde 2 a 4 dormitorios. Departamentos tradicionales, dúplex y en primer piso,con patio privado."
+          videoSrc="video/inn-test.mp4"
+        />
+
+        <ProjectFeatureSection
+          eyebrow={<>2<span className="mx-2">|</span>Departamentos</>}
+          title={<>EQUIPAMIENTO<br /><small>y terminaciones</small></>}
+          description="Incluye refrigerador y lavavajillas panelado, horno y microondas empotrado Franke. Cubierta ultra compacta MK, grifería italiana Paini y grifería alemana Hansgrohe."
+          highlightLogos={EQUIPMENT_LOGOS}
+          slides={EQUIPMENT_SLIDES}
+          carouselId="innDepartamentosCarousel"
+          backgroundImage="images/inn/edificio.svg"
+          id="departamentos"
+          className='pb-2 mb-2'
+          ariaLabel="Departamentos"
+          showIndicators={false}
+          activeSlide={activeEquipmentSlide}
+          onSlideChange={setActiveEquipmentSlide}
+        />
+
+        <CarouselNav
+          items={EQUIPMENT_NAV_ITEMS}
+          targetId="departamentos"
+          activeIndex={activeEquipmentSlide}
+          onSelect={setActiveEquipmentSlide}
+        />
       </main>
       <Footer />
     </>
