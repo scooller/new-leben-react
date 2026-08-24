@@ -315,3 +315,71 @@ $inn-gris-dark: #101010;
     color: rgba($lb-white, 0.94);
   }
 }
+
+// Recorrido 360
+.lb-inn-360 {
+  padding-block: 4.5rem 5.5rem;
+  background-color: #f7f0de;
+
+  .card.lb-inn-hero-tabs__inner {
+    border: 0;
+    width: min(90%, 53dvw);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    font-family: $font-title;
+    font-size: $lb-heading-3;
+    color: $lb-dark;
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+      object-fit: contain;
+    }
+  }
+
+  &__viewer {
+    overflow: hidden;
+    border-radius: 4px;
+    background: $lb-dark;
+    min-height: 20rem;
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .nav {
+    gap: 1rem;
+  }
+
+  .nav-item {
+    flex: 1 1 0;
+  }
+
+  .nav-link {
+    border-radius: $lb-radius-pill;
+    font-size: $lb-fs-xs;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: $inn-gris;
+
+    &__border {
+      border: 1px solid $lb-dark;
+    }
+
+    &:hover, &.active {
+      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      color: $lb-white;
+      border-color: $inn-gold;
+    }
+  }
+}

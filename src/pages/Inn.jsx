@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import CarouselNav from '../components/sections/CarouselNav.jsx'
 import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.jsx'
+import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 
 const INFO = [
@@ -47,14 +48,14 @@ const EQUIPMENT_SLIDES = [
 ]
 
 const EQUIPMENT_NAV_ITEMS = [
-  { label: 'Refrigerador', icon: 'images/logos/refrigerador.svg' },
-  { label: 'Horno', icon: 'images/logos/horno.svg' },
-  { label: 'Microondas', icon: 'images/logos/microhondas.svg' },
-  { label: 'Encimera y campana', icon: 'images/logos/encimera.svg' },
-  { label: 'Lavavajillas', icon: 'images/logos/lavavajillas.svg' },
-  { label: 'Cubierta cocina', icon: 'images/logos/cubierta cocina.svg' },
-  { label: 'Grifería cocina', icon: 'images/logos/griferia.svg' },
-  { label: 'Grifería baño', icon: 'images/logos/bano.svg' },
+  { label: 'Refrigerador', icon: 'images/icons/refrigerador.svg' },
+  { label: 'Horno', icon: 'images/icons/horno.svg' },
+  { label: 'Microondas', icon: 'images/icons/microhondas.svg' },
+  { label: 'Encimera y campana', icon: 'images/icons/encimera.svg' },
+  { label: 'Lavavajillas', icon: 'images/icons/lavavajillas.svg' },
+  { label: 'Cubierta cocina', icon: 'images/icons/cubierta cocina.svg' },
+  { label: 'Grifería cocina', icon: 'images/icons/griferia.svg' },
+  { label: 'Grifería baño', icon: 'images/icons/bano.svg' },
 ]
 
 const base = import.meta.env.BASE_URL
@@ -158,6 +159,8 @@ export default function Inn() {
           activeIndex={activeEquipmentSlide}
           onSelect={setActiveEquipmentSlide}
         />
+
+        <Recorridos360 />
       </main>
       <Footer />
     </>
