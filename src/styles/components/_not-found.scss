@@ -1,0 +1,26 @@
+@use '../variables' as *;
+
+.lb-not-found {
+  min-height: calc(100dvh - $lb-navbar-height);
+  padding: 6rem 1rem;
+  background: linear-gradient(135deg, $lb-cream 0%, $lb-white 55%, #eadfc8 100%);
+
+  &__code {
+    color: $lb-red;
+    font-size: clamp(5rem, 16vw, 11rem);
+    font-weight: 800;
+    line-height: 0.9;
+  }
+
+  &__title {
+    color: $lb-dark;
+    font-family: $font-title;
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  &__text {
+    max-width: 32rem;
+    color: $lb-gray-warm;
+    font-size: $lb-fs-lg;
+  }
+}

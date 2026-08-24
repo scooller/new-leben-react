@@ -26,6 +26,7 @@ const Login = lazy(() => import('./pages/Login.jsx'))
 const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
 const Inn = lazy(() => import('./pages/Inn.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 function Home() {
   return (
@@ -127,6 +128,11 @@ export default function App() {
       <Route path="/perfil" element={
         <Suspense fallback={<PageLoader />}>
           <Perfil />
+        </Suspense>
+      } />
+      <Route path="*" element={
+        <Suspense fallback={<PageLoader />}>
+          <NotFound />
         </Suspense>
       } />
       </Routes>

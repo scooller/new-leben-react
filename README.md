@@ -29,7 +29,7 @@ npm install
 npm run dev
 
 # Production build (lint + vite build)
-npm run build
+npm run build:all
 
 # Preview production build
 npm run preview
@@ -56,7 +56,10 @@ src/
 │   │   ├── Testimonials.jsx    # Client testimonials carousel
 │   │   ├── CTASection.jsx      # Call-to-action band
 │   │   ├── VideosSection.jsx   # Video showcase
-│   │   └── ProjectOfMonthSection.jsx
+│   │   ├── ProjectOfMonthSection.jsx
+│   │   ├── ProjectFeatureSection.jsx # Reusable INN project/media block
+│   │   ├── CarouselNav.jsx      # External carousel navigation
+│   │   └── Recorridos360.jsx    # 360 tour iframe tabs
 │   │
 │   ├── proyecto/               # Project detail page components
 │   │   ├── ProjectHero.jsx     # Project hero banner
@@ -94,7 +97,7 @@ src/
 │   └── SplitTitle.jsx          # Word-split text for GSAP reveals
 │
 ├── pages/
-��   ├── Proyectos.jsx           # Project listing page (API-driven)
+│   ├── Proyectos.jsx           # Project listing page (API-driven)
 │   ├── ProyectoDetalle.jsx     # Project detail page (lazy)
 │   ├── CotizadorGeneral.jsx    # Universal cotizador (/cotizador, lazy)
 │   ├── Brokers.jsx             # Brokers listing page (lazy)
@@ -132,6 +135,12 @@ src/
         └── _fancybox.scss      # Fancybox lightbox overrides
 ```
 
+```
+public/images/
+├── logos/                       # Brand logos: Franke, MK, Paini, Hansgrohe
+└── icons/                       # Functional SVG icons for INN controls
+```
+
 ---
 
 ## Design System
@@ -167,6 +176,9 @@ No custom breakpoint variables.
 - **Interactive SpacesGallery** — amenity icon buttons focus individual gallery slides
 - **WhatsApp integration** on agent cards (`wa.me` links)
 - **GSAP animations** — parallax, scroll reveals, hero motion
+- **INN reusable sections** — project/media blocks with configurable backgrounds, slides, indicators, and logo highlights
+- **INN 360 tours** — tabbed YouTube, Matterport, and La Nube 360 embeds with responsive viewers
+- **INN carousel navigation** — external icon buttons select and scroll to the matching carousel item
 - **Animated pqoqubbw icons** — Motion-powered SVG icons with hover states (replaces static Lucide icons in UI)
 - **Fancybox lightbox** for galleries and location images
 - **Fluid typography** via `clamp()` and rem-based sizing throughout

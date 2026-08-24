@@ -134,7 +134,7 @@ export default function Inn() {
 
         <VideoTextSection
           text="Edificio de solo 8 pisos, 78 departamentos exclusivosde 2 a 4 dormitorios. Departamentos tradicionales, dúplex y en primer piso,con patio privado."
-          videoSrc="video/inn-test.mp4"
+          videoSrc="video/video_reconfortante_a.mp4"
         />
 
         <ProjectFeatureSection
@@ -161,6 +161,14 @@ export default function Inn() {
         />
 
         <Recorridos360 />
+
+        {/* Aqui va la seccion plantas/cotizador */}
+
+        <VideoTextSection
+          text="Edificio inn, home & wellness redefine la vidafrente al Lago Llanquihue con espacios premium para el descanso,conexión y bienestar."
+          videoSrc="video/exterior.mp4"
+        />
+
       </main>
       <Footer />
     </>

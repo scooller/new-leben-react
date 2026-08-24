@@ -222,6 +222,11 @@ $inn-gris-dark: #101010;
     overflow: hidden;
     aspect-ratio: 4 / 3;
     height: 100%;
+
+    .lb-inn-proyecto__parallax {
+      height: 100%;
+      will-change: transform;
+    }
   }
 
   .carousel {

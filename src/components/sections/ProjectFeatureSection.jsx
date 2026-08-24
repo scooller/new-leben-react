@@ -1,8 +1,12 @@
 import { useEffect, useRef } from 'react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import ScrollAnim from '../ScrollAnim.jsx'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function ProjectFeatureSection({
   eyebrow,
@@ -22,28 +26,47 @@ export default function ProjectFeatureSection({
   showIndicators = true,
 }) {
   const base = import.meta.env.BASE_URL
+  const sectionRef = useRef(null)
   const carouselEl = useRef(null)
   const carouselInstance = useRef(null)
+  const carouselItemsRef = useRef([])
 
   useEffect(() => {
-    const el = carouselEl.current
-    if (!el || !slides.length) return
-
-    const c = new Carousel(el, { interval: 5000, ride: 'carousel' })
+    const section = sectionRef.current
+    const carousel = carouselEl.current
+    if (!carousel || !slides.length) return
+    const carouselItems = carouselItemsRef.current.filter(Boolean)
+    const c = new Carousel(carousel, { interval: 5000, ride: 'carousel' })
     carouselInstance.current = c
-    Fancybox.bind(el, '[data-fancybox]', {
-      Toolbar: { display: { left: [], right: ['close'] } },
-    })
+
+    const ctx = gsap.context(() => {
+      gsap.to(carouselItems, {
+        yPercent: 14,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      Fancybox.bind(carousel, '[data-fancybox]', {
+        Toolbar: { display: { left: [], right: ['close'] } },
+      })
+    }, section)
 
     const onSlid = (event) => {
       if (onSlideChange) onSlideChange(event.to)
     }
 
-    el.addEventListener('slid.bs.carousel', onSlid)
+    carousel.addEventListener('slid.bs.carousel', onSlid)
 
     return () => {
-      el.removeEventListener('slid.bs.carousel', onSlid)
-      Fancybox.unbind(el)
+      carousel.removeEventListener('slid.bs.carousel', onSlid)
+      Fancybox.unbind(carousel)
+      ctx.revert()
       c.dispose()
       carouselInstance.current = null
     }
@@ -57,7 +80,7 @@ export default function ProjectFeatureSection({
   const resolvedActiveSlide = typeof activeSlide === 'number' ? activeSlide : 0
 
   return (
-    <section className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
+    <section ref={sectionRef} className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
       <div
         className="container lb-shadow-box px-5 py-4 pt-8"
         style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
@@ -137,13 +160,15 @@ export default function ProjectFeatureSection({
                       data-bs-interval="5000"
                       key={slide.img || slide.src || index}
                     >
-                      <a
-                        href={`${base}${slide.img || slide.src}`}
-                        data-fancybox={slide.fancyboxGroup || 'project-gallery'}
-                        tabIndex={0}
-                      >
-                        <img src={`${base}${slide.img || slide.src}`} className="d-block w-100" alt={slide.alt || `Slide ${index + 1}`} />
-                      </a>
+                      <div ref={(element) => { carouselItemsRef.current[index] = element }} className="lb-inn-proyecto__parallax">
+                        <a
+                          href={`${base}${slide.img || slide.src}`}
+                          data-fancybox={slide.fancyboxGroup || 'project-gallery'}
+                          tabIndex={0}
+                        >
+                          <img src={`${base}${slide.img || slide.src}`} className="d-block w-100" alt={slide.alt || `Slide ${index + 1}`} />
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>

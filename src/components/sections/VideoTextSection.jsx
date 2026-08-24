@@ -47,7 +47,7 @@ export default function VideoTextSection({
       </div>
 
       <div className="container position-relative">
-        <div className="lb-inn-video-banner__content">
+        <div className="lb-inn-video-banner__content w-75 mx-auto">
           {eyebrow && <span className="lb-inn-video-banner__eyebrow mx-auto mb-1">{eyebrow}</span>}
           {title && <h3 className="lb-inn-video-banner__title mx-auto mb-2">{title}</h3>}
           {text && <p className="lb-inn-video-banner__text mx-auto">{text}</p>}
