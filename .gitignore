@@ -21,3 +21,4 @@ vite.config.js
 /assets high
 AGENTS.md
 /extra
+.vscode/extensions.json
