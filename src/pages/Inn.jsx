@@ -69,10 +69,11 @@ const GALLERY_IMAGES = [
   { img: 'images/inn/galeria5.jpg', alt: 'Galería 5' },
 ]
 
-const GALLERY_SLIDES = [
-  GALLERY_IMAGES.slice(0, 3),
-  GALLERY_IMAGES.slice(3),
-]
+// Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
+// avanzando de 1 en 1 (wrap-around para loop infinito)
+const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
+  [0, 1, 2].map((offset) => GALLERY_IMAGES[(i + offset) % GALLERY_IMAGES.length])
+)
 
 const MAP = {
   eyebrow: <>5<span className="mx-2">|</span>Ubicación</>,
