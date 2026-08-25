@@ -22,7 +22,7 @@ const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Departamentos' },
   { id: 'plantas', label: 'Plantas' },
-  { id: 'wellness', label: 'Home & Wellness' },
+  { id: 'espacios', label: 'Home & Wellness' },
   { id: 'ubicacion', label: 'Ubicación' },
 ]
 
@@ -112,6 +112,27 @@ export default function Inn() {
       Toolbar: { display: { left: [], right: ['close'] } },
     })
     return () => Fancybox.unbind(galleryEl)
+  }, [])
+
+  // Scrollspy: activa el tab según la sección visible (sin cambiar nombres)
+  useEffect(() => {
+    const sections = TABS
+      .map((t) => document.getElementById(t.id))
+      .filter(Boolean)
+    if (!sections.length) return
+
+    const onScroll = () => {
+      const offset = window.scrollY + window.innerHeight * 0.35
+      let current = null
+      sections.forEach((section) => {
+        if (section.offsetTop <= offset) current = section.id
+      })
+      if (current) setActiveTab(current)
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
