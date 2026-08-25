@@ -3,6 +3,7 @@ export default function CarouselNav({
   targetId,
   activeIndex = 0,
   onSelect,
+  variant = 'button', // 'button' = degradado con texto+icono en línea | 'stacked' = icono arriba, texto debajo, sin degradado
   className = '',
 }) {
   const base = import.meta.env.BASE_URL
@@ -13,17 +14,18 @@ export default function CarouselNav({
   }
 
   return (
-    <nav className={`lb-inn-hero-tabs lb-inn-hero-tabs--plain ${className}`.trim()} aria-label="Opciones del proyecto">
-      <ul className="nav nav-pills nav-justified flex-wrap align-items-stretch gap-4">
+    <nav className={`lb-inn-hero-tabs lb-inn-hero-tabs--plain lb-inn-hero-tabs--${variant} ${className}`.trim()} aria-label="Opciones del proyecto">
+      <ul className={`nav nav-pills nav-justified flex-wrap align-items-stretch gap-4`}>
         {items.map((item, index) => (
           <li className="nav-item" key={item.label || index}>
             <button
               type="button"
-              className={`nav-link nav-link__border w-100 h-100 d-flex flex-row align-items-center justify-content-center gap-2 ${index === activeIndex ? 'active' : ''}`}
+              className={`nav-link nav-link__border w-100 h-100 d-flex flex-${variant === 'stacked' ? 'column' : 'row'} align-items-center justify-content-center gap-2 ${index === activeIndex ? 'active' : ''}`}
               onClick={() => handleSelect(index)}
             >
+              {variant === 'stacked' && item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
               <span>{item.label}</span>
-              {item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
+              {variant === 'button' && item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
             </button>
           </li>
         ))}

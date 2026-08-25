@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import Navbar from '../components/layout/Navbar.jsx'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import CarouselNav from '../components/sections/CarouselNav.jsx'
@@ -58,12 +61,57 @@ const EQUIPMENT_NAV_ITEMS = [
   { label: 'Grifería baño', icon: 'images/icons/bano.svg' },
 ]
 
+const GALLERY_IMAGES = [
+  { img: 'images/inn/galeria1.jpg', alt: 'Galería 1' },
+  { img: 'images/inn/galeria2.jpg', alt: 'Galería 2' },
+  { img: 'images/inn/galeria3.jpg', alt: 'Galería 3' },
+  { img: 'images/inn/galeria4.jpg', alt: 'Galería 4' },
+  { img: 'images/inn/galeria5.jpg', alt: 'Galería 5' },
+]
+
+const GALLERY_SLIDES = [
+  GALLERY_IMAGES.slice(0, 3),
+  GALLERY_IMAGES.slice(3),
+]
+
+const MAP = {
+  eyebrow: <>5<span className="mx-2">|</span>Ubicación</>,
+  title: <>VISTAS<br/>INSUPERABLES</>,
+  description: 'Descubre el privilegio de vivir con vistas incomparables y despejadas al Lago Llanquihue, los volcanes Osorno y Calbuco, en un entorno privilegiado y en el edificio más moderno y exclusivo de Puerto Varas.',
+  image: 'images/inn/mapa.png',
+  logo: 'images/inn/V.png',
+  features: [
+    { id: 'direccion', icon: 'direccion', heading: 'Vicente Pérez Rosales 991', text: 'Puerto Varas, Región de Los Lagos' },
+    { id: 'telefono', icon: 'telefono', heading: '+56 9 1234 5678', text: 'Contacto directo' },
+  ],
+}
+
 const base = import.meta.env.BASE_URL
 
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
+  const mapRef = useRef(null)
+  const galleryRef = useRef(null)
+
+  useEffect(() => {
+    const mapEl = mapRef.current
+    if (!mapEl) return
+    Fancybox.bind(mapEl, '[data-fancybox]', {
+      Toolbar: { display: { left: [], right: ['close'] } },
+    })
+    return () => Fancybox.unbind(mapEl)
+  }, [])
+
+  useEffect(() => {
+    const galleryEl = galleryRef.current
+    if (!galleryEl) return
+    Fancybox.bind(galleryEl, '[data-fancybox]', {
+      Toolbar: { display: { left: [], right: ['close'] } },
+    })
+    return () => Fancybox.unbind(galleryEl)
+  }, [])
 
   return (
     <>
@@ -168,6 +216,104 @@ export default function Inn() {
           text="Edificio inn, home & wellness redefine la vidafrente al Lago Llanquihue con espacios premium para el descanso,conexión y bienestar."
           videoSrc="video/exterior.mp4"
         />
+
+        <ProjectFeatureSection
+          eyebrow={<>4<span className="mx-2">|</span>Home & Wellness</>}
+          title={<>ESPACIOS COMUNES</>}
+          description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
+          slides={EQUIPMENT_SLIDES}
+          carouselId="innEspaciosCarousel"
+          backgroundImage="images/inn/edificio.svg"
+          id="espacios"
+          className='pb-2 mb-2'
+          ariaLabel="Espacios"
+          showIndicators={false}
+          activeSlide={activeEquipmentSlide}
+          onSlideChange={setActiveEquipmentSlide}
+        />
+
+        <CarouselNav
+          items={EQUIPMENT_NAV_ITEMS}
+          targetId="espacios"
+          variant="stacked"
+          activeIndex={activeEquipmentSlide}
+          onSelect={setActiveEquipmentSlide}
+        />
+
+        <VideoTextSection
+          text="Lorem ipsum dolor sit amet, consectetuer adipiscingelit nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam."
+          videoSrc="video/lipsum.mp4"
+        />
+
+        {/* SECCIÓN MAPA */}
+        <section className="container-fluid lb-inn-map" id="ubicacion">
+          <div className="container">
+            <div className="row g-0">
+              <div className="col-12 col-lg-7 order-2 order-lg-1 p-5 d-flex flex-column justify-content-center">
+                <ScrollAnim className="d-flex align-items-center gap-4 mb-5 lb-inn-map__header">
+                  <img
+                    src={`${base}${MAP.logo}`}
+                    alt="Logo INN"
+                    className="lb-inn-map__header-logo"
+                  />
+                  <div className='lb-inn-map__titulos-right'>
+                    <span className="lb-inn-proyecto__eyebrow mb-0">{MAP.eyebrow}</span>
+                    <h2 className="lb-inn-proyecto__title mb-0">{MAP.title}</h2>
+                  </div>
+                </ScrollAnim>
+                <div className="lb-inn-map__text text-center text-lg-start">
+                  <p className="lh-lg mb-5">
+                    {MAP.description}
+                  </p>                  
+                </div>
+              </div>
+              <div className="col-12 col-lg-5 order-1 order-lg-2">
+                <div ref={mapRef} className="lb-inn-map__image position-relative h-100">
+                  <a href={`${base}${MAP.image}`} data-fancybox="inn-mapa" tabIndex={0} className="d-block h-100">
+                    <img 
+                      src={`${base}${MAP.image}`} 
+                      alt="Mapa de ubicación (clic para ampliar)" 
+                      className="img-fluid w-100 h-100 object-fit-contain"
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Carousel de imágenes en blanco y negro */}
+        <section className="lb-inn-gallery pt-3 pb-3" id="galeria">
+          <ScrollAnim className='container' animation="fade-in">
+            <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+              <div className="carousel-inner">
+                {GALLERY_SLIDES.map((slideImages, slideIndex) => (
+                  <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
+                    <div className="row g-2">
+                      {slideImages.map((image) => (
+                        <div className="col-4" key={image.img}>
+                          <a href={`${base}${image.img}`} data-fancybox="inn-galeria" tabIndex={0}>
+                            <img
+                              src={`${base}${image.img}`}
+                              alt={image.alt}
+                              className="d-block w-100 lb-inn-gallery__img rounded rounded-3"
+                            />
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button className="lb-inn-gallery__nav lb-inn-gallery__nav--prev" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="prev" aria-label="Anterior">
+                <ChevronLeft size={20} />
+              </button>
+              <button className="lb-inn-gallery__nav lb-inn-gallery__nav--next" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="next" aria-label="Siguiente">
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </ScrollAnim>
+        </section>
 
       </main>
       <Footer />

@@ -5,6 +5,7 @@ $inn-gold: #d8b35cff;
 $inn-gold-dark: #422c15;
 $inn-gris: #808080;
 $inn-gris-dark: #101010;
+$inn-celeste: rgb(226,237,249);
 
 .lb-inn{
   color: $inn-gris-dark;
@@ -147,6 +148,31 @@ $inn-gris-dark: #101010;
 @media (prefers-reduced-motion: reduce) {
   .lb-inn-hero-tabs--plain .nav-link img {
     transition: none;
+  }
+}
+
+// Variante apilada: icono arriba, texto debajo, sin degradado
+.lb-inn-hero-tabs--stacked {
+  .nav-link {
+    background: transparent;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-block: 1rem;
+    text-align: center;
+    border-radius: $lb-radius-pill;
+    border: none;
+
+    &:hover, &.active {
+      background: transparent;
+      color: $inn-gold;
+      img {
+        filter: none;
+      }
+    }
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
   }
 }
 
@@ -386,5 +412,107 @@ $inn-gris-dark: #101010;
       color: $lb-white;
       border-color: $inn-gold;
     }
+  }
+}
+
+// --- SECCIÓN MAPA (ubicación) ---
+.lb-inn-map {
+  background: $inn-celeste;
+
+  &__header {
+    padding-top: 0;
+  }
+
+  &__header-logo {
+    width: auto;
+    height: 9rem;
+    flex-shrink: 0;
+  }
+  &__titulos-right{
+    margin-left: -2rem;
+  }
+
+  &__text {
+    h2 {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $inn-gold;
+    border-radius: 50%;
+    padding: 0.5rem;
+    color: $lb-white;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  &__image {
+    img {
+    }
+  }
+}
+
+// --- GALERÍA (blanco y negro) ---
+.lb-inn-gallery {
+  background: $inn-celeste;
+  position: relative;
+
+  &__img {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+
+    &:hover {
+      filter: grayscale(0);
+    }
+  }
+
+  &__nav {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) !important;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(0.25rem);
+    border: none !important;
+    color: $lb-white !important;
+    opacity: 0.7;
+    transition: opacity 0.2s ease !important;
+
+    &:hover {
+      opacity: 1;
+      color: $lb-white !important;
+      background: rgba(0, 0, 0, 0.55) !important;
+      border-color: transparent !important;
+      transform: translateY(-50%) !important;
+    }
+
+    &--prev { left: 0.5rem; }
+    &--next { right: 0.5rem; }
   }
 }
