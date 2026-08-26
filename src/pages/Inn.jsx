@@ -23,6 +23,7 @@ const TABS = [
   { id: 'departamentos', label: 'Departamentos' },
   { id: 'plantas', label: 'Plantas' },
   { id: 'espacios', label: 'Home & Wellness' },
+  { id: 'interiorismo', label: 'Interiorismo' },
   { id: 'ubicacion', label: 'Ubicación' },
 ]
 
@@ -203,7 +204,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Edificio de solo 8 pisos, 78 departamentos exclusivosde 2 a 4 dormitorios. Departamentos tradicionales, dúplex y en primer piso,con patio privado."
+          text="Edificio de solo 8 pisos, 78 departamentos exclusivosde 2 a 4 dormitorios. Departamentos tradicionales, dúplex y en primer piso, con patio privado."
           videoSrc="video/video_reconfortante_a.mp4"
         />
 
@@ -336,6 +337,80 @@ export default function Inn() {
             </div>
           </ScrollAnim>
         </section>
+
+        {/* SECCIÓN INTERIORISMO */}
+        <section className="lb-inn-interiorismo py-5" id="interiorismo">
+          <div className="container">
+            <ScrollAnim className="row g-5">
+              {/* Columna izquierda - Texto e imagen */}
+              <div className="col-12 col-lg-6 d-flex flex-column">
+                <div className="d-flex flex-column gap-4">
+                  <div className="text-center text-lg-start">
+                    <span className="lb-inn-proyecto__eyebrow mb-0">6<span className="mx-2">|</span>Interiorismo</span>
+                    <h2 className="lb-inn-proyecto__title mb-0">DISEÑO EXCLUSIVO</h2>
+                  </div>
+                  <div className="lb-inn-interiorismo__text">
+                    <p className="lh-lg">
+                      Nuestros departamentos han sido diseñados por renombrados arquitectos y diseñadores, 
+                      combinando estética contemporánea con funcionalidad superior. Cada espacio refleja 
+                      un equilibrio perfecto entre lujo, confort y estilo, creando ambientes únicos que 
+                      se adaptan a tus necesidades y preferencias personales.
+                    </p>
+                    <p className="lh-lg mt-4">
+                      Los materiales de alta calidad, las terminaciones impecables y la atención al 
+                      detalle en cada rincón garantizan una experiencia de vida excepcional en el 
+                      corazón de Puerto Varas.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-5">
+                  <img 
+                    src={`${base}images/inn/interiorismo-principal.jpg`} 
+                    alt="Interiorismo principal del proyecto INN" 
+                    className="img-fluid rounded-3 shadow-lg w-100"
+                  />
+                </div>
+              </div>
+              
+              {/* Columna derecha - 3 imágenes con nombres y colores */}
+              <div className="col-12 col-lg-6">
+                <div className="row g-4">
+                  <div className="col-12 col-md-6">
+                    <div className="text-center">
+                      <img 
+                        src={`${base}images/inn/interiorismo-sofia.jpg`} 
+                        alt="Diseño de Sofía Iturralde" 
+                        className="img-fluid rounded-3 mb-3"
+                      />
+                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#d9bc70'}}>Sofía Iturralde</h3>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <div className="text-center">
+                      <img 
+                        src={`${base}images/inn/interiorismo-rafael.jpg`} 
+                        alt="Diseño de Rafael Rivera" 
+                        className="img-fluid rounded-3 mb-3"
+                      />
+                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#b78d56'}}>Rafael Rivera</h3>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <div className="text-center">
+                      <img 
+                        src={`${base}images/inn/interiorismo-teresa.jpg`} 
+                        alt="Diseño de Teresa Leighton" 
+                        className="img-fluid rounded-3 mb-3"
+                      />
+                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#a68761'}}>Teresa Leighton</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ScrollAnim>
+          </div>
+        </section>
+
 
       </main>
       <Footer />
