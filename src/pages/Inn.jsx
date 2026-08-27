@@ -70,6 +70,21 @@ const GALLERY_IMAGES = [
   { img: 'images/inn/galeria5.jpg', alt: 'Galería 5' },
 ]
 
+const MAP_FEATURES = [
+  'Museo Pablo Fierro',
+  'Monumento Héroes Patrios',
+  'Casino',
+  'Centro de Puerto Varas',
+  'Mall - Supermercado',
+  'Costanera',
+  'Muelle Piedralplen',
+  'Muelle Puerto Varas',
+  'Mesa Tropera',
+  'Hotel Cumbres',
+  'Cassis',
+  'La Olla',
+]
+
 // Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
 // avanzando de 1 en 1 (wrap-around para loop infinito)
 const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
@@ -77,7 +92,7 @@ const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
 )
 
 const MAP = {
-  eyebrow: <>5<span className="mx-2">|</span>Ubicación</>,
+  eyebrow: <>Ubicación</>,
   title: <>VISTAS<br/>INSUPERABLES</>,
   description: 'Descubre el privilegio de vivir con vistas incomparables y despejadas al Lago Llanquihue, los volcanes Osorno y Calbuco, en un entorno privilegiado y en el edificio más moderno y exclusivo de Puerto Varas.',
   image: 'images/inn/mapa.png',
@@ -92,19 +107,11 @@ const base = import.meta.env.BASE_URL
 
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
+  const [showMapModal, setShowMapModal] = useState(false)
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const mapRef = useRef(null)
   const galleryRef = useRef(null)
-
-  useEffect(() => {
-    const mapEl = mapRef.current
-    if (!mapEl) return
-    Fancybox.bind(mapEl, '[data-fancybox]', {
-      Toolbar: { display: { left: [], right: ['close'] } },
-    })
-    return () => Fancybox.unbind(mapEl)
-  }, [])
 
   useEffect(() => {
     const galleryEl = galleryRef.current
@@ -191,7 +198,7 @@ export default function Inn() {
         </section>
 
         <ProjectFeatureSection
-          eyebrow={<>1<span className="mx-2">|</span>Proyecto</>}
+          eyebrow={<>Proyecto</>}
           title={<>EXCLUSIVIDAD<br />FRENTE AL LAGO</>}
           description="Descubre el privilegio de vivir en primera línea con vistas incomparables y despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en el edificio más moderno y exclusivo de Puerto Varas."
           highlight="Departamentos, dúplex y deptos. con patio privado."
@@ -209,7 +216,7 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>2<span className="mx-2">|</span>Departamentos</>}
+          eyebrow={<>Departamentos</>}
           title={<>EQUIPAMIENTO<br /><small>y terminaciones</small></>}
           description="Incluye refrigerador y lavavajillas panelado, horno y microondas empotrado Franke. Cubierta ultra compacta MK, grifería italiana Paini y grifería alemana Hansgrohe."
           highlightLogos={EQUIPMENT_LOGOS}
@@ -241,7 +248,7 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>4<span className="mx-2">|</span>Home & Wellness</>}
+          eyebrow={<>Home & Wellness</>}
           title={<>ESPACIOS COMUNES</>}
           description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
           slides={EQUIPMENT_SLIDES}
@@ -291,15 +298,19 @@ export default function Inn() {
                 </div>
               </div>
               <div className="col-12 col-lg-5 order-1 order-lg-2">
-                <div ref={mapRef} className="lb-inn-map__image position-relative h-100">
-                  <a href={`${base}${MAP.image}`} data-fancybox="inn-mapa" tabIndex={0} className="d-block h-100">
-                    <img 
-                      src={`${base}${MAP.image}`} 
-                      alt="Mapa de ubicación (clic para ampliar)" 
-                      className="img-fluid w-100 h-100 object-fit-contain"
-                    />
-                  </a>
-                </div>
+                <button
+                  ref={mapRef}
+                  type="button"
+                  className="lb-inn-map__image position-relative h-100 border-0 bg-transparent p-0 w-100"
+                  onClick={() => setShowMapModal(true)}
+                  aria-label="Ver mapa de ubicación ampliado"
+                >
+                  <img
+                    src={`${base}${MAP.image}`}
+                    alt="Mapa de ubicación (clic para ampliar)"
+                    className="img-fluid w-100 h-100 object-fit-contain"
+                  />
+                </button>
               </div>
             </div>
           </div>
@@ -346,7 +357,7 @@ export default function Inn() {
               <div className="col-12 col-lg-6 d-flex flex-column">
                 <div className="d-flex flex-column gap-4">
                   <div className="text-center text-lg-start">
-                    <span className="lb-inn-proyecto__eyebrow mb-0">6<span className="mx-2">|</span>Interiorismo</span>
+                    <span className="lb-inn-proyecto__eyebrow mb-0">Interiorismo</span>
                     <h2 className="lb-inn-proyecto__title mb-0">DISEÑO EXCLUSIVO</h2>
                   </div>
                   <div className="lb-inn-interiorismo__text">
@@ -413,6 +424,50 @@ export default function Inn() {
 
 
       </main>
+
+      {/* MODAL MAPA DE UBICACIÓN */}
+      <div
+        className={`modal fade ${showMapModal ? 'show d-block' : ''}`}
+        id="innMapModal"
+        tabIndex={-1}
+        aria-label="Mapa de ubicación ampliado"
+        style={{ backgroundColor: 'rgba(0,0,0,.9)' }}
+        onClick={() => setShowMapModal(false)}
+      >
+        <div
+          className="modal-dialog modal-xl modal-dialog-centered"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="modal-content border-0 rounded-4 overflow-hidden">
+            <div className="modal-header border-0">
+              <h2 className="modal-title lb-inn-proyecto__title">UBICACIÓN</h2>
+              <button type="button" className="btn-close" aria-label="Cerrar" onClick={() => setShowMapModal(false)} />
+            </div>
+            <div className="modal-body p-0">
+              <div className="row g-0">
+                <div className="col-12 col-md-4 lb-inn-map-modal__list p-4">
+                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                    {MAP_FEATURES.map((feature, i) => (
+                      <li key={feature} className="d-flex align-items-center gap-2 lb-inn-map-modal__item">
+                        <span className="lb-inn-map-modal__number">{i + 1}</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="col-12 col-md-8">
+                  <img
+                    src={`${base}images/inn/mapa-big.jpg`}
+                    alt="Mapa ampliado de Puerto Varas"
+                    className="img-fluid w-100 h-100 object-fit-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </>
   )

@@ -464,8 +464,46 @@ $inn-celeste: rgb(226,237,249);
   }
 
   &__image {
-    img {
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+
+    &:hover {
+      opacity: 0.85;
     }
+  }
+}
+
+// --- MODAL MAPA DE UBICACIÓN ---
+.lb-inn-map-modal {
+  &__list {
+    background: #000;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  &__item {
+    color: $lb-white;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  &__number {
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($inn-gold, 0.35);
+    border-radius: 50%;
+    font-size: 0.7rem;
+  }
+}
+
+#innMapModal {
+  .modal-content {
+    background: #000;
+    color: $lb-white;
   }
 }
 
