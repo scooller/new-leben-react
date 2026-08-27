@@ -9,6 +9,9 @@ import CarouselNav from '../components/sections/CarouselNav.jsx'
 import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.jsx'
 import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
+import Cotizador from '../components/proyecto/Cotizador.jsx'
+import { getProjectBySlug } from '../data/projects.js'
+import { apiFetch } from '../lib/apiFetch.js'
 
 const INFO = [
   { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991' },
@@ -21,10 +24,11 @@ const INFO = [
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Departamentos' },
-  { id: 'plantas', label: 'Plantas' },
-  { id: 'espacios', label: 'Home & Wellness' },
-  { id: 'interiorismo', label: 'Interiorismo' },
+  { id: 'cotizador', label: 'Plantas' },
+  { id: 'espacios', label: 'Espacios' },  
   { id: 'ubicacion', label: 'Ubicación' },
+  { id: 'interiorismo', label: 'Interiorismo' },
+  { id: 'contacto', label: 'Contacto' },
 ]
 
 const SLIDES = [
@@ -108,6 +112,20 @@ const base = import.meta.env.BASE_URL
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [showMapModal, setShowMapModal] = useState(false)
+  const [apiProjects, setApiProjects] = useState(null)
+  const [innProject, setInnProject] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    apiFetch('/api/v1/proyectos').then(({ data }) => {
+      if (cancelled) return
+      setApiProjects(data)
+      // Preselección del proyecto INN (apiId 9)
+      const inn = Array.isArray(data) ? data.find((p) => p.id === 9) : null
+      if (inn) setInnProject(inn)
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const mapRef = useRef(null)
@@ -170,7 +188,12 @@ export default function Inn() {
                     <button
                       type="button"
                       className={`nav-link nav-link__border ${t.id === activeTab ? 'active' : ''}`}
-                      onClick={() => setActiveTab(t.id)}
+                      onClick={() => {
+                        setActiveTab(t.id)
+                        // "Plantas" vive en la sección del cotizador
+                        const target = document.getElementById(t.id)
+                        target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }}
                     >
                       {t.label.toUpperCase()}
                     </button>
@@ -240,7 +263,14 @@ export default function Inn() {
 
         <Recorridos360 />
 
-        {/* Aqui va la seccion plantas/cotizador */}
+        {/* Cotizador */}
+        <Cotizador
+          className="lb-inn-cot"
+          data={getProjectBySlug('inn')?.cotizador}
+          universal
+          projects={apiProjects}
+          selection={innProject ? { project: innProject } : undefined}
+        />
 
         <VideoTextSection
           text="Edificio inn, home & wellness redefine la vidafrente al Lago Llanquihue con espacios premium para el descanso,conexión y bienestar."
@@ -467,6 +497,12 @@ export default function Inn() {
           </div>
         </div>
       </div>
+
+      {/* SECCIÓN CONTACTO */}
+      <section className="lb-inn-contacto py-5" id="contacto">
+        <div className="container">          
+        </div>
+      </section>
 
       <Footer />
     </>

@@ -183,6 +183,7 @@ No custom breakpoint variables.
 - **Fancybox lightbox** for galleries and location images
 - **Fluid typography** via `clamp()` and rem-based sizing throughout
 - **Cotizador general** (`/cotizador`) — asistente guiado (wizard) + selección directa de proyectos
+- **Cotizador reutilizable** — `Cotizador.jsx` acepta `className` (clases extra para el `<section>`) y `selectedProject` (objeto proyecto con `name`/`comuna`): al pasar un proyecto, pre-selecciona comuna + proyecto en los filtros y desactiva el empty state. Componible con `externalPlanta` (pre-selección de planta específica)
 - **Pre-selección de planta** — botón "Cotizar" en RelatedProjects navega a `/cotizador` con planta pre-seleccionada vía `location.state`
 - **Skeleton loaders** — `ProjectCardSkeleton` con shimmer mientras cargan proyectos o plantas desde la API
 - **Scroll suave** — auto-scroll a sección cotizador al llegar desde RelatedProjects o al cambiar modo wizard/directo
@@ -396,6 +397,12 @@ All notable changes to this project are documented below.
 Dates in `YYYY-MM-DD` format.
 
 ---
+
+### 2026-08-27 — Cotizador Reutilizable & UI Fixes
+- `Cotizador.jsx` — nuevas props `className` y `selectedProject` para reutilizar el componente en cualquier página; `selectedProject` pre-selecciona comuna + proyecto en los filtros (modo universal) y bloquea el empty state
+- Caption del mapa (`mapCaption`) movido a overlay sobre la imagen (abajo-izquierda) usando utilidades Bootstrap (`position-absolute start-0 bottom-0`)
+- Intercambio de botones: "Compartir" pasa al `btn-group` junto a "Descargar Brochure"; "Vistas por piso de tu Dpto" toma su lugar en la columna izquierda
+- `ActionButton` refactorizado a `<button>` reutilizable con `variant`, `className`, `onClick`, `iconRef` — Compartir ahora lo usa
 
 ### 2026-08-13 — Cotizador Fixes: Fancybox, GSAP Warnings, Gallery Separation
 

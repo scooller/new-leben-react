@@ -49,7 +49,7 @@ export default function CotizadorGeneral() {
       <Navbar />
       <main>
         <section className="lb-cot-gen container-fluid px-0">
-          <Cotizador data={COTIZADOR_DATA} universal projects={apiProjects} onProjectChange={handleProjectChange} externalPlanta={externalPlanta} />
+          <Cotizador data={COTIZADOR_DATA} universal projects={apiProjects} onProjectChange={handleProjectChange} selection={externalPlanta ? { planta: externalPlanta } : undefined} />
 
           {activeProject && (
             <>

@@ -24,3 +24,5 @@ AGENTS.md
 .vscode/extensions.json
 /docs
 /.sf
+
+graphify-out/

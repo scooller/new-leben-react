@@ -403,7 +403,8 @@
 .lb-proj-det-cot-plan-img {
   border-radius: $lb-radius-md;
   background: $lb-white;
-  transition: opacity 0.25s ease;
+  // Incluye transform/filter para que el hover scale no sea brusco (hereda de .lb-img-interactive)
+  transition: transform 0.5s ease, filter 0.5s ease, opacity 0.25s ease;
 
   &.is-loading {
     opacity: 0.3;

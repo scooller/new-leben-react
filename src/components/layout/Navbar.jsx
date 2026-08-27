@@ -44,9 +44,7 @@ const menuGroups = [
   },
 ]
 
-const mainMobileLinks = [
-  { label: 'Cotizar', to: '/cotizador' },
-]
+const mainMobileLinks = mainLinks.slice(0, 1)
 
 /** Links dinámicos por página — aparecen después del separador */
 const pageLinksMap = {

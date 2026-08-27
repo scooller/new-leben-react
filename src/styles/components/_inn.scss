@@ -72,9 +72,20 @@ $inn-celeste: rgb(226,237,249);
   position: sticky;
   top: $lb-navbar-height;
   z-index: 80;
-  width: min(90%, 53dvw);
+  // Ancho según contenido para que ningún botón quede fuera (ej: Contacto)
+  width: fit-content;
+  max-width: 94%;
   margin-inline: auto;
   margin-top: -2.5rem;
+
+  .nav {
+    flex-wrap: wrap; // fallback si no caben todos en una línea
+  }
+
+// Scroll de tabs: compensar navbar fijo + botonera sticky
+body:has(.lb-inn-hero-tabs) section[id] {
+  scroll-margin-top: 10rem;
+}
 
   &__inner {
     border-radius: $lb-radius-pill;
@@ -469,6 +480,73 @@ $inn-celeste: rgb(226,237,249);
 
     &:hover {
       opacity: 0.85;
+    }
+  }
+}
+
+// Cotizador (mismo fondo que Recorridos 360)
+.lb-inn-cot {
+  background-color: #f7f0de !important;
+
+  // Botones dorados solo en INN
+  .lb-proj-det-filter-btn {
+    border-color: $inn-gold;
+    color: $inn-gold;
+    border-radius: 2rem;
+
+    &:hover,
+    &.active {
+      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      border-color: $inn-gold;
+      color: $lb-white;
+    }
+  }
+
+  // Botones outline (descargar, compartir, etc.)
+  // Texto/borde dorado pero texto gris neutro para legibilidad sobre fondo claro
+  .btn-outline-dark,
+  .btn-outline-primary {
+    border-color: $inn-gold;
+    color: $lb-gray-neutral;
+    border-radius: 2rem;
+
+    &:hover,
+    &:active,
+    &.active {
+      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      border-color: $inn-gold;
+      color: $lb-white;
+    }
+  }
+
+  // btn-group: radius solo en esquinas externas (primero izq, último der), como Bootstrap
+  .btn-group {
+    border-radius: 2rem;
+
+    > .btn {
+      border-radius: 0;
+    }
+
+    > .btn:first-child {
+      border-radius: 2rem 0 0 2rem;
+    }
+
+    > .btn:last-child {
+      border-radius: 0 2rem 2rem 0;
+    }
+
+    > .btn:only-child {
+      border-radius: 2rem;
+    }
+  }
+
+  .lb-proj-det-cot-cta {
+    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+    border: 0;
+    border-radius: 2rem;
+
+    &:hover {
+      filter: brightness(1.05);
     }
   }
 }

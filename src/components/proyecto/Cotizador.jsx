@@ -6,14 +6,13 @@ import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { HeartHandshakeIcon } from '../icons/heart-handshake.jsx'
+import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
-import { FacebookIcon } from '../icons/facebook.jsx'
-import { LinkedinIcon } from '../icons/linkedin.jsx'
 import { MailIcon } from '../icons/mail.jsx'
 import { hover } from '../icons/animated-icon.jsx'
 import { DownloadIcon } from '../icons/download.jsx'
 import { TelescopeIcon } from '../icons/telescope.jsx'
+import { MapPinHouseIcon } from '../icons/map-pin-house.jsx'
 
 /** Reusable share button with animated icon + hover */
 function ShareButton({ icon: Icon, label, href, onClick }) {
@@ -34,17 +33,20 @@ function ShareButton({ icon: Icon, label, href, onClick }) {
 }
 
 /** Reusable action button with animated icon + hover */
-function ActionButton({ icon: Icon, children }) {
-  const ref = useRef(null)
+function ActionButton({ icon: Icon, variant = 'btn-outline-dark', className = '', onClick, iconRef, children }) {
+  const innerRef = useRef(null)
+  const ref = iconRef || innerRef
   return (
-    <a
-      href='#'
-      className="btn btn-outline-dark d-flex align-items-center justify-content-center gap-2"
+    <button
+      type="button"
+      aria-label={typeof children === 'string' ? children : undefined}
+      onClick={onClick}
+      className={`btn ${variant} d-flex align-items-center justify-content-center gap-2 ${className}`}
       {...hover(ref)}
     >
       <Icon ref={ref} size={24} />
       {children}
-    </a>
+    </button>
   )
 }
 
@@ -55,16 +57,6 @@ const ORIENTACION_LABELS = {
   NE: 'Nor-Oriente', NO: 'Nor-Poniente',
   SE: 'Sur-Oriente', SO: 'Sur-Poniente',
 }
-
-// Mockup gallery images — fallback when project data has no thumbnails
-const MOCKUP_THUMBNAILS = [
-  `${import.meta.env.BASE_URL}images/inn/planta/planta.jpg`,
-  `${import.meta.env.BASE_URL}images/inn/planta/Cocina-Comedor-1.jpg`,
-  `${import.meta.env.BASE_URL}images/inn/planta/Comedor-2.jpg`,
-  `${import.meta.env.BASE_URL}images/inn/planta/Hall-de-acceso.jpg`,
-  `${import.meta.env.BASE_URL}images/inn/planta/Living-Comedor-2.jpg`,
-  `${import.meta.env.BASE_URL}images/inn/planta/Living-Comedor-3.jpg`,
-]
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
@@ -155,14 +147,34 @@ function FilterDropdown({ label, options, selected, onSelect }) {
   )
 }
 
-export default function Cotizador({ data, plantasRelacionadas, apiId, initialFilters, universal, projects, onProjectChange, externalPlanta }) {
+/** Derive universal filters from a selection ({ planta?, project? }) */
+function filtersFromSelection(selection) {
+  if (!selection) return null
+  if (selection.planta) {
+    const p = selection.planta
+    return {
+      comuna: p.proyecto?.comuna || '',
+      proyecto: p.proyecto?.name || '',
+      tipologia: p.programa || '',
+      orientacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion || '',
+    }
+  }
+  if (selection.project) {
+    return { comuna: selection.project.comuna || '', proyecto: selection.project.name || '', tipologia: '', orientacion: '' }
+  }
+  return null
+}
+
+export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
   const [activeData, setActiveData] = useState(data)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
   const ref = useRef(null)
   const shareIconRef = useRef(null)
+  const countIconRef = useRef(null)
   const [showCotizar, setShowCotizar] = useState(false)
   const [showShare, setShowShare] = useState(false)
+  const [showVistas, setShowVistas] = useState(false)
   const [copied, setCopied] = useState(false)
 
   // Resolve planta ID + project slug from URL — read once on mount
@@ -192,7 +204,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   // API plantas
   const [plantas, setPlantas] = useState([])
   const [loading, setLoading] = useState(false)
-  const [filters, setFilters] = useState(initialFilters || EMPTY_FILTERS)
+  const [filters, setFilters] = useState(() => filtersFromSelection(selection) || EMPTY_FILTERS)
   const [filtering, setFiltering] = useState(false)
   const [switching, setSwitching] = useState(false)
 
@@ -236,9 +248,9 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   // Sync when parent swaps data
   useEffect(() => {
     setActiveData(data); setSelected(0)
-    setFilters(initialFilters || EMPTY_FILTERS)
+    setFilters(filtersFromSelection(selection) || EMPTY_FILTERS)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, initialFilters, universal])
+  }, [data, selection, universal])
 
   // Fetch plantas from API — universal paginates through ALL available, otherwise per-project
   useEffect(() => {
@@ -361,25 +373,22 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
 
   // Universal mode: show placeholder until filters produce results
   // Respect urlPlantaId — if URL has a specific planta, never show empty state
-  const showEmptyState = universal && !urlPlantaId && !urlParams.slug && (!hasFilters || filteredPlantas.length === 0)
+  const showEmptyState = universal && !selection?.project && !urlPlantaId && !urlParams.slug && (!hasFilters || filteredPlantas.length === 0)
 
   // Skeleton while fetching/searching — EXCEPT the initial no-filter state,
   // where the empty-state message renders right away (no skeleton flash)
   const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
 
   // Active details: from filtered planta if available, else from data
-  // Thumbnails: real planta image first, then the original mockup gallery
+  // Thumbnails: real planta image only (no fake mockup fallback)
   const displayData = useMemo(() => {
     if ((universal && !plantas.length) || (!universal && (!apiId || !plantas.length))) return safeActiveData
     const planta = filteredPlantas[Math.min(selected, filteredPlantas.length - 1)]
     if (!planta) return { ...safeActiveData, details: [], pricing: { ...safeActiveData.pricing, price: 'Sin resultados' } }
     const enriched = plantaToDetails(planta)
-    const mockups = safeActiveData.floorPlan.thumbnails.length
-      ? safeActiveData.floorPlan.thumbnails
-      : MOCKUP_THUMBNAILS
     const thumbnails = enriched.floorPlanImage
-      ? [enriched.floorPlanImage, ...mockups]
-      : mockups
+      ? [enriched.floorPlanImage, ...safeActiveData.floorPlan.thumbnails]
+      : safeActiveData.floorPlan.thumbnails
     return {
       ...safeActiveData,
       details: enriched.details,
@@ -418,25 +427,22 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, filteredPlantas, activeProject])
 
-  // External planta selection (from RelatedProjects Cotizar button)
+  // External selection ({ planta?, project? }) — apply filters, scroll into view when planta-driven
   useEffect(() => {
-    if (!universal || !externalPlanta) return
-    const planta = externalPlanta
+    const next = filtersFromSelection(selection)
+    if (!universal || !next) return
     setFiltering(true)
-    setFilters({
-      comuna: planta.proyecto?.comuna || '',
-      proyecto: planta.proyecto?.name || '',
-      tipologia: planta.programa || '',
-      orientacion: ORIENTACION_LABELS[planta.orientacion] || planta.orientacion || '',
-    })
-    // Scroll to top of cotizador
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [universal, externalPlanta])
+    setFilters(next)
+    if (selection.planta) {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [universal, selection])
 
   const openGallery = (e) => {
     e.preventDefault()
     e.stopPropagation()
     const images = displayData.floorPlan.thumbnails.map((src) => ({ src, type: 'image' }))
+    if (!images.length) return
     Fancybox.show(images, { startIndex: imgIndex })
   }
 
@@ -462,16 +468,16 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
   const planFitClass = mainImage && mainImage === plantaImageUrl ? 'object-fit-contain' : 'object-fit-cover'
 
   return (
-    <section className="lb-proj-det-cotizador" id="cotizador" ref={ref}>
+    <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
       <div className="container">
         {/* Header + Filters */}
         <div className="row align-items-start g-4 mb-4" animation="fade-up">
-          <div className="col-lg-4">
+          <div className="col-lg-3">
             <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
           </div>
 
           {displayData.filters && (
-          <ScrollAnim as="div" className="col-lg-8 lb-proj-det-cot-filters-col">
+          <ScrollAnim as="div" className="col-lg-6 lb-proj-det-cot-filters-col">
             <div className="lb-proj-det-cot-filters">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
@@ -533,11 +539,12 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                   </>)}
                 </div>
                 <div className="d-flex align-items-center gap-3 mt-2">
-                  <span className="badge bg-secondary">
+                  <span className="badge bg-secondary d-inline-flex align-items-center gap-1" {...hover(countIconRef)}>
+                    <MapPinHouseIcon ref={countIconRef} size={14} />
                     {showSkeleton ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
                   </span>
                   <button
-                    className="btn btn-link btn-sm text-decoration-none px-0"
+                    className="btn btn-danger btn-sm text-decoration-none"
                     disabled={!hasFilters}
                     onClick={() => {
                       selectFilter(EMPTY_FILTERS)
@@ -572,6 +579,9 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                   loading="lazy"
                   decoding="async"
                 />
+                {displayData.mapCaption && (
+                  <p className="lb-proj-det-cot-map-caption position-absolute start-0 bottom-0 text-muted small mb-0 m-2 px-2 py-1 bg-white bg-opacity-75 rounded">{displayData.mapCaption}</p>
+                )}
               </div>
             ) : null}
           </ScrollAnim>
@@ -631,16 +641,22 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
 
           {/* Floor plan card */}
           <div className="col-lg-6 lb-proj-det-cot-plan-card">
-            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: 'pointer' }} role="button" tabIndex={0}>
+            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
-              <img
-                src={mainImage}
-                alt="Planta del departamento"
-                className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
-                onLoad={() => setSwitching(false)}
-                loading="lazy"
-                decoding="async"
-              />
+              {mainImage ? (
+                <img
+                  src={mainImage}
+                  alt="Planta del departamento"
+                  className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
+                  onLoad={() => setSwitching(false)}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div className="d-flex align-items-center justify-content-center text-muted small" style={{ minHeight: '18rem' }}>
+                  Sin imágenes disponibles para esta planta
+                </div>
+              )}
             </div>
             {filteredPlantas.length > 1 && (<>
               <button
@@ -703,20 +719,10 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
 
           {/* Bottom row: map caption + thumbnails + CTA */}
           {displayData.mapImage && (
-            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
-              <p className="lb-proj-det-cot-map-caption text-muted small mb-0">{displayData.mapCaption}</p>
-              <div className="d-flex align-items-center gap-2">                
-                <button
-                  className="btn btn-link text-decoration-none p-0 lb-share-trigger d-flex align-items-center"
-                  onClick={() => setShowShare(true)}
-                  aria-label="Compartir"
-                  {...hover(shareIconRef)}
-                >
-                  <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
-                  <HeartHandshakeIcon ref={shareIconRef} size={24} />
-                </button>
-              </div>
-            </div>
+            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">            
+              <ActionButton className='w-100 h-100' icon={TelescopeIcon} onClick={() => setShowVistas(true)}>
+                Vistas por piso de tu Dpto
+              </ActionButton></div>
           )}
           <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
             <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
@@ -736,8 +742,13 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
               <ActionButton icon={DownloadIcon}>
                 Descargar Brochure
               </ActionButton>
-              <ActionButton icon={TelescopeIcon}>
-                Vistas por piso de tu Dpto
+              <ActionButton
+                variant="btn-outline-primary"
+                icon={ExternalLinkIcon}
+                iconRef={shareIconRef}
+                onClick={() => setShowShare(true)}
+              >
+                <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
               </ActionButton>
             </div>
           </div>
@@ -786,12 +797,6 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                     <ShareButton icon={WhatsAppIcon} label="WhatsApp" href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`} />
                   </div>
                   <div className="col-6 col-md-3">
-                    <ShareButton icon={FacebookIcon} label="Facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} />
-                  </div>
-                  <div className="col-6 col-md-3">
-                    <ShareButton icon={LinkedinIcon} label="LinkedIn" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} />
-                  </div>
-                  <div className="col-6 col-md-3">
                     <ShareButton icon={MailIcon} label="Email" href={`mailto:?subject=Mira%20este%20departamento&body=${encodeURIComponent(shareUrl)}`} />
                   </div>
                   <div className="col-12">
@@ -803,6 +808,50 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, initialFil
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* MODAL VISTAS 3D POR PISO */}
+      {showVistas && createPortal(
+        <div className="modal d-block" tabIndex="-1" onClick={() => setShowVistas(false)}>
+          <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  Vista 3D — Piso {activePlanta?.piso ?? '—'} · {activePlanta?.name || displayData.title}
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowVistas(false)} aria-label="Cerrar" />
+              </div>
+              <div className="modal-body p-0">
+                {activePlanta?.vista_360_url ? (
+                  <iframe
+                    src={activePlanta.vista_360_url}
+                    title={`Vista 3D piso ${activePlanta?.piso}`}
+                    className="w-100"
+                    style={{ height: '70vh', border: 0 }}
+                    allowFullScreen
+                    allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
+                  />
+                ) : (
+                  <div className="d-flex flex-column align-items-center justify-content-center gap-3 p-5 text-center" style={{ minHeight: '50vh' }}>
+                    <TelescopeIcon size={48} />
+                    <p className="text-muted mb-0">
+                      Recorrido 3D del piso {activePlanta?.piso ?? '—'} próximamente.
+                      <br />
+                      <span className="small">Mientras tanto, revisa la planta en la galería.</span>
+                    </p>
+                    <img
+                      src={mainImage}
+                      alt={`Planta piso ${activePlanta?.piso ?? ''}`}
+                      className="img-fluid rounded"
+                      style={{ maxHeight: '40vh', objectFit: 'contain' }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
