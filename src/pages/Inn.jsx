@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import Navbar from '../components/layout/Navbar.jsx'
@@ -126,6 +126,13 @@ export default function Inn() {
     }).catch(() => {})
     return () => { cancelled = true }
   }, [])
+  // Selección estable: misma referencia entre renders para que el Cotizador
+  // no se resetee (sus efectos dependen de la identidad de `selection`)
+  const selection = useMemo(
+    () => (innProject ? { project: innProject } : undefined),
+    [innProject]
+  )
+
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const mapRef = useRef(null)
@@ -269,7 +276,7 @@ export default function Inn() {
           data={getProjectBySlug('inn')?.cotizador}
           universal
           projects={apiProjects}
-          selection={innProject ? { project: innProject } : undefined}
+          selection={selection}
         />
 
         <VideoTextSection

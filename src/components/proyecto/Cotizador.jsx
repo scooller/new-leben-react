@@ -5,6 +5,7 @@ import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
+import Room3DMockup from './Room3DMockup.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
@@ -837,20 +838,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                     allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
                   />
                 ) : (
-                  <div className="d-flex flex-column align-items-center justify-content-center gap-3 p-5 text-center" style={{ minHeight: '50vh' }}>
-                    <TelescopeIcon size={48} />
-                    <p className="text-muted mb-0">
-                      Recorrido 3D del piso {activePlanta?.piso ?? '—'} próximamente.
-                      <br />
-                      <span className="small">Mientras tanto, revisa la planta en la galería.</span>
-                    </p>
-                    <img
-                      src={mainImage}
-                      alt={`Planta piso ${activePlanta?.piso ?? ''}`}
-                      className="img-fluid rounded"
-                      style={{ maxHeight: '40vh', objectFit: 'contain' }}
-                    />
-                  </div>
+                  <Room3DMockup orientacion={activePlanta?.orientacion} planta={activePlanta} />
                 )}
               </div>
             </div>
