@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
@@ -14,6 +14,7 @@ export default function ProjectFeatureSection({
   description,
   highlight,
   highlightLogos = [],
+  highlightOffer,
   slides = [],
   mediaVideoSrc,
   backgroundImage = 'images/inn/bg-montain.svg',
@@ -24,7 +25,12 @@ export default function ProjectFeatureSection({
   activeSlide,
   onSlideChange,
   showIndicators = true,
+  // { buttonLabel, items: [{ label, icon, img, alt }] }
+  spacesModal,
 }) {
+  const [showSpacesModal, setShowSpacesModal] = useState(false)
+  const [activeSpace, setActiveSpace] = useState(0)
+  const spacesModalRef = useRef(null)
   const base = import.meta.env.BASE_URL
   const sectionRef = useRef(null)
   const carouselEl = useRef(null)
@@ -77,6 +83,16 @@ export default function ProjectFeatureSection({
     carouselInstance.current.to(Math.max(0, Math.min(activeSlide, slides.length - 1)))
   }, [activeSlide, slides.length])
 
+  // Fancybox para la galería del modal de espacios
+  useEffect(() => {
+    const el = spacesModalRef.current
+    if (!el) return
+    Fancybox.bind(el, '[data-fancybox]', {
+      Toolbar: { display: { left: [], right: ['close'] } },
+    })
+    return () => Fancybox.unbind(el)
+  }, [spacesModal])
+
   const resolvedActiveSlide = typeof activeSlide === 'number' ? activeSlide : 0
 
   return (
@@ -119,6 +135,28 @@ export default function ProjectFeatureSection({
                   ))}
                 </ScrollAnim>
               )}
+
+              {spacesModal?.items?.length > 0 && (
+                <ScrollAnim as="div" className="lb-inn-proyecto__spaces-btn-wrap mt-3 position-absolute">
+                  <button
+                    type="button"
+                    className="btn btn-lg lb-inn-proyecto__spaces-btn"
+                    onClick={() => setShowSpacesModal(true)}
+                  >
+                    {spacesModal.buttonLabel || 'Conoce los espacios'}
+                  </button>
+                </ScrollAnim>
+              )}
+
+              {(highlightOffer) && (
+                <ScrollAnim
+                  as="h3"
+                  className='lb-inn-proyecto__highligthtitle mt-3'
+                  // highlightOffer llega como string con HTML (<b>), se renderiza tal cual
+                  dangerouslySetInnerHTML={{ __html: highlightOffer }}
+                />
+              )}
+
 
               {showIndicators && slides.length > 0 && (
                 <div className="carousel-indicators position-absolute bottom-0 left-0 lb-inn-proyecto__indicators">
@@ -177,6 +215,65 @@ export default function ProjectFeatureSection({
           ) : null}
         </div>
       </div>
+      {/* MODAL ESPACIOS */}
+      {spacesModal?.items?.length > 0 && (
+        <div
+          ref={spacesModalRef}
+          className={`modal fade ${showSpacesModal ? 'show d-block' : ''}`}
+          tabIndex={-1}
+          aria-label="Espacios del proyecto"
+          style={{ backgroundColor: 'rgba(0,0,0,.9)', zIndex: 1000 }}
+          onClick={() => setShowSpacesModal(false)}
+        >
+          <div
+            className="modal-dialog modal-xl modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content border-0 rounded-4 overflow-hidden lb-inn-spaces-modal__content">
+              <div className="modal-header border-0">
+                <h2 className="modal-title lb-inn-proyecto__title mb-0">
+                  {spacesModal.items[activeSpace]?.label?.toUpperCase()}
+                </h2>
+                <button type="button" className="btn-close" aria-label="Cerrar" onClick={() => setShowSpacesModal(false)} />
+              </div>
+              <div className="modal-body p-0">
+                <div className="row g-0">
+                  <div className="col-12 col-md-4 lb-inn-spaces-modal__tabs">
+                    <ul className="nav nav-pills flex-column gap-2 p-3">
+                      {spacesModal.items.map((item, index) => (
+                        <li className="nav-item" key={item.label || index}>
+                          <button
+                            type="button"
+                            className={`nav-link nav-link__border w-100 d-flex align-items-center gap-2 ${index === activeSpace ? 'active' : ''}`}
+                            onClick={() => setActiveSpace(index)}
+                          >
+                            {item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
+                            <span>{item.label}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="col-12 col-md-8 lb-inn-spaces-modal__gallery">
+                    <a
+                      href={`${base}${spacesModal.items[activeSpace]?.img}`}
+                      data-fancybox="inn-espacios"
+                      data-caption={spacesModal.items[activeSpace]?.label}
+                      aria-label={`Ampliar imagen de ${spacesModal.items[activeSpace]?.label}`}
+                    >
+                      <img
+                        src={`${base}${spacesModal.items[activeSpace]?.img}`}
+                        alt={spacesModal.items[activeSpace]?.alt || spacesModal.items[activeSpace]?.label || ''}
+                        className="w-100 h-100 object-fit-cover"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
-import Room3DMockup from './Room3DMockup.jsx'
+// Carga diferida: Three.js es pesado; se descarga al abrir el modal, no al cargar la página
+const Room3DMockup = lazy(() => import('./Room3DMockup.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
@@ -838,7 +839,16 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                     allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
                   />
                 ) : (
-                  <Room3DMockup orientacion={activePlanta?.orientacion} planta={activePlanta} />
+                  <Suspense
+                    fallback={(
+                      <div className="d-flex flex-column align-items-center justify-content-center gap-3" style={{ height: '70vh', background: '#0e1420' }}>
+                        <span className="spinner-border text-warning" style={{ width: '3rem', height: '3rem' }} role="status" />
+                        <span className="small text-white-50">Cargando vista 3D…</span>
+                      </div>
+                    )}
+                  >
+                    <Room3DMockup orientacion={activePlanta?.orientacion} planta={activePlanta} />
+                  </Suspense>
                 )}
               </div>
             </div>

@@ -10,6 +10,8 @@ import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.
 import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
+import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
+import InnTeamAgents from '../components/proyecto/InnTeamAgents.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 
@@ -88,6 +90,13 @@ const MAP_FEATURES = [
   'Cassis',
   'La Olla',
 ]
+
+// Espacios para el modal "Conoce los espacios": cada item del nav + su imagen correspondiente
+const SPACES_MODAL_ITEMS = EQUIPMENT_NAV_ITEMS.map((item, i) => ({
+  ...item,
+  img: EQUIPMENT_SLIDES[i]?.img,
+  alt: EQUIPMENT_SLIDES[i]?.alt,
+}))
 
 // Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
 // avanzando de 1 en 1 (wrap-around para loop infinito)
@@ -232,6 +241,7 @@ export default function Inn() {
           title={<>EXCLUSIVIDAD<br />FRENTE AL LAGO</>}
           description="Descubre el privilegio de vivir en primera línea con vistas incomparables y despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en el edificio más moderno y exclusivo de Puerto Varas."
           highlight="Departamentos, dúplex y deptos. con patio privado."
+          highlightOffer="paga el pien en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
           activeSlide={activeSlide}
@@ -259,13 +269,10 @@ export default function Inn() {
           showIndicators={false}
           activeSlide={activeEquipmentSlide}
           onSlideChange={setActiveEquipmentSlide}
-        />
-
-        <CarouselNav
-          items={EQUIPMENT_NAV_ITEMS}
-          targetId="departamentos"
-          activeIndex={activeEquipmentSlide}
-          onSelect={setActiveEquipmentSlide}
+          spacesModal={{
+            buttonLabel: 'Conoce los espacios',
+            items: SPACES_MODAL_ITEMS,
+          }}
         />
 
         <Recorridos360 />
@@ -386,78 +393,14 @@ export default function Inn() {
           </ScrollAnim>
         </section>
 
-        {/* SECCIÓN INTERIORISMO */}
-        <section className="lb-inn-interiorismo py-5" id="interiorismo">
-          <div className="container">
-            <ScrollAnim className="row g-5">
-              {/* Columna izquierda - Texto e imagen */}
-              <div className="col-12 col-lg-6 d-flex flex-column">
-                <div className="d-flex flex-column gap-4">
-                  <div className="text-center text-lg-start">
-                    <span className="lb-inn-proyecto__eyebrow mb-0">Interiorismo</span>
-                    <h2 className="lb-inn-proyecto__title mb-0">DISEÑO EXCLUSIVO</h2>
-                  </div>
-                  <div className="lb-inn-interiorismo__text">
-                    <p className="lh-lg">
-                      Nuestros departamentos han sido diseñados por renombrados arquitectos y diseñadores, 
-                      combinando estética contemporánea con funcionalidad superior. Cada espacio refleja 
-                      un equilibrio perfecto entre lujo, confort y estilo, creando ambientes únicos que 
-                      se adaptan a tus necesidades y preferencias personales.
-                    </p>
-                    <p className="lh-lg mt-4">
-                      Los materiales de alta calidad, las terminaciones impecables y la atención al 
-                      detalle en cada rincón garantizan una experiencia de vida excepcional en el 
-                      corazón de Puerto Varas.
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <img 
-                    src={`${base}images/inn/interiorismo-principal.jpg`} 
-                    alt="Interiorismo principal del proyecto INN" 
-                    className="img-fluid rounded-3 shadow-lg w-100"
-                  />
-                </div>
-              </div>
-              
-              {/* Columna derecha - 3 imágenes con nombres y colores */}
-              <div className="col-12 col-lg-6">
-                <div className="row g-4">
-                  <div className="col-12 col-md-6">
-                    <div className="text-center">
-                      <img 
-                        src={`${base}images/inn/interiorismo-sofia.jpg`} 
-                        alt="Diseño de Sofía Iturralde" 
-                        className="img-fluid rounded-3 mb-3"
-                      />
-                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#d9bc70'}}>Sofía Iturralde</h3>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6">
-                    <div className="text-center">
-                      <img 
-                        src={`${base}images/inn/interiorismo-rafael.jpg`} 
-                        alt="Diseño de Rafael Rivera" 
-                        className="img-fluid rounded-3 mb-3"
-                      />
-                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#b78d56'}}>Rafael Rivera</h3>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6">
-                    <div className="text-center">
-                      <img 
-                        src={`${base}images/inn/interiorismo-teresa.jpg`} 
-                        alt="Diseño de Teresa Leighton" 
-                        className="img-fluid rounded-3 mb-3"
-                      />
-                      <h3 className="lb-inn-interiorismo__designer" style={{color: '#a68761'}}>Teresa Leighton</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollAnim>
-          </div>
-        </section>
+        <InteriorismoSection
+          eyebrow={<>Interiorismo</>}
+          title={<>DISEÑO EXCLUSIVO</>}
+          description="Nuestros departamentos han sido diseñados por renombrados arquitectos y diseñadores, combinando estética contemporánea con funcionalidad superior. Cada espacio refleja un equilibrio perfecto entre lujo, confort y estilo, creando ambientes únicos que se adaptan a tus necesidades y preferencias personales. Los materiales de alta calidad, las terminaciones impecables y la atención al detalle en cada rincón garantizan una experiencia de vida excepcional en el corazón de Puerto Varas."
+          backgroundImage="images/inn/interiorismo.svg"
+          id="interiorismo"
+          ariaLabel="Interiorismo"
+        />
 
 
       </main>
@@ -505,11 +448,11 @@ export default function Inn() {
         </div>
       </div>
 
-      {/* SECCIÓN CONTACTO */}
-      <section className="lb-inn-contacto py-5" id="contacto">
-        <div className="container">          
-        </div>
-      </section>
+      {/* SECCIÓN CONTACTO — asesores + mapa (misma referencia que ProyectoDetalle) */}
+      <InnTeamAgents
+        data={innProject?.team || getProjectBySlug('inn')?.team}
+        apiId={innProject?.apiId ?? getProjectBySlug('inn')?.apiId}
+      />
 
       <Footer />
     </>

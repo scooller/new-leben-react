@@ -1,0 +1,35 @@
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 6  | / @use 'bootstrap/scss/bootstrap' as * with (
+ * 7  | |   $primary:       #d44040,
+ * 8  | |   $secondary:     #1b5e4a,
+ * 9  | |   $dark:          #1a1a1a,
+ * 10 | |   $body-bg:       #f5f2ed,
+ * 11 | |   $body-color:    #333333,
+ * 12 | |   $font-family-sans-serif: ('Lato', sans-serif),
+ * 13 | |   $headings-color: #1a1a1a,
+ * 14 | |   $border-radius:    2px,
+ * 15 | |   $border-radius-sm: 2px,
+ * 16 | |   $border-radius-lg: 4px,
+ * 17 | |   $container-max-widths: (
+ * 18 | |     sm: 540px,
+ * 19 | |     md: 720px,
+ * 20 | |     lg: 960px,
+ * 21 | |     xl: 1140px,
+ * 22 | |     xxl: 1394px
+ * 23 | |   ),
+ * 24 | | );
+ *    | '-^
+ *    '
+ *   src\styles\main.scss 6:1  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    \2577 \a 6  \2502  \250c  @use 'bootstrap/scss/bootstrap' as * with (\a 7  \2502  \2502    $primary:       #d44040,\a 8  \2502  \2502    $secondary:     #1b5e4a,\a 9  \2502  \2502    $dark:          #1a1a1a,\a 10 \2502  \2502    $body-bg:       #f5f2ed,\a 11 \2502  \2502    $body-color:    #333333,\a 12 \2502  \2502    $font-family-sans-serif: ('Lato', sans-serif),\a 13 \2502  \2502    $headings-color: #1a1a1a,\a 14 \2502  \2502    $border-radius:    2px,\a 15 \2502  \2502    $border-radius-sm: 2px,\a 16 \2502  \2502    $border-radius-lg: 4px,\a 17 \2502  \2502    $container-max-widths: (\a 18 \2502  \2502      sm: 540px,\a 19 \2502  \2502      md: 720px,\a 20 \2502  \2502      lg: 960px,\a 21 \2502  \2502      xl: 1140px,\a 22 \2502  \2502      xxl: 1394px\a 23 \2502  \2502    ),\a 24 \2502  \2502  );\a    \2502  \2514 \2500 ^\a    \2575 \a   src\\styles\\main.scss 6:1  root stylesheet";
+}

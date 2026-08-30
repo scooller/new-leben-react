@@ -206,8 +206,9 @@ export const projectDetails = {
 
     // --- Team / Agents ---
     team: {
-      title: 'Te acompañamos en todo el proceso',
-      subtitle: 'Visitanos en: Vicente Pérez Rosales 991, Puerto Varas. Horarios de sala de venta: Lun a Dom. 10:00 a 14:00hrs y 15:00 a 19:00hrs.',
+      eyebrow: 'Contactos - Sala de venta',
+      title: 'Te acompañamos en<br>todo el proceso',
+      subtitle: '<b>Visítanos en:</b> Vicente Pérez Rosales 991, Puerto Varas.<br><b>Horario sala de ventas:</b> Lun a Dom. 10:00 a 14:00 hrs.<br>y de 15:00 a 19:00 hrs.',
       wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
       agents: [
         { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('Patricia-Ramirez.jpg') },

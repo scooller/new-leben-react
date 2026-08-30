@@ -80,18 +80,7 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
     }
 
     // --- Materiales con texturas procedurales de alta calidad ---
-    // makeTex: canvas -> textura (map sRGB). makeBump: canvas -> bumpMap (lineal).
-    const makeTex = (size, draw, repeat = 1) => {
-      const c = document.createElement('canvas')
-      c.width = c.height = size
-      draw(c.getContext('2d'), size)
-      const t = new THREE.CanvasTexture(c)
-      t.colorSpace = THREE.SRGBColorSpace
-      t.wrapS = t.wrapT = THREE.RepeatWrapping
-      t.anisotropy = renderer.capabilities.getMaxAnisotropy()
-      t.repeat.set(repeat, repeat)
-      return t
-    }
+    // makeBump: canvas -> bumpMap (lineal).
     const makeBump = (size, draw, repeat = 1) => {
       const c = document.createElement('canvas')
       c.width = c.height = size
@@ -173,7 +162,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
       }
       grain(ctx, s, 0.03, 3000)
     }
-    const texPiso = makeTex(1024, (ctx, s) => drawFloor(ctx, s, false), 2)
     const bumpPiso = makeBump(1024, (ctx, s) => drawFloor(ctx, s, true), 2)
     // Piso: textura REAL del video + bump procedural, satinado con clearcoat
     const matPiso = new THREE.MeshPhysicalMaterial({
@@ -196,7 +184,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
       }
       grain(ctx, s, 0.05, 4000)
     }
-    const texMuro = makeTex(512, (ctx, s) => drawPlaster(ctx, s, false), 2)
     const bumpMuro = makeBump(512, (ctx, s) => drawPlaster(ctx, s, true), 2)
     const matMuro = new THREE.MeshStandardMaterial({
       map: loadTex('tex_muro.png', 2, 2), bumpMap: bumpMuro, bumpScale: 0.005, roughness: 0.88, side: THREE.DoubleSide,
@@ -224,7 +211,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
       }
       grain(ctx, s, 0.06, 2500)
     }
-    const texNogal = makeTex(512, (ctx, s) => drawWalnut(ctx, s, false))
     const bumpNogal = makeBump(512, (ctx, s) => drawWalnut(ctx, s, true))
     const matMadera = new THREE.MeshStandardMaterial({
       map: loadTex('tex_nogal.png', 2, 1), bumpMap: bumpNogal, bumpScale: 0.15, roughness: 0.6,
@@ -236,28 +222,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
     // Verde pizarra (#3D4744) para columnas de cocina
     const matPizarra = new THREE.MeshStandardMaterial({ color: 0x3d4744, roughness: 0.7 })
 
-    // ===== MÁRMOL: cubierta con vetas grises difusas =====
-    const drawMarble = (ctx, s) => {
-      ctx.fillStyle = '#ebe9e4'
-      ctx.fillRect(0, 0, s, s)
-      ctx.shadowBlur = 6
-      for (let v = 0; v < 14; v++) {
-        ctx.strokeStyle = `rgba(${150 + Math.random() * 30},${148 + Math.random() * 28},${140 + Math.random() * 26},${0.12 + Math.random() * 0.18})`
-        ctx.lineWidth = 0.6 + Math.random() * 1.8
-        ctx.beginPath()
-        const x0 = Math.random() * s, y0 = Math.random() * s
-        ctx.moveTo(x0, y0)
-        ctx.bezierCurveTo(
-          x0 + (Math.random() * 200 - 100), y0 + (Math.random() * 200 - 100),
-          x0 + (Math.random() * 240 - 120), y0 + (Math.random() * 240 - 120),
-          Math.random() * s, Math.random() * s
-        )
-        ctx.stroke()
-      }
-      ctx.shadowBlur = 0
-      grain(ctx, s, 0.02, 1500, true)
-    }
-    const texMarmol = makeTex(512, drawMarble)
     // Mármol real del video, pulido con clearcoat + veta en relieve
     const matMarmol = new THREE.MeshPhysicalMaterial({
       map: loadTex('tex_marmol.png'), bumpMap: loadTex('tex_marmol.png'), bumpScale: 0.04,
@@ -297,7 +261,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
         ctx.stroke()
       }
     }
-    const texLino = makeTex(256, (ctx, s) => drawLinen(ctx, s, false), 3)
     const bumpLino = makeBump(256, (ctx, s) => drawLinen(ctx, s, true), 3)
     // Bouclé con sheen aterciopelado (textura real del video)
     const matTela = new THREE.MeshPhysicalMaterial({
@@ -305,20 +268,6 @@ export default function Room3DMockup({ orientacion = 'N', planta = null }) {
       sheen: 0.65, sheenColor: new THREE.Color(0xffffff), sheenRoughness: 0.5,
     })
 
-    // ===== ALFOMBRA: lana de pelo corto =====
-    const drawRug = (ctx, s) => {
-      ctx.fillStyle = '#a8a196'
-      ctx.fillRect(0, 0, s, s)
-      for (let i = 0; i < 9000; i++) {
-        ctx.strokeStyle = Math.random() < 0.5 ? 'rgba(120,113,104,.5)' : 'rgba(190,184,175,.5)'
-        const x = Math.random() * s, y = Math.random() * s
-        ctx.beginPath()
-        ctx.moveTo(x, y)
-        ctx.lineTo(x + Math.random() * 4 - 2, y + Math.random() * 4 - 2)
-        ctx.stroke()
-      }
-    }
-    const texAlfombra = makeTex(512, drawRug)
     // Alfombra: lana real del video
     const matAlfombra = new THREE.MeshStandardMaterial({ map: loadTex('tex_alfombra.png', 2, 2), roughness: 0.98, bumpScale: 0.09 })
     // Roble nórdico claro para mesa de comedor

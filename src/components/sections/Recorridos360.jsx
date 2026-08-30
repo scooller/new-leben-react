@@ -2,19 +2,19 @@ import { useState } from 'react'
 
 const TOURS = [
   {
-    label: 'Video',
+    label: 'Home & Wellness',
     src: 'https://www.youtube.com/embed/TQpR0wBv2a0',
     title: 'Home & Wellness',
     allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
   },
   {
-    label: 'Matterport',
+    label: 'Piloto 360',
     src: 'https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0',
     title: 'Conoce tu próximo departamento',
     allow: 'fullscreen; autoplay',
   },
   {
-    label: 'La Nube 360',
+    label: 'Vista 360',
     src: 'https://www.lanube360.com/ileben1/',
     title: 'En primera línea frente al lago',
     allow: 'fullscreen',

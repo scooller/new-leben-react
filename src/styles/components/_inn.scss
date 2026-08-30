@@ -6,6 +6,10 @@ $inn-gold-dark: #422c15;
 $inn-gris: #808080;
 $inn-gris-dark: #101010;
 $inn-celeste: rgb(226,237,249);
+$inn-gold-bg: #faf4e8;
+
+// Import team agents styles (namespace evita conflicto de variables $inn-*)
+@use './inn-team-agents';
 
 .lb-inn{
   color: $inn-gris-dark;
@@ -241,6 +245,37 @@ body:has(.lb-inn-hero-tabs) section[id] {
     }
   }
 
+  &__highligthtitle{
+    color: $inn-gold;
+    font-family: $font-title;
+    b{
+      font-size: 1.2em;
+      vertical-align: middle;
+    }
+  }
+
+  &__spaces-btn-wrap {
+    margin-top: 1.25rem;
+    left: 0;
+    bottom: -7rem;
+  }
+
+  &__spaces-btn {
+    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+    color: $lb-white;
+    border: 0;
+    border-radius: $lb-radius-pill;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.65rem 1.75rem;
+    transition: filter 0.2s ease;
+
+    &:hover {
+      filter: brightness(1.05);
+      color: $lb-white;
+    }
+  }
+
   &__title {
     font-size: $lb-heading-display;
     font-family: $font-title;
@@ -361,7 +396,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
 // Recorrido 360
 .lb-inn-360 {
   padding-block: 4.5rem 5.5rem;
-  background-color: #f7f0de;
+  background-color: $inn-gold-bg;
 
   .card.lb-inn-hero-tabs__inner {
     border: 0;
@@ -486,7 +521,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
 // Cotizador (mismo fondo que Recorridos 360)
 .lb-inn-cot {
-  background-color: #f7f0de !important;
+  background-color: $inn-gold-bg !important;
 
   // Botones dorados solo en INN
   .lb-proj-det-filter-btn {
@@ -547,6 +582,68 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
     &:hover {
       filter: brightness(1.05);
+    }
+  }
+}
+
+// --- MODAL ESPACIOS (Departamentos) ---
+.lb-inn-spaces-modal {
+  &__content {
+    background: #fff;
+    color: $inn-gris-dark;
+  }
+
+  &__tabs {
+    background: $inn-celeste;
+    max-height: 75vh;
+    overflow-y: auto;
+
+    .nav-link {
+      border-radius: $lb-radius-pill;
+      font-size: $lb-fs-xs;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: $inn-gris;
+      justify-content: flex-start;
+
+      &__border {
+        border: 1px solid;
+        border-color: $lb-dark;
+      }
+
+      &:hover, &.active {
+        background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        color: $lb-white;
+        border-color: $inn-gold;
+      }
+
+      img {
+        width: 1.25rem;
+        height: 1.25rem;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  &__gallery {
+    // Altura definida + overflow para que object-fit-cover respete el contenedor
+    height: 75vh;
+    overflow: hidden;
+    display: block;
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: zoom-in;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -630,5 +727,64 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
     &--prev { left: 0.5rem; }
     &--next { right: 0.5rem; }
+  }
+}
+// --- INTERIORISMO ---
+.lb-inn-interiorismo {
+  .designers{
+    margin-bottom: -10rem;
+  }
+  &__designer-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    border-radius: $lb-radius-sm;
+    overflow: hidden;
+    background: transparent;
+    background: linear-gradient(180deg, #fff 0%, #d8b35c 100%);
+
+    &:hover,
+    &.active {
+      border: none;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transition: transform 0.45s ease;
+      margin-top: auto; // imagen abajo centrada
+      mix-blend-mode: luminosity;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    &.active img {
+      transform: scale(1.06);
+    }
+  }
+
+  &__designer-name {
+    z-index: 2;
+    width: 100%;
+    margin-bottom: auto;
+    font-family: $font-title;
+    font-size: $lb-heading-3;
+    font-weight: 400;
+    pointer-events: none;
+    text-align: left;    
+  }
+
+  &__designer-text {
+    color: $inn-gris;
   }
 }
