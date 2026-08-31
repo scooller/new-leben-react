@@ -44,15 +44,33 @@ $inn-gold-bg: #faf6ee;
     margin-bottom: 1.5rem;
   }
 
-  // Tarjeta tipo píldora
+  // Contenedor principal de la fila
   &__agent-row {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    position: relative;
+    // max-width: 440px;
+    margin-bottom: 0.5rem;
+
+    // Al hacer hover sobre la fila, el avatar se expande
+    &:hover .lb-inn-team-agents__avatar-wrapper {
+      width: 180px;
+    }
+  }
+
+  // Tarjeta interior con la info, con forma de píldora
+  &__agent-info-card {
+    display: flex;
+    align-items: center;
     background: #fff;
-    border: 1px solid rgba($inn-gold, 0.6);
+    border: 2px solid #e1ceaa;
     border-radius: 9999px;
-    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
+    flex: 1;
+    min-height: 90px;
+    z-index: 2;
+    position: relative;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.03); // Sombra ligera sobre el avatar
     transition: box-shadow 0.3s ease;
 
     &:hover {
@@ -63,30 +81,59 @@ $inn-gold-bg: #faf6ee;
   &__agent-data {
     flex: 1;
     min-width: 0;
+    padding-right: 1rem;
   }
 
   &__name {
     margin: 0;
     font-size: 0.975rem;
-    color: $inn-gris;
+    color: #333; // Un gris más oscuro
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 
     strong {
       font-weight: 700;
+      color: #1a1a1a;
+    }
+  }
+
+  // Nombre clicable → abre modal "Agenda tu visita" con el asesor preseleccionado
+  &__name-btn {
+    font-weight: 700;
+    color: #1a1a1a;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+
+    &:hover {
+      text-decoration: underline;
+      color: $inn-gold-dark;
     }
   }
 
   &__phone {
     font-weight: 400;
-    color: $inn-gris;
+    color: #555;
+    font-size: 0.9rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: $inn-gold-dark;
+    }
   }
 
   &__email {
     font-size: 0.875rem;
-    color: #0d6efd;
-    text-decoration: underline;
+    color: #0066cc; // Azul
+    text-decoration: none; // En la imagen no se ve subrayado
 
     &:hover {
-      color: #0a58ca;
+      text-decoration: underline;
     }
   }
 
@@ -96,25 +143,43 @@ $inn-gold-bg: #faf6ee;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: $inn-gold;
-    color: #fff;
-    transition: background-color 0.3s ease;
+    width: 36px;
+    height: 36px;
+    color: #d1b578; // Color dorado
+    margin-right: -0.5rem; // Acercar al avatar
+    transition: transform 0.3s ease;
+    z-index: 2; // Asegurar que esté sobre el fondo
+    margin-right: 0.5rem;
+
+    svg {
+      fill: currentColor;
+    }
 
     &:hover {
-      background-color: $inn-gold-dark;
+      transform: scale(1.1);
+      color: $inn-gold-dark;
     }
   }
 
-  // Avatar en el extremo derecho, encaja en el remate de la píldora
-  &__avatar {
+  &__avatar-wrapper {
     flex-shrink: 0;
-    width: 72px;
-    height: 72px;
+    width: 140px;
+    height: 90px;
+    position: relative;
+    z-index: 1;
+    margin-left: -35px; // Hacemos que se meta por debajo de la tarjeta blanca
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    overflow: hidden;
+    transition: width 0.3s ease;
+  }
+
+  // Avatar en el extremo derecho
+  &__avatar {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 9999px;
+    object-position: center;
   }
 
   // CTA dorado tipo píldora
@@ -123,19 +188,22 @@ $inn-gold-bg: #faf6ee;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    background-color: $inn-gold;
+    background: linear-gradient(135deg, #d8bc82 0%, #b89552 100%);
     color: #fff;
     border: none;
     border-radius: 9999px;
-    font-weight: 700;
-    font-size: 0.875rem;
+    font-weight: 600;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(184, 149, 82, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 1rem;
 
     &:hover {
-      background-color: $inn-gold-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(184, 149, 82, 0.4);
     }
   }
 
@@ -218,19 +286,26 @@ $inn-gold-bg: #faf6ee;
 
 @media (max-width: 575px) {
   .lb-inn-team-agents {
-    &__agent-row {
-      padding-left: 1rem;
-      gap: 0.75rem;
+    &__agent-info-card {
+      padding-left: 1.5rem;
+      padding-right: 1rem;
+      min-height: 80px;
     }
 
-    &__avatar {
-      width: 56px;
-      height: 56px;
+    &__name {
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    &__avatar-wrapper {
+      width: 80px;
+      height: 80px;
+      margin-left: -25px;
     }
 
     &__wa-btn {
-      width: 38px;
-      height: 38px;
+      width: 30px;
+      height: 30px;
     }
   }
 }

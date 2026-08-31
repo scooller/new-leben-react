@@ -11,7 +11,7 @@ import { apiFetch } from '../../lib/apiFetch.js'
  */
 export default function InnTeamAgents({ data, apiId }) {
   const [agents, setAgents] = useState(data?.agents || [])
-  const [showModal, setShowModal] = useState({})
+  const [showModal, setShowModal] = useState(false)
   const waRef = useRef(null)
   const calendarRef = useRef(null)
 
@@ -64,33 +64,54 @@ export default function InnTeamAgents({ data, apiId }) {
             <div className="lb-inn-team-agents__agents-list">
               {agents.map((agent) => (
                 <div key={agent.email} className="lb-inn-team-agents__agent-row">
-                  <div className="lb-inn-team-agents__agent-data">
-                    <p className="lb-inn-team-agents__name">
-                      <strong>{agent.name}</strong>
-                      <span className="lb-inn-team-agents__phone"> | {agent.phone}</span>
-                    </p>
-                    <a href={`mailto:${agent.email}`} className="lb-inn-team-agents__email">
-                      {agent.email}
+                  <div className="lb-inn-team-agents__agent-info-card">
+                    <div className="lb-inn-team-agents__agent-data">
+                      <p className="lb-inn-team-agents__name">
+                        <button
+                          type="button"
+                          className="lb-inn-team-agents__name-btn"
+                          onClick={() => {
+                            setSelectedAgent(agent.email)
+                            setShowModal(true)
+                          }}
+                        >
+                          {agent.name}
+                        </button>
+                        <a
+                          href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="lb-inn-team-agents__phone"
+                        >
+                          {agent.phone}
+                        </a>
+                      </p>
+                      <a href={`mailto:${agent.email}`} className="lb-inn-team-agents__email">
+                        {agent.email}
+                      </a>
+                    </div>
+                    <a
+                      href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="lb-inn-team-agents__wa-btn"
+                      aria-label={`WhatsApp ${agent.name}`}
+                      {...hover(waRef)}
+                    >
+                      <WhatsAppIcon ref={waRef} size={25} />
                     </a>
                   </div>
-                  <a
-                    href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="lb-inn-team-agents__wa-btn"
-                    aria-label={`WhatsApp ${agent.name}`}
-                    {...hover(waRef)}
-                  >
-                    <WhatsAppIcon ref={waRef} size={20} />
-                  </a>
-                  <img
-                    src={agent.avatar}
-                    alt={agent.name}
-                    width={72}
-                    height={72}
-                    loading="lazy"
-                    className="lb-inn-team-agents__avatar"
-                  />
+                  
+                  <div className="lb-inn-team-agents__avatar-wrapper">
+                    <img
+                      src={agent.avatar}
+                      alt={agent.name}
+                      width={90}
+                      height={90}
+                      loading="lazy"
+                      className="lb-inn-team-agents__avatar"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
