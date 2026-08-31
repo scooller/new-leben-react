@@ -204,7 +204,7 @@ export default function ProjectFeatureSection({
                           data-fancybox={slide.fancyboxGroup || 'project-gallery'}
                           tabIndex={0}
                         >
-                          <img src={`${base}${slide.img || slide.src}`} className="d-block w-100" alt={slide.alt || `Slide ${index + 1}`} />
+                          <img src={`${base}${slide.img || slide.src}`} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
                         </a>
                       </div>
                     </div>

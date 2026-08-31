@@ -1,3 +1,21 @@
+import { useRef } from 'react'
+import { hover } from '../icons/animated-icon.jsx'
+
+// Icono por item: string = imagen estática | componente = icono animado en hover (ref propio)
+function ItemIcon({ icon }) {
+  const ref = useRef(null)
+  if (!icon) return null
+  if (typeof icon === 'string') {
+    return <img src={`${import.meta.env.BASE_URL}${icon}`} alt="" aria-hidden="true" />
+  }
+  const Icon = icon
+  return (
+    <span className="d-inline-flex" {...hover(ref)}>
+      <Icon ref={ref} />
+    </span>
+  )
+}
+
 export default function CarouselNav({
   items = [],
   targetId,
@@ -6,8 +24,6 @@ export default function CarouselNav({
   variant = 'button', // 'button' = degradado con texto+icono en línea | 'stacked' = icono arriba, texto debajo, sin degradado
   className = '',
 }) {
-  const base = import.meta.env.BASE_URL
-
   const handleSelect = (index) => {
     onSelect?.(index)
     document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -23,9 +39,9 @@ export default function CarouselNav({
               className={`nav-link nav-link__border w-100 h-100 d-flex flex-${variant === 'stacked' ? 'column' : 'row'} align-items-center justify-content-center gap-2 ${index === activeIndex ? 'active' : ''}`}
               onClick={() => handleSelect(index)}
             >
-              {variant === 'stacked' && item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
+              {variant === 'stacked' && item.icon && <ItemIcon icon={item.icon} />}
               <span>{item.label}</span>
-              {variant === 'button' && item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
+              {variant === 'button' && item.icon && <ItemIcon icon={item.icon} />}
             </button>
           </li>
         ))}

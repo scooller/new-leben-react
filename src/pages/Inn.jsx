@@ -12,6 +12,13 @@ import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
 import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
 import InnTeamAgents from '../components/proyecto/InnTeamAgents.jsx'
+import { ConciergeBellIcon } from '../components/icons/concierge-bell.jsx'
+import { TableIcon } from '../components/icons/table.jsx'
+import { ChefHatIcon } from '../components/icons/chef-hat.jsx'
+import { DumbbellIcon } from '../components/icons/dumbbell.jsx'
+import { WavesLadderIcon } from '../components/icons/waves-ladder.jsx'
+import { KayakIcon } from '../components/icons/kayak.jsx'
+import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 
@@ -66,6 +73,17 @@ const EQUIPMENT_NAV_ITEMS = [
   { label: 'Cubierta cocina', icon: 'images/icons/cubierta cocina.svg' },
   { label: 'Grifería cocina', icon: 'images/icons/griferia.svg' },
   { label: 'Grifería baño', icon: 'images/icons/bano.svg' },
+]
+
+// Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
+const ESPACIOS_NAV_ITEMS = [
+  { label: 'Hall de acceso', icon: ConciergeBellIcon },
+  { label: 'Atrio', icon: TableIcon },
+  { label: 'Gourmet + Quincho equipado', icon: ChefHatIcon },
+  { label: 'Training Zone', icon: DumbbellIcon },
+  { label: 'Jacuzzi exterior', icon: HotTubIcon },
+  { label: 'Piscina climatizada', icon: WavesLadderIcon },
+  { label: 'Bodega náutica', icon: KayakIcon },
 ]
 
 const GALLERY_IMAGES = [
@@ -144,6 +162,7 @@ export default function Inn() {
 
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
+  const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
   const mapRef = useRef(null)
   const galleryRef = useRef(null)
 
@@ -297,7 +316,7 @@ export default function Inn() {
           description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
           slides={EQUIPMENT_SLIDES}
           carouselId="innEspaciosCarousel"
-          backgroundImage="images/inn/edificio.svg"
+          backgroundImage="images/inn/espacio.svg"
           id="espacios"
           className='pb-2 mb-2'
           ariaLabel="Espacios"
@@ -307,11 +326,11 @@ export default function Inn() {
         />
 
         <CarouselNav
-          items={EQUIPMENT_NAV_ITEMS}
+          items={ESPACIOS_NAV_ITEMS}
           targetId="espacios"
           variant="stacked"
-          activeIndex={activeEquipmentSlide}
-          onSelect={setActiveEquipmentSlide}
+          activeIndex={activeEspacioSlide}
+          onSelect={setActiveEspacioSlide}
         />
 
         <VideoTextSection

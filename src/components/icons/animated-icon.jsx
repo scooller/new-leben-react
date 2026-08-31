@@ -16,7 +16,12 @@ export const createAnimatedIcon = (render) =>
     const controls = useAnimation()
     useImperativeHandle(ref, () => ({
       startAnimation: () => controls.start('animate'),
-      stopAnimation: () => controls.start('normal'),
+      // stop() interrumpe animaciones en curso/pendientes para que un hover rápido
+      // no deje la animación atascada cuando startAnimation se resuelve después
+      stopAnimation: () => {
+        controls.stop()
+        controls.start('normal')
+      },
     }))
     return (
       <div className={className} {...props}>

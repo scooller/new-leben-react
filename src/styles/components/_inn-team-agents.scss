@@ -8,6 +8,8 @@ $inn-gold: #c5a869;
 $inn-gold-dark: #422c15;
 $inn-gris: #2d3748;
 $inn-gold-bg: #faf6ee;
+$inn-border: #e1ceaa;
+$inn-wa: #d1b578;
 
 .lb-inn-team-agents {
   background-color: $inn-gold-bg;
@@ -23,14 +25,14 @@ $inn-gold-bg: #faf6ee;
 
   &__eyebrow {
     display: block;
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: $lb-fs-xl;
+    font-weight: $lb-heading-weight;
     color: $inn-gris;
     margin-bottom: 0.75rem;
   }
 
   &__title {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-size: $lb-heading-display;
     font-weight: 400;
     text-transform: uppercase;
     color: $inn-gold;
@@ -62,9 +64,9 @@ $inn-gold-bg: #faf6ee;
   &__agent-info-card {
     display: flex;
     align-items: center;
-    background: #fff;
-    border: 2px solid #e1ceaa;
-    border-radius: 9999px;
+    background: $lb-white;
+    border: 2px solid $inn-border;
+    border-radius: $lb-radius-pill;
     padding: 0.5rem 1.5rem 0.5rem 2rem;
     flex: 1;
     min-height: 90px;
@@ -87,7 +89,7 @@ $inn-gold-bg: #faf6ee;
   &__name {
     margin: 0;
     font-size: 0.975rem;
-    color: #333; // Un gris más oscuro
+    color: $lb-body; // Un gris más oscuro
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
@@ -95,14 +97,14 @@ $inn-gold-bg: #faf6ee;
 
     strong {
       font-weight: 700;
-      color: #1a1a1a;
+      color: $lb-dark;
     }
   }
 
   // Nombre clicable → abre modal "Agenda tu visita" con el asesor preseleccionado
   &__name-btn {
     font-weight: 700;
-    color: #1a1a1a;
+    color: $lb-dark;
     background: none;
     border: none;
     padding: 0;
@@ -117,7 +119,7 @@ $inn-gold-bg: #faf6ee;
 
   &__phone {
     font-weight: 400;
-    color: #555;
+    color: $lb-gray-700;
     font-size: 0.9rem;
     text-decoration: none;
 
@@ -128,7 +130,7 @@ $inn-gold-bg: #faf6ee;
   }
 
   &__email {
-    font-size: 0.875rem;
+    font-size: $lb-fs-md;
     color: #0066cc; // Azul
     text-decoration: none; // En la imagen no se ve subrayado
 
@@ -145,7 +147,7 @@ $inn-gold-bg: #faf6ee;
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: #d1b578; // Color dorado
+    color: $inn-wa; // Color dorado
     margin-right: -0.5rem; // Acercar al avatar
     transition: transform 0.3s ease;
     z-index: 2; // Asegurar que esté sobre el fondo
@@ -179,31 +181,26 @@ $inn-gold-bg: #faf6ee;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: 50% 30%;
   }
 
-  // CTA dorado tipo píldora
+  // CTA igual al .lb-inn-360 .nav-link.active (gradiente dorado) pero más grande
   &__cta {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #d8bc82 0%, #b89552 100%);
-    color: #fff;
-    border: none;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(184, 149, 82, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 0.75rem 2.5rem;
+    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+    color: $lb-white;
+    border: 1px solid $inn-gold;
+    font-size: $lb-fs-base;
+    letter-spacing: 0.12em;
+    transition: $lb-transition-fast;
     margin-top: 1rem;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(184, 149, 82, 0.4);
+      color: $lb-white;
+      filter: brightness(1.08);
     }
   }
 
@@ -214,7 +211,7 @@ $inn-gold-bg: #faf6ee;
   }
 
   &__subtitle {
-    font-size: 1rem;
+    font-size: $lb-fs-lg;
     color: $inn-gris;
     line-height: 1.5;
     margin-bottom: 1.5rem;
@@ -226,7 +223,7 @@ $inn-gold-bg: #faf6ee;
 
   &__map {
     flex: 1;
-    border-radius: 1rem;
+    border-radius: $lb-radius-xl;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     min-height: 420px;
@@ -270,7 +267,7 @@ $inn-gold-bg: #faf6ee;
 
 @media (max-width: 991px) {
   .lb-inn-team-agents {
-    padding: 2.5rem 0;
+    padding: $lb-section-pad-sm 0;
 
     &__layout {
       grid-template-columns: 1fr;

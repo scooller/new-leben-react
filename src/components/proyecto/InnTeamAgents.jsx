@@ -9,10 +9,63 @@ import { apiFetch } from '../../lib/apiFetch.js'
  * Inn Team Agents section — adapted from the screenshot
  * Uses $inn-gold-bg background and matches the layout from the image
  */
+function AgentRow({ agent, onSchedule }) {
+  const waRef = useRef(null)
+
+  return (
+    <div className="lb-inn-team-agents__agent-row">
+      <div className="lb-inn-team-agents__agent-info-card">
+        <div className="lb-inn-team-agents__agent-data">
+          <p className="lb-inn-team-agents__name">
+            <button
+              type="button"
+              className="lb-inn-team-agents__name-btn"
+              onClick={() => onSchedule(agent.email)}
+            >
+              {agent.name}
+            </button>
+            <a
+              href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lb-inn-team-agents__phone"
+            >
+              {agent.phone}
+            </a>
+          </p>
+          <a href={`mailto:${agent.email}`} className="lb-inn-team-agents__email">
+            {agent.email}
+          </a>
+        </div>
+        <a
+          href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="lb-inn-team-agents__wa-btn"
+          aria-label={`WhatsApp ${agent.name}`}
+          {...hover(waRef)}
+        >
+          <WhatsAppIcon ref={waRef} size={25} />
+        </a>
+      </div>
+
+      <div className="lb-inn-team-agents__avatar-wrapper">
+        <img
+          src={agent.avatar}
+          alt={agent.name}
+          width={90}
+          height={90}
+          loading="lazy"
+          className="lb-inn-team-agents__avatar"
+        />
+      </div>
+    </div>
+  )
+}
+
 export default function InnTeamAgents({ data, apiId }) {
   const [agents, setAgents] = useState(data?.agents || [])
   const [showModal, setShowModal] = useState(false)
-  const waRef = useRef(null)
   const calendarRef = useRef(null)
 
   const timeSlots = ['09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00']
@@ -61,63 +114,14 @@ export default function InnTeamAgents({ data, apiId }) {
             <span className="lb-inn-team-agents__eyebrow">{data.eyebrow}</span>
             <h2 className="lb-inn-team-agents__title" dangerouslySetInnerHTML={{ __html: data.title }} />
 
-            <div className="lb-inn-team-agents__agents-list">
+            <div className="lb-inn-team-agents__agents-list w-75">
               {agents.map((agent) => (
-                <div key={agent.email} className="lb-inn-team-agents__agent-row">
-                  <div className="lb-inn-team-agents__agent-info-card">
-                    <div className="lb-inn-team-agents__agent-data">
-                      <p className="lb-inn-team-agents__name">
-                        <button
-                          type="button"
-                          className="lb-inn-team-agents__name-btn"
-                          onClick={() => {
-                            setSelectedAgent(agent.email)
-                            setShowModal(true)
-                          }}
-                        >
-                          {agent.name}
-                        </button>
-                        <a
-                          href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="lb-inn-team-agents__phone"
-                        >
-                          {agent.phone}
-                        </a>
-                      </p>
-                      <a href={`mailto:${agent.email}`} className="lb-inn-team-agents__email">
-                        {agent.email}
-                      </a>
-                    </div>
-                    <a
-                      href={`https://wa.me/${agent.phone.replace(/\D/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="lb-inn-team-agents__wa-btn"
-                      aria-label={`WhatsApp ${agent.name}`}
-                      {...hover(waRef)}
-                    >
-                      <WhatsAppIcon ref={waRef} size={25} />
-                    </a>
-                  </div>
-                  
-                  <div className="lb-inn-team-agents__avatar-wrapper">
-                    <img
-                      src={agent.avatar}
-                      alt={agent.name}
-                      width={90}
-                      height={90}
-                      loading="lazy"
-                      className="lb-inn-team-agents__avatar"
-                    />
-                  </div>
-                </div>
+                <AgentRow key={agent.email} agent={agent} onSchedule={(email) => { setSelectedAgent(email); setShowModal(true) }} />
               ))}
             </div>
 
             <button
-              className="lb-inn-team-agents__cta"
+              className="btn btn-lg rounded-pill text-uppercase fw-bold lb-inn-team-agents__cta"
               onClick={() => {
                 setSelectedAgent(agents[0]?.email || '')
                 setShowModal(true)

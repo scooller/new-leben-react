@@ -18,17 +18,17 @@ export default function InteriorismoSection({
   designers = [
     {
       name: 'Sofía Iturralde',
-      image: 'images/inn/interiorismo-sofia.png',
+      image: 'images/inn/Foto_Iturralde.jpg',
       alt: 'Diseño de Sofía Iturralde',
       color: '#d9bc70',
-      text: 'Diseño contemporáneo que combina minimalismo con elementos naturales, creando espacios luminosos y acogedores que resaltan la belleza de los materiales.',
+      // text: 'Diseño contemporáneo que combina minimalismo con elementos naturales, creando espacios luminosos y acogedores que resaltan la belleza de los materiales.',
     },
     {
       name: 'Rafael Rivera',
-      image: 'images/inn/interiorismo-rafael.png',
+      image: 'images/inn/Foto_Rivera.jpg',
       alt: 'Diseño de Rafael Rivera',
       color: '#b78d56',
-      text: 'Estilo ecléctico que mezcla tradición y modernidad, con un enfoque en la funcionalidad y la elegancia atemporal.',
+      // text: 'Estilo ecléctico que mezcla tradición y modernidad, con un enfoque en la funcionalidad y la elegancia atemporal.',
     },
     // {
     //   name: 'Teresa Leighton',
@@ -86,8 +86,8 @@ export default function InteriorismoSection({
                 <ScrollAnim as="span" className="lb-inn-proyecto__eyebrow">
                   {eyebrow}
                 </ScrollAnim>
-              )}
-
+              )}  
+              
               {title && (
                 <ScrollAnim as="h2" className="lb-inn-proyecto__title">
                   {title}
@@ -100,14 +100,16 @@ export default function InteriorismoSection({
                 </ScrollAnim>
               )}
 
-              <ScrollAnim as="div" className="lb-inn-interiorismo__designer-content mt-4">
-                <h3 style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3">
-                  {currentDesigner.name}
-                </h3>
-                <p className="lh-lg lb-inn-interiorismo__designer-text">
-                  {currentDesigner.text}
-                </p>
-              </ScrollAnim>
+              {currentDesigner.text && (
+                <ScrollAnim as="div" className="lb-inn-interiorismo__designer-content mt-4"> 
+                  <h3 style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3">
+                    {currentDesigner.name}
+                  </h3>
+                  <p className="lh-lg lb-inn-interiorismo__designer-text">
+                    {currentDesigner.text}
+                  </p>                
+                </ScrollAnim>
+              )}
             </div>
           </div>
 
@@ -123,19 +125,22 @@ export default function InteriorismoSection({
                     className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
                       index === activeDesigner ? 'active' : ''
                     }`}
-                    onClick={() => setActiveDesigner(index)}
+                    onClick={designer.text ? () => setActiveDesigner(index) : undefined}
+                    disabled={!designer.text}
+                    style={{
+                      ...(designer.image && {
+                        backgroundImage: `url("${base}${designer.image}")`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center top',
+                      }),
+                      ...(!designer.text && { opacity: 1 }),
+                    }}
                   >
                     <h4
                       className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
-                      style={{ color: designer.color }}
                     >
                       {designer.name}
                     </h4>
-                    <img
-                      src={`${base}${designer.image}`}
-                      alt={designer.alt}
-                      className="img-fluid w-100"
-                    />
                   </button>
                 </div>
               ))}
