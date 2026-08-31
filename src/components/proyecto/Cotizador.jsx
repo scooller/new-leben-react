@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import CotizadorForm from './CotizadorForm.jsx'

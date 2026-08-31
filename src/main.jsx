@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 // Styles
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import './styles/main.scss'
 
 // App

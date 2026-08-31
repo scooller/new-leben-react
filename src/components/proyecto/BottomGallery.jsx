@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 

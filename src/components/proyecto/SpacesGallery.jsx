@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 

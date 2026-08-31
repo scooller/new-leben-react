@@ -86,6 +86,8 @@ src/
 │   │   ├── calendar-check.jsx, map-pin.jsx, badge-percent.jsx
 │   │   ├── award.jsx, frame.jsx, party-popper.jsx, sparkles.jsx
 │   │   ├── layout-grid.jsx, message-circle.jsx
+│   │   ├── concierge-bell.jsx, table.jsx, chef-hat.jsx, dumbbell.jsx
+│   │   ├── waves-ladder.jsx, kayak.jsx, hot-tub.jsx   # espacios comunes INN
 │   │   └── facebook.jsx, instagram.jsx, linkedin.jsx, whatsapp.jsx
 │   │
 │   ├── ChatWidget.jsx          # Floating chat bubble
@@ -231,6 +233,39 @@ La página de Proyectos consume la API de iLeben (`dev.ileben.cl`). La API requi
 - `api-proxy.php` habilita `CURLOPT_FOLLOWLOCATION` como red de seguridad ante redirecciones
 - Respuesta API: estructura paginada de Laravel (`{ data: [...], current_page, ... }`)
 - Fuente: [`API_USAGE.md`](https://github.com/scooller/Leben-site/blob/main/API_USAGE.md) en Leben-site
+
+---
+
+## AI Search Worker (`ai-search-tutorial/`)
+
+Cloudflare Worker de **búsqueda semántica** sobre el catálogo real de iLeben.
+Workers AI (embeddings `@cf/baai/bge-base-en-v1.5`) + similitud coseno.
+
+### Endpoints
+
+| Endpoint | Descripción |
+|---|---|
+| `GET /search?q=<texto>` | Búsqueda semántica sobre `/api/v1/proyectos`. Top 5 `{ id, slug, score }` |
+| `GET /health` | Ping |
+
+### Cómo funciona
+
+- En el primer `/search` hace fetch a la API de iLeben (mismos headers que `api-proxy.php`: Bearer + `Origin`/`Referer` autorizados), genera embeddings de cada proyecto y cachea todo en memoria **10 min**
+- Catálogo pequeño → fuerza bruta con coseno. `ponytail:` sobre ~1k docs, migrar a Vectorize (`env.VECTOR_INDEX.query`, mismo shape de respuesta)
+
+### Configuración
+
+- `wrangler.jsonc` vars: `API_BASE`, `AUTHORIZED_ORIGIN`
+- Token local: `.dev.vars` con `API_TOKEN=...` (gitignored)
+- Token producción: `npx wrangler secret put API_TOKEN`
+
+```bash
+cd ai-search-tutorial
+npm run dev      # http://localhost:8787
+npm run deploy   # requiere wrangler login + secret
+```
+
+Ejemplo: `http://localhost:8787/search?q=departamento frente al lago con piscina`
 
 ---
 

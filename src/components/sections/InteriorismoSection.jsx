@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import ScrollAnim from '../ScrollAnim.jsx'
 
 gsap.registerPlugin(ScrollTrigger)

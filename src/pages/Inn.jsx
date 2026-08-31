@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import Navbar from '../components/layout/Navbar.jsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
@@ -175,25 +174,23 @@ export default function Inn() {
     return () => Fancybox.unbind(galleryEl)
   }, [])
 
-  // Scrollspy: activa el tab según la sección visible (sin cambiar nombres)
+  // Scrollspy: activa el tab segun la seccion visible (sin cambiar nombres)
   useEffect(() => {
     const sections = TABS
       .map((t) => document.getElementById(t.id))
       .filter(Boolean)
     if (!sections.length) return
 
-    const onScroll = () => {
-      const offset = window.scrollY + window.innerHeight * 0.35
-      let current = null
-      sections.forEach((section) => {
-        if (section.offsetTop <= offset) current = section.id
-      })
-      if (current) setActiveTab(current)
-    }
-
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveTab(entry.target.id)
+        })
+      },
+      { rootMargin: '-35% 0px -55% 0px' }
+    )
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
   }, [])
 
   return (
