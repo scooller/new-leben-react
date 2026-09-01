@@ -30,7 +30,6 @@ export default function VideosSection() {
 
   const meta = [
     { icon: 'user', label: 'Proyecto', value: project.name },
-    { icon: 'calendar', label: 'Año', value: project.year },
     { icon: 'mapPin', label: 'Ubicación', value: project.location },
     { icon: 'building', label: 'Desde', value: project.price },
   ]

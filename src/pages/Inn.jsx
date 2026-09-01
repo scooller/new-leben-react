@@ -6,6 +6,7 @@ import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import CarouselNav from '../components/sections/CarouselNav.jsx'
 import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.jsx'
+import HeroShell from '../components/sections/HeroShell.jsx'
 import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
@@ -22,8 +23,8 @@ import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 
 const INFO = [
-  { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991' },
-  { id: 'tipologias', label: 'Tipologías', value: '2 · 3 · 4 dorms, dúplex y deptos con patio' },
+  { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
+  { id: 'tipologias', label: 'Tipologías', value: '2, 3 y dorms, Deptos, dúplex y deptos con patio privado' },
   { id: 'metrajes', label: 'Metrajes', value: 'Desde 85 m²' },
   { id: 'precio', label: 'Precio desde', value: 'UF 9.816' },
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
@@ -53,14 +54,16 @@ const EQUIPMENT_LOGOS = [
 ]
 
 const EQUIPMENT_SLIDES = [
-  { img: 'images/inn/terminacion-puertas.jpg', alt: 'Refrigerador' },
-  { img: 'images/inn/terminacion-horno.jpg', alt: 'Horno' },
-  { img: 'images/inn/terminacion-microondas.jpg', alt: 'Microondas' },
-  { img: 'images/inn/terminacion-encimera-campana.jpg', alt: 'Encimera y campana' },
-  { img: 'images/inn/terminacion-lavavajillas.jpg', alt: 'Lavavajillas' },
-  { img: 'images/inn/terminacion-cubierta-cocina.jpg', alt: 'Cubierta cocina' },
-  { img: 'images/inn/terminacion-griferia-cocina.jpg', alt: 'Grifería cocina' },
-  { img: 'images/inn/terminacion-griferia-bano.jpg', alt: 'Grifería baño' },
+  { img: 'images/inn/galerias/Detalle_09.jpg', alt: 'Refrigerador' },
+  { img: 'images/inn/galerias/Detalle_08.jpg', alt: 'Horno y microondas' },
+  { img: 'images/inn/galerias/Detalle_10.jpg', alt: 'Encimera' },
+  { img: 'images/inn/galerias/Detalle_01.jpg', alt: 'Cubierta cocina' },
+  { img: 'images/inn/galerias/Detalle_02.jpg', alt: 'Grifería cocina' },
+  { img: 'images/inn/galerias/Detalle_03.jpg', alt: 'Ducha' },
+  { img: 'images/inn/galerias/Detalle_07.jpg', alt: 'Grifería baño' },
+  { img: 'images/inn/galerias/Detalle_04.jpg', alt: 'Cerradura electrónica' },
+  { img: 'images/inn/galerias/Detalle_05.jpg', alt: 'Terminación puertas' },
+  { img: 'images/inn/galerias/Detalle_06.jpg', alt: 'Manillas' },
 ]
 
 // Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
@@ -230,17 +233,18 @@ export default function Inn() {
       <Navbar />
       <main className="lb-inn">
         {/* HERO */}
-        <section className="lb-inn-hero justify-content-center" id="inicio">
-          <div className="lb-inn-hero__bg-wrap">
-            <video src={`${base}video/inn-test.mp4`} autoPlay muted loop playsInline fetchPriority="high" />
-            <div className="lb-inn-hero__overlay" />
-          </div>
+        <HeroShell
+          id="inicio"
+          className="lb-inn-hero justify-content-center"
+          video={`${base}video/inn-test.mp4`}
+          bgWrapClassName="lb-inn-hero__bg-wrap"
+          overlayClassName="lb-inn-hero__overlay"
+        >
           <ScrollAnim animation='zoom-in' className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
             <img src={`${base}images/inn-logo.png`} className="lb-inn-hero__logo mt-auto" alt="Logo INN" />
             <h1 className="lb-inn-hero__title p-0">VIVE EL LUJO<br/> EN PUERTO VARAS</h1>
           </ScrollAnim>
-
-        </section>
+        </HeroShell>
 
         {/* Botonera pinneada debajo del header (sticky se confina al padre, por eso vive fuera del hero) */}
         <nav className="lb-inn-hero-tabs mx-auto" aria-label="Secciones del proyecto">

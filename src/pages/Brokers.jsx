@@ -8,6 +8,7 @@ import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
+import HeroShell from '../components/sections/HeroShell.jsx'
 
 // Router
 import { Link } from 'react-router-dom'
@@ -72,11 +73,12 @@ export default function Brokers() {
       <Navbar />
       <main className="lb-brokers">
         {/* ======================= HERO ======================= */}
-        <section className="lb-brokers-hero container position-relative d-flex align-items-center lb-radius-bl-br">
-          <div className="lb-brokers-hero__bg" aria-hidden>
-            <img src={data.hero.backgroundImage} alt="" />
-            <div className="lb-brokers-hero__overlay" />
-          </div>
+        <HeroShell
+          className="lb-brokers-hero container position-relative d-flex align-items-center lb-radius-bl-br"
+          image={data.hero.backgroundImage}
+          bgWrapClassName="lb-brokers-hero__bg"
+          overlayClassName="lb-brokers-hero__overlay"
+        >
           <div className="container">
           <ScrollAnim animation="fade-up" className="lb-brokers-hero__content">
             <h1 className="lb-brokers-hero__title">{data.hero.title}</h1>
@@ -91,7 +93,7 @@ export default function Brokers() {
             </div>
           </ScrollAnim>
           </div>
-        </section>
+        </HeroShell>
 
         {/* ======================= BENEFITS ======================= */}
         <section className="lb-brokers-benefits" id="beneficios">

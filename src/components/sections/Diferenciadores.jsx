@@ -77,14 +77,15 @@ export default function Diferenciadores() {
           <ScrollAnim as="div" className="col-md-7 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {diferenciadores.map((item, i) => (
               <div
-                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-85"
+                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-80 ms-auto"
                 key={i}
                 tabIndex={0}
               >
                 <div className="flex-shrink-0 lb-diff-badge d-flex align-items-center justify-content-center">
                   <img src={images[item.image]} alt="" className="lb-diff-badge-img lb-img-interactive" loading="lazy" decoding="async" />
                 </div>
-                <p className="flex-grow-1 mb-0 lb-diff-text">{item.text}</p>
+                {/* dangerouslySetInnerHTML: los textos traen <b> desde content.js */}
+                <p className="flex-grow-1 mb-0 lb-diff-text" dangerouslySetInnerHTML={{ __html: item.text }} />
               </div>
             ))}
           </ScrollAnim>

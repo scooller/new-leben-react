@@ -18,7 +18,7 @@ export const images = {
   sello5: img('sello-5.svg'),
   sello9: img('sello9.png'),
   sello4: img('sello4.png'),
-  sello10: img('sello10.png'),
+  sello10: img('logo-isotipo.webp'),
   sello11: img('sello11.png'),
   avatarHerman: img('avatar-herman.jpg'),
   avatarFernanda: img('avatar-fernanda.jpg'),
@@ -75,10 +75,10 @@ export const diferenciadoresTitle = {
 }
 
 export const diferenciadores = [
-  { image: 'sello5', text: 'Gracias a la excelente evaluación de nuestros clientes hemos sido certificados por 6 años consecutivos por Best Place to Live como una de las mejores inmobiliarias para vivir en Chile y Latinoamérica.' },
-  { image: 'sello4', text: 'Certificados como la 4ta mejor inmobiliaria para vivir en Chile y 9na en Latinoamérica gracias al acompañamiento y la experiencia brindada a nuestros clientes en su proceso de compra o inversión. ' },
-  { image: 'sello11', text: 'Hemos sido certificados por la Cámara Chilena de la Construcción (Cchc) con el Sello Pro por trabajar bajo los mejores estándares de sostenibilidad siendo uno de los pocos grupos inmobiliarios en la industria en obtener este sello consecutivamente.' },
-  { image: 'sello10', text: 'Prácticamente todos nuestros proyectos cuentan con Calificación Energética de Viviendas (CEV) lo que te permite acceder a una tasa rebajada en bancos asociados mientras contribuyes al medio ambiente ahorrando en calefacción y refrigeración.' },
+  { image: 'sello5', text: 'Certificados <b>6 años consecutivos</b> como una de las mejores inmobiliarias para vivir.' },
+  { image: 'sello4', text: '<b>Top-4 Chile y Top-9 Latinoamérica</b> 2025 en satisfacción y acompañamiento al cliente.' },
+  { image: 'sello11', text: 'Certificados por la CChC con el <b>Sello PRO</b>, respaldando nuestros estándares de sostenibilidad.' },
+  { image: 'sello10', text: 'Proyectos con <b>Certificación Energética</b> con beneficios crediticios y ahorro en energía.' },
 ]
 
 export const searchFilters = {
@@ -172,7 +172,6 @@ export const videosContent = {
   countLabel: '06 Obras seleccionadas',
   project: {
     name: 'Edificio INN',
-    year: '2027',
     location: 'Puerto Varas, Chile',
     price: 'UF 9.816',
     mainImage: img('img1-main.jpg'),
@@ -213,7 +212,7 @@ export const footerContent = {
     'Bases Legales',
     'Trabaja en Leben',
   ],
-  copyright: '© 2024 Ileben Real Estate. Todos los derechos reservados.',
+  copyright: '© 2024 Leben. Todos los derechos reservados.',
   copyrightLinks: ['Privacidad', 'Términos', 'Cookies'],
 }
 

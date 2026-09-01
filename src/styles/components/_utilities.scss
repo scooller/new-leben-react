@@ -1,0 +1,10 @@
+// ============================================================
+// Utilidades de ancho propias: .w-5 … .w-100 (paso 5)
+// Independientes de las utilidades w-* de Bootstrap
+// ============================================================
+
+@for $i from 1 through 20 {
+  .w-#{$i * 5} {
+    width: ($i * 5%) !important;
+  }
+}

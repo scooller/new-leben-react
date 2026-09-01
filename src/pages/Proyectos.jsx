@@ -6,6 +6,7 @@ import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import ProjectCardSkeleton from '../components/ProjectCardSkeleton.jsx'
 import ValueProps from '../components/sections/ValueProps.jsx'
+import HeroShell from '../components/sections/HeroShell.jsx'
 import { proyectosHero, proyectosCta, images } from '../data/content.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
@@ -98,21 +99,23 @@ export default function Proyectos() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="lb-proj-hero container position-relative d-flex align-items-end lb-radius-bl lb-radius-br">
-          <div className="lb-proj-hero-bg-wrap lb-radius-bl lb-radius-br">
-            <img src={images.proyectosHero} alt="" className="lb-proj-hero-bg" />
-            <div className="lb-proj-hero-overlay" />
-          </div>
-          <ScrollAnim as="div" className="position-relative d-flex flex-column gap-3 lb-proj-hero-content" animation="fade-up" stagger={0.12}>
+        <HeroShell
+          className="lb-proj-hero container-fluid position-relative d-flex align-items-end"
+          image={images.proyectosHero}
+          bgWrapClassName="lb-proj-hero-bg-wrap"
+          bgClassName="lb-proj-hero-bg"
+          overlayClassName="lb-proj-hero-overlay"
+        >
+          <ScrollAnim as="div" className="position-relative container d-flex flex-column gap-3 lb-proj-hero-content" animation="fade-up" stagger={0.12}>
             <div className="d-flex align-items-center gap-2">
-              <img src={images.line} alt="" width="32" height="0" />
+              <img src={images.line} alt="" width="32" height="3" />
               <span className="lb-eyebrow">{proyectosHero.eyebrow}</span>
             </div>
             <h1 className="mb-0 lb-proj-hero-title">{proyectosHero.title}</h1>
             <p className="mb-0 lb-proj-hero-subtitle">{proyectosHero.subtitle}</p>
-            <button className="btn btn-outline-light lb-proj-hero-btn">{proyectosHero.ctaText}</button>
+            {/* <button className="btn btn-outline-light lb-proj-hero-btn">{proyectosHero.ctaText}</button> */}
           </ScrollAnim>
-        </section>
+        </HeroShell>
 
         {/* Featured Projects */}
         <section className="lb-featured container-fluid" id="proyectos">
