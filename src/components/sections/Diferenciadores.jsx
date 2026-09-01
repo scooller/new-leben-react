@@ -77,7 +77,7 @@ export default function Diferenciadores() {
           <ScrollAnim as="div" className="col-md-7 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {diferenciadores.map((item, i) => (
               <div
-                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-80 ms-auto"
+                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-md-80 ms-auto"
                 key={i}
                 tabIndex={0}
               >

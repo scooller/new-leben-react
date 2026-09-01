@@ -114,7 +114,7 @@ export default function InnTeamAgents({ data, apiId }) {
             <span className="lb-inn-team-agents__eyebrow">{data.eyebrow}</span>
             <h2 className="lb-inn-team-agents__title" dangerouslySetInnerHTML={{ __html: data.title }} />
 
-            <div className="lb-inn-team-agents__agents-list w-75">
+            <div className="lb-inn-team-agents__agents-list w-md-75">
               {agents.map((agent) => (
                 <AgentRow key={agent.email} agent={agent} onSchedule={(email) => { setSelectedAgent(email); setShowModal(true) }} />
               ))}

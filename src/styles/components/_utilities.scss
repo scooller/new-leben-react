@@ -1,10 +1,34 @@
 // ============================================================
-// Utilidades de ancho propias: .w-5 … .w-100 (paso 5)
-// Independientes de las utilidades w-* de Bootstrap
+// Utilidades propias de tamaño: w-N / h-N / max-w-N (paso 5)
+// Independientes de las utilidades w-*/h-*/mw-* de Bootstrap
+// Variantes responsivas: .w-{sm|md|lg|xl|xxl}-N (min-width,
+// mismo comportamiento que Bootstrap: aplican desde el breakpoint
+// hacia arriba). Breakpoints = defaults de Bootstrap.
 // ============================================================
 
 @for $i from 1 through 20 {
   .w-#{$i * 5} {
     width: ($i * 5%) !important;
+  }
+  .h-#{$i * 5} {
+    height: ($i * 5%) !important;
+  }
+  .max-w-#{$i * 5} {
+    max-width: ($i * 5%) !important;
+  }
+}
+
+$bp-list: (sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px);
+
+@each $bp, $min in $bp-list {
+  @media (min-width: $min) {
+    @for $i from 1 through 20 {
+      .w-#{$bp}-#{$i * 5} {
+        width: ($i * 5%) !important;
+      }
+      .h-#{$bp}-#{$i * 5} {
+        height: ($i * 5%) !important;
+      }
+    }
   }
 }

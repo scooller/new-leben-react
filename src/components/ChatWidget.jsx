@@ -87,8 +87,7 @@ export default function ChatWidget() {
                   className={`d-flex mb-2 ${msg.from === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
                 >
                   <div
-                    className={`rounded-3 px-3 py-2 lb-chat-msg ${msg.from === 'user' ? 'bg-danger text-white' : 'bg-light'}`}
-                    style={{ maxWidth: '80%' }}
+                    className={`rounded-3 px-3 py-2 lb-chat-msg max-w-80 ${msg.from === 'user' ? 'bg-danger text-white' : 'bg-light'}`}
                   >
                     {msg.text}
                   </div>
