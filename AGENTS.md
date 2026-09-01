@@ -5,6 +5,19 @@
 
 ***
 
+## Mandatory Directives (EVERY session, no exceptions)
+
+1. **Ponytail always ON** — before writing ANY code, read `.agents/skills/ponytail/SKILL.md` (or `~/.copilot/installed-plugins/ponytail/ponytail/skills/ponytail/SKILL.md`) and apply it: simplest solution, YAGNI first, stdlib/native before deps, one line before fifty. Never over-engineer.
+2. **Answer in caveman mode** — load `.agents/skills/caveman/SKILL.md` and respond with `/caveman` style: terse, compressed, technically complete. Less tokens, same accuracy.
+3. **Graphify before/after code** — `graphify-out/graph.json` exists, so:
+   - BEFORE answering codebase questions: `rtk graphify query "<question>"`
+   - Relationships: `rtk graphify path "<A>" "<B>"` / `rtk graphify explain "<concept>"`
+   - AFTER modifying code: `rtk graphify update .` — always, no excuses.
+4. **RTK prefix** — every terminal command runs as `rtk <command>` when available.
+5. **Build** — `rtk npm run build:all`, never bare `npm run build`.
+
+***
+
 ## Repository Structure for AI Agents
 
 ```
