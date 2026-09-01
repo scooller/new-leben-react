@@ -6,18 +6,17 @@
 // ============================================================
 
 export default function HeroShell({
-  id,
   className = '',
   video,                       // src de video (si hay, usa video; si no, image)
   image,
   bgWrapClassName = '',
   bgClassName = '',
-  overlay = true,
   overlayClassName = '',
   children,
+  ...rest
 }) {
   return (
-    <section id={id} className={className}>
+    <section className={className} {...rest}>
       <div className={bgWrapClassName}>
         {video ? (
           <video
@@ -27,7 +26,7 @@ export default function HeroShell({
             loop
             playsInline
             fetchPriority="high"
-            className={bgClassName || undefined}
+            className={bgClassName}
           />
         ) : (
           <img
@@ -35,10 +34,10 @@ export default function HeroShell({
             alt=""
             fetchPriority="high"
             decoding="async"
-            className={bgClassName || undefined}
+            className={bgClassName}
           />
         )}
-        {overlay && <div className={overlayClassName} />}
+        <div className={overlayClassName} />
       </div>
       {children}
     </section>
