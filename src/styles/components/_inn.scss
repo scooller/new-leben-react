@@ -609,6 +609,18 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
 // --- MODAL ESPACIOS (Departamentos) ---
 .lb-inn-spaces-modal {
+  &__close {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: background-color 0.2s ease !important;
+    pointer-events: auto !important;
+    width: 48px;
+    height: 48px;
+    
+    &:hover {
+      background-color: var(--bs-danger) !important;
+    }
+  }
+
   &__content {
     background: #fff;
     color: $inn-gris-dark;

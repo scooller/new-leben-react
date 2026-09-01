@@ -63,34 +63,35 @@ const EQUIPMENT_SLIDES = [
   { img: 'images/inn/terminacion-griferia-bano.jpg', alt: 'Grifería baño' },
 ]
 
-const EQUIPMENT_NAV_ITEMS = [
-  { label: 'Refrigerador', icon: 'images/icons/refrigerador.svg' },
-  { label: 'Horno', icon: 'images/icons/horno.svg' },
-  { label: 'Microondas', icon: 'images/icons/microhondas.svg' },
-  { label: 'Encimera y campana', icon: 'images/icons/encimera.svg' },
-  { label: 'Lavavajillas', icon: 'images/icons/lavavajillas.svg' },
-  { label: 'Cubierta cocina', icon: 'images/icons/cubierta cocina.svg' },
-  { label: 'Grifería cocina', icon: 'images/icons/griferia.svg' },
-  { label: 'Grifería baño', icon: 'images/icons/bano.svg' },
+// Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
+const ESPACIOS_COMUNES_NAV_ITEMS = [
+  { id: 'hall', label: 'Hall de acceso', icon: ConciergeBellIcon },
+  { id: 'atrio', label: 'Atrio', icon: TableIcon },
+  { id: 'gourmet', label: 'Gourmet + Quincho equipado', icon: ChefHatIcon },
+  { id: 'training', label: 'Training Zone', icon: DumbbellIcon },
+  { id: 'jacuzzi', label: 'Jacuzzi exterior', icon: HotTubIcon },
+  { id: 'piscina', label: 'Piscina climatizada', icon: WavesLadderIcon },
+  { id: 'bodega', label: 'Bodega náutica', icon: KayakIcon },
 ]
 
-// Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
-const ESPACIOS_NAV_ITEMS = [
-  { label: 'Hall de acceso', icon: ConciergeBellIcon },
-  { label: 'Atrio', icon: TableIcon },
-  { label: 'Gourmet + Quincho equipado', icon: ChefHatIcon },
-  { label: 'Training Zone', icon: DumbbellIcon },
-  { label: 'Jacuzzi exterior', icon: HotTubIcon },
-  { label: 'Piscina climatizada', icon: WavesLadderIcon },
-  { label: 'Bodega náutica', icon: KayakIcon },
+// Un slide por espacio, vinculado por navId (mismas claves que ESPACIOS_COMUNES_NAV_ITEMS.id)
+// Para asignar imagen real a un espacio: edita el img de su navId
+const ESPACIOS_COMUNES_SLIDES = [
+  { navId: 'hall', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Hall de acceso' },
+  { navId: 'atrio', img: 'images/inn/galerias/EECC_02.jpg', alt: 'Atrio' },
+  { navId: 'gourmet', img: 'images/inn/galerias/EECC_03.jpg', alt: 'Gourmet + Quincho equipado' },
+  { navId: 'training', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Training Zone' },
+  { navId: 'jacuzzi', img: 'images/inn/galerias/EECC_02.jpg', alt: 'Jacuzzi exterior' },
+  { navId: 'piscina', img: 'images/inn/galerias/EECC_03.jpg', alt: 'Piscina climatizada' },
+  { navId: 'bodega', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Bodega náutica' },
 ]
 
 const GALLERY_IMAGES = [
-  { img: 'images/inn/galeria1.jpg', alt: 'Galería 1' },
-  { img: 'images/inn/galeria2.jpg', alt: 'Galería 2' },
-  { img: 'images/inn/galeria3.jpg', alt: 'Galería 3' },
-  { img: 'images/inn/galeria4.jpg', alt: 'Galería 4' },
-  { img: 'images/inn/galeria5.jpg', alt: 'Galería 5' },
+  { img: 'images/inn/ubicacion_1.jpg', alt: 'Galería 1' },
+  { img: 'images/inn/ubicacion_2.jpg', alt: 'Galería 2' },
+  { img: 'images/inn/ubicacion_3.jpg', alt: 'Galería 3' },
+  { img: 'images/inn/ubicacion_1.jpg', alt: 'Galería 4' },
+  { img: 'images/inn/ubicacion_2.jpg', alt: 'Galería 5' },
 ]
 
 const MAP_FEATURES = [
@@ -108,12 +109,39 @@ const MAP_FEATURES = [
   'La Olla',
 ]
 
-// Espacios para el modal "Conoce los espacios": cada item del nav + su imagen correspondiente
-const SPACES_MODAL_ITEMS = EQUIPMENT_NAV_ITEMS.map((item, i) => ({
-  ...item,
-  img: EQUIPMENT_SLIDES[i]?.img,
-  alt: EQUIPMENT_SLIDES[i]?.alt,
-}))
+// Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
+const SPACES_MODAL_GALLERIES = [
+  {
+    label: 'ACCESO',
+    images: [
+      { img: 'images/inn/terminacion-puertas.jpg', alt: 'Acceso 1', thumb: 'images/inn/terminacion-puertas.jpg' },
+      { img: 'images/inn/terminacion-horno.jpg', alt: 'Acceso 2', thumb: 'images/inn/terminacion-horno.jpg' }
+    ]
+  },
+  {
+    label: 'COCINA',
+    images: [
+      { img: 'images/inn/terminacion-microondas.jpg', alt: 'Cocina 1', thumb: 'images/inn/terminacion-microondas.jpg' },
+      { img: 'images/inn/terminacion-encimera-campana.jpg', alt: 'Cocina 2', thumb: 'images/inn/terminacion-encimera-campana.jpg' },
+      { img: 'images/inn/terminacion-lavavajillas.jpg', alt: 'Cocina 3', thumb: 'images/inn/terminacion-lavavajillas.jpg' },
+      { img: 'images/inn/terminacion-cubierta-cocina.jpg', alt: 'Cocina 4', thumb: 'images/inn/terminacion-cubierta-cocina.jpg' }
+    ]
+  },
+  {
+    label: 'LIVING - COMEDOR',
+    images: [
+      { img: 'images/inn/terminacion-griferia-cocina.jpg', alt: 'Living 1', thumb: 'images/inn/terminacion-griferia-cocina.jpg' },
+      { img: 'images/inn/terminacion-griferia-bano.jpg', alt: 'Living 2', thumb: 'images/inn/terminacion-griferia-bano.jpg' },
+      { img: 'images/inn/terminacion-puertas.jpg', alt: 'Living 3', thumb: 'images/inn/terminacion-puertas.jpg' }
+    ]
+  },
+  {
+    label: 'TERRAZA',
+    images: [
+      { img: 'images/inn/terminacion-horno.jpg', alt: 'Terraza 1', thumb: 'images/inn/terminacion-horno.jpg' }
+    ]
+  }
+]
 
 // Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
 // avanzando de 1 en 1 (wrap-around para loop infinito)
@@ -162,6 +190,10 @@ export default function Inn() {
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
+  // Slide vinculado al espacio seleccionado en el nav (fallback: primer slide)
+  const espaciosSlideIndex = Math.max(0, ESPACIOS_COMUNES_SLIDES.findIndex(
+    (s) => s.navId === ESPACIOS_COMUNES_NAV_ITEMS[activeEspacioSlide]?.id
+  ))
   const mapRef = useRef(null)
   const galleryRef = useRef(null)
 
@@ -287,7 +319,7 @@ export default function Inn() {
           onSlideChange={setActiveEquipmentSlide}
           spacesModal={{
             buttonLabel: 'Conoce los espacios',
-            items: SPACES_MODAL_ITEMS,
+            galleries: SPACES_MODAL_GALLERIES,
           }}
         />
 
@@ -308,22 +340,21 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>Home & Wellness</>}
-          title={<>ESPACIOS COMUNES</>}
+          eyebrow={<>Espacios</>}
+          title={<>ESPACIOS<br />COMUNES</>}
           description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
-          slides={EQUIPMENT_SLIDES}
+          slides={ESPACIOS_COMUNES_SLIDES}
           carouselId="innEspaciosCarousel"
           backgroundImage="images/inn/espacio.svg"
           id="espacios"
           className='pb-2 mb-2'
           ariaLabel="Espacios"
           showIndicators={false}
-          activeSlide={activeEquipmentSlide}
-          onSlideChange={setActiveEquipmentSlide}
+          activeSlide={espaciosSlideIndex}
         />
 
         <CarouselNav
-          items={ESPACIOS_NAV_ITEMS}
+          items={ESPACIOS_COMUNES_NAV_ITEMS}
           targetId="espacios"
           variant="stacked"
           activeIndex={activeEspacioSlide}
@@ -384,8 +415,8 @@ export default function Inn() {
                 {GALLERY_SLIDES.map((slideImages, slideIndex) => (
                   <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
                     <div className="row g-2">
-                      {slideImages.map((image) => (
-                        <div className="col-4" key={image.img}>
+                      {slideImages.map((image, imageIndex) => (
+                        <div className="col-4" key={imageIndex}>
                           <a href={`${base}${image.img}`} data-fancybox="inn-galeria" tabIndex={0}>
                             <img
                               src={`${base}${image.img}`}

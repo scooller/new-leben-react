@@ -28,7 +28,8 @@ export default function ProjectFeatureSection({
   spacesModal,
 }) {
   const [showSpacesModal, setShowSpacesModal] = useState(false)
-  const [activeSpace, setActiveSpace] = useState(0)
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
   const spacesModalRef = useRef(null)
   const base = import.meta.env.BASE_URL
   const sectionRef = useRef(null)
@@ -135,12 +136,16 @@ export default function ProjectFeatureSection({
                 </ScrollAnim>
               )}
 
-              {spacesModal?.items?.length > 0 && (
+              {spacesModal?.galleries?.length > 0 && (
                 <ScrollAnim as="div" className="lb-inn-proyecto__spaces-btn-wrap mt-3 position-absolute">
                   <button
                     type="button"
                     className="btn btn-lg lb-inn-proyecto__spaces-btn"
-                    onClick={() => setShowSpacesModal(true)}
+                    onClick={() => {
+                      setActiveGalleryIndex(0)
+                      setActiveImageIndex(0)
+                      setShowSpacesModal(true)
+                    }}
                   >
                     {spacesModal.buttonLabel || 'Conoce los espacios'}
                   </button>
@@ -195,7 +200,7 @@ export default function ProjectFeatureSection({
                     <div
                       className={`carousel-item ${index === 0 ? 'active' : ''}`}
                       data-bs-interval="5000"
-                      key={slide.img || slide.src || index}
+                      key={index}
                     >
                       <div ref={(element) => { carouselItemsRef.current[index] = element }} className="lb-inn-proyecto__parallax">
                         <a
@@ -215,58 +220,137 @@ export default function ProjectFeatureSection({
         </div>
       </div>
       {/* MODAL ESPACIOS */}
-      {spacesModal?.items?.length > 0 && (
+      {spacesModal?.galleries?.length > 0 && (
         <div
           ref={spacesModalRef}
-          className={`modal fade ${showSpacesModal ? 'show d-block' : ''}`}
+          className={`modal fade lb-inn-spaces-modal ${showSpacesModal ? 'show d-block' : ''}`}
           tabIndex={-1}
           aria-label="Espacios del proyecto"
-          style={{ backgroundColor: 'rgba(0,0,0,.9)', zIndex: 1000 }}
+          style={{ backgroundColor: 'rgba(26,26,26, 1)', zIndex: 1000 }}
           onClick={() => setShowSpacesModal(false)}
         >
           <div
-            className="modal-dialog modal-xl modal-dialog-centered"
+            className="modal-dialog modal-fullscreen"
             onClick={(e) => e.stopPropagation()}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <div className="modal-content border-0 rounded-4 overflow-hidden lb-inn-spaces-modal__content">
-              <div className="modal-header border-0">
-                <h2 className="modal-title lb-inn-proyecto__title mb-0">
-                  {spacesModal.items[activeSpace]?.label?.toUpperCase()}
-                </h2>
-                <button type="button" className="btn-close" aria-label="Cerrar" onClick={() => setShowSpacesModal(false)} />
-              </div>
-              <div className="modal-body p-0">
-                <div className="row g-0">
-                  <div className="col-12 col-md-4 lb-inn-spaces-modal__tabs">
-                    <ul className="nav nav-pills flex-column gap-2 p-3">
-                      {spacesModal.items.map((item, index) => (
-                        <li className="nav-item" key={item.label || index}>
-                          <button
-                            type="button"
-                            className={`nav-link nav-link__border w-100 d-flex align-items-center gap-2 ${index === activeSpace ? 'active' : ''}`}
-                            onClick={() => setActiveSpace(index)}
-                          >
-                            {item.icon && <img src={`${base}${item.icon}`} alt="" aria-hidden="true" />}
-                            <span>{item.label}</span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="col-12 col-md-8 lb-inn-spaces-modal__gallery">
-                    <a
-                      href={`${base}${spacesModal.items[activeSpace]?.img}`}
-                      data-fancybox="inn-espacios"
-                      data-caption={spacesModal.items[activeSpace]?.label}
-                      aria-label={`Ampliar imagen de ${spacesModal.items[activeSpace]?.label}`}
+            <button 
+              type="button" 
+              className="btn position-fixed top-0 end-0 m-4 p-2 z-3 text-white rounded-circle d-flex align-items-center justify-content-center lb-inn-spaces-modal__close" 
+              aria-label="Cerrar" 
+              onClick={() => setShowSpacesModal(false)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <div className="modal-content bg-transparent border-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ maxWidth: '1200px' }}>
+              
+              <div className="modal-body p-0 w-100 d-flex flex-column align-items-center justify-content-center position-relative">
+                {/* Main image container */}
+                <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '70vh', backgroundColor: '#111' }}>
+                    <button 
+                        className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-3 d-flex align-items-center justify-content-center"
+                        style={{ width: '48px', height: '48px', backgroundColor: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', zIndex: 2 }}
+                        onClick={() => {
+                          if (activeImageIndex > 0) {
+                            setActiveImageIndex(activeImageIndex - 1);
+                          } else if (activeGalleryIndex > 0) {
+                            setActiveGalleryIndex(activeGalleryIndex - 1);
+                            setActiveImageIndex(spacesModal.galleries[activeGalleryIndex - 1].images.length - 1);
+                          } else {
+                            const lastGalleryIndex = spacesModal.galleries.length - 1;
+                            setActiveGalleryIndex(lastGalleryIndex);
+                            setActiveImageIndex(spacesModal.galleries[lastGalleryIndex].images.length - 1);
+                          }
+                        }}
                     >
-                      <img
-                        src={`${base}${spacesModal.items[activeSpace]?.img}`}
-                        alt={spacesModal.items[activeSpace]?.alt || spacesModal.items[activeSpace]?.label || ''}
-                        className="w-100 h-100 object-fit-cover"
-                      />
-                    </a>
-                  </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    
+                    {(() => {
+                      const activeImageObj = spacesModal.galleries[activeGalleryIndex]?.images[activeImageIndex];
+                      if (!activeImageObj) return null;
+                      return (
+                        <a
+                          href={`${base}${activeImageObj.img}`}
+                          data-fancybox="inn-espacios"
+                          data-caption={activeImageObj.alt || ''}
+                          aria-label={`Ampliar imagen`}
+                          className="w-100 h-100"
+                        >
+                          <img
+                              src={`${base}${activeImageObj.img}`}
+                              alt={activeImageObj.alt || ''}
+                              className="w-100 h-100 object-fit-cover rounded-3"
+                          />
+                        </a>
+                      );
+                    })()}
+
+                    <button 
+                        className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center justify-content-center"
+                        style={{ width: '48px', height: '48px', backgroundColor: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', zIndex: 2 }}
+                        onClick={() => {
+                          const currentGallery = spacesModal.galleries[activeGalleryIndex];
+                          if (activeImageIndex < currentGallery.images.length - 1) {
+                            setActiveImageIndex(activeImageIndex + 1);
+                          } else if (activeGalleryIndex < spacesModal.galleries.length - 1) {
+                            setActiveGalleryIndex(activeGalleryIndex + 1);
+                            setActiveImageIndex(0);
+                          } else {
+                            setActiveGalleryIndex(0);
+                            setActiveImageIndex(0);
+                          }
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                </div>
+
+                {/* Tabs / Categories below image */}
+                <div className="d-flex justify-content-center gap-4 mt-4 text-uppercase fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>
+                    {spacesModal.galleries.map((gallery, index) => {
+                        const isActive = index === activeGalleryIndex;
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
+                                className="btn btn-link text-decoration-none p-0"
+                                style={{ color: isActive ? '#e3b044' : 'rgba(255,255,255,0.5)', transition: 'color 0.2s' }}
+                            >
+                                {isActive 
+                                    ? `${gallery.label} ${activeImageIndex + 1}/${gallery.images.length}`
+                                    : gallery.label}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Thumbnails of current category */}
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                    {spacesModal.galleries[activeGalleryIndex]?.images.map((imgObj, idx) => {
+                        const isActiveThumb = idx === activeImageIndex;
+                        return (
+                            <button
+                                key={idx}
+                                onClick={() => setActiveImageIndex(idx)}
+                                className="p-0 bg-transparent"
+                                style={{ 
+                                  width: '80px', 
+                                  height: '60px', 
+                                  overflow: 'hidden', 
+                                  border: isActiveThumb ? '2px solid #e3b044' : '2px solid transparent',
+                                  transition: 'border-color 0.2s, opacity 0.2s',
+                                  opacity: isActiveThumb ? 1 : 0.6 
+                                }}
+                            >
+                                <img
+                                    src={`${base}${imgObj.thumb || imgObj.img}`}
+                                    alt={`Thumb ${idx}`}
+                                    className="w-100 h-100 object-fit-cover"
+                                />
+                            </button>
+                        );
+                    })}
                 </div>
               </div>
             </div>
