@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.2] - 2026-09-04
+
+### Added
+- Cotizador: panel de imagen hero a la izquierda (`Fondo_cotizar.jpg`) con texto superpuesto "Cotiza tu próximo departamento", usando layout `container-fluid` a ancho completo y bordes redondeados a la derecha estilo burbuja de diálogo.
+- Nuevas clases SCSS: `.lb-cot-hero-panel`, `.lb-cot-hero-img`, `.lb-cot-hero-overlay`, `.lb-cot-hero-text`, `.lb-cot-content-col`.
+
 ## [0.9.1] - 2026-09-02
 
 ### Added

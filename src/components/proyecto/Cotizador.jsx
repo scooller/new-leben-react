@@ -470,6 +470,24 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
   return (
     <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
+      <div className="container-fluid p-0">
+        <div className="row g-0 align-items-stretch">
+          {/* Left image panel */}
+          <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex">
+            <img
+              src="/images/Fondo_cotizar.jpg"
+              alt="Cotiza tu próximo departamento"
+              className="lb-cot-hero-img"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="lb-cot-hero-overlay">
+              <p className="lb-cot-hero-text">Cotiza tu próximo departamento</p>
+            </div>
+          </div>
+
+          {/* Right: cotizador content */}
+          <div className="col-lg-9 lb-cot-content-col">
       <div className="container">
         {/* Header + Filters */}
         <div className="row align-items-start g-4 mb-4" animation="fade-up">
@@ -776,7 +794,10 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
             ))}
           </div>
         )}
-      </div>
+      </div>{/* /container */}
+      </div>{/* /col-lg-9 */}
+        </div>{/* /row g-0 */}
+      </div>{/* /container-fluid */}
 
       <CotizadorForm
         show={showCotizar}
