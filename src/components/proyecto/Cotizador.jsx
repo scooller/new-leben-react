@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { gsap } from 'gsap'
 import { Fancybox } from '@fancyapps/ui'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
@@ -173,10 +174,55 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
+  const heroPanelRef = useRef(null)
+  const heroBgRef = useRef(null)
+  const heroTextRef = useRef(null)
   const [showCotizar, setShowCotizar] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showVistas, setShowVistas] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  // Parallax animation for hero panel background and text
+  useEffect(() => {
+    if (!heroPanelRef.current) return
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 992px)', () => {
+      if (heroBgRef.current) {
+        gsap.fromTo(
+          heroBgRef.current,
+          { yPercent: -10 },
+          {
+            yPercent: 10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroPanelRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
+      }
+
+      if (heroTextRef.current) {
+        gsap.fromTo(
+          heroTextRef.current,
+          { yPercent: 25 },
+          {
+            yPercent: -25,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroPanelRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
+      }
+    })
+    return () => mm.revert()
+  }, [])
 
   // Resolve planta ID + project slug from URL — read once on mount
   const [urlParams] = useState(() => {
@@ -472,16 +518,10 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
       <div className="container-fluid p-0">
         <div className="row g-0 align-items-stretch">
-          {/* Left image panel */}
-          <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex">
-            <img
-              src="/images/Fondo_cotizar.jpg"
-              alt="Cotiza tu próximo departamento"
-              className="lb-cot-hero-img"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="lb-cot-hero-overlay">
+          {/* Left image panel with parallax */}
+          <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex" ref={heroPanelRef}>
+            <div className="lb-cot-hero-bg" ref={heroBgRef} />
+            <div className="lb-cot-hero-content" ref={heroTextRef}>
               <p className="lb-cot-hero-text">Cotiza tu próximo departamento</p>
             </div>
           </div>

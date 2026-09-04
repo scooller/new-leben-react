@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.5] - 2026-09-04
+
+### Added
+- Cotizador: efecto parallax en `.lb-cot-hero-panel` usando GSAP `ScrollTrigger` con `scrub` y `matchMedia(min-width: 992px)`, separando las velocidades de desplazamiento entre la imagen de fondo (`.lb-cot-hero-bg`) y el texto flotante (`.lb-cot-hero-content`).
+
+## [0.9.4] - 2026-09-04
+
+### Refactored
+- Cotizador: simplificado `.lb-cot-hero-panel` combinando degradado y `background-image` en una sola regla SCSS con flexbox, eliminando los divs `.lb-cot-hero-img`, `.lb-cot-hero-overlay` y `position: absolute`.
+
+## [0.9.3] - 2026-09-04
+
+### Changed
+- Cotizador: `.lb-cot-hero-img` ahora es un `<div>` con imagen de fondo (`background-image: url(...)`, `background-size: cover`) en vez de una etiqueta `<img>`.
+
 ## [0.9.2] - 2026-09-04
 
 ### Added

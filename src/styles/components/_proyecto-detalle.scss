@@ -309,34 +309,36 @@
   position: relative;
   overflow: hidden;
   border-radius: 0 2rem 2rem 0; // speech-bubble right rounded
-  min-height: 80dvh;
+  min-height: 85dvh;
+  padding: 2.5rem 2rem;
+  display: flex;
+  align-items: flex-end;
 
   @include bs.media-breakpoint-down(lg) {
     display: none !important;
   }
 }
 
-.lb-cot-hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left center;
-  display: block;
-  min-height: 95dvh;
-}
-
-.lb-cot-hero-overlay {
+.lb-cot-hero-bg {
   position: absolute;
-  inset: 0;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  height: 120%;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.65) 0%,
     rgba(0, 0, 0, 0.1) 60%,
     transparent 100%
-  );
-  display: flex;
-  align-items: flex-end;
-  padding: 2.5rem 2rem;
+  ), url('/images/Fondo_cotizar.jpg') 9% 50% / cover no-repeat;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.lb-cot-hero-content {
+  position: relative;
+  z-index: 1;
+  will-change: transform;
 }
 
 .lb-cot-hero-text {
