@@ -115,7 +115,8 @@ src/
 │       └── authSlice.js        # user, token, isAuthenticated
 │
 ├── hooks/
-│   └── useGsapAnimations.js    # GSAP + ScrollTrigger hook
+│   ├── useGsapAnimations.js    # GSAP + ScrollTrigger hook
+│   └── useBsTooltips.js        # Init tooltips Bootstrap (data-bs-toggle="tooltip")
 │
 ├── data/
 │   ├── content.js              # Site content / images

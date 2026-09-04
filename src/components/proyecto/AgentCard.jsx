@@ -5,6 +5,7 @@ import { CalendarCheckIcon } from '../icons/calendar-check.jsx'
 import { MailIcon } from '../icons/mail.jsx'
 import { MessageCircleIcon } from '../icons/message-circle.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
+import { useBsTooltips } from '../../hooks/useBsTooltips.js'
 
 /**
  * Agent card — Bootstrap card, horizontal layout.
@@ -19,6 +20,8 @@ export default function AgentCard({ name, phone, email, avatar }) {
   const waRef = useRef(null)
   const mailRef = useRef(null)
   const calendarRef = useRef(null)
+
+  useBsTooltips([name, phone, email])
 
   const timeSlots = ['09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00']
   const today = new Date().toISOString().split('T')[0]
@@ -41,6 +44,8 @@ export default function AgentCard({ name, phone, email, avatar }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`WhatsApp ${name}`}
+            data-bs-toggle="tooltip"
+            data-bs-title={`Escribir a ${name} por WhatsApp`}
             className="text-decoration-none"
           >
             <img
@@ -58,12 +63,18 @@ export default function AgentCard({ name, phone, email, avatar }) {
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="small text-muted text-decoration-none d-flex align-items-center gap-1"
-              {...hover(waRef)}
+              className="small text-muted text-decoration-none d-flex align-items-center gap-1"              data-bs-toggle="tooltip"
+              data-bs-title="Contactar por WhatsApp"              {...hover(waRef)}
             >
               <WhatsAppIcon ref={waRef} size={14} /> {phone}
             </a>
-            <a href={`mailto:${email}`} className="small text-decoration-none d-flex align-items-center gap-1" {...hover(mailRef)}>
+            <a
+              href={`mailto:${email}`}
+              className="small text-decoration-none d-flex align-items-center gap-1"
+              data-bs-toggle="tooltip"
+              data-bs-title="Enviar correo"
+              {...hover(mailRef)}
+            >
               <MailIcon ref={mailRef} size={14} /> {email}
             </a>
             <button

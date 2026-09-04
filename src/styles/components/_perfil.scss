@@ -98,6 +98,16 @@
       outline: none;
       color: $lb-dark;
     }
+
+    .lb-login__pass-toggle {
+      border: none;
+      background: none;
+      padding: 0;
+      display: inline-flex;
+      color: #999;
+
+      &:hover { color: $lb-green; }
+    }
   }
 
   &__error {

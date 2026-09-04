@@ -15,6 +15,10 @@
    - AFTER modifying code: `rtk graphify update .` — always, no excuses.
 4. **RTK prefix** — every terminal command runs as `rtk <command>` when available.
 5. **Build** — `rtk npm run build:all`, never bare `npm run build`.
+6. **Version on every change** — WHENEVER project files are modified:
+   - Bump `version` in `package.json` (semantic: patch = fix/refactor, minor = feature, major = breaking).
+   - Add an entry to `CHANGELOG.md` (Keep a Changelog format) describing the changes.
+   - Both must stay in sync (same version in `package.json` and `CHANGELOG.md`).
 
 ***
 
@@ -155,4 +159,4 @@ When an agent needs to report a bug, request a feature, or log a finding:
 
 ***
 
-*Last updated: 2026-08-13*
+*Last updated: 2026-09-02*

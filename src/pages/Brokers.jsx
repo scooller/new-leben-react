@@ -74,7 +74,7 @@ export default function Brokers() {
       <main className="lb-brokers">
         {/* ======================= HERO ======================= */}
         <HeroShell
-          className="lb-brokers-hero container position-relative d-flex align-items-center lb-radius-bl-br"
+          className="lb-brokers-hero container-fluid position-relative d-flex align-items-center"
           image={data.hero.backgroundImage}
           bgWrapClassName="lb-brokers-hero__bg"
           overlayClassName="lb-brokers-hero__overlay"

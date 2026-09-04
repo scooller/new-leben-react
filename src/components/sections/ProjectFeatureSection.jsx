@@ -5,6 +5,9 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ScrollAnim from '../ScrollAnim.jsx'
 
+// Fuerza del parallax del carrusel (se sobrescribe desde Inn.jsx)
+const PARALLAX_STRENGTH = 14
+
 gsap.registerPlugin(ScrollTrigger)
 
 export default function ProjectFeatureSection({
@@ -23,6 +26,7 @@ export default function ProjectFeatureSection({
   ariaLabel = 'Proyecto',
   activeSlide,
   onSlideChange,
+  parallaxStrength = PARALLAX_STRENGTH,
   showIndicators = true,
   // { buttonLabel, items: [{ label, icon, img, alt }] }
   spacesModal,
@@ -35,19 +39,18 @@ export default function ProjectFeatureSection({
   const sectionRef = useRef(null)
   const carouselEl = useRef(null)
   const carouselInstance = useRef(null)
-  const carouselItemsRef = useRef([])
 
   useEffect(() => {
     const section = sectionRef.current
     const carousel = carouselEl.current
     if (!carousel || !slides.length) return
-    const carouselItems = carouselItemsRef.current.filter(Boolean)
     const c = new Carousel(carousel, { interval: 5000, ride: 'carousel' })
     carouselInstance.current = c
 
     const ctx = gsap.context(() => {
-      gsap.to(carouselItems, {
-        yPercent: 14,
+      // Parallax sobre el carrusel completo (.carousel.slide), no por item
+      gsap.to(carousel, {
+        yPercent: parallaxStrength,
         ease: 'none',
         scrollTrigger: {
           trigger: section,
@@ -76,22 +79,23 @@ export default function ProjectFeatureSection({
       c.dispose()
       carouselInstance.current = null
     }
-  }, [slides.length, onSlideChange])
+  }, [slides.length, onSlideChange, parallaxStrength])
 
   useEffect(() => {
     if (!carouselInstance.current || !slides.length || typeof activeSlide !== 'number') return
     carouselInstance.current.to(Math.max(0, Math.min(activeSlide, slides.length - 1)))
   }, [activeSlide, slides.length])
 
-  // Fancybox para la galería del modal de espacios
+  // Fancybox para la galería del modal de espacios (bind cuando el modal está abierto)
   useEffect(() => {
+    if (!showSpacesModal) return
     const el = spacesModalRef.current
     if (!el) return
     Fancybox.bind(el, '[data-fancybox]', {
       Toolbar: { display: { left: [], right: ['close'] } },
     })
     return () => Fancybox.unbind(el)
-  }, [spacesModal])
+  }, [showSpacesModal])
 
   const resolvedActiveSlide = typeof activeSlide === 'number' ? activeSlide : 0
 
@@ -125,7 +129,7 @@ export default function ProjectFeatureSection({
               {(highlight || highlightLogos.length > 0) && (
                 <ScrollAnim
                   as="div"
-                  className={highlightLogos.length > 0 ? 'row row-cols-2 row-cols-md-4 g-2 align-items-stretch lb-inn-proyecto__highlight mt-2' : 'lb-inn-proyecto__highlight'}
+                  className={highlightLogos.length > 0 ? 'row row-cols-2 row-cols-md-4 g-2 align-items-stretch lb-inn-proyecto__highlight mt-5' : 'lb-inn-proyecto__highlight'}
                 >
                   {highlight}
                   {highlightLogos.map((logo, index) => (
@@ -155,7 +159,7 @@ export default function ProjectFeatureSection({
               {(highlightOffer) && (
                 <ScrollAnim
                   as="h3"
-                  className='lb-inn-proyecto__highligthtitle mt-3'
+                  className='lb-inn-proyecto__highligthtitle mt-5'
                   // highlightOffer llega como string con HTML (<b>), se renderiza tal cual
                   dangerouslySetInnerHTML={{ __html: highlightOffer }}
                 />
@@ -202,10 +206,11 @@ export default function ProjectFeatureSection({
                       data-bs-interval="5000"
                       key={index}
                     >
-                      <div ref={(element) => { carouselItemsRef.current[index] = element }} className="lb-inn-proyecto__parallax">
+                      <div className="lb-inn-proyecto__parallax">
                         <a
                           href={`${base}${slide.img || slide.src}`}
                           data-fancybox={slide.fancyboxGroup || 'project-gallery'}
+                          data-caption={slide.alt || ''}
                           tabIndex={0}
                         >
                           <img src={`${base}${slide.img || slide.src}`} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
@@ -226,7 +231,7 @@ export default function ProjectFeatureSection({
           className={`modal fade lb-inn-spaces-modal ${showSpacesModal ? 'show d-block' : ''}`}
           tabIndex={-1}
           aria-label="Espacios del proyecto"
-          style={{ backgroundColor: 'rgba(26,26,26, 1)', zIndex: 1000 }}
+          style={{ backgroundColor: 'var(--lb-inn-spaces-overlay)', zIndex: 1000 }}
           onClick={() => setShowSpacesModal(false)}
         >
           <div
@@ -246,10 +251,10 @@ export default function ProjectFeatureSection({
               
               <div className="modal-body p-0 w-100 d-flex flex-column align-items-center justify-content-center position-relative">
                 {/* Main image container */}
-                <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '70vh', backgroundColor: '#111' }}>
+                <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '70vh', border: '1px solid var(--lb-inn-spaces-frame-border)', borderRadius: 'var(--bs-border-radius-lg)', overflow: 'hidden' }}>
                     <button 
                         className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-3 d-flex align-items-center justify-content-center"
-                        style={{ width: '48px', height: '48px', backgroundColor: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', zIndex: 2 }}
+                        style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
                         onClick={() => {
                           if (activeImageIndex > 0) {
                             setActiveImageIndex(activeImageIndex - 1);
@@ -275,20 +280,23 @@ export default function ProjectFeatureSection({
                           data-fancybox="inn-espacios"
                           data-caption={activeImageObj.alt || ''}
                           aria-label={`Ampliar imagen`}
-                          className="w-100 h-100"
+                          className="w-100 h-100 position-relative"
                         >
                           <img
                               src={`${base}${activeImageObj.img}`}
                               alt={activeImageObj.alt || ''}
-                              className="w-100 h-100 object-fit-cover rounded-3"
+                              className="w-100 h-100 object-fit-contain rounded-3"
                           />
+                          {activeImageObj.alt && (
+                            <span className="lb-inn-spaces-modal__caption w-md-50 mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
+                          )}
                         </a>
                       );
                     })()}
 
                     <button 
                         className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center justify-content-center"
-                        style={{ width: '48px', height: '48px', backgroundColor: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', zIndex: 2 }}
+                        style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
                         onClick={() => {
                           const currentGallery = spacesModal.galleries[activeGalleryIndex];
                           if (activeImageIndex < currentGallery.images.length - 1) {
@@ -315,10 +323,10 @@ export default function ProjectFeatureSection({
                                 key={index}
                                 onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
                                 className="btn btn-link text-decoration-none p-0"
-                                style={{ color: isActive ? '#e3b044' : 'rgba(255,255,255,0.5)', transition: 'color 0.2s' }}
+                                style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s' }}
                             >
                                 {isActive 
-                                    ? `${gallery.label} ${activeImageIndex + 1}/${gallery.images.length}`
+                                    ? `${gallery.label} [${activeImageIndex + 1}/${gallery.images.length}]`
                                     : gallery.label}
                             </button>
                         );
@@ -338,7 +346,8 @@ export default function ProjectFeatureSection({
                                   width: '80px', 
                                   height: '60px', 
                                   overflow: 'hidden', 
-                                  border: isActiveThumb ? '2px solid #e3b044' : '2px solid transparent',
+                                  border: isActiveThumb ? '2px solid var(--lb-inn-spaces-accent)' : '2px solid transparent',
+                                  borderRadius: 'var(--bs-border-radius)',
                                   transition: 'border-color 0.2s, opacity 0.2s',
                                   opacity: isActiveThumb ? 1 : 0.6 
                                 }}

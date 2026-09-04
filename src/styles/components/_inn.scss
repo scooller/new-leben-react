@@ -314,7 +314,6 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
     .lb-inn-proyecto__parallax {
       height: 100%;
-      will-change: transform;
       img{
         aspect-ratio: 1 / 1;
         max-height: 35rem;     
@@ -323,7 +322,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
   }
 
   .carousel {
-    margin-bottom: -8rem; // para que el carrusel se superponga al footer y no quede espacio en blanco;
+    margin-bottom: -10rem; // para que el carrusel se superponga al footer y no quede espacio en blanco;
   }
 
   // dots debajo de los textos (columna izquierda)
@@ -609,6 +608,25 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
 // --- MODAL ESPACIOS (Departamentos) ---
 .lb-inn-spaces-modal {
+  // Variables del modal de espacios (evitan colores hardcodeados en JSX)
+  --lb-inn-spaces-overlay: #1a1a1a;
+  --lb-inn-spaces-frame-border: rgba(255, 255, 255, 0.01);
+  --lb-inn-spaces-arrow-bg: rgba(255, 255, 255, 0.2);
+  --lb-inn-spaces-arrow-color: #fff;
+  --lb-inn-spaces-accent: #e3b044;
+  --lb-inn-spaces-tab-inactive: rgba(255, 255, 255, 0.5);
+
+  // Banda con el alt sobre la imagen, abajo a ancho completo
+  &__caption {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    text-align: center;
+    border-radius: 0 0 var(--bs-border-radius-lg) var(--bs-border-radius-lg);
+    pointer-events: none;
+  }
+
   &__close {
     background-color: rgba(255, 255, 255, 0.1) !important;
     transition: background-color 0.2s ease !important;
@@ -783,6 +801,15 @@ body:has(.lb-inn-hero-tabs) section[id] {
     &.active {
       border: none;
     }
+  }
+
+  &__designer-img {
+    position: absolute;
+    inset: -12% 0;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
   }
 
   &__designer-name {

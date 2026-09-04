@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.1] - 2026-09-02
+
+### Added
+- Hook `useBsTooltips` (`src/hooks/useBsTooltips.js`): inicializa tooltips de Bootstrap (`data-bs-toggle="tooltip"`) con re-escaneo por dependencias e inicialización idempotente.
+- Tooltips en iconos sociales del footer, avatar y acciones (WhatsApp / mail) de `AgentCard`, valores truncados de `ProjectTabs` y nombre de usuario en `Perfil`.
+- Toggle mostrar/ocultar contraseña en `Login` con icono Eye/EyeOff y tooltip dinámico.
+
 ## [0.9.0] - 2026-09-01
 
 ### Added

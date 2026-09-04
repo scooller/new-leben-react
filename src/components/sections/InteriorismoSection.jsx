@@ -6,6 +6,9 @@ import ScrollAnim from '../ScrollAnim.jsx'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// Fuerza del parallax de las tarjetas (se sobrescribe desde Inn.jsx)
+const DESIGNER_PARALLAX = 25
+
 export default function InteriorismoSection({
   eyebrow,
   title,
@@ -13,17 +16,18 @@ export default function InteriorismoSection({
   backgroundImage = 'images/inn/interiorismo.svg',
   id = 'interiorismo',
   ariaLabel = 'Interiorismo',
+  parallaxStrength = DESIGNER_PARALLAX,
   // Array of designers with their images and text content
   designers = [
     {
-      name: 'Sofía Iturralde',
+      name: 'Sofía Iturralde<br/><small>Designer</small>',
       image: 'images/inn/Foto_Iturralde.jpg',
       alt: 'Diseño de Sofía Iturralde',
       color: '#d9bc70',
       // text: 'Diseño contemporáneo que combina minimalismo con elementos naturales, creando espacios luminosos y acogedores que resaltan la belleza de los materiales.',
     },
     {
-      name: 'Rafael Rivera',
+      name: 'Rafael Rivera<br/><small>Iluminador</small>',
       image: 'images/inn/Foto_Rivera.jpg',
       alt: 'Diseño de Rafael Rivera',
       color: '#b78d56',
@@ -59,6 +63,19 @@ export default function InteriorismoSection({
         },
       })
 
+      // Parallax de las tarjetas de designers (columna completa)
+      gsap.to(section.querySelectorAll('.designers > div'), {
+        yPercent: parallaxStrength,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      })
+
       Fancybox.bind(section, '[data-fancybox]', {
         Toolbar: { display: { left: [], right: ['close'] } },
       })
@@ -68,7 +85,7 @@ export default function InteriorismoSection({
       Fancybox.unbind(section)
       ctx.revert()
     }
-  }, [])
+  }, [parallaxStrength])
 
   const currentDesigner = designers[activeDesigner]
 
@@ -101,9 +118,9 @@ export default function InteriorismoSection({
 
               {currentDesigner.text && (
                 <ScrollAnim as="div" className="lb-inn-interiorismo__designer-content mt-4"> 
-                  <h3 style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3">
-                    {currentDesigner.name}
-                  </h3>
+                  <h3 style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3"
+                    dangerouslySetInnerHTML={{ __html: currentDesigner.name }}
+                  />
                   <p className="lh-lg lb-inn-interiorismo__designer-text">
                     {currentDesigner.text}
                   </p>                
@@ -127,19 +144,20 @@ export default function InteriorismoSection({
                     onClick={designer.text ? () => setActiveDesigner(index) : undefined}
                     disabled={!designer.text}
                     style={{
-                      ...(designer.image && {
-                        backgroundImage: `url("${base}${designer.image}")`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center top',
-                      }),
                       ...(!designer.text && { opacity: 1 }),
                     }}
                   >
+                    <div
+                      className="lb-inn-interiorismo__designer-img"
+                      aria-hidden="true"
+                      style={designer.image ? {
+                        backgroundImage: `url("${base}${designer.image}")`,
+                      } : undefined}
+                    />
                     <h4
                       className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
-                    >
-                      {designer.name}
-                    </h4>
+                      dangerouslySetInnerHTML={{ __html: designer.name }}
+                    />
                   </button>
                 </div>
               ))}

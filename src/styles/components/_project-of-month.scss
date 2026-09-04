@@ -5,7 +5,7 @@
   position: relative;
   padding-block: $lb-section-pad;
   background: $lb-white;
-  background-image: url(/images/fondo.jpeg);
+  background-image: url(/images/home/fondo.jpeg);
   background-repeat: no-repeat;
   background-position: right;
   background-attachment: fixed;
@@ -66,8 +66,8 @@
     position: relative;
     width: 85%;
     aspect-ratio: 371 / 750;
-    -webkit-mask-image: url('/images/iphone-back-mask.png');
-    mask-image: url('/images/iphone-back-mask.png');
+    -webkit-mask-image: url('/images/home/iphone-back-mask.png');
+    mask-image: url('/images/home/iphone-back-mask.png');
     -webkit-mask-position: center;
     mask-position: center;
     -webkit-mask-repeat: no-repeat;

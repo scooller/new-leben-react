@@ -30,10 +30,14 @@ const INFO = [
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
 ]
 
+// Fuerza global del parallax (en % del alto del elemento). Un solo knob para todas las secciones de INN.
+// Negativo = el elemento sube al hacer scroll (parallax clásico).
+const PARALLAX_STRENGTH = -14
+
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
-  { id: 'departamentos', label: 'Departamentos' },
-  { id: 'cotizador', label: 'Plantas' },
+  { id: 'departamentos', label: 'Equipamiento' },
+  { id: 'cotizador', label: 'Cotizador' },
   { id: 'espacios', label: 'Espacios' },  
   { id: 'ubicacion', label: 'Ubicación' },
   { id: 'interiorismo', label: 'Interiorismo' },
@@ -41,9 +45,9 @@ const TABS = [
 ]
 
 const SLIDES = [
-  { img: 'images/inn/slides/02_DEPORTE-NAUTICO.jpg', alt: 'Deportes náuticos' },
-  { img: 'images/inn/slides/foto1.jpg', alt: 'Trekking' },
-  { img: 'images/inn/slides/foto2.jpg', alt: 'Pesca' },
+  { img: 'images/inn/galerias/Espacio_01.jpg', alt: '' },
+  { img: 'images/inn/galerias/Espacio_04.jpg', alt: '' },
+  { img: 'images/inn/galerias/Espacio_07.jpg', alt: '' },
 ]
 
 const EQUIPMENT_LOGOS = [
@@ -117,31 +121,31 @@ const SPACES_MODAL_GALLERIES = [
   {
     label: 'ACCESO',
     images: [
-      { img: 'images/inn/terminacion-puertas.jpg', alt: 'Acceso 1', thumb: 'images/inn/terminacion-puertas.jpg' },
-      { img: 'images/inn/terminacion-horno.jpg', alt: 'Acceso 2', thumb: 'images/inn/terminacion-horno.jpg' }
+      { img: 'images/inn/terminaciones/terminacion-puertas.jpg', alt: 'Terminación puertas', thumb: 'images/inn/terminaciones/terminacion-puertas.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-horno.jpg', alt: 'Terminación horno', thumb: 'images/inn/terminaciones/terminacion-horno.jpg' }
     ]
   },
   {
     label: 'COCINA',
     images: [
-      { img: 'images/inn/terminacion-microondas.jpg', alt: 'Cocina 1', thumb: 'images/inn/terminacion-microondas.jpg' },
-      { img: 'images/inn/terminacion-encimera-campana.jpg', alt: 'Cocina 2', thumb: 'images/inn/terminacion-encimera-campana.jpg' },
-      { img: 'images/inn/terminacion-lavavajillas.jpg', alt: 'Cocina 3', thumb: 'images/inn/terminacion-lavavajillas.jpg' },
-      { img: 'images/inn/terminacion-cubierta-cocina.jpg', alt: 'Cocina 4', thumb: 'images/inn/terminacion-cubierta-cocina.jpg' }
+      { img: 'images/inn/terminaciones/terminacion-microondas.jpg', alt: 'Terminación microondas', thumb: 'images/inn/terminaciones/terminacion-microondas.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-encimera-campana.jpg', alt: 'Terminación encimera y campana', thumb: 'images/inn/terminaciones/terminacion-encimera-campana.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-lavavajillas.jpg', alt: 'Terminación lavavajillas', thumb: 'images/inn/terminaciones/terminacion-lavavajillas.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-cubierta-cocina.jpg', alt: 'Terminación cubierta de cocina', thumb: 'images/inn/terminaciones/terminacion-cubierta-cocina.jpg' }
     ]
   },
   {
     label: 'LIVING - COMEDOR',
     images: [
-      { img: 'images/inn/terminacion-griferia-cocina.jpg', alt: 'Living 1', thumb: 'images/inn/terminacion-griferia-cocina.jpg' },
-      { img: 'images/inn/terminacion-griferia-bano.jpg', alt: 'Living 2', thumb: 'images/inn/terminacion-griferia-bano.jpg' },
-      { img: 'images/inn/terminacion-puertas.jpg', alt: 'Living 3', thumb: 'images/inn/terminacion-puertas.jpg' }
+      { img: 'images/inn/terminaciones/terminacion-griferia-cocina.jpg', alt: 'Terminación grifería cocina', thumb: 'images/inn/terminaciones/terminacion-griferia-cocina.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-griferia-bano.jpg', alt: 'Terminación grifería baño', thumb: 'images/inn/terminaciones/terminacion-griferia-bano.jpg' },
+      { img: 'images/inn/terminaciones/terminacion-puertas.jpg', alt: 'Terminación puertas', thumb: 'images/inn/terminaciones/terminacion-puertas.jpg' }
     ]
   },
   {
     label: 'TERRAZA',
     images: [
-      { img: 'images/inn/terminacion-horno.jpg', alt: 'Terraza 1', thumb: 'images/inn/terminacion-horno.jpg' }
+      { img: 'images/inn/terminaciones/terminacion-horno.jpg', alt: 'Terminación horno', thumb: 'images/inn/terminaciones/terminacion-horno.jpg' }
     ]
   }
 ]
@@ -241,7 +245,7 @@ export default function Inn() {
           overlayClassName="lb-inn-hero__overlay"
         >
           <ScrollAnim animation='zoom-in' className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
-            <img src={`${base}images/inn-logo.png`} className="lb-inn-hero__logo mt-auto" alt="Logo INN" />
+            <img src={`${base}images/inn/inn-logo.png`} className="lb-inn-hero__logo mt-auto" alt="Logo INN" />
             <h1 className="lb-inn-hero__title p-0">VIVE EL LUJO<br/> EN PUERTO VARAS</h1>
           </ScrollAnim>
         </HeroShell>
@@ -296,8 +300,10 @@ export default function Inn() {
           highlightOffer="paga el pien en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
+          parallaxStrength={PARALLAX_STRENGTH}
           activeSlide={activeSlide}
           onSlideChange={setActiveSlide}
+          showIndicators={false}
           id="proyecto"
           ariaLabel="Proyecto"
         />
@@ -308,12 +314,12 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>Departamentos</>}
           title={<>EQUIPAMIENTO<br /><small>y terminaciones</small></>}
           description="Incluye refrigerador y lavavajillas panelado, horno y microondas empotrado Franke. Cubierta ultra compacta MK, grifería italiana Paini y grifería alemana Hansgrohe."
           highlightLogos={EQUIPMENT_LOGOS}
           slides={EQUIPMENT_SLIDES}
           carouselId="innDepartamentosCarousel"
+          parallaxStrength={PARALLAX_STRENGTH}
           backgroundImage="images/inn/edificio.svg"
           id="departamentos"
           className='pb-2 mb-2'
@@ -322,7 +328,7 @@ export default function Inn() {
           activeSlide={activeEquipmentSlide}
           onSlideChange={setActiveEquipmentSlide}
           spacesModal={{
-            buttonLabel: 'Conoce los espacios',
+            buttonLabel: 'Mas detalles...',
             galleries: SPACES_MODAL_GALLERIES,
           }}
         />
@@ -344,11 +350,11 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>Espacios</>}
           title={<>ESPACIOS<br />COMUNES</>}
           description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
           slides={ESPACIOS_COMUNES_SLIDES}
           carouselId="innEspaciosCarousel"
+          parallaxStrength={PARALLAX_STRENGTH}
           backgroundImage="images/inn/espacio.svg"
           id="espacios"
           className='pb-2 mb-2'
@@ -375,15 +381,17 @@ export default function Inn() {
           <div className="container">
             <div className="row g-0">
               <div className="col-12 col-lg-7 order-2 order-lg-1 p-5 d-flex flex-column justify-content-center">
-                <ScrollAnim className="d-flex align-items-center gap-4 mb-5 lb-inn-map__header">
-                  <img
-                    src={`${base}${MAP.logo}`}
-                    alt="Logo INN"
-                    className="lb-inn-map__header-logo"
-                  />
-                  <div className='lb-inn-map__titulos-right'>
-                    <span className="lb-inn-proyecto__eyebrow mb-0">{MAP.eyebrow}</span>
-                    <h2 className="lb-inn-proyecto__title mb-0">{MAP.title}</h2>
+                <ScrollAnim className="mb-5 lb-inn-map__header">
+                  <span className="lb-inn-proyecto__eyebrow d-block mb-5">{MAP.eyebrow}</span>
+                  <div className="d-flex align-items-center gap-4">
+                    <img
+                      src={`${base}${MAP.logo}`}
+                      alt="Logo INN"
+                      className="lb-inn-map__header-logo"
+                    />
+                    <div className='lb-inn-map__titulos-right'>
+                      <h2 className="lb-inn-proyecto__title mb-0">{MAP.title}</h2>
+                    </div>
                   </div>
                 </ScrollAnim>
                 <div className="lb-inn-map__text text-center text-lg-start">
@@ -447,6 +455,7 @@ export default function Inn() {
         <InteriorismoSection
           eyebrow={<>Interiorismo</>}
           title={<>DISEÑO EXCLUSIVO</>}
+          parallaxStrength={PARALLAX_STRENGTH}
           description="Nuestros departamentos han sido diseñados por renombrados arquitectos y diseñadores, combinando estética contemporánea con funcionalidad superior. Cada espacio refleja un equilibrio perfecto entre lujo, confort y estilo, creando ambientes únicos que se adaptan a tus necesidades y preferencias personales. Los materiales de alta calidad, las terminaciones impecables y la atención al detalle en cada rincón garantizan una experiencia de vida excepcional en el corazón de Puerto Varas."
           backgroundImage="images/inn/interiorismo.svg"
           id="interiorismo"

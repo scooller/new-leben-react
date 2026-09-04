@@ -126,7 +126,7 @@ export default function RelatedProjects({ data, onCotizar }) {
                     >
                       Cotizar
                       <img
-                        src={`${import.meta.env.BASE_URL}images/arrow-right.svg`}
+                        src={`${import.meta.env.BASE_URL}images/icons/arrow-right.svg`}
                         alt=""
                         width="14"
                         height="14"

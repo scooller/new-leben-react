@@ -1,4 +1,22 @@
 // Fancybox overrides
 .fancybox__container {
   --fancybox-bg: rgba(15, 15, 15, 0.9);
+
+  // Caption como banda superpuesta abajo, a ancho completo
+  .fancybox__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: rgba(26, 26, 26, 0.75);
+    color: #fff;
+    font-family: var(--bs-body-font-family, sans-serif);
+    text-align: center;
+  }
+
+  &:has(.fancybox__caption:empty) .fancybox__caption {
+    display: none;
+  }
 }

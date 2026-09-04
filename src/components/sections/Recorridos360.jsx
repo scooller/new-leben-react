@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Fancybox } from '@fancyapps/ui'
+
+const isImage = (src) => /\.(png|jpe?g|webp|gif|avif|svg)(\?|#|$)/i.test(src)
 
 const TOURS = [
   {
-    label: 'Home & Wellness',
-    src: 'https://www.youtube.com/embed/TQpR0wBv2a0',
-    title: 'Home & Wellness',
-    allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+    label: 'Masterplan',
+    src: '/images/inn/inn-vista360.jpg',
+    title: 'Masterplan',
+    allow: 'fullscreen',
   },
   {
     label: 'Piloto 360',
@@ -25,6 +28,16 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
   const base = import.meta.env.BASE_URL
   const [activeIndex, setActiveIndex] = useState(0)
   const activeTour = tours[activeIndex]
+  const viewerRef = useRef(null)
+
+  useEffect(() => {
+    const el = viewerRef.current
+    if (!el) return
+    Fancybox.bind(el, '[data-fancybox]', {
+      Toolbar: { display: { left: [], right: ['close'] } },
+    })
+    return () => Fancybox.unbind(el)
+  }, [])
 
   if (!activeTour) return null
 
@@ -36,16 +49,33 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
           <img src={`${base}images/icons/360.svg`} alt="" aria-hidden="true" />
           <span>{activeTour.title}</span>
         </h3>
-        <div className="ratio ratio-16x9 lb-inn-360__viewer">
-          <iframe
-            key={activeTour.src}
-            src={activeTour.src}
-            title={activeTour.title}
-                allow={`${activeTour.allow}; fullscreen`}
-            allowFullScreen
-                loading="eager"
-                referrerPolicy="strict-origin-when-cross-origin"
-          />
+        <div className="ratio ratio-16x9 lb-inn-360__viewer" ref={viewerRef}>
+          {isImage(activeTour.src) ? (
+            <a
+              href={activeTour.src}
+              data-fancybox="recorridos-360"
+              data-caption={activeTour.title}
+              className="d-block w-100 h-100"
+              aria-label={`Ampliar ${activeTour.title}`}
+            >
+              <img
+                key={activeTour.src}
+                src={activeTour.src}
+                alt={activeTour.title}
+                className="w-100 h-100 object-fit-contain bg-white"
+              />
+            </a>
+          ) : (
+            <iframe
+              key={activeTour.src}
+              src={activeTour.src}
+              title={activeTour.title}
+                  allow={`${activeTour.allow}; fullscreen`}
+              allowFullScreen
+                  loading="eager"
+                  referrerPolicy="strict-origin-when-cross-origin"
+            />
+          )}
         </div>
             <div className="text-end mt-2">
               <a href={activeTour.src} target="_blank" rel="noreferrer" className="small text-muted">

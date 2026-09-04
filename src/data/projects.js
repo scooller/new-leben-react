@@ -24,7 +24,7 @@ export const projectDetails = {
       subtitle: 'Conexión Urbana & Paisajismo Interior',
       location: 'Puerto Varas',
       backgroundVideo: vid('hero-inn.mp4'),
-      logo: img('inn-logo.png'),
+      logo: img('inn/inn-logo.png'),
     },
 
     // --- Tabs (sticky bar) ---
@@ -43,9 +43,9 @@ export const projectDetails = {
       description:
         'Descubre el privilegio de vivir en primera línea con vistas incomparables y despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en uno de los edificios más modernos y exclusivos de Puerto Varas. Departamentos, dúplex y deptos. con patio privado. Equipamiento premium Franke.',
       collage: {
-        left: img('inn-overview-1.jpg'),
-        rightTop: img('inn-overview-2.jpg'),
-        rightBottom: img('inn-overview-3.jpg'),
+        left: img('inn/inn-overview-1.jpg'),
+        rightTop: img('inn/inn-overview-2.jpg'),
+        rightBottom: img('inn/inn-overview-3.jpg'),
       },
       stats: [
         { value: '2 • 3 • 4', label: 'Dormitorios' },
@@ -65,10 +65,10 @@ export const projectDetails = {
         img('inn/Horno-microondas.jpg'),
         img('inn/Lavavajillas-panelable-scaled.jpg'),
         img('inn/Encimera-y-campana-scaled.jpg'),
-        img('inn/Cubierta-cocina-scaled.jpg'),
+        img('inn/terminaciones/terminacion-cubierta-cocina.jpg'),
         img('inn/Griferia-cocina.jpg'),
         img('inn/Griferia-bano-principal.jpg'),
-        img('inn/Puertas-scaled.jpg'),
+        img('inn/terminaciones/terminacion-puertas.jpg'),
       ],
       items: [
         { label: 'Horno Franke', icon: 'flame' },
@@ -87,7 +87,7 @@ export const projectDetails = {
       eyebrow: 'Recorrido virtual',
       title: 'Explora el proyecto',
       tabs: ['Master Plan', 'Pilotos 360°', 'Vista por piso'],
-      images: [img('inn-vista360.jpg'), 'https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0', 'https://www.lanube360.com/ileben1/'],
+      images: [img('inn/inn-vista360.jpg'), 'https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0', 'https://www.lanube360.com/ileben1/'],
     },
 
     // --- Cotizador (visual mock) ---
@@ -148,9 +148,9 @@ export const projectDetails = {
     alternatives: {
       title: '¿Buscas otras opciones en el sur de Chile?',
       cards: [
-        { name: 'Edificio Índigo', location: 'Puerto Varas', tipologia: '2-3 Dormitorios — Entrega Inmediata', price: 'Desde UF 8.906*', image: img('inn-alt-1.jpg') },
-        { name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '1-2-3 Dormitorios — Futuro Proyecto', price: 'Desde UF 4.746*', image: img('inn-alt-2.jpg') },
-        { name: 'Edificio Bold', location: 'Valdivia', tipologia: '1-2 Dormitorios — Entrega Inmediata', price: 'Desde UF 3.521*', image: img('inn-alt-3.jpg') },
+        { name: 'Edificio Índigo', location: 'Puerto Varas', tipologia: '2-3 Dormitorios — Entrega Inmediata', price: 'Desde UF 8.906*', image: img('inn/inn-alt-1.jpg') },
+        { name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '1-2-3 Dormitorios — Futuro Proyecto', price: 'Desde UF 4.746*', image: img('inn/inn-alt-2.jpg') },
+        { name: 'Edificio Bold', location: 'Valdivia', tipologia: '1-2 Dormitorios — Entrega Inmediata', price: 'Desde UF 3.521*', image: img('inn/inn-alt-3.jpg') },
       ],
     },
 
@@ -162,8 +162,8 @@ export const projectDetails = {
         'Departamentos diseñados para aprovechar al máximo la luz natural y las vistas al lago. Terrazas, dormitorios y baños con terminaciones premium.',
       images: [
         img('inn/render.jpg'),
-        img('inn-space-2.jpg'),
-        img('inn-space-3.jpg'),
+        img('inn/inn-space-2.jpg'),
+        img('inn/inn-space-3.jpg'),
       ],
       designer: {
         name: 'Sofia Iturralde',
@@ -192,7 +192,7 @@ export const projectDetails = {
         'Cassis',
         'La Olla',
       ],
-      mapImage: img('inn-map.jpg'),
+      mapImage: img('inn/inn-map.jpg'),
     },
 
     // --- Bottom Gallery ---
@@ -211,9 +211,9 @@ export const projectDetails = {
       subtitle: '<b>Visítanos en:</b> Vicente Pérez Rosales 991, Puerto Varas.<br><b>Horario sala de ventas:</b> Lun a Dom. 10:00 a 14:00 hrs.<br>y de 15:00 a 19:00 hrs.',
       wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
       agents: [
-        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('Patricia-Ramirez.jpg') },
-        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('catalina.jpg') },
-        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('Patricia-Singh.jpg') },
+        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('team/Patricia-Ramirez.jpg') },
+        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('team/catalina.jpg') },
+        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('team/Patricia-Singh.jpg') },
       ],
     },
   },

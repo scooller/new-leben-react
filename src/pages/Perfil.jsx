@@ -6,6 +6,7 @@ import { images } from '../data/content.js'
 import { Bell, LogOut, Home, Menu, X } from 'lucide-react'
 import PerfilComprador from './PerfilComprador.jsx'
 import PerfilBroker from './PerfilBroker.jsx'
+import { useBsTooltips } from '../hooks/useBsTooltips.js'
 
 export default function Perfil() {
   const user = useSelector((s) => s.auth.user)
@@ -14,6 +15,8 @@ export default function Perfil() {
   const [activeTab, setActiveTab] = useState(0)
   const [showNotif, setShowNotif] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  useBsTooltips([user?.name])
 
   if (!user) return <Navigate to="/login" replace />
 
@@ -50,7 +53,7 @@ export default function Perfil() {
             )}
           </div>
           <div className="lb-perfil__user-info">
-            <p className="lb-perfil__user-name">{user.name}</p>
+            <p className="lb-perfil__user-name" data-bs-toggle="tooltip" data-bs-title={user.name}>{user.name}</p>
             <span className={`lb-perfil__user-role lb-perfil__user-role--${user.role}`}>
               {isBroker ? 'Broker' : 'Comprador'}
             </span>

@@ -46,7 +46,7 @@ export default function ProjectOfMonthSection() {
                   className="lb-iphone-video"
                 />
               </div>
-              <img src={`${import.meta.env.BASE_URL}images/iphone-container.png`} alt="" className="lb-iphone-frame" />
+              <img src={`${import.meta.env.BASE_URL}images/home/iphone-container.png`} alt="" className="lb-iphone-frame" />
             </ScrollAnim>
           </div>
         </div>

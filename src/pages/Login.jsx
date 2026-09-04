@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../store/slices/authSlice.js'
 import { images } from '../data/content.js'
-import { Lock, Mail, ArrowRight } from 'lucide-react'
+import { Lock, Mail, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { useBsTooltips } from '../hooks/useBsTooltips.js'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -12,6 +13,9 @@ export default function Login() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPass, setShowPass] = useState(false)
+
+  useBsTooltips([showPass])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -66,12 +70,22 @@ export default function Login() {
           <label className="lb-login__field">
             <Lock size={18} />
             <input
-              type="password"
+              type={showPass ? 'text' : 'password'}
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <button
+              type="button"
+              aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              data-bs-toggle="tooltip"
+              data-bs-title={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              className="lb-login__pass-toggle"
+              onClick={() => setShowPass((v) => !v)}
+            >
+              {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </label>
 
           <button type="submit" className="btn btn-success d-flex align-items-center justify-content-center gap-2 fw-semibold py-2">

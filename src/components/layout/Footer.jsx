@@ -8,6 +8,7 @@ import { MailCheckIcon } from '../icons/mail-check.jsx'
 import { FacebookIcon } from '../icons/facebook.jsx'
 import { InstagramIcon } from '../icons/instagram.jsx'
 import { LinkedinIcon } from '../icons/linkedin.jsx'
+import { useBsTooltips } from '../../hooks/useBsTooltips.js'
 
 const socialIcons = {
   facebook: FacebookIcon,
@@ -24,8 +25,10 @@ export default function Footer() {
   const mailRef = useRef(null)
   const socialRefs = useRef([])
 
+  useBsTooltips()
+
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.street}, ${address.city}`)}`
-  const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}`
+  const phoneLink = `tel:${phone.replace(/\D/g, '')}`
 
   return (
     <footer className="lb-footer container-fluid">
@@ -40,7 +43,7 @@ export default function Footer() {
           {/* Col 1: Logo + badges */}
           <div className="col-6 col-md d-flex flex-column gap-3">
             <div className="fs-2 fw-bold">
-              <img src="/images/leben_bptl_pro.svg" alt="" className="flex-shrink-0 img-logo" fetchPriority="high" />
+              <img src="/images/brand/leben_bptl_pro.svg" alt="" className="flex-shrink-0 img-logo" fetchPriority="high" />
             </div>
             <div className="d-flex gap-2">
               {/* {badges.map((b) => {
@@ -60,13 +63,18 @@ export default function Footer() {
                 return (
                   <a
                     key={s}
-                    href="#"
+                    href={socialLinks[s]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s}
+                    data-bs-toggle="tooltip"
+                    data-bs-title={s}
                     className={`lb-badge lb-badge-${s} d-inline-flex flex-column align-items-center justify-content-center rounded border text-decoration-none`}
                     onMouseEnter={() => socialRefs.current[i]?.startAnimation()}
                     onMouseLeave={() => socialRefs.current[i]?.stopAnimation()}
                   >
                     <Ic ref={(el) => { socialRefs.current[i] = el }} size={20} className="lb-badge-icon" />
-                    <span className="lb-badge-label">{socialLinks[s]}</span>
+                    <span className="lb-badge-label d-none">{s}</span>
                   </a>
                 )
               })}
@@ -79,12 +87,14 @@ export default function Footer() {
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              data-bs-toggle="tooltip"
+              data-bs-title="Ver mapa"
               className="d-flex gap-2 align-items-center text-decoration-none"
               {...hover(mapRef)}
             >
               <MapPinIcon ref={mapRef} size={13} className="lb-footer-icon flex-shrink-0 d-inline-flex" />
               <div className="d-flex flex-column lb-contact">
-                <span>{address.street} {address.city}</span>
+                <span>{address.street}<br />{address.city}</span>
               </div>
             </a>
             <div className='lb-border-red me-4' />
@@ -99,7 +109,7 @@ export default function Footer() {
               </div>
             </div>
             <a
-              href={whatsappUrl}
+              href={phoneLink}
               target="_blank"
               rel="noopener noreferrer"
               className="d-flex gap-2 align-items-center mb-2 text-decoration-none"
