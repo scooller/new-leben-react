@@ -3,6 +3,7 @@
 // ============================================================
 
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 // --- Login ---
 .lb-login {
@@ -1141,7 +1142,7 @@
   }
 
   // --- Responsive ---
-  @media (max-width: 991px) {
+  @include bs.media-breakpoint-down(lg) {
     .lb-perfil {
       &__sidebar {
         transform: translateX(-100%);

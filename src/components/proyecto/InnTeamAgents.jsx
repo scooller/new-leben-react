@@ -72,6 +72,10 @@ export default function InnTeamAgents({ data, apiId }) {
   const today = new Date().toISOString().split('T')[0]
 
   useEffect(() => {
+    if (data?.agents) setAgents(data.agents)
+  }, [data?.agents])
+
+  useEffect(() => {
     if (!apiId) return
     let cancelled = false
     apiFetch(`/api/v1/proyectos/${apiId}?include_asesores=1`).then(({ data, error }) => {

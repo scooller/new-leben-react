@@ -69,13 +69,13 @@ const EQUIPMENT_SLIDES = [
   { img: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg', alt: 'Baño' },
 ]
 
-// Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
+// Espacios comunes: iconos animados (pqoqubbw/icons).
 const ESPACIOS_COMUNES_NAV_ITEMS = [
-  { id: 'hall', label: 'Hall de acceso', icon: ConciergeBellIcon },
-  { id: 'atrio', label: 'Atrio', icon: TableIcon },
-  { id: 'gourmet', label: 'Gourmet + Quincho equipado', icon: ChefHatIcon },
+  { id: 'hall', label: 'Hall de acceso<br />con doble altura', icon: ConciergeBellIcon },
+  { id: 'atrio', label: 'Atrio con 6<br />pisos de altura', icon: TableIcon },
+  { id: 'gourmet', label: 'Sala gourmet con<br />quincho techado', icon: ChefHatIcon },
   { id: 'training', label: 'Training Zone', icon: DumbbellIcon },
-  { id: 'jacuzzi', label: 'Jacuzzi exterior', icon: HotTubIcon },
+  { id: 'jacuzzi', label: 'Rooftop con jacuzzi', icon: HotTubIcon },
   { id: 'piscina', label: 'Piscina climatizada', icon: WavesLadderIcon },
   { id: 'bodega', label: 'Bodega náutica', icon: KayakIcon },
 ]
@@ -183,7 +183,7 @@ const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
 const MAP = {
   eyebrow: <>Ubicación</>,
   title: <>VISTAS<br/>INSUPERABLES</>,
-  description: 'Descubre el privilegio de vivir con vistas incomparables y despejadas al Lago Llanquihue, los volcanes Osorno y Calbuco, en un entorno privilegiado y en el edificio más moderno y exclusivo de Puerto Varas.',
+  description: 'Despertar con el marco imponente del lago Llanquihue y los volcanes es solo el comienzo. Imagina tan solo cruzar la calle y sentir el aire fresco del sur mientras caminas por la costanera, disfrutar un café de especialidad a pocos pasos de tu puerta o terminar la tarde cenando en los mejores restaurantes de Puerto Varas. Una ubicación privilegiada para disfrutar el lago, la ciudad y el sur como parte de tu rutina.',
   image: 'images/inn/mapa.png',
   logo: 'images/inn/V.png',
   features: [
@@ -193,6 +193,18 @@ const MAP = {
 }
 
 const base = import.meta.env.BASE_URL
+
+const TEAM_DATA = {
+  eyebrow: 'Contactos',
+  title: 'TE ACOMPAÑAMOS EN<br />CADA DECISIÓN',
+  subtitle: '<b>Sala de ventas y departamento piloto</b> disponible en Vicente Pérez Rosales 991, Puerto Varas<br /><b>Horario:</b> Lunes a domingo de 10:00 a 14:00 horas y de 15:00 a 19:00 horas.',
+  wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
+  agents: [
+    { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: `${base}images/team/Patricia-Ramirez.jpg` },
+    { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: `${base}images/team/catalina.jpg` },
+    { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: `${base}images/team/Patricia-Singh.jpg` },
+  ],
+}
 
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
@@ -317,9 +329,9 @@ export default function Inn() {
         </section>
 
         <ProjectFeatureSection
-          eyebrow={<>Proyecto</>}
-          title={<>EXCLUSIVIDAD<br />FRENTE AL LAGO</>}
-          description="Descubre el privilegio de vivir en primera línea con vistas incomparables y despejadas al Lago Llanquihue y los volcanes Osorno y Calbuco, en el edificio más moderno y exclusivo de Puerto Varas."
+          eyebrow={<>Home & Wellness</>}
+          title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
+          description="Ubicado en primera línea frente al lago Llanquihue, INN combina la experiencia Home & Wellness con la sofisticación y comodidad de un hotel boutique. Sus departamentos de 2, 3 y 4 dormitorios, dúplex y deptos con patio privado ofrecen un refugio exclusivo donde el diseño y la naturaleza se integran para brindarte una experiencia de bienestar inigualable."
           highlight="Departamentos, dúplex y deptos. con patio privado."
           highlightOffer="paga el pien en <b>60</b> cuotas"
           slides={SLIDES}
@@ -338,8 +350,9 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          title={<>EQUIPAMIENTO<br /><small>y terminaciones</small></>}
-          description="Incluye refrigerador y lavavajillas panelado, horno y microondas empotrado Franke. Cubierta ultra compacta MK, grifería italiana Paini y grifería alemana Hansgrohe."
+          eyebrow={<>Equipamiento y terminaciones</>}
+          title={<>SOFISTICACIÓN<br />EN CADA DETALLE</>}
+          description="Elevamos cada espacio con equipamiento y terminaciones de alto estándar: marca suiza Franke en cocina con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras. Las terrazas incorporan revestimiento parcial de tejas y cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural para completar una experiencia de diseño, confort y calidad."
           highlightLogos={EQUIPMENT_LOGOS}
           slides={EQUIPMENT_SLIDES}
           carouselId="innDepartamentosCarousel"
@@ -352,7 +365,7 @@ export default function Inn() {
           activeSlide={activeEquipmentSlide}
           onSlideChange={setActiveEquipmentSlide}
           spacesModal={{
-            buttonLabel: 'Mas detalles...',
+            buttonLabel: 'Ver Detalles',
             galleries: SPACES_MODAL_GALLERIES,
           }}
         />
@@ -374,8 +387,8 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          title={<>ESPACIOS<br />COMUNES</>}
-          description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
+          title={<>ESPACIOS DE<br />OTRO NIVEL</>}
+          description="Los espacios están concebidos como una extensión natural de tu departamento, donde la sensación hotelera se integra con la serenidad del entorno. Cada ambiente ha sido cuidadosamente diseñado para enriquecer tu rutina diaria, ofreciendo espacios de encuentro, trabajo y descanso que combinan la calidez sureña, una delicada propuesta de interiorismo y vistas privilegiadas para disfrutar Puerto Varas al máximo."
           slides={ESPACIOS_COMUNES_SLIDES}
           carouselId="innEspaciosCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
@@ -478,9 +491,9 @@ export default function Inn() {
 
         <InteriorismoSection
           eyebrow={<>Interiorismo</>}
-          title={<>DISEÑO EXCLUSIVO</>}
+          title={<>MAESTRÍA EN<br />CADA DETALLE</>}
           parallaxStrength={PARALLAX_STRENGTH}
-          description="Nuestros departamentos han sido diseñados por renombrados arquitectos y diseñadores, combinando estética contemporánea con funcionalidad superior. Cada espacio refleja un equilibrio perfecto entre lujo, confort y estilo, creando ambientes únicos que se adaptan a tus necesidades y preferencias personales. Los materiales de alta calidad, las terminaciones impecables y la atención al detalle en cada rincón garantizan una experiencia de vida excepcional en el corazón de Puerto Varas."
+          description="La experiencia de la reconocida interiorista Sofía Iturralde se une con la maestría en iluminación de Rafael Rivera para crear entornos en los que cada textura, línea y matriz de luz dialogan en armonía estética sureña y posicionan a este proyecto como el residencial más exclusivo para vivir en Puerto Varas."
           backgroundImage="images/inn/interiorismo.svg"
           id="interiorismo"
           ariaLabel="Interiorismo"
@@ -532,11 +545,8 @@ export default function Inn() {
         </div>
       </div>
 
-      {/* SECCIÓN CONTACTO — asesores + mapa (misma referencia que ProyectoDetalle) */}
-      <InnTeamAgents
-        data={innProject?.team || getProjectBySlug('inn')?.team}
-        apiId={innProject?.apiId ?? getProjectBySlug('inn')?.apiId}
-      />
+      {/* SECCIÓN CONTACTO — asesores + mapa */}
+      <InnTeamAgents data={TEAM_DATA} />
 
       <Footer />
     </>

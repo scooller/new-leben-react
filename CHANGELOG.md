@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.13] - 2026-09-07
+
+### Changed
+- `Inn.jsx`: la data de Team / Agents (`TEAM_DATA`) ahora se define directamente en `Inn.jsx` para facilitar su edición, eliminando la sección `team` de `projectDetails.inn` en `projects.js`.
+- `InnTeamAgents.jsx`: sincronización reactiva de `agents` vía `useEffect` cuando cambia `data.agents`.
+
+## [0.9.12] - 2026-09-07
+
+### Changed
+- `CarouselNav`: los labels de los items ahora se renderizan con `dangerouslySetInnerHTML`, permitiendo tags HTML (como `<br />` en `ESPACIOS_COMUNES_NAV_ITEMS` de `Inn.jsx`).
+
+## [0.9.11] - 2026-09-07
+
+### Changed
+- SCSS: homologadas todas las media queries responsivas de componentes (`_brokers.scss`, `_inn-team-agents.scss`, `_perfil.scss`) utilizando mixins estándar de Bootstrap (`@include bs.media-breakpoint-down(...)`).
+
+## [0.9.10] - 2026-09-07
+
+### Fixed
+- `_inn.scss`: importado módulo Bootstrap (`@use 'bootstrap/scss/bootstrap' as bs;`) para resolver namespace `bs` en mixins `@include bs.media-breakpoint-down(md)`.
+
 ## [0.9.9] - 2026-09-06
 
 ### Changed

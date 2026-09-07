@@ -33,14 +33,14 @@ export default function CarouselNav({
     <nav className={`lb-inn-hero-tabs lb-inn-hero-tabs--plain lb-inn-hero-tabs--${variant} ${className}`.trim()} aria-label="Opciones del proyecto">
       <ul className={`nav nav-pills nav-justified flex-wrap align-items-stretch gap-4`}>
         {items.map((item, index) => (
-          <li className="nav-item" key={item.label || index}>
+          <li className="nav-item" key={item.id || item.label || index}>
             <button
               type="button"
               className={`nav-link nav-link__border w-100 h-100 d-flex flex-${variant === 'stacked' ? 'column' : 'row'} align-items-center justify-content-center gap-2 ${index === activeIndex ? 'active' : ''}`}
               onClick={() => handleSelect(index)}
             >
               {variant === 'stacked' && item.icon && <ItemIcon icon={item.icon} />}
-              <span>{item.label}</span>
+              <span dangerouslySetInnerHTML={{ __html: item.label }} />
               {variant === 'button' && item.icon && <ItemIcon icon={item.icon} />}
             </button>
           </li>

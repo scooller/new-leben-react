@@ -289,7 +289,7 @@ export default function ProjectFeatureSection({
                               className="w-100 h-100 object-fit-contain rounded-3"
                           />
                           {activeImageObj.alt && (
-                            <span className="lb-inn-spaces-modal__caption w-md-50 mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
+                            <span className="lb-inn-spaces-modal__caption mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
                           )}
                         </a>
                       );

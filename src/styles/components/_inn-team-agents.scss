@@ -3,6 +3,7 @@
  * Variables duplicadas porque los módulos @use no heredan variables del padre (_inn.scss)
  */
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 $inn-gold: #c5a869;
 $inn-gold-dark: #422c15;
@@ -265,7 +266,7 @@ $inn-wa: #d1b578;
   }
 }
 
-@media (max-width: 991px) {
+@include bs.media-breakpoint-down(lg) {
   .lb-inn-team-agents {
     padding: $lb-section-pad-sm 0;
 
@@ -281,7 +282,7 @@ $inn-wa: #d1b578;
   }
 }
 
-@media (max-width: 575px) {
+@include bs.media-breakpoint-down(sm) {
   .lb-inn-team-agents {
     &__agent-info-card {
       padding-left: 1.5rem;

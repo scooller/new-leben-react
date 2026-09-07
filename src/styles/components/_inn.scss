@@ -1,5 +1,6 @@
 // INN (/inn-test) — solo lo que Bootstrap no cubre
 @use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
 
 $inn-gold: #d8b35cff;
 $inn-gold-dark: #422c15;
@@ -623,8 +624,11 @@ body:has(.lb-inn-hero-tabs) section[id] {
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
     text-align: center;
-    border-radius: 0 0 var(--bs-border-radius-lg) var(--bs-border-radius-lg);
     pointer-events: none;
+    @include bs.media-breakpoint-up(md) {// only desktop ancho máximo 40.5% para que no quede demasiado ancho en pantallas grandes
+      width: 40.5%;
+    }
+    
   }
 
   &__close {

@@ -203,19 +203,6 @@ export const projectDetails = {
       img('inn/galeria4.jpg'),
       img('inn/galeria5.jpg'),
     ],
-
-    // --- Team / Agents ---
-    team: {
-      eyebrow: 'Contactos - Sala de venta',
-      title: 'Te acompañamos en<br>todo el proceso',
-      subtitle: '<b>Visítanos en:</b> Vicente Pérez Rosales 991, Puerto Varas.<br><b>Horario sala de ventas:</b> Lun a Dom. 10:00 a 14:00 hrs.<br>y de 15:00 a 19:00 hrs.',
-      wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
-      agents: [
-        { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: img('team/Patricia-Ramirez.jpg') },
-        { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: img('team/catalina.jpg') },
-        { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: img('team/Patricia-Singh.jpg') },
-      ],
-    },
   },
 }
 
