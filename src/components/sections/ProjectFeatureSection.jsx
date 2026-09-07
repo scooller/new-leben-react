@@ -3,6 +3,7 @@ import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { X, ChevronLeft, ChevronRight, Image } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 
 // Fuerza del parallax del carrusel (se sobrescribe desde Inn.jsx)
@@ -245,7 +246,7 @@ export default function ProjectFeatureSection({
               aria-label="Cerrar" 
               onClick={() => setShowSpacesModal(false)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              <X size={24} />
             </button>
             <div className="modal-content bg-transparent border-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ maxWidth: '1200px' }}>
               
@@ -268,7 +269,7 @@ export default function ProjectFeatureSection({
                           }
                         }}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        <ChevronLeft size={24} />
                     </button>
                     
                     {(() => {
@@ -310,7 +311,7 @@ export default function ProjectFeatureSection({
                           }
                         }}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        <ChevronRight size={24} />
                     </button>
                 </div>
 
@@ -322,12 +323,16 @@ export default function ProjectFeatureSection({
                             <button
                                 key={index}
                                 onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
-                                className="btn btn-link text-decoration-none p-0"
+                                className="btn btn-link text-decoration-none p-0 d-inline-flex align-items-center"
                                 style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s' }}
                             >
-                                {isActive 
-                                    ? `${gallery.label} [${activeImageIndex + 1}/${gallery.images.length}]`
-                                    : gallery.label}
+                                <span>{gallery.label}</span>
+                                {isActive && (
+                                  <span className="d-inline-flex align-items-center gap-1 ms-1">
+                                    <Image size={14} className="flex-shrink-0" />
+                                    <span>[{activeImageIndex + 1}/{gallery.images.length}]</span>
+                                  </span>
+                                )}
                             </button>
                         );
                     })}

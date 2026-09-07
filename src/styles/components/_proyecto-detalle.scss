@@ -272,7 +272,11 @@
 // --- Cotizador ---
 .lb-proj-det-cotizador {
   background: $lb-cream;
-  // padding-block handled by .lb-cot-content-col so the hero image fills full height
+  padding-block: $lb-section-pad;
+
+  &--has-hero {
+    padding-block: 0; // padding-block handled by .lb-cot-content-col so the hero image fills full height
+  }
 }
 
 // Right content column padding (section padding moved here)

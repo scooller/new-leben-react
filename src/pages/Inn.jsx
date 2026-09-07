@@ -45,9 +45,12 @@ const TABS = [
 ]
 
 const SLIDES = [
-  { img: 'images/inn/galerias/Espacio_01.jpg', alt: '' },
-  { img: 'images/inn/galerias/Espacio_04.jpg', alt: '' },
-  { img: 'images/inn/galerias/Espacio_07.jpg', alt: '' },
+  { img: 'images/inn/proyecto/Proyecto_01_Acceso.jpg', alt: 'Acceso' },
+  { img: 'images/inn/proyecto/Proyecto_02_Cocina.jpg', alt: 'Cocina' },
+  { img: 'images/inn/proyecto/Proyecto_03_Living-Comedor.jpg', alt: 'Living Comedor' },
+  { img: 'images/inn/proyecto/Proyecto_04_Vista-Acceso.jpg', alt: 'Vista Acceso' },
+  { img: 'images/inn/proyecto/Proyecto_05_Isla.jpg', alt: 'Isla Cocina' },
+  { img: 'images/inn/proyecto/Proyecto_06_Dorm-Ppal.jpg', alt: 'Dormitorio Principal' },
 ]
 
 const EQUIPMENT_LOGOS = [
@@ -58,16 +61,12 @@ const EQUIPMENT_LOGOS = [
 ]
 
 const EQUIPMENT_SLIDES = [
-  { img: 'images/inn/galerias/Detalle_09.jpg', alt: 'Refrigerador' },
-  { img: 'images/inn/galerias/Detalle_08.jpg', alt: 'Horno y microondas' },
-  { img: 'images/inn/galerias/Detalle_10.jpg', alt: 'Encimera' },
-  { img: 'images/inn/galerias/Detalle_01.jpg', alt: 'Cubierta cocina' },
-  { img: 'images/inn/galerias/Detalle_02.jpg', alt: 'Grifería cocina' },
-  { img: 'images/inn/galerias/Detalle_03.jpg', alt: 'Ducha' },
-  { img: 'images/inn/galerias/Detalle_07.jpg', alt: 'Grifería baño' },
-  { img: 'images/inn/galerias/Detalle_04.jpg', alt: 'Cerradura electrónica' },
-  { img: 'images/inn/galerias/Detalle_05.jpg', alt: 'Terminación puertas' },
-  { img: 'images/inn/galerias/Detalle_06.jpg', alt: 'Manillas' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg', alt: 'Hall de acceso' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg', alt: 'Cocina' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Living-Comedor.jpg', alt: 'Living Comedor' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Terraza.jpg', alt: 'Terraza' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Dormitorios.jpg', alt: 'Dormitorio Principal' },
+  { img: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg', alt: 'Baño' },
 ]
 
 // Espacios comunes: iconos animados (pqoqubbw/icons). Jacuzzi exterior sin icono por ahora.
@@ -94,11 +93,11 @@ const ESPACIOS_COMUNES_SLIDES = [
 ]
 
 const GALLERY_IMAGES = [
-  { img: 'images/inn/ubicacion_1.jpg', alt: 'Galería 1' },
-  { img: 'images/inn/ubicacion_2.jpg', alt: 'Galería 2' },
-  { img: 'images/inn/ubicacion_3.jpg', alt: 'Galería 3' },
-  { img: 'images/inn/ubicacion_1.jpg', alt: 'Galería 4' },
-  { img: 'images/inn/ubicacion_2.jpg', alt: 'Galería 5' },
+  { img: 'images/inn/Ubicacion_01_Color.jpg', alt: 'Galería 1' },
+  { img: 'images/inn/Ubicacion_02_Color.jpg', alt: 'Galería 2' },
+  { img: 'images/inn/Ubicacion_03_Color.jpg', alt: 'Galería 3' },
+  { img: 'images/inn/Ubicacion_01_Color.jpg', alt: 'Galería 4' },
+  { img: 'images/inn/Ubicacion_02_Color.jpg', alt: 'Galería 5' },
 ]
 
 const MAP_FEATURES = [
@@ -119,35 +118,60 @@ const MAP_FEATURES = [
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
 const SPACES_MODAL_GALLERIES = [
   {
-    label: 'ACCESO',
+    label: 'Hall de acceso',
     images: [
-      { img: 'images/inn/terminaciones/terminacion-puertas.jpg', alt: 'Terminación puertas', thumb: 'images/inn/terminaciones/terminacion-puertas.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-horno.jpg', alt: 'Terminación horno', thumb: 'images/inn/terminaciones/terminacion-horno.jpg' }
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg', alt: 'Hall de acceso', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Cerradura_Digital.jpg', alt: 'Puerta de acceso con cerradura digital', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Cerradura_Digital.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Piso_SPC.jpg', alt: 'Piso vinilico SCP', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Piso_SPC.jpg' },
     ]
   },
   {
-    label: 'COCINA',
+    label: 'Cocina',
     images: [
-      { img: 'images/inn/terminaciones/terminacion-microondas.jpg', alt: 'Terminación microondas', thumb: 'images/inn/terminaciones/terminacion-microondas.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-encimera-campana.jpg', alt: 'Terminación encimera y campana', thumb: 'images/inn/terminaciones/terminacion-encimera-campana.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-lavavajillas.jpg', alt: 'Terminación lavavajillas', thumb: 'images/inn/terminaciones/terminacion-lavavajillas.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-cubierta-cocina.jpg', alt: 'Terminación cubierta de cocina', thumb: 'images/inn/terminaciones/terminacion-cubierta-cocina.jpg' }
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg', alt: 'Cocina', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación traventino', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg', alt: 'Lavavajillas panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg', alt: 'Equipamiento Franke', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg' },
     ]
   },
   {
-    label: 'LIVING - COMEDOR',
+    label: 'Living Comedor',
     images: [
-      { img: 'images/inn/terminaciones/terminacion-griferia-cocina.jpg', alt: 'Terminación grifería cocina', thumb: 'images/inn/terminaciones/terminacion-griferia-cocina.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-griferia-bano.jpg', alt: 'Terminación grifería baño', thumb: 'images/inn/terminaciones/terminacion-griferia-bano.jpg' },
-      { img: 'images/inn/terminaciones/terminacion-puertas.jpg', alt: 'Terminación puertas', thumb: 'images/inn/terminaciones/terminacion-puertas.jpg' }
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Living-Comedor.jpg', alt: 'Living comedor', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Living-Comedor.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Puertas_Interiores.jpg', alt: 'Puertas enchapadas en madera de encina', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Puertas_Interiores.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Iluminación_Ventanales.jpg', alt: 'Iluminación incluida ventanas de termopanel de PVC', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Iluminación_Ventanales.jpg' },
     ]
   },
   {
-    label: 'TERRAZA',
+    label: 'Terraza',
     images: [
-      { img: 'images/inn/terminaciones/terminacion-horno.jpg', alt: 'Terminación horno', thumb: 'images/inn/terminaciones/terminacion-horno.jpg' }
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Terraza.jpg', alt: 'Terraza', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Terraza.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Pavimento.jpg', alt: 'Terraza con pavimento Gres', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Pavimento.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Tejuelas.jpg', alt: 'Muros exteriores con revestimiento de tejuelas en madera nativa', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Tejuelas.jpg' },
     ]
-  }
+  },
+  {
+    label: 'Dormitorios',
+    images: [
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Dormitorios.jpg', alt: 'Dormitorio principal', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Dormitorios.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Wallkincloset.jpg', alt: 'Walk in closet', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Wallkincloset.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_2.jpg', alt: 'Dormitorio 2', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_2.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_3.jpg', alt: 'Dormitorio 3', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_3.jpg' },
+    ]
+  },
+  {
+    label: 'Baños',
+    images: [
+      { img: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg', alt: 'Baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Mampara.jpg', alt: 'Mampara vidrio templado en baños', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Mampara.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg', alt: 'Grifería Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg', alt: 'Ducha Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg', alt: 'Accesorios marca MK', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg' },
+    ]
+  },
 ]
 
 // Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
@@ -240,7 +264,7 @@ export default function Inn() {
         <HeroShell
           id="inicio"
           className="lb-inn-hero justify-content-center"
-          video={`${base}video/inn-test.mp4`}
+          video={`${base}video/inn-new.mp4`}
           bgWrapClassName="lb-inn-hero__bg-wrap"
           overlayClassName="lb-inn-hero__overlay"
         >

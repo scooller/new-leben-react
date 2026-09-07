@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.9] - 2026-09-06
+
+### Changed
+- `Cotizador`: `showHeroPanel` ahora es estrictamente `false` por defecto (`showHeroPanel = false`), debiendo activarse de forma explícita en las vistas que requieran el panel hero (como `CotizadorGeneral`).
+
+## [0.9.8] - 2026-09-06
+
+### Added
+- `Cotizador`: soporte para prop configurable `showHeroPanel` (booleano). Si es `false`, se omite el panel hero izquierdo y el cotizador se renderiza con el layout estándar `container` (ideal para vistas de proyecto); si es `true` (o modo `universal`), se muestra el panel izquierdo con parallax y layout ancho completo.
+
+## [0.9.7] - 2026-09-06
+
+### Added
+- `ProjectFeatureSection`: añadido icono `Image` de `lucide-react` frente al contador de imágenes en las pestañas del modal de espacios.
+
+## [0.9.6] - 2026-09-06
+
+### Refactored
+- `ProjectFeatureSection`: reemplazados los SVGs inline del modal de espacios por componentes `X`, `ChevronLeft` y `ChevronRight` de `lucide-react`.
+
 ## [0.9.5] - 2026-09-04
 
 ### Added

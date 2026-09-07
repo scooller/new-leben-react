@@ -167,7 +167,8 @@ function filtersFromSelection(selection) {
   return null
 }
 
-export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
+export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '', showHeroPanel = false }) {
+  const hasHero = Boolean(showHeroPanel)
   const [activeData, setActiveData] = useState(data)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
@@ -184,7 +185,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
   // Parallax animation for hero panel background and text
   useEffect(() => {
-    if (!heroPanelRef.current) return
+    if (!hasHero || !heroPanelRef.current) return
     const mm = gsap.matchMedia()
     mm.add('(min-width: 992px)', () => {
       if (heroBgRef.current) {
@@ -222,7 +223,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       }
     })
     return () => mm.revert()
-  }, [])
+  }, [hasHero])
 
   // Resolve planta ID + project slug from URL — read once on mount
   const [urlParams] = useState(() => {
@@ -514,22 +515,9 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const plantaImageUrl = activePlanta?.interior_image_url || null
   const planFitClass = mainImage && mainImage === plantaImageUrl ? 'object-fit-contain' : 'object-fit-cover'
 
-  return (
-    <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
-      <div className="container-fluid p-0">
-        <div className="row g-0 align-items-stretch">
-          {/* Left image panel with parallax */}
-          <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex" ref={heroPanelRef}>
-            <div className="lb-cot-hero-bg" ref={heroBgRef} />
-            <div className="lb-cot-hero-content" ref={heroTextRef}>
-              <p className="lb-cot-hero-text">Cotiza tu próximo departamento</p>
-            </div>
-          </div>
-
-          {/* Right: cotizador content */}
-          <div className="col-lg-9 lb-cot-content-col">
-      <div className="container">
-        {/* Header + Filters */}
+  const content = (
+    <div className="container">
+      {/* Header + Filters */}
         <div className="row align-items-start g-4 mb-4" animation="fade-up">
           <div className="col-lg-3">
             <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
@@ -834,10 +822,31 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
             ))}
           </div>
         )}
-      </div>{/* /container */}
-      </div>{/* /col-lg-9 */}
-        </div>{/* /row g-0 */}
-      </div>{/* /container-fluid */}
+      </div>
+  )
+
+  return (
+    <section className={`lb-proj-det-cotizador ${hasHero ? 'lb-proj-det-cotizador--has-hero' : ''} ${className}`.trim()} id="cotizador" ref={ref}>
+      {hasHero ? (
+        <div className="container-fluid p-0">
+          <div className="row g-0 align-items-stretch">
+            {/* Left image panel with parallax */}
+            <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex" ref={heroPanelRef}>
+              <div className="lb-cot-hero-bg" ref={heroBgRef} />
+              <div className="lb-cot-hero-content" ref={heroTextRef}>
+                <p className="lb-cot-hero-text">Cotiza tu próximo departamento</p>
+              </div>
+            </div>
+
+            {/* Right: cotizador content */}
+            <div className="col-lg-9 lb-cot-content-col">
+              {content}
+            </div>
+          </div>
+        </div>
+      ) : (
+        content
+      )}
 
       <CotizadorForm
         show={showCotizar}
