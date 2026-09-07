@@ -267,7 +267,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   // Lookup project etapa by name for smart ordering
   const projectEtapaByName = useMemo(() => {
     const map = {}
-    ;(projects || []).forEach((p) => { map[(p.name || '').trim().toLowerCase()] = p.etapa })
+      ; (projects || []).forEach((p) => { map[(p.name || '').trim().toLowerCase()] = p.etapa })
     return map
   }, [projects])
 
@@ -334,7 +334,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       const tipologia = [...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort()
       const orientacion = [...new Set(
         afterProyecto.map((p) => p.orientacion).filter(Boolean)
-            .map((code) => ORIENTACION_LABELS[code] || code)
+          .map((code) => ORIENTACION_LABELS[code] || code)
       )].sort()
 
       return { comuna, proyecto, tipologia, orientacion }
@@ -439,7 +439,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       pricing: { ...safeActiveData.pricing, ...enriched.pricing },
       floorPlan: { ...safeActiveData.floorPlan, thumbnails },
     }
-}, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
+  }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
   // Resolve selected index from URL planta ID once filteredPlantas load
   useEffect(() => {
@@ -514,14 +514,16 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const content = (
     <div className="container">
       {/* Header + Filters */}
-        <div className="row align-items-start g-4 mb-4" animation="fade-up">
+      <div className="row align-items-start g-4 mb-4" animation="fade-up">
+        {!hasHero && (
           <div className="col-lg-3">
             <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
           </div>
+        )}
 
-          {displayData.filters && (
-          <ScrollAnim as="div" className="col-lg-6 lb-proj-det-cot-filters-col">
-            <div className="lb-proj-det-cot-filters">
+        {displayData.filters && (
+          <ScrollAnim as="div" className={`${hasHero ? 'col-lg-12 ps-5 pt-3' : 'col-lg-9'} lb-proj-det-cot-filters-col`}>
+            <div className="lb-proj-det-cot-filters d-flex gap-2">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
                   <span className="spinner-border spinner-border-sm" role="status" />
@@ -581,7 +583,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                     />
                   </>)}
                 </div>
-                <div className="d-flex align-items-center gap-3 mt-2">
+                <div className="d-flex align-items-center gap-3 ms-auto">
                   <span className="badge bg-secondary d-inline-flex align-items-center gap-1" {...hover(countIconRef)}>
                     <MapPinHouseIcon ref={countIconRef} size={14} />
                     {showSkeleton ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
@@ -601,15 +603,15 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
               </>)}
             </div>
           </ScrollAnim>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Main row: esquicio + plan + details (or empty state) */}
-        {/* Main row: map always visible + content area changes (skeleton/empty/plan) */}
-        <div className="row g-4 mb-4 lb-proj-det-cot-main" id="detalle-cot">
+      {/* Main row: esquicio + plan + details (or empty state) */}
+      {/* Main row: map always visible + content area changes (skeleton/empty/plan) */}
+      <div className={`${hasHero ? 'ms-4' : ''} row g-4 mb-4 lb-proj-det-cot-main`} id="detalle-cot">
 
-          {/* Esquicio — hidden during empty state (no planta selected) */}
-          {showEmptyState ? null : (
+        {/* Esquicio — hidden during empty state (no planta selected) */}
+        {showEmptyState ? null : (
           <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
             {showSkeleton ? (
               <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
@@ -628,124 +630,124 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
               </div>
             ) : null}
           </ScrollAnim>
-          )}
+        )}
 
-          {/* Content: skeleton | empty state | floor plan + details */}
-          {/* Empty state renders immediately — initial fetch with no filters shouldn't skeleton */}
-          {showSkeleton ? (
-            <>
-              {/* Skeleton: floor plan card */}
-              <div className="col-lg-6 lb-proj-det-cot-plan-card">
-                <div className="lb-skeleton" style={{ width: '100%', height: '300px', borderRadius: '0.5rem' }} />
+        {/* Content: skeleton | empty state | floor plan + details */}
+        {/* Empty state renders immediately — initial fetch with no filters shouldn't skeleton */}
+        {showSkeleton ? (
+          <>
+            {/* Skeleton: floor plan card */}
+            <div className="col-lg-6 lb-proj-det-cot-plan-card">
+              <div className="lb-skeleton" style={{ width: '100%', height: '300px', borderRadius: '0.5rem' }} />
+            </div>
+
+            {/* Skeleton: details grid (2 cols, 6 items) + pricing */}
+            <div className="col-lg-3 lb-proj-det-cot-details">
+              <div className="lb-proj-det-cot-detail-grid">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="d-flex align-items-center gap-2">
+                    <div className="lb-skeleton rounded-circle" style={{ width: '24px', height: '24px', flexShrink: 0 }} />
+                    <div className="flex-grow-1">
+                      <div className="lb-skeleton" style={{ width: '4rem', height: '0.75rem' }} />
+                      <div className="lb-skeleton mt-1" style={{ width: '5.5rem', height: '1rem' }} />
+                    </div>
+                  </div>
+                ))}
               </div>
+              <div className="mt-4">
+                <div className="lb-skeleton" style={{ width: '6rem', height: '0.75rem' }} />
+                <div className="lb-skeleton mt-1" style={{ width: '8rem', height: '1.5rem' }} />
+              </div>
+            </div>
 
-              {/* Skeleton: details grid (2 cols, 6 items) + pricing */}
-              <div className="col-lg-3 lb-proj-det-cot-details">
-                <div className="lb-proj-det-cot-detail-grid">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="d-flex align-items-center gap-2">
-                      <div className="lb-skeleton rounded-circle" style={{ width: '24px', height: '24px', flexShrink: 0 }} />
-                      <div className="flex-grow-1">
-                        <div className="lb-skeleton" style={{ width: '4rem', height: '0.75rem' }} />
-                        <div className="lb-skeleton mt-1" style={{ width: '5.5rem', height: '1rem' }} />
+            {/* Skeleton: bottom row — thumbnails + CTA */}
+            <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
+              <div className="d-flex gap-2 flex-wrap">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="lb-skeleton" style={{ width: '64px', height: '64px', borderRadius: '0.375rem' }} />
+                ))}
+              </div>
+            </div>
+            <div className="col-lg-3 lb-proj-det-cot-bottom">
+              <div className="lb-skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '0.375rem' }} />
+            </div>
+          </>
+        ) : showEmptyState ? (
+          <div className="col-lg-9 offset-lg-4 text-start py-5 lb-cot-empty-state">
+            <div className="alert alert-warning d-inline-block text-center" role="alert">
+              <p className="text-muted mb-1">{hasFilters ? 'Sin resultados para tu búsqueda.' : 'Usa los filtros para encontrar tu departamento ideal.'}</p>
+              {hasFilters && (
+                <p className="text-muted small">Prueba con otra combinación de filtros.</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <>
+
+            {/* Floor plan card */}
+            <div className="col-lg-6 lb-proj-det-cot-plan-card">
+              <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
+                {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
+                {mainImage ? (
+                  <img
+                    src={mainImage}
+                    alt="Planta del departamento"
+                    className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
+                    onLoad={() => setSwitching(false)}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div className="d-flex align-items-center justify-content-center text-muted small" style={{ minHeight: '18rem' }}>
+                    Sin imágenes disponibles para esta planta
+                  </div>
+                )}
+              </div>
+              {filteredPlantas.length > 1 && (<>
+                <button
+                  className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
+                  onClick={() => changePlanta(-1)}
+                  disabled={selected <= 0}
+                  aria-label="Planta anterior"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
+                  onClick={() => changePlanta(1)}
+                  disabled={selected >= filteredPlantas.length - 1}
+                  aria-label="Planta siguiente"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>)}
+            </div>
+
+            {/* Details grid */}
+            <div className="col-lg-3 lb-proj-det-cot-details">
+              {displayData.details?.length > 0 && (
+                <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
+                  {displayData.details.map((d) => (
+                    <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
+                      <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
+                        {(() => { const Icon = DETAIL_ICONS[d.icon] ?? Layers; return <Icon size={24} /> })()}
+                      </span>
+                      <div className="d-flex flex-column">
+                        <span className="lb-proj-det-cot-detail-label">{d.label}</span>
+                        <span className="lb-proj-det-cot-detail-value">{d.value}</span>
                       </div>
                     </div>
                   ))}
-                </div>
-                <div className="mt-4">
-                  <div className="lb-skeleton" style={{ width: '6rem', height: '0.75rem' }} />
-                  <div className="lb-skeleton mt-1" style={{ width: '8rem', height: '1.5rem' }} />
-                </div>
-              </div>
-
-              {/* Skeleton: bottom row — thumbnails + CTA */}
-              <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
-                <div className="d-flex gap-2 flex-wrap">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="lb-skeleton" style={{ width: '64px', height: '64px', borderRadius: '0.375rem' }} />
-                  ))}
-                </div>
-              </div>
-              <div className="col-lg-3 lb-proj-det-cot-bottom">
-                <div className="lb-skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '0.375rem' }} />
-              </div>
-            </>
-          ) : showEmptyState ? (
-            <div className="col-lg-9 offset-lg-4 text-start py-5 lb-cot-empty-state">
-              <div className="alert alert-warning d-inline-block text-center" role="alert">
-                <p className="text-muted mb-1">{hasFilters ? 'Sin resultados para tu búsqueda.' : 'Usa los filtros para encontrar tu departamento ideal.'}</p>
-                {hasFilters && (
-                <p className="text-muted small">Prueba con otra combinación de filtros.</p>
-                )}
-              </div>
-            </div>
-          ) : (
-          <>
-
-          {/* Floor plan card */}
-          <div className="col-lg-6 lb-proj-det-cot-plan-card">
-            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
-              {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
-              {mainImage ? (
-                <img
-                  src={mainImage}
-                  alt="Planta del departamento"
-                  className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
-                  onLoad={() => setSwitching(false)}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <div className="d-flex align-items-center justify-content-center text-muted small" style={{ minHeight: '18rem' }}>
-                  Sin imágenes disponibles para esta planta
-                </div>
+                </ScrollAnim>
               )}
-            </div>
-            {filteredPlantas.length > 1 && (<>
-              <button
-                className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
-                onClick={() => changePlanta(-1)}
-                disabled={selected <= 0}
-                aria-label="Planta anterior"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
-                onClick={() => changePlanta(1)}
-                disabled={selected >= filteredPlantas.length - 1}
-                aria-label="Planta siguiente"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </>)}
-          </div>
 
-          {/* Details grid */}
-          <div className="col-lg-3 lb-proj-det-cot-details">
-            {displayData.details?.length > 0 && (
-            <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
-              {displayData.details.map((d) => (
-                <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
-                  <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
-                    {(() => { const Icon = DETAIL_ICONS[d.icon] ?? Layers; return <Icon size={24} /> })()}
-                  </span>
-                  <div className="d-flex flex-column">
-                    <span className="lb-proj-det-cot-detail-label">{d.label}</span>
-                    <span className="lb-proj-det-cot-detail-value">{d.value}</span>
-                  </div>
-                </div>
-              ))}
-            </ScrollAnim>
-            )}
-
-            {/* Pricing */}
+              {/* Pricing */}
               <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
                 <div className="row align-items-end">
                   <div className="col-md">
                     <span className="lb-proj-det-cot-price-label">{displayData.pricing.label}</span>
                     <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
-                      <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>                      
+                      <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>
                     </div>
                   </div>
                   <div className="col-md">
@@ -754,71 +756,71 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                       onClick={() => setShowCotizar(true)}
                     >
                       {displayData.ctaText}
-                    </button>      
+                    </button>
                   </div>
                 </div>
               </ScrollAnim>
-          </div>
-
-          {/* Bottom row: map caption + thumbnails + CTA */}
-          {displayData.mapImage && (
-            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">            
-              <ActionButton className='w-100 h-100' icon={TelescopeIcon} onClick={() => setShowVistas(true)}>
-                Vistas por piso de tu Dpto
-              </ActionButton></div>
-          )}
-          <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
-            <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
-              {displayData.floorPlan.thumbnails.map((thumb, i) => (
-                <button
-                  key={i}
-                  className={`lb-proj-det-cot-thumb${imgIndex === i ? ' lb-proj-det-cot-thumb--active' : ''}`}
-                  onClick={() => setImgIndex(i)}
-                >
-                  <img src={thumb} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
-                </button>
-              ))}
             </div>
-          </div>
-          <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
-            <div className="btn-group w-100" role="group" aria-label="Acciones">
-              <ActionButton icon={DownloadIcon}>
-                Descargar Brochure
-              </ActionButton>
-              <ActionButton
-                variant="btn-outline-primary"
-                icon={ExternalLinkIcon}
-                iconRef={shareIconRef}
-                onClick={() => setShowShare(true)}
-              >
-                <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
-              </ActionButton>
-            </div>
-          </div>
-          </>
-          )}
-        </div>
 
-        {/* Plantas relacionadas */}
-        {plantasRelacionadas?.length > 0 && (
-          <div className="row g-4 mt-2" animation="fade-up">
-            <ScrollAnim as="h3" className="lb-proj-det-cot-plantas-title mb-3 col-12">Plantas relacionadas</ScrollAnim>
-            {plantasRelacionadas.map((p, i) => (
-              <div key={i} className="col-md-6 col-lg-4">
-                <button
-                  className="card h-100 lb-proj-det-cot-planta-card"
-                  onClick={() => { setActiveData(p.data); setSelected(0) }}
-                >
-                  {p.image && <img src={p.image} alt={p.label} className="card-img-top" loading="lazy" />}
-                  <div className="card-body">
-                    <h5 className="card-title mb-0">{p.label}</h5>
-                  </div>
-                </button>
+            {/* Bottom row: map caption + thumbnails + CTA */}
+            {displayData.mapImage && (
+              <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
+                <ActionButton className='w-100 h-100' icon={TelescopeIcon} onClick={() => setShowVistas(true)}>
+                  Vistas por piso de tu Dpto
+                </ActionButton></div>
+            )}
+            <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
+              <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
+                {displayData.floorPlan.thumbnails.map((thumb, i) => (
+                  <button
+                    key={i}
+                    className={`lb-proj-det-cot-thumb${imgIndex === i ? ' lb-proj-det-cot-thumb--active' : ''}`}
+                    onClick={() => setImgIndex(i)}
+                  >
+                    <img src={thumb} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
+              <div className="btn-group w-100" role="group" aria-label="Acciones">
+                <ActionButton icon={DownloadIcon}>
+                  Descargar Brochure
+                </ActionButton>
+                <ActionButton
+                  variant="btn-outline-primary"
+                  icon={ExternalLinkIcon}
+                  iconRef={shareIconRef}
+                  onClick={() => setShowShare(true)}
+                >
+                  <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
+                </ActionButton>
+              </div>
+            </div>
+          </>
         )}
       </div>
+
+      {/* Plantas relacionadas */}
+      {plantasRelacionadas?.length > 0 && (
+        <div className="row g-4 mt-2" animation="fade-up">
+          <ScrollAnim as="h3" className="lb-proj-det-cot-plantas-title mb-3 col-12">Plantas relacionadas</ScrollAnim>
+          {plantasRelacionadas.map((p, i) => (
+            <div key={i} className="col-md-6 col-lg-4">
+              <button
+                className="card h-100 lb-proj-det-cot-planta-card"
+                onClick={() => { setActiveData(p.data); setSelected(0) }}
+              >
+                {p.image && <img src={p.image} alt={p.label} className="card-img-top" loading="lazy" />}
+                <div className="card-body">
+                  <h5 className="card-title mb-0">{p.label}</h5>
+                </div>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 
   return (
