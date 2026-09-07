@@ -4,6 +4,8 @@ import { hover } from '../icons/animated-icon.jsx'
 import { CalendarCheckIcon } from '../icons/calendar-check.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
+import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 
 /**
  * Inn Team Agents section — adapted from the screenshot
@@ -13,7 +15,7 @@ function AgentRow({ agent, onSchedule }) {
   const waRef = useRef(null)
 
   return (
-    <div className="lb-inn-team-agents__agent-row">
+    <ScrollAnim as='div' animation='fade-up' className="lb-inn-team-agents__agent-row">
       <div className="lb-inn-team-agents__agent-info-card">
         <div className="lb-inn-team-agents__agent-data">
           <p className="lb-inn-team-agents__name">
@@ -59,7 +61,7 @@ function AgentRow({ agent, onSchedule }) {
           className="lb-inn-team-agents__avatar"
         />
       </div>
-    </div>
+    </ScrollAnim>
   )
 }
 
@@ -115,8 +117,8 @@ export default function InnTeamAgents({ data, apiId }) {
         <div className="lb-inn-team-agents__layout">
           {/* Left column - Agents */}
           <div className="lb-inn-team-agents__left">
-            <span className="lb-inn-team-agents__eyebrow">{data.eyebrow}</span>
-            <h2 className="lb-inn-team-agents__title" dangerouslySetInnerHTML={{ __html: data.title }} />
+            <ScrollAnim as='span' animation='flip-x' className="lb-inn-team-agents__eyebrow">{data.eyebrow}</ScrollAnim>
+            <SplitTitle as='h2' delay={0.2} stagger={0.05} className="lb-inn-team-agents__title" dangerouslySetInnerHTML={{ __html: data.title }} />
 
             <div className="lb-inn-team-agents__agents-list w-md-75">
               {agents.map((agent) => (
@@ -139,8 +141,8 @@ export default function InnTeamAgents({ data, apiId }) {
 
           {/* Right column - Info + Map */}
           <div className="lb-inn-team-agents__right">
-            <p className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
-            <div className="lb-inn-team-agents__map">
+            <ScrollAnim as='p' animation='fade-up' delay={0.2} stagger={0.05} className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
+            <ScrollAnim as='div' animation='scale' delay={0.4} className="lb-inn-team-agents__map">
               <iframe
                 src={data.wazeMap}
                 title="Ubicación Waze"
@@ -149,81 +151,81 @@ export default function InnTeamAgents({ data, apiId }) {
                 allowFullScreen
                 loading="lazy"
               />
-            </div>
+            </ScrollAnim>
           </div>
         </div>
       </div>
 
       {/* Modal agendar visita */}
       {showModal && createPortal(
-          <div className="modal d-block" tabIndex="-1" onClick={() => setShowModal(false)}>
-            <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-content lb-inn-team-agents__modal">
-                <div className="modal-header border-0">
-                  <h5 className="modal-title d-flex align-items-center gap-2">
-                    <CalendarCheckIcon size={20} /> Agenda tu visita
-                  </h5>
-                  <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Cerrar" />
-                </div>
-                <form onSubmit={handleSchedule}>
-                  <div className="modal-body">
-                    <p className="text-muted small mb-3">
-                      Selecciona asesor, día y hora. Te redirigiremos a WhatsApp con el mensaje listo.
-                    </p>
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold">Asesor</label>
-                      <select
-                        className="form-select"
-                        value={selectedAgent}
-                        onChange={(e) => setSelectedAgent(e.target.value)}
-                        required
-                      >
-                        {agents.map((a) => (
-                          <option key={a.email} value={a.email}>{a.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold">Fecha</label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        min={today}
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <label className="form-label fw-semibold">Hora</label>
-                      <div className="d-flex flex-wrap gap-2">
-                        {timeSlots.map((slot) => (
-                          <button
-                            key={slot}
-                            type="button"
-                            className={`btn btn-sm ${selectedTime === slot ? 'btn-dark' : 'btn-outline-dark'}`}
-                            onClick={() => setSelectedTime(slot)}
-                          >
-                            {slot}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="modal-footer border-0">
-                    <button type="button" className="btn btn-outline-dark" onClick={() => setShowModal(false)}>
-                      Cancelar
-                    </button>
-                    <button type="submit" className="btn btn-dark">
-                      Confirmar por WhatsApp
-                    </button>
-                  </div>
-                </form>
+        <div className="modal d-block" tabIndex="-1" onClick={() => setShowModal(false)}>
+          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content lb-inn-team-agents__modal">
+              <div className="modal-header border-0">
+                <h5 className="modal-title d-flex align-items-center gap-2">
+                  <CalendarCheckIcon size={20} /> Agenda tu visita
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Cerrar" />
               </div>
+              <form onSubmit={handleSchedule}>
+                <div className="modal-body">
+                  <p className="text-muted small mb-3">
+                    Selecciona asesor, día y hora. Te redirigiremos a WhatsApp con el mensaje listo.
+                  </p>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Asesor</label>
+                    <select
+                      className="form-select"
+                      value={selectedAgent}
+                      onChange={(e) => setSelectedAgent(e.target.value)}
+                      required
+                    >
+                      {agents.map((a) => (
+                        <option key={a.email} value={a.email}>{a.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Fecha</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      min={today}
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label className="form-label fw-semibold">Hora</label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {timeSlots.map((slot) => (
+                        <button
+                          key={slot}
+                          type="button"
+                          className={`btn btn-sm ${selectedTime === slot ? 'btn-dark' : 'btn-outline-dark'}`}
+                          onClick={() => setSelectedTime(slot)}
+                        >
+                          {slot}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer border-0">
+                  <button type="button" className="btn btn-outline-dark" onClick={() => setShowModal(false)}>
+                    Cancelar
+                  </button>
+                  <button type="submit" className="btn btn-dark">
+                    Confirmar por WhatsApp
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </div>,
+        document.body
+      )}
     </section>
   )
 }

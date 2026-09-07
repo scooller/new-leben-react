@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
+import ScrollAnim from '../ScrollAnim'
+import SplitTitle from '../SplitTitle'
 
 const isImage = (src) => /\.(png|jpe?g|webp|gif|avif|svg)(\?|#|$)/i.test(src)
 
@@ -44,12 +46,12 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
   return (
     <section className={`lb-inn-360 container-fluid ${className}`.trim()} id="recorridos-360" aria-labelledby="recorridos-360-title">
       <div className="container">
-        <h2 id="recorridos-360-title" className="visually-hidden">Recorridos 360</h2>
-        <h3 className="lb-inn-360__title">
+        <SplitTitle id="recorridos-360-title" as='h2' text="Recorridos 360" />
+        <ScrollAnim as='h3' animation='fade-up' className="lb-inn-360__title">
           <img src={`${base}images/icons/360.svg`} alt="" aria-hidden="true" />
           <span>{activeTour.title}</span>
-        </h3>
-        <div className="ratio ratio-16x9 lb-inn-360__viewer" ref={viewerRef}>
+        </ScrollAnim>
+        <ScrollAnim as='div' animation='fade' className="ratio ratio-16x9 lb-inn-360__viewer" ref={viewerRef}>
           {isImage(activeTour.src) ? (
             <a
               href={activeTour.src}
@@ -70,20 +72,20 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
               key={activeTour.src}
               src={activeTour.src}
               title={activeTour.title}
-                  allow={`${activeTour.allow}; fullscreen`}
+              allow={`${activeTour.allow}; fullscreen`}
               allowFullScreen
-                  loading="eager"
-                  referrerPolicy="strict-origin-when-cross-origin"
+              loading="eager"
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           )}
+        </ScrollAnim>
+        <div className="text-end mt-2">
+          <a href={activeTour.src} target="_blank" rel="noreferrer" className="small text-muted">
+            Abrir recorrido en una nueva ventana
+          </a>
         </div>
-            <div className="text-end mt-2">
-              <a href={activeTour.src} target="_blank" rel="noreferrer" className="small text-muted">
-                Abrir recorrido en una nueva ventana
-              </a>
-            </div>
 
-        <div className="card lb-inn-hero-tabs__inner shadow-lg mt-3 mx-auto">
+        <ScrollAnim as='div' animation='fade-up' className="card lb-inn-hero-tabs__inner shadow-lg mt-3 mx-auto">
           <div className="card-body p-2 p-md-4">
             <ul className="nav nav-pills nav-justified flex-wrap gap-5" role="tablist" aria-label="Recorridos del proyecto">
               {tours.map((tour, index) => (
@@ -101,7 +103,7 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
               ))}
             </ul>
           </div>
-        </div>
+        </ScrollAnim>
       </div>
     </section>
   )

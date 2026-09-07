@@ -4,6 +4,7 @@ import Navbar from '../components/layout/Navbar.jsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
+import SplitTitle from '../components/SplitTitle.jsx'
 import CarouselNav from '../components/sections/CarouselNav.jsx'
 import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.jsx'
 import HeroShell from '../components/sections/HeroShell.jsx'
@@ -38,7 +39,7 @@ const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Equipamiento' },
   { id: 'cotizador', label: 'Cotizador' },
-  { id: 'espacios', label: 'Espacios' },  
+  { id: 'espacios', label: 'Espacios' },
   { id: 'ubicacion', label: 'Ubicación' },
   { id: 'interiorismo', label: 'Interiorismo' },
   { id: 'contacto', label: 'Contacto' },
@@ -182,7 +183,7 @@ const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
 
 const MAP = {
   eyebrow: <>Ubicación</>,
-  title: <>VISTAS<br/>INSUPERABLES</>,
+  title: <>VISTAS<br />INSUPERABLES</>,
   description: 'Despertar con el marco imponente del lago Llanquihue y los volcanes es solo el comienzo. Imagina tan solo cruzar la calle y sentir el aire fresco del sur mientras caminas por la costanera, disfrutar un café de especialidad a pocos pasos de tu puerta o terminar la tarde cenando en los mejores restaurantes de Puerto Varas. Una ubicación privilegiada para disfrutar el lago, la ciudad y el sur como parte de tu rutina.',
   image: 'images/inn/mapa.png',
   logo: 'images/inn/V.png',
@@ -220,7 +221,7 @@ export default function Inn() {
       // Preselección del proyecto INN (apiId 9)
       const inn = Array.isArray(data) ? data.find((p) => p.id === 9) : null
       if (inn) setInnProject(inn)
-    }).catch(() => {})
+    }).catch(() => { })
     return () => { cancelled = true }
   }, [])
   // Selección estable: misma referencia entre renders para que el Cotizador
@@ -275,15 +276,15 @@ export default function Inn() {
         {/* HERO */}
         <HeroShell
           id="inicio"
-          className="lb-inn-hero justify-content-center"
+          className="lb-inn-hero justify-content-center position-relative"
           video={`${base}video/inn-new.mp4`}
           bgWrapClassName="lb-inn-hero__bg-wrap"
           overlayClassName="lb-inn-hero__overlay"
         >
-          <ScrollAnim animation='zoom-in' className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
-            <img src={`${base}images/inn/inn-logo.png`} className="lb-inn-hero__logo mt-auto" alt="Logo INN" />
-            <h1 className="lb-inn-hero__title p-0">VIVE EL LUJO<br/> EN PUERTO VARAS</h1>
-          </ScrollAnim>
+          <div className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
+            <ScrollAnim as='span' animation='zoom-in' className='mt-auto'><img src={`${base}images/inn/inn-logo.png`} className="lb-inn-hero__logo" alt="Logo INN" /></ScrollAnim>
+            <SplitTitle as='h1' delay={0.2} stagger={0.05} className="lb-inn-hero__title p-0">VIVE EL LUJO<br /> EN PUERTO VARAS</SplitTitle>
+          </div>
         </HeroShell>
 
         {/* Botonera pinneada debajo del header (sticky se confina al padre, por eso vive fuera del hero) */}
@@ -315,16 +316,16 @@ export default function Inn() {
         {/* DATOS DEL PROYECTO */}
         <section className="lb-inn-info" aria-label="Datos del proyecto">
           <div className="container">
-            <ScrollAnim className="row row-cols-1 row-cols-lg-5 text-center gx-4 gy-3">
-              {INFO.map((t) => (
-                <div className="col" key={t.id}>
+            <div className="row row-cols-1 row-cols-lg-5 text-center gx-4 gy-3">
+              {INFO.map((t, i) => (
+                <ScrollAnim animation='scale' delay={0.5 * (i + 1)} className="col" key={t.id}>
                   <div className="d-flex flex-column gap-1">
                     <small className="lb-inn-info__label text-uppercase">{t.label}</small>
                     <span className="fw-bold">{t.value}</span>
                   </div>
-                </div>
+                </ScrollAnim>
               ))}
-            </ScrollAnim>
+            </div>
           </div>
         </section>
 
@@ -418,39 +419,43 @@ export default function Inn() {
           <div className="container">
             <div className="row g-0">
               <div className="col-12 col-lg-7 order-2 order-lg-1 p-5 d-flex flex-column justify-content-center">
-                <ScrollAnim className="mb-5 lb-inn-map__header">
-                  <span className="lb-inn-proyecto__eyebrow d-block mb-5">{MAP.eyebrow}</span>
+                <div className="mb-5 lb-inn-map__header">
+                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-5">{MAP.eyebrow}</ScrollAnim>
                   <div className="d-flex align-items-center gap-4">
-                    <img
-                      src={`${base}${MAP.logo}`}
-                      alt="Logo INN"
-                      className="lb-inn-map__header-logo"
-                    />
+                    <ScrollAnim as="span" animation="fade-left">
+                      <img
+                        src={`${base}${MAP.logo}`}
+                        alt="Logo INN"
+                        className="lb-inn-map__header-logo"
+                        />
+                    </ScrollAnim>
                     <div className='lb-inn-map__titulos-right'>
-                      <h2 className="lb-inn-proyecto__title mb-0">{MAP.title}</h2>
+                      <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={MAP.title} stagger={0.06} />
                     </div>
                   </div>
-                </ScrollAnim>
+                </div>
                 <div className="lb-inn-map__text text-center text-lg-start">
-                  <p className="lh-lg mb-5">
+                  <ScrollAnim animation="fade-up" className="lh-lg mb-5">
                     {MAP.description}
-                  </p>                  
+                  </ScrollAnim>
                 </div>
               </div>
               <div className="col-12 col-lg-5 order-1 order-lg-2">
-                <button
-                  ref={mapRef}
-                  type="button"
-                  className="lb-inn-map__image position-relative h-100 border-0 bg-transparent p-0 w-100"
-                  onClick={() => setShowMapModal(true)}
-                  aria-label="Ver mapa de ubicación ampliado"
-                >
-                  <img
-                    src={`${base}${MAP.image}`}
-                    alt="Mapa de ubicación (clic para ampliar)"
-                    className="img-fluid w-100 h-100 object-fit-contain"
-                  />
-                </button>
+                <ScrollAnim animation="fade-right">
+                  <button
+                    ref={mapRef}
+                    type="button"
+                    className="lb-inn-map__image position-relative h-100 border-0 bg-transparent p-0 w-100"
+                    onClick={() => setShowMapModal(true)}
+                    aria-label="Ver mapa de ubicación ampliado"
+                  >
+                    <img
+                      src={`${base}${MAP.image}`}
+                      alt="Mapa de ubicación (clic para ampliar)"
+                      className="img-fluid w-100 h-100 object-fit-contain"
+                    />
+                  </button>
+                </ScrollAnim>
               </div>
             </div>
           </div>
@@ -458,7 +463,7 @@ export default function Inn() {
 
         {/* Carousel de imágenes en blanco y negro */}
         <section className="lb-inn-gallery pt-3 pb-3" id="galeria">
-          <ScrollAnim className='container' animation="fade-in">
+          <ScrollAnim className='container' animation="fade-up">
             <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
               <div className="carousel-inner">
                 {GALLERY_SLIDES.map((slideImages, slideIndex) => (

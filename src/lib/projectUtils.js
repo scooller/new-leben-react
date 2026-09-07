@@ -43,13 +43,19 @@ export function mapApiProject(p) {
   }
 }
 
+export const ORIENTACION_LABELS = {
+  N: 'Norte', S: 'Sur', E: 'Oriente', O: 'Poniente',
+  NE: 'Nor-Oriente', NO: 'Nor-Poniente',
+  SE: 'Sur-Oriente', SO: 'Sur-Poniente',
+  P: 'Patio', SP: 'Sin Patio',
+}
+
 /** Group raw API projects by comuna → [{ zone, projects }] */
 export function groupByComuna(projects) {
-  const map = {}
-  for (const p of projects) {
-    const zone = (p.comuna || 'Otros').trim()
-    if (!map[zone]) map[zone] = []
-    map[zone].push(mapApiProject(p))
-  }
-  return Object.entries(map).map(([zone, projects]) => ({ zone, projects }))
+  const groups = Object.groupBy(projects || [], (p) => (p.comuna || 'Otros').trim())
+  return Object.entries(groups).map(([zone, list]) => ({
+    zone,
+    projects: list.map(mapApiProject),
+  }))
 }
+

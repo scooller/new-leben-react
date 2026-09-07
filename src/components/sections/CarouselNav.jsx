@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { hover } from '../icons/animated-icon.jsx'
+import ScrollAnim from '../ScrollAnim.jsx'
 
 // Icono por item: string = imagen estática | componente = icono animado en hover (ref propio)
 function ItemIcon({ icon }) {
@@ -33,7 +34,7 @@ export default function CarouselNav({
     <nav className={`lb-inn-hero-tabs lb-inn-hero-tabs--plain lb-inn-hero-tabs--${variant} ${className}`.trim()} aria-label="Opciones del proyecto">
       <ul className={`nav nav-pills nav-justified flex-wrap align-items-stretch gap-4`}>
         {items.map((item, index) => (
-          <li className="nav-item" key={item.id || item.label || index}>
+          <ScrollAnim key={item.id || item.label || index} animation="fade-up" delay={index * 0.1} className="nav-item">
             <button
               type="button"
               className={`nav-link nav-link__border w-100 h-100 d-flex flex-${variant === 'stacked' ? 'column' : 'row'} align-items-center justify-content-center gap-2 ${index === activeIndex ? 'active' : ''}`}
@@ -43,7 +44,7 @@ export default function CarouselNav({
               <span dangerouslySetInnerHTML={{ __html: item.label }} />
               {variant === 'button' && item.icon && <ItemIcon icon={item.icon} />}
             </button>
-          </li>
+          </ScrollAnim>
         ))}
       </ul>
     </nav>

@@ -8,6 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: Three.js es pesado; se descarga al abrir el modal, no al cargar la página
 const Room3DMockup = lazy(() => import('./Room3DMockup.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
+import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -54,11 +55,6 @@ function ActionButton({ icon: Icon, variant = 'btn-outline-dark', className = ''
 
 const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, compass: Compass, maximize: Maximize }
 
-const ORIENTACION_LABELS = {
-  N: 'Norte', S: 'Sur', E: 'Oriente', O: 'Poniente',
-  NE: 'Nor-Oriente', NO: 'Nor-Poniente',
-  SE: 'Sur-Oriente', SO: 'Sur-Poniente',
-}
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {

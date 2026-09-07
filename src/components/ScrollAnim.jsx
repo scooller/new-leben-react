@@ -7,16 +7,22 @@ import { gsap } from 'gsap'
  * Props: as, animation (preset), duration, delay, stagger, start, once, className, style, children
  */
 const PRESETS = {
-  'fade-up':    { from: { opacity: 0, y: 50 },  to: { opacity: 1, y: 0 } },
-  'fade-left':  { from: { opacity: 0, x: -50 }, to: { opacity: 1, x: 0 } },
+  'fade': { from: { opacity: 0 }, to: { opacity: 1 } },
+  'fade-up': { from: { opacity: 0, y: 50 }, to: { opacity: 1, y: 0 } },
+  'fade-down': { from: { opacity: 0, y: -50 }, to: { opacity: 1, y: 0 } },
+  'fade-left': { from: { opacity: 0, x: -50 }, to: { opacity: 1, x: 0 } },
   'fade-right': { from: { opacity: 0, x: 50 }, to: { opacity: 1, x: 0 } },
-  'zoom-in':   { from: { opacity: 0, scale: 0.8, y: 50 }, to: { opacity: 1, scale: 1, y: 0 } },
-  'scale':      { from: { opacity: 0, scale: 0.9 }, to: { opacity: 1, scale: 1 } },
+  'zoom-in': { from: { opacity: 0, scale: 0.8, y: 50, transformOrigin: 'center center' }, to: { opacity: 1, scale: 1, y: 0 } },
+  'scale': { from: { opacity: 0, scale: 0.9, transformOrigin: 'center center' }, to: { opacity: 1, scale: 1 } },
+  'flip-x': { from: { opacity: 0, rotateX: 90, transformOrigin: 'center center' }, to: { opacity: 1, rotateX: 0 } },
+  'flip-y': { from: { opacity: 0, rotateY: 90, transformOrigin: 'center center' }, to: { opacity: 1, rotateY: 0 } },
+  'rotate': { from: { opacity: 0, rotate: 180, transformOrigin: 'center center' }, to: { opacity: 1, rotate: 0 } },
+  'bounce': { from: { opacity: 0, y: 100, transformOrigin: 'center center' }, to: { opacity: 1, y: 0, ease: 'back.out(1.7)', yoyo: true } },
 }
 
 export default function ScrollAnim({
   as: Tag = 'div',
-  animation = 'fade-up',
+  animation = 'fade',
   duration = 0.8,
   delay = 0,
   stagger = 0,
@@ -25,6 +31,7 @@ export default function ScrollAnim({
   className = '',
   style,
   children,
+  dangerouslySetInnerHTML,
   ...rest
 }) {
   const ref = useRef(null)
@@ -37,8 +44,10 @@ export default function ScrollAnim({
     if (!el) return
 
     const preset = PRESETS[animation] || PRESETS['fade-up']
-    const targets = stagger > 0 ? Array.from(el.children) : el
-    if (Array.isArray(targets) && targets.length === 0) return
+    const hasChildElements = el.children && el.children.length > 0
+    const targets = (stagger > 0 && !dangerouslySetInnerHTML && hasChildElements)
+      ? Array.from(el.children)
+      : el
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -49,7 +58,7 @@ export default function ScrollAnim({
           duration,
           delay,
           ease: 'power3.out',
-          stagger: stagger > 0 ? Math.min(stagger, 0.5) : 0,
+          stagger: targets !== el && stagger > 0 ? Math.min(stagger, 0.5) : 0,
           scrollTrigger: {
             trigger: el,
             start,
@@ -60,7 +69,19 @@ export default function ScrollAnim({
     }, el)
 
     return () => ctx.revert()
-  }, [animation, duration, delay, stagger, start, once, isLoaded])
+  }, [animation, duration, delay, stagger, start, once, isLoaded, dangerouslySetInnerHTML])
+
+  if (dangerouslySetInnerHTML) {
+    return (
+      <Tag
+        ref={ref}
+        className={className}
+        style={style}
+        dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+        {...rest}
+      />
+    )
+  }
 
   return (
     <Tag ref={ref} className={className} style={style} {...rest}>

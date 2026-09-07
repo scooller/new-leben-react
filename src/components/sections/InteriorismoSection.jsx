@@ -3,6 +3,7 @@ import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -99,32 +100,30 @@ export default function InteriorismoSection({
           <div className="col-lg-6 align-self-stretch position-relative lb-inn-proyecto__text-column">
             <div className="h-100 pe-4" animation="fade-up">
               {eyebrow && (
-                <ScrollAnim as="span" className="lb-inn-proyecto__eyebrow">
+                <ScrollAnim as="span" animation='flip-x' className="lb-inn-proyecto__eyebrow">
                   {eyebrow}
-                </ScrollAnim>
-              )}  
-              
-              {title && (
-                <ScrollAnim as="h2" className="lb-inn-proyecto__title">
-                  {title}
                 </ScrollAnim>
               )}
 
+              {title && (
+                <SplitTitle as="h2" className="lb-inn-proyecto__title" text={title} stagger={0.06} />
+              )}
+
               {description && (
-                <ScrollAnim as="p" className="lb-inn-proyecto__text">
+                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text">
                   {description}
                 </ScrollAnim>
               )}
 
               {currentDesigner.text && (
-                <ScrollAnim as="div" className="lb-inn-interiorismo__designer-content mt-4"> 
-                  <h3 style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3"
+                <div className="lb-inn-interiorismo__designer-content mt-4">
+                  <SplitTitle style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3"
                     dangerouslySetInnerHTML={{ __html: currentDesigner.name }}
                   />
-                  <p className="lh-lg lb-inn-interiorismo__designer-text">
+                  <ScrollAnim as="p" animation='fade-up' className="lh-lg lb-inn-interiorismo__designer-text">
                     {currentDesigner.text}
-                  </p>                
-                </ScrollAnim>
+                  </ScrollAnim>
+                </div>
               )}
             </div>
           </div>
@@ -138,23 +137,25 @@ export default function InteriorismoSection({
                 >
                   <button
                     type="button"
-                    className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
-                      index === activeDesigner ? 'active' : ''
-                    }`}
+                    className={`btn btn-lg lb-inn-interiorismo__designer-btn ${index === activeDesigner ? 'active' : ''
+                      }`}
                     onClick={designer.text ? () => setActiveDesigner(index) : undefined}
                     disabled={!designer.text}
                     style={{
                       ...(!designer.text && { opacity: 1 }),
                     }}
                   >
-                    <div
+                    <ScrollAnim
+                      as="div"
+                      animation='fade-up'
                       className="lb-inn-interiorismo__designer-img"
                       aria-hidden="true"
+                      delay={0.1 * index}
                       style={designer.image ? {
                         backgroundImage: `url("${base}${designer.image}")`,
                       } : undefined}
                     />
-                    <h4
+                    <SplitTitle
                       className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
                       dangerouslySetInnerHTML={{ __html: designer.name }}
                     />

@@ -5,6 +5,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { X, ChevronLeft, ChevronRight, Image } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 
 // Fuerza del parallax del carrusel (se sobrescribe desde Inn.jsx)
 const PARALLAX_STRENGTH = 14
@@ -110,19 +111,17 @@ export default function ProjectFeatureSection({
           <div className="col-lg-5 align-self-stretch position-relative lb-inn-proyecto__text-column">
             <div className="h-100 pe-4" animation="fade-up">
               {eyebrow && (
-                <ScrollAnim as="span" className="lb-inn-proyecto__eyebrow">
+                <ScrollAnim as="span" delay={0.2} animation='flip-x' className="lb-inn-proyecto__eyebrow">
                   {eyebrow}
                 </ScrollAnim>
               )}
 
               {title && (
-                <ScrollAnim as="h2" className="lb-inn-proyecto__title">
-                  {title}
-                </ScrollAnim>
+                <SplitTitle as="h2" className="lb-inn-proyecto__title" text={title} />
               )}
 
               {description && (
-                <ScrollAnim as="p" className="lb-inn-proyecto__text">
+                <ScrollAnim as="p" animation='fade-right' className="lb-inn-proyecto__text">
                   {description}
                 </ScrollAnim>
               )}
@@ -142,7 +141,7 @@ export default function ProjectFeatureSection({
               )}
 
               {spacesModal?.galleries?.length > 0 && (
-                <ScrollAnim as="div" className="lb-inn-proyecto__spaces-btn-wrap mt-3 position-absolute">
+                <ScrollAnim as="div" delay={0.2} animation='scale' className="lb-inn-proyecto__spaces-btn-wrap mt-3 position-absolute">
                   <button
                     type="button"
                     className="btn btn-lg lb-inn-proyecto__spaces-btn"
@@ -158,7 +157,7 @@ export default function ProjectFeatureSection({
               )}
 
               {(highlightOffer) && (
-                <ScrollAnim
+                <SplitTitle
                   as="h3"
                   className='lb-inn-proyecto__highligthtitle mt-5'
                   // highlightOffer llega como string con HTML (<b>), se renderiza tal cual
@@ -240,131 +239,131 @@ export default function ProjectFeatureSection({
             onClick={(e) => e.stopPropagation()}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <button 
-              type="button" 
-              className="btn position-fixed top-0 end-0 m-4 p-2 z-3 text-white rounded-circle d-flex align-items-center justify-content-center lb-inn-spaces-modal__close" 
-              aria-label="Cerrar" 
+            <button
+              type="button"
+              className="btn position-fixed top-0 end-0 m-4 p-2 z-3 text-white rounded-circle d-flex align-items-center justify-content-center lb-inn-spaces-modal__close"
+              aria-label="Cerrar"
               onClick={() => setShowSpacesModal(false)}
             >
               <X size={24} />
             </button>
             <div className="modal-content bg-transparent border-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ maxWidth: '1200px' }}>
-              
+
               <div className="modal-body p-0 w-100 d-flex flex-column align-items-center justify-content-center position-relative">
                 {/* Main image container */}
                 <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '70vh', border: '1px solid var(--lb-inn-spaces-frame-border)', borderRadius: 'var(--bs-border-radius-lg)', overflow: 'hidden' }}>
-                    <button 
-                        className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-3 d-flex align-items-center justify-content-center"
-                        style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
-                        onClick={() => {
-                          if (activeImageIndex > 0) {
-                            setActiveImageIndex(activeImageIndex - 1);
-                          } else if (activeGalleryIndex > 0) {
-                            setActiveGalleryIndex(activeGalleryIndex - 1);
-                            setActiveImageIndex(spacesModal.galleries[activeGalleryIndex - 1].images.length - 1);
-                          } else {
-                            const lastGalleryIndex = spacesModal.galleries.length - 1;
-                            setActiveGalleryIndex(lastGalleryIndex);
-                            setActiveImageIndex(spacesModal.galleries[lastGalleryIndex].images.length - 1);
-                          }
-                        }}
-                    >
-                        <ChevronLeft size={24} />
-                    </button>
-                    
-                    {(() => {
-                      const activeImageObj = spacesModal.galleries[activeGalleryIndex]?.images[activeImageIndex];
-                      if (!activeImageObj) return null;
-                      return (
-                        <a
-                          href={`${base}${activeImageObj.img}`}
-                          data-fancybox="inn-espacios"
-                          data-caption={activeImageObj.alt || ''}
-                          aria-label={`Ampliar imagen`}
-                          className="w-100 h-100 position-relative"
-                        >
-                          <img
-                              src={`${base}${activeImageObj.img}`}
-                              alt={activeImageObj.alt || ''}
-                              className="w-100 h-100 object-fit-contain rounded-3"
-                          />
-                          {activeImageObj.alt && (
-                            <span className="lb-inn-spaces-modal__caption mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
-                          )}
-                        </a>
-                      );
-                    })()}
+                  <button
+                    className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-3 d-flex align-items-center justify-content-center"
+                    style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    onClick={() => {
+                      if (activeImageIndex > 0) {
+                        setActiveImageIndex(activeImageIndex - 1);
+                      } else if (activeGalleryIndex > 0) {
+                        setActiveGalleryIndex(activeGalleryIndex - 1);
+                        setActiveImageIndex(spacesModal.galleries[activeGalleryIndex - 1].images.length - 1);
+                      } else {
+                        const lastGalleryIndex = spacesModal.galleries.length - 1;
+                        setActiveGalleryIndex(lastGalleryIndex);
+                        setActiveImageIndex(spacesModal.galleries[lastGalleryIndex].images.length - 1);
+                      }
+                    }}
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
 
-                    <button 
-                        className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center justify-content-center"
-                        style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
-                        onClick={() => {
-                          const currentGallery = spacesModal.galleries[activeGalleryIndex];
-                          if (activeImageIndex < currentGallery.images.length - 1) {
-                            setActiveImageIndex(activeImageIndex + 1);
-                          } else if (activeGalleryIndex < spacesModal.galleries.length - 1) {
-                            setActiveGalleryIndex(activeGalleryIndex + 1);
-                            setActiveImageIndex(0);
-                          } else {
-                            setActiveGalleryIndex(0);
-                            setActiveImageIndex(0);
-                          }
-                        }}
-                    >
-                        <ChevronRight size={24} />
-                    </button>
+                  {(() => {
+                    const activeImageObj = spacesModal.galleries[activeGalleryIndex]?.images[activeImageIndex];
+                    if (!activeImageObj) return null;
+                    return (
+                      <a
+                        href={`${base}${activeImageObj.img}`}
+                        data-fancybox="inn-espacios"
+                        data-caption={activeImageObj.alt || ''}
+                        aria-label={`Ampliar imagen`}
+                        className="w-100 h-100 position-relative"
+                      >
+                        <img
+                          src={`${base}${activeImageObj.img}`}
+                          alt={activeImageObj.alt || ''}
+                          className="w-100 h-100 object-fit-contain rounded-3"
+                        />
+                        {activeImageObj.alt && (
+                          <span className="lb-inn-spaces-modal__caption mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
+                        )}
+                      </a>
+                    );
+                  })()}
+
+                  <button
+                    className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center justify-content-center"
+                    style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    onClick={() => {
+                      const currentGallery = spacesModal.galleries[activeGalleryIndex];
+                      if (activeImageIndex < currentGallery.images.length - 1) {
+                        setActiveImageIndex(activeImageIndex + 1);
+                      } else if (activeGalleryIndex < spacesModal.galleries.length - 1) {
+                        setActiveGalleryIndex(activeGalleryIndex + 1);
+                        setActiveImageIndex(0);
+                      } else {
+                        setActiveGalleryIndex(0);
+                        setActiveImageIndex(0);
+                      }
+                    }}
+                  >
+                    <ChevronRight size={24} />
+                  </button>
                 </div>
 
                 {/* Tabs / Categories below image */}
                 <div className="d-flex justify-content-center gap-4 mt-4 text-uppercase fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>
-                    {spacesModal.galleries.map((gallery, index) => {
-                        const isActive = index === activeGalleryIndex;
-                        return (
-                            <button
-                                key={index}
-                                onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
-                                className="btn btn-link text-decoration-none p-0 d-inline-flex align-items-center"
-                                style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s' }}
-                            >
-                                <span>{gallery.label}</span>
-                                {isActive && (
-                                  <span className="d-inline-flex align-items-center gap-1 ms-1">
-                                    <Image size={14} className="flex-shrink-0" />
-                                    <span>[{activeImageIndex + 1}/{gallery.images.length}]</span>
-                                  </span>
-                                )}
-                            </button>
-                        );
-                    })}
+                  {spacesModal.galleries.map((gallery, index) => {
+                    const isActive = index === activeGalleryIndex;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
+                        className="btn btn-link text-decoration-none p-0 d-inline-flex align-items-center"
+                        style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s' }}
+                      >
+                        <span>{gallery.label}</span>
+                        {isActive && (
+                          <span className="d-inline-flex align-items-center gap-1 ms-1">
+                            <Image size={14} className="flex-shrink-0" />
+                            <span>[{activeImageIndex + 1}/{gallery.images.length}]</span>
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Thumbnails of current category */}
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    {spacesModal.galleries[activeGalleryIndex]?.images.map((imgObj, idx) => {
-                        const isActiveThumb = idx === activeImageIndex;
-                        return (
-                            <button
-                                key={idx}
-                                onClick={() => setActiveImageIndex(idx)}
-                                className="p-0 bg-transparent"
-                                style={{ 
-                                  width: '80px', 
-                                  height: '60px', 
-                                  overflow: 'hidden', 
-                                  border: isActiveThumb ? '2px solid var(--lb-inn-spaces-accent)' : '2px solid transparent',
-                                  borderRadius: 'var(--bs-border-radius)',
-                                  transition: 'border-color 0.2s, opacity 0.2s',
-                                  opacity: isActiveThumb ? 1 : 0.6 
-                                }}
-                            >
-                                <img
-                                    src={`${base}${imgObj.thumb || imgObj.img}`}
-                                    alt={`Thumb ${idx}`}
-                                    className="w-100 h-100 object-fit-cover"
-                                />
-                            </button>
-                        );
-                    })}
+                  {spacesModal.galleries[activeGalleryIndex]?.images.map((imgObj, idx) => {
+                    const isActiveThumb = idx === activeImageIndex;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveImageIndex(idx)}
+                        className="p-0 bg-transparent"
+                        style={{
+                          width: '80px',
+                          height: '60px',
+                          overflow: 'hidden',
+                          border: isActiveThumb ? '2px solid var(--lb-inn-spaces-accent)' : '2px solid transparent',
+                          borderRadius: 'var(--bs-border-radius)',
+                          transition: 'border-color 0.2s, opacity 0.2s',
+                          opacity: isActiveThumb ? 1 : 0.6
+                        }}
+                      >
+                        <img
+                          src={`${base}${imgObj.thumb || imgObj.img}`}
+                          alt={`Thumb ${idx}`}
+                          className="w-100 h-100 object-fit-cover"
+                        />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

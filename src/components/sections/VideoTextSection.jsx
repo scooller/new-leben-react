@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SplitTitle from '../SplitTitle.jsx'
+import ScrollAnim from '../ScrollAnim.jsx'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -48,9 +50,9 @@ export default function VideoTextSection({
 
       <div className="container position-relative">
         <div className="lb-inn-video-banner__content w-75 mx-auto">
-          {eyebrow && <span className="lb-inn-video-banner__eyebrow mx-auto mb-1">{eyebrow}</span>}
-          {title && <h3 className="lb-inn-video-banner__title mx-auto mb-2">{title}</h3>}
-          {text && <p className="lb-inn-video-banner__text mx-auto">{text}</p>}
+          {eyebrow && <ScrollAnim animation='flip-x' className="lb-inn-video-banner__eyebrow mx-auto mb-1">{eyebrow}</ScrollAnim>}
+          {title && <SplitTitle as='h3' text={title} delay={0.3} stagger={0.05} className="lb-inn-video-banner__title mx-auto mb-2" />}
+          {text && <SplitTitle as='p' text={text} delay={0.6} stagger={0.02} className="lb-inn-video-banner__text mx-auto" />}
         </div>
       </div>
     </section>

@@ -120,76 +120,76 @@ export default function Proyectos() {
         {/* Featured Projects */}
         <section className="lb-featured container-fluid" id="proyectos">
           <div className="container d-flex flex-column gap-5">
-          {hasFilters && (
-            <div className="d-flex align-items-center justify-content-end">
-              <button
-                className="btn btn-outline-secondary btn-sm rounded-pill"
-                onClick={() => setSearchParams()}
-              >
-                Resetear filtros
-              </button>
-            </div>
-          )}
-          {/* Filter bar */}
-          <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3">
-            <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
-              {dynamicFilters.map((f) => (
-                <select
-                  key={f.id}
-                  className="form-select form-select-sm border-0 bg-transparent"
-                  style={{ width: 'auto' }}
-                  value={searchParams.get(f.id) || ''}
-                  onChange={(e) => {
-                    const next = new URLSearchParams(searchParams)
-                    if (e.target.value) next.set(f.id, e.target.value)
-                    else next.delete(f.id)
-                    setSearchParams(next)
-                  }}
+            {hasFilters && (
+              <div className="d-flex align-items-center justify-content-end">
+                <button
+                  className="btn btn-outline-secondary btn-sm rounded-pill"
+                  onClick={() => setSearchParams()}
                 >
-                  <option value="">{f.label}</option>
-                  {f.options.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              ))}
-            </div>
-          </div>
-          {projectsLoading ? (
-            /* Skeleton grid while API loads */
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="col">
-                  <ProjectCardSkeleton />
-                </div>
-              ))}
-            </div>
-          ) : projectsError ? (
-            <div className="text-center py-5">
-              <p className="text-danger mb-3">No se pudieron cargar los proyectos.</p>
-              <button className="btn btn-outline-primary btn-sm" onClick={() => window.location.reload()}>Reintentar</button>
-            </div>
-          ) : (
-            <>
-              {filteredGroups.map((group, gi) => (
-                <div className="d-flex flex-column gap-4" key={group.zone}>
-                  <ScrollAnim as="div" className="d-flex align-items-center justify-content-between" animation="fade-right" delay={gi * 0.1}>
-                    <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
-                  </ScrollAnim>
-
-                  <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-                    {group.projects.map((project) => (
-                      <div key={project.name} className="col">
-                        <ProjectCard project={project} />
-                      </div>
+                  Resetear filtros
+                </button>
+              </div>
+            )}
+            {/* Filter bar */}
+            <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3">
+              <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
+                {dynamicFilters.map((f) => (
+                  <select
+                    key={f.id}
+                    className="form-select form-select-sm border-0 bg-transparent"
+                    style={{ width: 'auto' }}
+                    value={searchParams.get(f.id) || ''}
+                    onChange={(e) => {
+                      const next = new URLSearchParams(searchParams)
+                      if (e.target.value) next.set(f.id, e.target.value)
+                      else next.delete(f.id)
+                      setSearchParams(next)
+                    }}
+                  >
+                    <option value="">{f.label}</option>
+                    {f.options.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
                     ))}
-                  </ScrollAnim>
-                </div>
-              ))}
-            </>
-          )}
-          {!projectsLoading && !projectsError && filteredGroups.length === 0 && (
-            <p className="text-center text-muted py-5">No se encontraron proyectos con los filtros seleccionados.</p>
-          )}
+                  </select>
+                ))}
+              </div>
+            </div>
+            {projectsLoading ? (
+              /* Skeleton grid while API loads */
+              <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="col">
+                    <ProjectCardSkeleton />
+                  </div>
+                ))}
+              </div>
+            ) : projectsError ? (
+              <div className="text-center py-5">
+                <p className="text-danger mb-3">No se pudieron cargar los proyectos.</p>
+                <button className="btn btn-outline-primary btn-sm" onClick={() => window.location.reload()}>Reintentar</button>
+              </div>
+            ) : (
+              <>
+                {filteredGroups.map((group, gi) => (
+                  <div className="d-flex flex-column gap-4" key={group.zone}>
+                    <ScrollAnim as="div" className="d-flex align-items-center justify-content-between" animation="fade-right" delay={gi * 0.1}>
+                      <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
+                    </ScrollAnim>
+
+                    <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
+                      {group.projects.map((project) => (
+                        <div key={project.name} className="col">
+                          <ProjectCard project={project} />
+                        </div>
+                      ))}
+                    </ScrollAnim>
+                  </div>
+                ))}
+              </>
+            )}
+            {!projectsLoading && !projectsError && filteredGroups.length === 0 && (
+              <p className="text-center text-muted py-5">No se encontraron proyectos con los filtros seleccionados.</p>
+            )}
           </div>
         </section>
 
@@ -200,7 +200,7 @@ export default function Proyectos() {
         <section className="lb-proj-cta container-fluid d-flex flex-column align-items-center gap-5" animation="fade-up" duration={1} style={{ '--lb-cta-bg': `url(${images.proyectosCta})` }}>
           <div className="container position-relative d-flex flex-column align-items-center gap-5">
             <div className="lb-proj-cta-bg-wrap position-relative h-100 p-4 rounded-4">
-              <ScrollAnim as="div" className="position-relative d-flex flex-column align-items-center gap-3 text-center" style={{ zIndex: 1 }} animation="fade-in" duration={1}>            
+              <ScrollAnim as="div" className="position-relative d-flex flex-column align-items-center gap-3 text-center" style={{ zIndex: 1 }} animation="fade" duration={1}>
                 <span className="lb-vprops-eyebrow">{proyectosCta.eyebrow}</span>
                 <h2 className="mb-0 lb-proj-cta-title">{proyectosCta.title}</h2>
                 <p className="mb-0 lb-proj-cta-subtitle">{proyectosCta.subtitle}</p>

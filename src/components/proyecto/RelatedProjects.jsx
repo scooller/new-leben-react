@@ -3,13 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-
-const ORIENTACION_LABELS = {
-  N: 'Norte', S: 'Sur', E: 'Oriente', O: 'Poniente',
-  NE: 'Nor-Oriente', NO: 'Nor-Poniente',
-  SE: 'Sur-Oriente', SO: 'Sur-Poniente',
-  P: 'Patio', SP: 'Sin Patio',
-}
+import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
 
 /**
  * Related projects table — fetches real plantas from API.
