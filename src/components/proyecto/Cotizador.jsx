@@ -297,8 +297,11 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   }, [data, selection, universal])
 
   // Fetch plantas from API — universal paginates through ALL available, otherwise per-project
+  // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
   useEffect(() => {
     if (!universal && !apiId) { setPlantas([]); return }
+    const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion)
+    if (universal && !universalHasFilter) { setPlantas([]); return }
     let cancelled = false
     setLoading(true)
 
@@ -311,7 +314,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal])
+  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
@@ -586,7 +589,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                 <div className="d-flex align-items-center gap-3 ms-auto">
                   <span className="badge bg-secondary d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                     <MapPinHouseIcon ref={countIconRef} size={14} />
-                    {showSkeleton ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
+                    {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
                   </span>
                   <button
                     className="btn btn-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"

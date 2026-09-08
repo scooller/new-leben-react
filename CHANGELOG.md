@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.26] - 2026-09-08
+
+### Fixed
+- `TeamAgents.jsx`: corregida importación inexistente de `SplitText` a `SplitTitle`. Agregadas guardas seguras para `data` opcional y renderizado condicional de `wazeMap` cuando el proyecto no incluye mapa o datos estáticos de asesores.
+
+## [0.9.25] - 2026-09-08
+
+### Fixed
+- `Cotizador.jsx`: el badge de deptos encontrados ahora muestra `'Buscando deptos…'` mientras `plantas` está cargando desde la API (`loading && !plantas.length`), evitando mostrar `0 deptos encontrados` durante la carga inicial.
+
 ## [0.9.24] - 2026-09-08
 
 ### Changed

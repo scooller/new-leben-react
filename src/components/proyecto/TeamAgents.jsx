@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 import AgentCard from './AgentCard.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
 
@@ -27,16 +28,31 @@ export default function TeamAgents({ data, apiId }) {
     })
     return () => { cancelled = true }
   }, [apiId])
+
+  if (!data && !apiId) return null
+
+  const title = data?.title || 'Te acompañamos en cada decisión'
+  const subtitle = data?.subtitle || ''
+  const wazeMap = data?.wazeMap
+
   return (
     <section className="lb-proj-det-team container text-center" id="contacto">
       <div className="row">
-        <ScrollAnim as="div" className='col-12' animation="fade-up">
-          <h2 className="lb-proj-det-section-title mb-4">{data.title}</h2>
-        </ScrollAnim>
-        <div className="col-12 col-md-7">
-          <ScrollAnim as="div" animation="fade-up">
-            <p className="lb-proj-det-team-subtitle text-muted mx-auto">{data.subtitle}</p>
-          </ScrollAnim>
+        <div className='col-12'>
+          <SplitTitle
+            as="h2"
+            className="lb-proj-det-section-title mb-4"
+            text={title}
+          />
+        </div>
+        <div className={wazeMap ? "col-12 col-md-7" : "col-12 col-md-10 mx-auto"}>
+          {subtitle && (
+            <SplitTitle
+              as="p"
+              className="lb-proj-det-team-subtitle text-muted mx-auto"
+              text={subtitle}
+            />
+          )}
 
           <ScrollAnim
             as="div"
@@ -53,19 +69,21 @@ export default function TeamAgents({ data, apiId }) {
             ))}
           </ScrollAnim>
         </div>
-        <div className="col-12 col-md-5">
-          <ScrollAnim as="div" animation="fade-up" className="h-100">
-            <iframe
-              src={data.wazeMap}
-              title="Ubicación Waze"
-              width="100%"
-              height="450"
-              allowFullScreen
-              loading="lazy"
-              style={{ border: 0, borderRadius: 'var(--lb-radius-md, 1rem)' }}
-            />
-          </ScrollAnim>
-        </div>
+        {wazeMap && (
+          <div className="col-12 col-md-5">
+            <ScrollAnim as="div" animation="fade-up" className="h-100">
+              <iframe
+                src={wazeMap}
+                title="Ubicación Waze"
+                width="100%"
+                height="450"
+                allowFullScreen
+                loading="lazy"
+                style={{ border: 0, borderRadius: 'var(--lb-radius-md, 1rem)' }}
+              />
+            </ScrollAnim>
+          </div>
+        )}
       </div>
     </section>
   )
