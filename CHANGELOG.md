@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.33] - 2026-09-08
+
+### Changed
+- `_proyecto-detalle.scss`: ajustada posición de la flecha indicadora del cotizador a `top: 10rem`.
+- `_inn.scss`, `Inn.jsx`: ajustes de jerarquía tipográfica, espaciados y layout en secciones del proyecto INN.
+- `Cotizador.jsx`: actualizado estilo visual del badge de conteo de departamentos a `text-bg-dark`.
+- `VideoTextSection.jsx`, `ProjectFeatureSection.jsx`, `Recorridos360.jsx`: ajustes de niveles de encabezados (`h1`, `h2`, `h4`) y títulos de sección.
+
+## [0.9.32] - 2026-09-08
+
+### Fixed
+- `ScrollAnim.jsx`: comparar el contenido HTML primitivo (`dangerouslySetInnerHTML?.__html`) en lugar de la referencia del objeto en las dependencias de `useEffect`, evitando que la animación se reinicie en bucle infinito ante re-renders de componentes padres.
+- `InnTeamAgents.jsx`: removido prop `stagger` innecesario en el subtítulo animado.
+
 ## [0.9.31] - 2026-09-08
 
 ### Changed

@@ -23,7 +23,7 @@ export default function InteriorismoSection({
   // Array of designers with their images and text content
   designers = [
     {
-      name: 'Sofía Iturralde<br/><small>Designer</small>',
+      name: 'Sofía Iturralde<br/><small>Interiorista</small>',
       image: 'images/inn/Foto_Iturralde.jpg',
       alt: 'Diseño de Sofía Iturralde',
       color: '#d9bc70',
@@ -112,7 +112,7 @@ export default function InteriorismoSection({
               )}
 
               {description && (
-                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text">
+                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text w-md-80">
                   {description}
                 </ScrollAnim>
               )}

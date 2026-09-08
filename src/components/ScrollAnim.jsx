@@ -37,6 +37,8 @@ export default function ScrollAnim({
   const ref = useRef(null)
   const isLoaded = useSelector((s) => s.ui.isLoaded)
 
+  const htmlContent = dangerouslySetInnerHTML?.__html
+
   useEffect(() => {
     if (!isLoaded) return
 
@@ -69,7 +71,8 @@ export default function ScrollAnim({
     }, el)
 
     return () => ctx.revert()
-  }, [animation, duration, delay, stagger, start, once, isLoaded, dangerouslySetInnerHTML])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animation, duration, delay, stagger, start, once, isLoaded, htmlContent])
 
   if (dangerouslySetInnerHTML) {
     return (

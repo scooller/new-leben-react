@@ -160,7 +160,7 @@ export default function ProjectFeatureSection({
 
               {(highlightOffer) && (
                 <SplitTitle
-                  as="h3"
+                  as="h4"
                   className='lb-inn-proyecto__highligthtitle mt-5'
                   // highlightOffer llega como string con HTML (<b>), se renderiza tal cual
                   dangerouslySetInnerHTML={{ __html: highlightOffer }}

@@ -6,13 +6,13 @@ $inn-gold: #d8b35cff;
 $inn-gold-dark: #422c15;
 $inn-gris: #808080;
 $inn-gris-dark: #101010;
-$inn-celeste: rgb(226,237,249);
+$inn-celeste: rgb(226, 237, 249);
 $inn-gold-bg: #faf4e8;
 
 // Import team agents styles (namespace evita conflicto de variables $inn-*)
 @use './inn-team-agents';
 
-.lb-inn{
+.lb-inn {
   color: $inn-gris-dark;
 }
 
@@ -87,10 +87,10 @@ $inn-gold-bg: #faf4e8;
     flex-wrap: wrap; // fallback si no caben todos en una línea
   }
 
-// Scroll de tabs: compensar navbar fijo + botonera sticky
-body:has(.lb-inn-hero-tabs) section[id] {
-  scroll-margin-top: 10rem;
-}
+  // Scroll de tabs: compensar navbar fijo + botonera sticky
+  body:has(.lb-inn-hero-tabs) section[id] {
+    scroll-margin-top: 10rem;
+  }
 
   &__inner {
     border-radius: $lb-radius-pill;
@@ -107,12 +107,14 @@ body:has(.lb-inn-hero-tabs) section[id] {
         border-color: $lb-dark;
       }
 
-      &:hover, &.active {
+      &:hover,
+      &.active {
         background: $inn-gold;
-        background: linear-gradient(180deg,rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
         color: $lb-white;
         border-color: $inn-gold;
-        img{
+
+        img {
           filter: brightness(1);
         }
       }
@@ -137,11 +139,13 @@ body:has(.lb-inn-hero-tabs) section[id] {
         border: 1px solid $lb-dark;
       }
 
-      &:hover, &.active {
+      &:hover,
+      &.active {
         background: $inn-gold;
-        background: linear-gradient(360deg,rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        background: linear-gradient(360deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
         color: $lb-white;
         border-color: $inn-gold;
+
         img {
           filter: brightness(0) invert(1);
         }
@@ -178,13 +182,16 @@ body:has(.lb-inn-hero-tabs) section[id] {
     border-radius: $lb-radius-pill;
     border: none;
 
-    &:hover, &.active {
+    &:hover,
+    &.active {
       background: transparent;
       color: $inn-gold;
+
       img {
         filter: none;
       }
     }
+
     img {
       width: 2rem;
       height: 2rem;
@@ -215,7 +222,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
   padding-left: 0;
   padding-right: 0;
 
-  .container.lb-shadow-box{
+  .container.lb-shadow-box {
     margin-bottom: 7rem;
     background-image: var(--lb-inn-proyecto-bg, url(/images/inn/bg-montain.svg));
     background-repeat: no-repeat;
@@ -224,20 +231,20 @@ body:has(.lb-inn-hero-tabs) section[id] {
     background-size: 70%;
   }
 
-  &#departamentos{
-    .container.lb-shadow-box{
+  &#departamentos {
+    .container.lb-shadow-box {
       background-size: 57%;
     }
   }
 
-  &#espacios{
-    .container.lb-shadow-box{
+  &#espacios {
+    .container.lb-shadow-box {
       background-size: 57%;
     }
   }
 
-  &#interiorismo{
-    .container.lb-shadow-box{
+  &#interiorismo {
+    .container.lb-shadow-box {
       background-size: 51%;
     }
   }
@@ -264,10 +271,11 @@ body:has(.lb-inn-hero-tabs) section[id] {
     }
   }
 
-  &__highligthtitle{
+  &__highligthtitle {
     color: $inn-gold;
     font-family: $font-title;
-    b{
+
+    b {
       font-size: 1.2em;
       vertical-align: middle;
     }
@@ -306,6 +314,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
     font-size: $lb-fs-md;
     color: $inn-gris-dark;
     margin-bottom: 1.1rem;
+    line-height: 1.8;
   }
 
   &__frame {
@@ -315,9 +324,10 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
     .lb-inn-proyecto__parallax {
       height: 100%;
-      img{
+
+      img {
         aspect-ratio: 1 / 1;
-        max-height: 35rem;     
+        max-height: 35rem;
       }
     }
   }
@@ -400,7 +410,6 @@ body:has(.lb-inn-hero-tabs) section[id] {
 
   &__title {
     font-family: $font-title;
-    font-size: $lb-heading-1;
     color: rgba($lb-white, 0.94);
     line-height: 1.05;
     letter-spacing: 0.02em;
@@ -408,7 +417,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
   }
 
   &__text {
-    font-size: $lb-fs-2xl;
+    font-weight: 200;
     line-height: 1.7;
     color: rgba($lb-white, 0.94);
   }
@@ -474,7 +483,8 @@ body:has(.lb-inn-hero-tabs) section[id] {
       border: 1px solid $lb-dark;
     }
 
-    &:hover, &.active {
+    &:hover,
+    &.active {
       background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
       color: $lb-white;
       border-color: $inn-gold;
@@ -495,7 +505,8 @@ body:has(.lb-inn-hero-tabs) section[id] {
     height: 9rem;
     flex-shrink: 0;
   }
-  &__titulos-right{
+
+  &__titulos-right {
     margin-left: -2rem;
   }
 
@@ -579,19 +590,19 @@ body:has(.lb-inn-hero-tabs) section[id] {
   .btn-group {
     border-radius: 2rem;
 
-    > .btn {
+    >.btn {
       border-radius: 0;
     }
 
-    > .btn:first-child {
+    >.btn:first-child {
       border-radius: 2rem 0 0 2rem;
     }
 
-    > .btn:last-child {
+    >.btn:last-child {
       border-radius: 0 2rem 2rem 0;
     }
 
-    > .btn:only-child {
+    >.btn:only-child {
       border-radius: 2rem;
     }
   }
@@ -625,10 +636,12 @@ body:has(.lb-inn-hero-tabs) section[id] {
     color: #fff;
     text-align: center;
     pointer-events: none;
-    @include bs.media-breakpoint-up(md) {// only desktop ancho máximo 40.5% para que no quede demasiado ancho en pantallas grandes
+
+    @include bs.media-breakpoint-up(md) {
+      // only desktop ancho máximo 40.5% para que no quede demasiado ancho en pantallas grandes
       width: 40.5%;
     }
-    
+
   }
 
   &__close {
@@ -637,7 +650,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
     pointer-events: auto !important;
     width: 48px;
     height: 48px;
-    
+
     &:hover {
       background-color: var(--bs-danger) !important;
     }
@@ -666,7 +679,8 @@ body:has(.lb-inn-hero-tabs) section[id] {
         border-color: $lb-dark;
       }
 
-      &:hover, &.active {
+      &:hover,
+      &.active {
         background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
         color: $lb-white;
         border-color: $inn-gold;
@@ -780,15 +794,22 @@ body:has(.lb-inn-hero-tabs) section[id] {
       transform: translateY(-50%) !important;
     }
 
-    &--prev { left: 0.5rem; }
-    &--next { right: 0.5rem; }
+    &--prev {
+      left: 0.5rem;
+    }
+
+    &--next {
+      right: 0.5rem;
+    }
   }
 }
+
 // --- INTERIORISMO ---
 .lb-inn-interiorismo {
-  .designers{
+  .designers {
     margin-bottom: -10rem;
   }
+
   &__designer-btn {
     position: relative;
     display: flex;
@@ -825,7 +846,7 @@ body:has(.lb-inn-hero-tabs) section[id] {
     color: $inn-gold;
     font-weight: 400;
     pointer-events: none;
-    text-align: left;    
+    text-align: left;
   }
 
   &__designer-text {

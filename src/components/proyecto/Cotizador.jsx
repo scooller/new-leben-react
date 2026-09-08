@@ -588,7 +588,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                   </>)}
                 </div>
                 <div className="d-flex align-items-center gap-3 ms-auto">
-                  <span className="badge bg-secondary d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
+                  <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                     <MapPinHouseIcon ref={countIconRef} size={14} />
                     {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
                   </span>

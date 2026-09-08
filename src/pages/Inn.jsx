@@ -335,7 +335,7 @@ export default function Inn() {
           title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
           description="Ubicado en primera línea frente al lago Llanquihue, INN combina la experiencia Home & Wellness con la sofisticación y comodidad de un hotel boutique. Sus departamentos de 2, 3 y 4 dormitorios, dúplex y deptos con patio privado ofrecen un refugio exclusivo donde el diseño y la naturaleza se integran para brindarte una experiencia de bienestar inigualable."
           highlight="Departamentos, dúplex y deptos. con patio privado."
-          highlightOffer="paga el pien en <b>60</b> cuotas"
+          highlightOffer="paga el pie en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
           parallaxStrength={10}
@@ -347,7 +347,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Un estilo de vida único frente al lago y los volcanes."
+          text="Un estilo de vida único frente al lago y los volcanes"
           videoSrc="video/video_reconfortante_a.mp4"
         />
 
@@ -384,7 +384,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Descubre todo lo que Puerto Varas tiene para ofrecerte."
+          text="Descubre todo lo que Puerto Varas tiene para ofrecerte"
           videoSrc="video/exterior.mp4"
         />
 
@@ -436,7 +436,7 @@ export default function Inn() {
                   </div>
                 </div>
                 <div className="lb-inn-map__text text-center text-lg-start">
-                  <ScrollAnim animation="fade-up" className="lh-lg mb-5">
+                  <ScrollAnim animation="fade-up" className="lh-lg mb-5 w-md-80">
                     {MAP.description}
                   </ScrollAnim>
                 </div>

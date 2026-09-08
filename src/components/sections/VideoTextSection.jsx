@@ -51,8 +51,8 @@ export default function VideoTextSection({
       <div className="container position-relative">
         <div className="lb-inn-video-banner__content w-75 mx-auto">
           {eyebrow && <ScrollAnim animation='flip-x' className="lb-inn-video-banner__eyebrow mx-auto mb-1">{eyebrow}</ScrollAnim>}
-          {title && <SplitTitle as='h3' text={title} delay={0.3} stagger={0.05} className="lb-inn-video-banner__title mx-auto mb-2" />}
-          {text && <SplitTitle as='p' text={text} delay={0.6} stagger={0.02} className="lb-inn-video-banner__text mx-auto" />}
+          {title && <SplitTitle as='h2' text={title} delay={0.3} stagger={0.05} className="lb-inn-video-banner__title mx-auto mb-2" />}
+          {text && <SplitTitle as='h1' text={text} delay={0.6} stagger={0.02} className="lb-inn-video-banner__text mx-auto" />}
         </div>
       </div>
     </section>

@@ -141,7 +141,7 @@ export default function InnTeamAgents({ data, apiId }) {
 
           {/* Right column - Info + Map */}
           <div className="lb-inn-team-agents__right">
-            <ScrollAnim as='p' animation='fade-up' delay={0.2} stagger={0.05} className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
+            <ScrollAnim as='p' animation='fade-up' delay={0.2} className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
             <ScrollAnim as='div' animation='scale' delay={0.4} className="lb-inn-team-agents__map">
               <iframe
                 src={data.wazeMap}

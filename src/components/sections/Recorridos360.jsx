@@ -30,7 +30,6 @@ const TOURS = [
 ]
 
 export default function Recorridos360({ tours = TOURS, className = '' }) {
-  const base = import.meta.env.BASE_URL
   const [activeIndex, setActiveIndex] = useState(0)
   const [activeSubIndex, setActiveSubIndex] = useState(0)
   const activeTour = tours[activeIndex]
@@ -60,13 +59,13 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
   return (
     <section className={`lb-inn-360 container-fluid ${className}`.trim()} id="recorridos-360" aria-labelledby="recorridos-360-title">
       <div className="container">
-        <SplitTitle id="recorridos-360-title" as='h2' text="Recorridos 360" />
+        <SplitTitle id="recorridos-360-title" as='h2' text="Descubre INN" />
 
         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
-          <ScrollAnim as='h3' animation='fade-up' className="lb-inn-360__title mb-0">
+          {/* <ScrollAnim as='h3' animation='fade-up' className="lb-inn-360__title mb-0">
             <img src={`${base}images/icons/360.svg`} alt="" aria-hidden="true" />
             <span>{currentTitle}</span>
-          </ScrollAnim>
+          </ScrollAnim> */}
 
           {hasSubImages && (
             <div className="d-inline-flex gap-1 p-1 bg-white rounded-pill shadow-sm border" role="tablist" aria-label="Subvistas de Masterplan">
