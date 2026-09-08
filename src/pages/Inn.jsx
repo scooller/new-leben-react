@@ -213,6 +213,7 @@ export default function Inn() {
   const [apiProjects, setApiProjects] = useState(null)
   const [innProject, setInnProject] = useState(null)
 
+  // API - Proyectos con ID:9 proyecto INN precargado
   useEffect(() => {
     let cancelled = false
     apiFetch('/api/v1/proyectos').then(({ data }) => {
