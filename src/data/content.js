@@ -11,12 +11,10 @@ export const videos = {
 }
 
 export const images = {
-  capa21: img('home/Prueba fondo.png'),
   logoIcon: img('brand/icon.svg'),
   logoText: img('brand/leben.svg'),
   logoBest: img('brand/sello.png'),
   sello5: img('brand/sello-5.svg'),
-  sello9: img('brand/sello9.png'),
   sello4: img('brand/sello4.png'),
   sello10: img('brand/logo-isotipo.webp'),
   sello11: img('brand/sello11.png'),
@@ -24,9 +22,6 @@ export const images = {
   avatarFernanda: img('home/avatar-fernanda.jpg'),
   avatarMaximiliano: img('home/avatar-maximiliano.jpg'),
   ctaSection: img('home/banner.jpg'),
-  img1Main: img('home/img1-main.jpg'),
-  img1Right: img('home/img1-right.jpg'),
-  chevronDown: img('icons/chevron-down.svg'),
   star: img('icons/star.svg'),
   starHalf: img('icons/star-half.svg'),
   share: img('icons/share.svg'),
@@ -39,31 +34,10 @@ export const images = {
   bgLogo: img('home/hoja.png'),
   proyectosHero: img('proyectos/proyectos-hero.jpg'),
   proyectosCta: img('proyectos/proyectos-cta.jpg'),
-  projSanto: img('proyectos/proj-santo.jpg'),
-  projArgomedo: img('proyectos/proj-argomedo.jpg'),
-  projMood: img('proyectos/proj-mood.jpg'),
-  projBaum: img('proyectos/proj-baum.jpg'),
-  projCapitanes: img('proyectos/proj-capitanes.jpg'),
-  projSuecia: img('proyectos/proj-suecia.jpg'),
-  projPiloto: img('proyectos/proj-piloto.jpg'),
-  projCotizador: img('proyectos/proj-cotizador.jpg'),
-  projInn: img('inn/inn-hero-lake.jpeg'),
-  chevronLeft: img('icons/chevron-left.svg'),
-  chevronRight: img('icons/chevron-right.svg'),
+  bgLogin: img('Fondo_cotizar.jpg'),
   user: img('icons/user.svg'),
-  calendar: img('icons/calendar.svg'),
   mapPin: img('icons/map-pin.svg'),
   building: img('icons/building.svg'),
-  shieldCheck: img('icons/shield-check.svg'),
-  award: img('icons/award.svg'),
-  starFooter: img('icons/star-footer.svg'),
-  mapPinFooter: img('icons/map-pin-footer.svg'),
-  clock: img('icons/clock.svg'),
-  phone: img('icons/phone.svg'),
-  mail: img('icons/mail.svg'),
-  facebook: img('icons/facebook.svg'),
-  instagram: img('icons/instagram.svg'),
-  linkedin: img('icons/linkedin.svg'),
 }
 
 export const heroContent = {
@@ -151,14 +125,6 @@ export const testimonials = {
   ],
 }
 
-export const ctaContent = {
-  title: 'Espacios que transforman tu forma de vivir',
-  subtitle: 'Descubre proyectos diseñados para integrarse armónicamente con la naturaleza, donde cada detalle constructivo evoca calidez, luz y trascendencia.',
-  inputLabel: 'Tu correo electrónico',
-  inputPlaceholder: 'hola@leben.cl',
-  buttonText: 'Agenda tu visita',
-}
-
 export const projectOfMonthContent = {
   title: 'María Gracia en ',
   titleHighlight: 'Leben',
@@ -188,11 +154,6 @@ export const videosContent = {
 
 export const footerContent = {
   legal: 'La promoción se encuentra adscrita en las Bases de promoción protocolizadas con fecha 3 de diciembre de 2025 en la 45° Notaría de Santiago de don Juan Ignacio San Martín Schrüder, Repertorio N° 17917-2025. Las ilustraciones fueron elaboradas con fines ilustrativos y no constituyen necesariamente una representación exacta de la realidad. Su objetivo es mostrar una caracterización general del proyecto y las prestaciones de la departamento al momento de comprar. Ventas sujeto a confirmación con área de ventas. Esta información es virtud de lo señalado en la Ley 19.496 y según la resolución exenta N° 10.408 del 16 de julio de 2013.',
-  badges: [
-    { icon: 'shieldCheck', label: 'CERT' },
-    { icon: 'award', label: 'ISO' },
-    { icon: 'starFooter', label: 'RATED' },
-  ],
   address: {
     street: 'Dr. Manuel Barros Borgoño 386 ',
     city: 'Providencia, Santiago, Chile',
@@ -206,14 +167,6 @@ export const footerContent = {
     instagram: 'https://www.instagram.com/inmobiliarialeben',
     linkedin: 'https://www.linkedin.com/company/ileben/posts/?feedView=all',
   },
-  legalLinks: [
-    'Canal de Denuncias y Consultas',
-    'Acceso Colaboradores',
-    'Proceso Reserva en Línea',
-    'Información de la Empresa',
-    'Bases Legales',
-    'Trabaja en Leben',
-  ],
   copyright: '© 2024 Leben. Todos los derechos reservados.',
   copyrightLinks: ['Privacidad', 'Términos', 'Cookies'],
 }
@@ -228,111 +181,6 @@ export const proyectosHero = {
   subtitle: 'Creando espacios donde lo cotidiano se vuelve extraordinario. Proyectos de alta gama integrados armónicamente en el sur y centro de Chile.',
   ctaText: 'Contactar Asesor',
 }
-
-export const projectGroups = [
-  {
-    zone: 'Santiago Centro',
-    filterLabel: 'De mayor a menor precio',
-    projects: [
-      {
-        image: 'projSanto',
-        location: 'Condor 1071',
-        name: 'Edificio Santo',
-        entrega: 'Inmediata',
-        tipologia: '1-2 Dorms',
-        price: 'UF 3.756*',
-      },
-      {
-        image: 'projArgomedo',
-        location: 'Argomedo 382',
-        name: 'Edificio Argomedo',
-        entrega: 'Inmediata',
-        tipologia: '1-2 Dorms',
-        price: 'UF 3.790*',
-      },
-    ],
-  },
-  {
-    zone: 'La Florida',
-    projects: [
-      {
-        image: 'projMood',
-        location: 'Av Américo Vespucio 6608',
-        name: 'Edificio Mood',
-        entrega: 'Inmediata',
-        tipologia: '1-2 Dorms',
-        equipacion: 'Plug & Play',
-        price: 'UF 2.750*',
-      },
-      {
-        image: 'projBaum',
-        location: 'El Canelo 6750',
-        name: 'Edificio Baum',
-        entrega: 'Inmediata',
-        tipologia: '1-2 Dorms',
-        equipacion: 'Plug & Play',
-        price: 'UF 2.844*',
-      },
-    ],
-  },
-  {
-    zone: 'Providencia',
-    projects: [
-      {
-        image: 'projCapitanes',
-        location: 'Capitanes 1445',
-        name: 'Edificio Capitanes',
-        entrega: 'Inmediata',
-        tipologia: '2-3 Dorms, Dúplex y dúplex con Rooftop',
-        price: 'UF 7.662*',
-      },
-      {
-        image: 'projSuecia',
-        location: 'Tranquila 2307',
-        name: 'Edificio Suecia',
-        entrega: 'Inmediata',
-        tipologia: '2-3 Dorms, Dúplex y dúplex con Rooftop',
-        price: 'UF 8.247*',
-      },
-    ],
-  },
-  {
-    zone: 'Las Condes',
-    projects: [
-      {
-        image: 'projPiloto',
-        location: 'Av Apoquindo 1234',
-        name: 'Edificio Piloto',
-        entrega: 'Inmediata',
-        tipologia: '2-3 Dorms',
-        price: 'UF 8.906*',
-      },
-      {
-        image: 'projCotizador',
-        location: 'El Golf 567',
-        name: 'Edificio Cotizador',
-        entrega: 'Inmediata',
-        tipologia: '2-3 Dorms',
-        price: 'UF 9.120*',
-        slug: 'cotizador',
-      },
-    ],
-  },
-  {
-    zone: 'Puerto Varas',
-    projects: [
-      {
-        image: 'projInn',
-        location: 'Vicente Pérez Rosales 991',
-        name: 'Edificio INN',
-        entrega: '2027',
-        tipologia: '2-3-4 Dorms',
-        price: 'UF 9.816*',
-        slug: 'inn',
-      },
-    ],
-  },
-]
 
 export const valueProps = {
   eyebrow: 'El Respaldo de Elegir Leben',
@@ -350,43 +198,4 @@ export const proyectosCta = {
   subtitle: 'Déjanos tu correo electrónico y un asesor experto se pondrá en contacto contigo para coordinar una reunión exclusiva.',
   inputPlaceholder: 'ejemplo@correo.cl',
   buttonText: 'Enviar Solicitud',
-}
-
-export const cotizadorHero = {
-  eyebrow: 'COTIZA TU HOGAR IDEAL',
-  title: 'Cotizador General',
-  subtitle: 'Encuentra la planta perfecta y cotiza tu próximo hogar en simples pasos.',
-  ctaText: 'Comenzar',
-}
-
-export const splitCarousel = {
-  slides: [
-    {
-      id: 1,
-      title: 'Diseño que se integra con la naturaleza',
-      text: 'Proyectos diseñados para integrarse armónicamente con el entorno, donde cada detalle constructivo evoca calidez, luz y trascendencia.',
-      ctaLabel: 'Ver proyectos',
-      ctaHref: '/proyectos',
-      imageUrl: img('home/img1-main.jpg'),
-      imageAlt: 'Proyecto Leben',
-    },
-    {
-      id: 2,
-      title: 'Áreas comunes de otro nivel',
-      text: 'Arquitectura, diseño e iluminación pensados para hacer de cada día una experiencia comparable a un hotel de lujo.',
-      ctaLabel: 'Ver proyecto INN',
-      ctaHref: '/proyectos/inn',
-      imageUrl: img('inn/inn-overview-1.jpg'),
-      imageAlt: 'Áreas comunes INN',
-    },
-    {
-      id: 3,
-      title: 'Ubicaciones privilegiadas',
-      text: 'Departamentos frente al lago en Puerto Varas y proyectos en las mejores zonas del sur de Chile.',
-      ctaLabel: 'Cotiza tu hogar',
-      ctaHref: '/cotizador',
-      imageUrl: img('inn/inn-hero-lake.jpeg'),
-      imageAlt: 'Vista al lago',
-    },
-  ],
 }

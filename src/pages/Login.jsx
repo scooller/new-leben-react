@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="lb-login">
       <div className="lb-login__bg" aria-hidden>
-        <img src={images.projInn} alt="" />
+        <img src={images.bgLogin} alt="" />
         <div className="lb-login__overlay" />
       </div>
 

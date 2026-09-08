@@ -33,7 +33,7 @@ const INFO = [
 
 // Fuerza global del parallax (en % del alto del elemento). Un solo knob para todas las secciones de INN.
 // Negativo = el elemento sube al hacer scroll (parallax clásico).
-const PARALLAX_STRENGTH = -14
+const PARALLAX_STRENGTH = -15
 
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
@@ -201,9 +201,9 @@ const TEAM_DATA = {
   subtitle: '<b>Sala de ventas y departamento piloto</b> disponible en Vicente Pérez Rosales 991, Puerto Varas<br /><b>Horario:</b> Lunes a domingo de 10:00 a 14:00 horas y de 15:00 a 19:00 horas.',
   wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
   agents: [
-    { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: `${base}images/team/Patricia-Ramirez.jpg` },
-    { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: `${base}images/team/catalina.jpg` },
-    { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: `${base}images/team/Patricia-Singh.jpg` },
+    { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: `${base}images/team/Ramirez.jpg` },
+    { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: `${base}images/team/Cid.jpg` },
+    { name: 'Patricia Singh', phone: '+56 9 3420 4832', email: 'psingh@ileben.cl', avatar: `${base}images/team/Singh.jpg` },
   ],
 }
 
@@ -346,7 +346,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Edificio de solo 8 pisos, 78 departamentos exclusivosde 2 a 4 dormitorios. Departamentos tradicionales, dúplex y en primer piso, con patio privado."
+          text="Un estilo de vida único frente al lago y los volcanes."
           videoSrc="video/video_reconfortante_a.mp4"
         />
 
@@ -358,7 +358,7 @@ export default function Inn() {
           slides={EQUIPMENT_SLIDES}
           carouselId="innDepartamentosCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
-          backgroundImage="images/inn/edificio.svg"
+          backgroundImage="images/inn/Perspectiva.svg"
           id="departamentos"
           className='pb-2 mb-2'
           ariaLabel="Departamentos"
@@ -383,7 +383,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Edificio inn, home & wellness redefine la vidafrente al Lago Llanquihue con espacios premium para el descanso,conexión y bienestar."
+          text="Descubre todo lo que Puerto Varas tiene para ofrecerte."
           videoSrc="video/exterior.mp4"
         />
 
@@ -393,7 +393,7 @@ export default function Inn() {
           slides={ESPACIOS_COMUNES_SLIDES}
           carouselId="innEspaciosCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
-          backgroundImage="images/inn/espacio.svg"
+          backgroundImage="images/inn/Climbing.svg"
           id="espacios"
           className='pb-2 mb-2'
           ariaLabel="Espacios"
@@ -427,7 +427,7 @@ export default function Inn() {
                         src={`${base}${MAP.logo}`}
                         alt="Logo INN"
                         className="lb-inn-map__header-logo"
-                        />
+                      />
                     </ScrollAnim>
                     <div className='lb-inn-map__titulos-right'>
                       <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={MAP.title} stagger={0.06} />
@@ -499,7 +499,7 @@ export default function Inn() {
           title={<>MAESTRÍA EN<br />CADA DETALLE</>}
           parallaxStrength={PARALLAX_STRENGTH}
           description="La experiencia de la reconocida interiorista Sofía Iturralde se une con la maestría en iluminación de Rafael Rivera para crear entornos en los que cada textura, línea y matriz de luz dialogan en armonía estética sureña y posicionan a este proyecto como el residencial más exclusivo para vivir en Puerto Varas."
-          backgroundImage="images/inn/interiorismo.svg"
+          backgroundImage="images/inn/Interiorismo.svg"
           id="interiorismo"
           ariaLabel="Interiorismo"
         />

@@ -18,6 +18,8 @@ export default function InteriorismoSection({
   id = 'interiorismo',
   ariaLabel = 'Interiorismo',
   parallaxStrength = DESIGNER_PARALLAX,
+  parallaxEase = 'power1.out',
+  parallaxScrub = 1.5,
   // Array of designers with their images and text content
   designers = [
     {
@@ -64,15 +66,15 @@ export default function InteriorismoSection({
         },
       })
 
-      // Parallax de las tarjetas de designers (columna completa)
+      // Parallax de las tarjetas de designers con ease y retraso (scrub)
       gsap.to(section.querySelectorAll('.designers > div'), {
         yPercent: parallaxStrength,
-        ease: 'none',
+        ease: parallaxEase,
         scrollTrigger: {
           trigger: section,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: parallaxScrub,
           invalidateOnRefresh: true,
         },
       })
@@ -86,7 +88,7 @@ export default function InteriorismoSection({
       Fancybox.unbind(section)
       ctx.revert()
     }
-  }, [parallaxStrength])
+  }, [parallaxStrength, parallaxEase, parallaxScrub])
 
   const currentDesigner = designers[activeDesigner]
 

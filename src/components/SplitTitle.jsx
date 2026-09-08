@@ -35,7 +35,7 @@ function parseHtmlToWords(html) {
         .map((child, i) => traverse(child, `${key}-${i}`))
         .filter(Boolean)
 
-      const props = { key }
+      const props = {}
       if (node.className) props.className = node.className
       if (node.getAttribute('style')) {
         const styleObj = {}
@@ -50,7 +50,7 @@ function parseHtmlToWords(html) {
       }
 
       const Tag = tagName
-      return <Tag {...props}>{children}</Tag>
+      return <Tag key={key} {...props}>{children}</Tag>
     }
     return null
   }

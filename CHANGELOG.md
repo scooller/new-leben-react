@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.30] - 2026-09-08
+
+### Changed
+- `ProjectFeatureSection.jsx`, `InteriorismoSection.jsx`: mejorado el efecto de parallax en el proyecto INN incorporando `ease: 'power1.out'` y un retardo de inercia suave (`scrub: 1.5`), logrando un movimiento más fluido, notorio y cinematográfico.
+- `Inn.jsx`, `Login.jsx`: actualizadas rutas de assets, fondos SVG, textos descriptivos y fotos del equipo asesor.
+
+## [0.9.29] - 2026-09-08
+
+### Added
+- `Recorridos360.jsx`: soporte para múltiples imágenes por tour (`images: [{ title, src }]`) con selector de sub-tabs/pills sobre el visor. Se agregaron las vistas "Masterplan" y "Masterplan Primer Piso".
+
+## [0.9.28] - 2026-09-08
+
+### Removed
+- `src/data/content.js`: eliminados bloques huérfanos (`ctaContent`, `cotizadorHero`, `splitCarousel`, y badges/links de `footerContent`), junto con claves no utilizadas en el objeto `images` (proyectos demo retirados e iconos redundantes).
+
+## [0.9.27] - 2026-09-08
+
+### Fixed
+- `SplitTitle.jsx`: pasar `key` directamente como prop JSX (`<Tag key={key} {...props}>`) en lugar de incluirlo dentro del objeto propagado, eliminando advertencia de React 19 sobre propagación de `key`.
+
 ## [0.9.26] - 2026-09-08
 
 ### Fixed

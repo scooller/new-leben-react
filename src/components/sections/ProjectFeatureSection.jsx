@@ -21,7 +21,7 @@ export default function ProjectFeatureSection({
   highlightOffer,
   slides = [],
   mediaVideoSrc,
-  backgroundImage = 'images/inn/bg-montain.svg',
+  backgroundImage = 'images/inn/Volcan.svg',
   carouselId = 'project-carousel',
   className = 'pb-5 mb-5',
   id = 'proyecto',
@@ -29,6 +29,8 @@ export default function ProjectFeatureSection({
   activeSlide,
   onSlideChange,
   parallaxStrength = PARALLAX_STRENGTH,
+  parallaxEase = 'power1.out',
+  parallaxScrub = 1.5,
   showIndicators = true,
   // { buttonLabel, items: [{ label, icon, img, alt }] }
   spacesModal,
@@ -50,15 +52,15 @@ export default function ProjectFeatureSection({
     carouselInstance.current = c
 
     const ctx = gsap.context(() => {
-      // Parallax sobre el carrusel completo (.carousel.slide), no por item
+      // Parallax sobre el carrusel completo con ease y retraso de inercia (scrub)
       gsap.to(carousel, {
         yPercent: parallaxStrength,
-        ease: 'none',
+        ease: parallaxEase,
         scrollTrigger: {
           trigger: section,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: parallaxScrub,
           invalidateOnRefresh: true,
         },
       })
@@ -81,7 +83,7 @@ export default function ProjectFeatureSection({
       c.dispose()
       carouselInstance.current = null
     }
-  }, [slides.length, onSlideChange, parallaxStrength])
+  }, [slides.length, onSlideChange, parallaxStrength, parallaxEase, parallaxScrub])
 
   useEffect(() => {
     if (!carouselInstance.current || !slides.length || typeof activeSlide !== 'number') return
