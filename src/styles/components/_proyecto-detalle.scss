@@ -373,15 +373,38 @@
 // Filter dropdowns — Bootstrap .dropdown provides position:relative + toggle caret
 .lb-proj-det-filter-btn {
   min-width: 9rem;
+  height: 2.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
   text-align: left;
   border-radius: $lb-radius-sm;
   font-size: 0.85rem;
-  padding: 0.3rem 2rem 0.3rem 0.75rem;
+  padding: 0 0.75rem;
   transition: border-color 0.15s ease;
 
   &:hover {
     border-color: $lb-dark;
   }
+}
+
+.lb-proj-det-filter-badge {
+  height: 2.125rem;
+  padding: 0 0.875rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: $lb-radius-sm;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lb-proj-det-filter-reset {
+  height: 2.125rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: $lb-radius-sm;
+  padding: 0 0.875rem;
+  font-size: 0.85rem;
 }
 
 .lb-proj-det-filter-menu {

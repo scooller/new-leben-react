@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { videosContent, images } from '../../data/content.js'
 import ScrollAnim from '../ScrollAnim.jsx'
-import ProjectOfMonthSection from './ProjectOfMonthSection.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 
 export default function VideosSection() {
   const { monthLabel, project, gallery } = videosContent
@@ -36,66 +36,64 @@ export default function VideosSection() {
 
   return (
     <>
-      <ProjectOfMonthSection />
       <div className="lb-videos-spacer" />
       <div ref={sectionRef}>
-      <ScrollAnim as="section" className="lb-videos container lb-radius-tl lb-radius-tr" id="proyectos" animation="fade-up" duration={1}>
-        <div className="d-flex flex-column gap-3">
-          <div className="d-flex justify-content-between align-items-center lb-section-header lb-parallax-text">
-            <h3 className="lb-month-label">{monthLabel}</h3>
-            {/* <span className="text-muted">{countLabel}</span> */}
-          </div>
+        <section className="lb-videos container lb-radius-tl lb-radius-tr" id="proyectos">
+          <div className="d-flex flex-column gap-3">
+            <div className="d-flex justify-content-between align-items-center lb-section-header lb-parallax-text">
+              <SplitTitle className="lb-month-label" text={monthLabel} />
+            </div>
 
-          <div className="d-flex gap-3 lb-video-row">
-            <div className="lb-video-main d-flex flex-column gap-2 flex-shrink-0 lb-img-trigger" tabIndex={0}>
-              <div className="d-flex gap-4 pb-2">
-                {meta.map((m) => (
-                  <div className="d-flex flex-column" key={m.label}>
-                    <div className="d-flex align-items-center gap-1 lb-meta-label">
-                      <img src={images[m.icon]} alt="" width="11" height="11" loading="lazy" decoding="async" />
-                      <span>{m.label}</span>
+            <div className="d-flex gap-3 lb-video-row">
+              <div className="lb-video-main d-flex flex-column gap-2 flex-shrink-0 lb-img-trigger" tabIndex={0}>
+                <ScrollAnim animation='fade-right' className="d-flex gap-4 pb-2">
+                  {meta.map((m) => (
+                    <div className="d-flex flex-column" key={m.label}>
+                      <div className="d-flex align-items-center gap-1 lb-meta-label">
+                        <img src={images[m.icon]} alt="" width="11" height="11" loading="lazy" decoding="async" />
+                        <span>{m.label}</span>
+                      </div>
+                      <div className="lb-meta-value lb-parallax-text">{m.value}</div>
                     </div>
-                    <div className="lb-meta-value lb-parallax-text">{m.value}</div>
-                  </div>
-                ))}
+                  ))}
+                </ScrollAnim>
+                <ScrollAnim animation='scale' className="lb-thumb-main-wrap">
+                  <img
+                    src={project.mainImage}
+                    alt={project.name}
+                    className="lb-thumb-main lb-img-interactive"
+                    data-fancybox="gallery"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </ScrollAnim>
               </div>
-              <div className="lb-thumb-main-wrap">
+              <ScrollAnim animation='fade-up' delay={0.25} className="flex-fill rounded lb-video-side lb-img-trigger" tabIndex={0}>
                 <img
-                  src={project.mainImage}
-                  alt={project.name}
-                  className="lb-thumb-main lb-img-interactive"
+                  src={project.sideImage}
+                  alt="Vista adicional"
+                  className="lb-thumb-side lb-img-interactive"
                   data-fancybox="gallery"
                   loading="lazy"
                   decoding="async"
                 />
-              </div>
+              </ScrollAnim>
             </div>
-            <div className="flex-fill rounded lb-video-side lb-img-trigger" tabIndex={0}>
-              <img
-                src={project.sideImage}
-                alt="Vista adicional"
-                className="lb-thumb-side lb-img-interactive"
-                data-fancybox="gallery"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
 
-          <div className="row justify-content-between align-items-center pt-4 lb-parallax-text">
-            <div className="col-md-6 col-12 mb-3 mb-md-0">
-              {/* <SplitTitle as="h3" className="lb-gallery-title mb-0" text={gallery.title} />
+            <div className="row justify-content-between align-items-center pt-4 lb-parallax-text">
+              <ScrollAnim className="col-md-6 col-12 mb-3 mb-md-0">
+                {/* <SplitTitle as="h3" className="lb-gallery-title mb-0" text={gallery.title} />
               <p className="lb-gallery-subtitle mb-0">{gallery.subtitle}</p> */}
-              </div>
-            <div className="col-md-6 col-12 d-flex justify-content-md-end justify-content-start">
-              <div className="btn-group">
-                <Link to="/inn-test" className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
-                <Link to="/proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
-              </div>
+              </ScrollAnim>
+              <ScrollAnim className="col-md-6 col-12 d-flex justify-content-md-end justify-content-start">
+                <div className="btn-group">
+                  <Link to="/inn-test" className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
+                  <Link to="/proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
+                </div>
+              </ScrollAnim>
             </div>
           </div>
-        </div>
-      </ScrollAnim>
+        </section>
       </div>
     </>
   )

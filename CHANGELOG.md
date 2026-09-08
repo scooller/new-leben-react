@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.24] - 2026-09-08
+
+### Changed
+- `Cotizador.jsx` & `_proyecto-detalle.scss`: igualada la altura (`2.125rem` / 34px) y centrado vertical flex para el badge de deptos (`.lb-proj-det-filter-badge`), el botón de borrar filtros (`.lb-proj-det-filter-reset`) y los dropdowns de filtro (`.lb-proj-det-filter-btn`).
+
+## [0.9.23] - 2026-09-08
+
+### Added
+- `house-heart.jsx`: nuevo componente de icono animado oficial Lucide `house-heart` con microinteracción al hover.
+- `ProjectOfMonthSection.jsx`: añadido icono `HouseHeartIcon` interactivo con `hover(iconRef)` al botón `.btn-dark`.
+
+## [0.9.22] - 2026-09-08
+
+### Added
+- `SplitTitle.jsx`: soporte completo para `dangerouslySetInnerHTML` preservando etiquetas y estilos HTML (ej. `<span className="text-danger">`) mediante parseo nativo con `DOMParser`, envolviendo recursivamente cada palabra en `.lb-split-word` para su animación en GSAP ScrollTrigger.
+
 ## [0.9.21] - 2026-09-08
 
 ### Added

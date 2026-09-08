@@ -12,7 +12,7 @@
     position: relative;
     overflow: hidden;
     padding-top: 4rem;
-    margin-bottom: -6rem;
+    margin-bottom: -5rem;
   }
 
   @include bs.media-breakpoint-down(md) {
@@ -99,7 +99,7 @@
 }
 
 .lb-diff-list {
-  padding-bottom: 6rem;
+  padding-bottom: 5rem;
 }
 
 .lb-diff-row {

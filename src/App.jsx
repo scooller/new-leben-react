@@ -16,6 +16,7 @@ import Hero from './components/sections/Hero.jsx'
 import Diferenciadores from './components/sections/Diferenciadores.jsx'
 import Testimonials from './components/sections/Testimonials.jsx'
 import CTASection from './components/sections/CTASection.jsx'
+import ProjectOfMonthSection from './components/sections/ProjectOfMonthSection.jsx'
 import VideosSection from './components/sections/VideosSection.jsx'
 
 // Pages — lazy loaded
@@ -35,6 +36,7 @@ function Home() {
       <Diferenciadores />
       <Testimonials />
       <CTASection />
+      <ProjectOfMonthSection />
       <VideosSection />
     </>
   )
@@ -68,73 +70,73 @@ export default function App() {
     <>
       <Loader />
       <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <Navbar />
-            <main>
-              <Home />
-            </main>
-            <Footer />
-          </>
-        }
-      />
-      <Route path="/inn-test" element={
-        <Suspense fallback={<PageLoader />}>
-          <Inn />
-        </Suspense>
-      } />
-      <Route path="/proyectos" element={
-        <Suspense fallback={<PageLoader />}>
-          <Proyectos />
-        </Suspense>
-      } />
-      <Route path="/proyectos/:slug" element={
-        <Suspense fallback={<PageLoader />}>
-          <ProyectoDetalle />
-        </Suspense>
-      } />
-      <Route path="/proyectos/:slug/planta/:plantaId" element={
-        <Suspense fallback={<PageLoader />}>
-          <ProyectoDetalle />
-        </Suspense>
-      } />
-      <Route path="/brokers" element={
-        <Suspense fallback={<PageLoader />}>
-          <Brokers />
-        </Suspense>
-      } />
-      <Route path="/cotizador" element={
-        <Suspense fallback={<PageLoader />}>
-          <CotizadorGeneral />
-        </Suspense>
-      } />
-      <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={
-        <Suspense fallback={<PageLoader />}>
-          <CotizadorGeneral />
-        </Suspense>
-      } />
-      <Route path="/cotizador/proyecto/:proyectoSlug" element={
-        <Suspense fallback={<PageLoader />}>
-          <CotizadorGeneral />
-        </Suspense>
-      } />
-      <Route path="/login" element={
-        <Suspense fallback={<PageLoader />}>
-          <Login />
-        </Suspense>
-      } />
-      <Route path="/perfil" element={
-        <Suspense fallback={<PageLoader />}>
-          <Perfil />
-        </Suspense>
-      } />
-      <Route path="*" element={
-        <Suspense fallback={<PageLoader />}>
-          <NotFound />
-        </Suspense>
-      } />
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar />
+              <main>
+                <Home />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+        <Route path="/inn-test" element={
+          <Suspense fallback={<PageLoader />}>
+            <Inn />
+          </Suspense>
+        } />
+        <Route path="/proyectos" element={
+          <Suspense fallback={<PageLoader />}>
+            <Proyectos />
+          </Suspense>
+        } />
+        <Route path="/proyectos/:slug" element={
+          <Suspense fallback={<PageLoader />}>
+            <ProyectoDetalle />
+          </Suspense>
+        } />
+        <Route path="/proyectos/:slug/planta/:plantaId" element={
+          <Suspense fallback={<PageLoader />}>
+            <ProyectoDetalle />
+          </Suspense>
+        } />
+        <Route path="/brokers" element={
+          <Suspense fallback={<PageLoader />}>
+            <Brokers />
+          </Suspense>
+        } />
+        <Route path="/cotizador" element={
+          <Suspense fallback={<PageLoader />}>
+            <CotizadorGeneral />
+          </Suspense>
+        } />
+        <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={
+          <Suspense fallback={<PageLoader />}>
+            <CotizadorGeneral />
+          </Suspense>
+        } />
+        <Route path="/cotizador/proyecto/:proyectoSlug" element={
+          <Suspense fallback={<PageLoader />}>
+            <CotizadorGeneral />
+          </Suspense>
+        } />
+        <Route path="/login" element={
+          <Suspense fallback={<PageLoader />}>
+            <Login />
+          </Suspense>
+        } />
+        <Route path="/perfil" element={
+          <Suspense fallback={<PageLoader />}>
+            <Perfil />
+          </Suspense>
+        } />
+        <Route path="*" element={
+          <Suspense fallback={<PageLoader />}>
+            <NotFound />
+          </Suspense>
+        } />
       </Routes>
       <ChatWidget />
     </>

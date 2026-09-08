@@ -584,12 +584,12 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                   </>)}
                 </div>
                 <div className="d-flex align-items-center gap-3 ms-auto">
-                  <span className="badge bg-secondary d-inline-flex align-items-center gap-1" {...hover(countIconRef)}>
+                  <span className="badge bg-secondary d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                     <MapPinHouseIcon ref={countIconRef} size={14} />
                     {showSkeleton ? 'Buscando deptos…' : (universal || apiId) ? `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}` : 'Filtros demo'}
                   </span>
                   <button
-                    className="btn btn-danger btn-sm text-decoration-none"
+                    className="btn btn-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
                     disabled={!hasFilters}
                     onClick={() => {
                       selectFilter(EMPTY_FILTERS)
