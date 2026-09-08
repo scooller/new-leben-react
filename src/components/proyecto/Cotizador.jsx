@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import { Fancybox } from '@fancyapps/ui'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: Three.js es pesado; se descarga al abrir el modal, no al cargar la página
 const Room3DMockup = lazy(() => import('./Room3DMockup.jsx'))
@@ -807,7 +808,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       {/* Plantas relacionadas */}
       {plantasRelacionadas?.length > 0 && (
         <div className="row g-4 mt-2" animation="fade-up">
-          <ScrollAnim as="h3" className="lb-proj-det-cot-plantas-title mb-3 col-12">Plantas relacionadas</ScrollAnim>
+          <SplitTitle as="h3" className="lb-proj-det-cot-plantas-title mb-3 col-12" text='Plantas relacionadas' />
           {plantasRelacionadas.map((p, i) => (
             <div key={i} className="col-md-6 col-lg-4">
               <button
@@ -816,7 +817,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
               >
                 {p.image && <img src={p.image} alt={p.label} className="card-img-top" loading="lazy" />}
                 <div className="card-body">
-                  <h5 className="card-title mb-0">{p.label}</h5>
+                  <SplitTitle as='h5' className="card-title mb-0" text={p.label} />
                 </div>
               </button>
             </div>

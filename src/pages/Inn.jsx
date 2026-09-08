@@ -33,7 +33,7 @@ const INFO = [
 
 // Fuerza global del parallax (en % del alto del elemento). Un solo knob para todas las secciones de INN.
 // Negativo = el elemento sube al hacer scroll (parallax clásico).
-const PARALLAX_STRENGTH = -15
+const PARALLAX_STRENGTH = -12
 
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
@@ -319,7 +319,7 @@ export default function Inn() {
           <div className="container">
             <div className="row row-cols-1 row-cols-lg-5 text-center gx-4 gy-3">
               {INFO.map((t, i) => (
-                <ScrollAnim animation='scale' delay={0.5 * (i + 1)} className="col" key={t.id}>
+                <ScrollAnim animation='scale' delay={0.2 * (i + 1)} className="col" key={t.id}>
                   <div className="d-flex flex-column gap-1">
                     <small className="lb-inn-info__label text-uppercase">{t.label}</small>
                     <span className="fw-bold">{t.value}</span>
@@ -338,7 +338,7 @@ export default function Inn() {
           highlightOffer="paga el pien en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
-          parallaxStrength={PARALLAX_STRENGTH}
+          parallaxStrength={10}
           activeSlide={activeSlide}
           onSlideChange={setActiveSlide}
           showIndicators={false}

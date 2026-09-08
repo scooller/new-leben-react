@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
+import SplitTitle from '../SplitTitle.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
 import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
 
@@ -39,42 +40,42 @@ export default function RelatedProjects({ data, onCotizar }) {
       ? `comuna=${encodeURIComponent(data.comuna)}&disponible=1`
       : `proyecto_id=${data.apiId}`
 
-    ;(async () => {
-      const all = []
-      let pg = 1
-      while (true) {
-        const { data: page, error } = await apiFetch(`/api/v1/plantas?${baseParams}&perPage=100&page=${pg}`)
-        if (cancelled || error || !Array.isArray(page)) break
-        all.push(...page)
-        if (page.length < 100) break
-        pg++
-      }
-      if (cancelled) return
-      setLoading(false)
-      const plantas = all.filter((p) => p.is_available)
-      if (!plantas.length) return
-      setRows(plantas
-        .map((p) => ({
-          proyecto: p.proyecto?.name || data.projectName,
-          nombre: `Dpto. ${p.name}`,
-          piso: p.piso,
-          ubicacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion,
-          tipologia: p.programa,
-          superficie: `${Math.round(parseFloat(p.superficie_util) || 0)} m²`,
-          precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}*`,
-          _planta: p,
-        })))
-    })()
+      ; (async () => {
+        const all = []
+        let pg = 1
+        while (true) {
+          const { data: page, error } = await apiFetch(`/api/v1/plantas?${baseParams}&perPage=100&page=${pg}`)
+          if (cancelled || error || !Array.isArray(page)) break
+          all.push(...page)
+          if (page.length < 100) break
+          pg++
+        }
+        if (cancelled) return
+        setLoading(false)
+        const plantas = all.filter((p) => p.is_available)
+        if (!plantas.length) return
+        setRows(plantas
+          .map((p) => ({
+            proyecto: p.proyecto?.name || data.projectName,
+            nombre: `Dpto. ${p.name}`,
+            piso: p.piso,
+            ubicacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion,
+            tipologia: p.programa,
+            superficie: `${Math.round(parseFloat(p.superficie_util) || 0)} m²`,
+            precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}*`,
+            _planta: p,
+          })))
+      })()
     return () => { cancelled = true }
   }, [data.apiId, data.comuna, data.projectName])
 
   return (
     <section className="lb-proj-det-related" id="relacionados">
       <div className="container">
-        <ScrollAnim as="div" animation="fade-up">
-          <span className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </span>
-          <h2 className="lb-proj-det-section-title">{data.title}</h2>
-        </ScrollAnim>
+        <div>
+          <ScrollAnim as='span' animation='fade-up' className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </ScrollAnim>
+          <SplitTitle as='h2' text='Plantas relacionadas' />
+        </div>
 
         <ScrollAnim as="div" className="mt-4" animation="fade-up" delay={0.1}>
           <table className="table table-hover lb-proj-det-table align-middle">

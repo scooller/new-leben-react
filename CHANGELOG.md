@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.31] - 2026-09-08
+
+### Changed
+- `Cotizador.jsx`, `RelatedProjects.jsx`: integrado `SplitTitle` en encabezados y títulos de tarjetas de plantas relacionadas.
+- `Recorridos360.jsx`: normalizadas rutas de imágenes de Masterplan a `masterplan-1.jpg` y `masterplan-2.jpg`.
+- `Inn.jsx`: ajustado timing de delay en cards informativas y fuerza de parallax en carrusel principal.
+
 ## [0.9.30] - 2026-09-08
 
 ### Changed

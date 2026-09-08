@@ -132,7 +132,7 @@ export const projectOfMonthContent = {
   photo: img('inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg'),
   video: vid('maria gracia.mp4'),
   buttonText: 'Ver proyecto INN',
-  buttonLink: '/proyectos/inn',
+  buttonLink: '/inn-test',
 }
 
 export const videosContent = {
