@@ -35,6 +35,8 @@ export const images = {
   starHalfSmall: img('icons/star-half-small.svg'),
   arrowRight: img('icons/arrow-right.svg'),
   line: img('icons/line.svg'),
+  pareja: img('home/pareja.png'),
+  bgLogo: img('home/hoja.png'),
   proyectosHero: img('proyectos/proyectos-hero.jpg'),
   proyectosCta: img('proyectos/proyectos-cta.jpg'),
   projSanto: img('proyectos/proj-santo.jpg'),

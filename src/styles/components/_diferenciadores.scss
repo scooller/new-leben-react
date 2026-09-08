@@ -7,11 +7,12 @@
   width: 100%;
   min-height: 50rem;
   padding: 6rem 0 4rem;
-  .diferenciadores{
+
+  .diferenciadores {
     position: relative;
     overflow: hidden;
     padding-top: 4rem;
-    padding-bottom: 6rem;
+    margin-bottom: -6rem;
   }
 
   @include bs.media-breakpoint-down(md) {
@@ -98,13 +99,12 @@
 }
 
 .lb-diff-list {
-  flex: 1 1 0;
-  width: 100%;
+  padding-bottom: 6rem;
 }
 
 .lb-diff-row {
   // background: rgba(255, 255, 255, 0.92);
-  padding: 0.75rem;
+  // padding: 0.75rem;
 
   @include bs.media-breakpoint-down(md) {
     width: 100% !important;

@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.21] - 2026-09-08
+
+### Added
+- `Diferenciadores.jsx`: parallax desacoplado con GSAP ScrollTrigger (`scrub: 1`) entre el fondo `bgLogo` (`.lb-diff-bg-logo`) y la imagen frontal `pareja` (`.lb-diff-pareja`) en la columna `col-md-5`.
+
 ## [0.9.20] - 2026-09-07
 
 ### Fixed

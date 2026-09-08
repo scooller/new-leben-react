@@ -15,9 +15,14 @@ export default function Diferenciadores() {
   useEffect(() => {
     if (!isLoaded) return
     const ctx = gsap.context(() => {
-      gsap.fromTo('.lb-diff-bg img',
-        { yPercent: -8 },
-        { yPercent: 8, ease: 'none', scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 1 } })
+      // ponytail: scrub parallax with yPercent on stacked images instead of complex canvas/svg
+      const st = { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 1 }
+      gsap.fromTo('.lb-diff-bg-logo',
+        { yPercent: -10, scale: 1.05 },
+        { yPercent: 10, scale: 1.05, ease: 'none', scrollTrigger: st })
+      gsap.fromTo('.lb-diff-pareja',
+        { yPercent: 6 },
+        { yPercent: -6, ease: 'none', scrollTrigger: st })
     }, sectionRef)
     return () => ctx.revert()
   }, [isLoaded])
@@ -62,22 +67,31 @@ export default function Diferenciadores() {
       </ScrollAnim>
 
       <div className="container-fluid diferenciadores">
-        {/* Background image with GSAP parallax (see useEffect → .lb-diff-bg img) */}
-        <div className="lb-diff-bg">
-          <img src={images.capa21} alt="" loading="lazy" decoding="async" />
-        </div>
         <div className="container mx-auto row g-0 align-items-stretch justify-content-center position-relative">
-          <div className="col-12 text-center mb-4">
+          <div className="col-md-5 position-relative d-flex align-items-center justify-content-center">
+            <img
+              src={images.bgLogo}
+              alt=""
+              className="lb-diff-bg-logo position-absolute top-0 start-0 w-100 h-100 object-fit-contain pe-none"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              src={images.pareja}
+              alt=""
+              className="lb-diff-pareja img-fluid position-relative"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <ScrollAnim as="div" className="col-md-7 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {/* Title */}
-            <ScrollAnim as="div" className="position-relative" animation="fade-right">
+            <ScrollAnim as="div" className="position-relative w-md-80 ms-4" animation="fade-right">
               <SplitTitle as="h2" className="lb-diff-title mb-4 mx-auto" text={diferenciadoresTitle.part1 + ' ' + diferenciadoresTitle.highlight + ' ' + diferenciadoresTitle.part2} />
             </ScrollAnim>
-          </div>
-          <div className="col-md-5" />
-          <ScrollAnim as="div" className="col-md-7 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {diferenciadores.map((item, i) => (
               <div
-                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-md-80 ms-auto"
+                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-md-80 ms-4 me-auto"
                 key={i}
                 tabIndex={0}
               >
