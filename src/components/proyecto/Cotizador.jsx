@@ -445,11 +445,12 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     }
   }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
-  // Resolve selected index from URL planta ID once filteredPlantas load
+  // Resolve selected index from URL planta ID or external selection once filteredPlantas load
   useEffect(() => {
     if (!filteredPlantas.length) return
-    const idx = urlPlantaId != null
-      ? Math.max(0, filteredPlantas.findIndex((p) => p.id === urlPlantaId))
+    const targetPlantaId = selection?.planta?.id ?? urlPlantaId
+    const idx = targetPlantaId != null
+      ? Math.max(0, filteredPlantas.findIndex((p) => p.id === targetPlantaId))
       : 0
     const valid = idx >= 0 ? idx : 0
     setSelected(valid)
@@ -465,7 +466,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         })
       }
     }
-  }, [filteredPlantas, urlPlantaId, urlParams.slug])
+  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id])
 
   // Update URL when selection changes — only if user navigated to a specific planta or has filters
   useEffect(() => {

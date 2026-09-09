@@ -11,6 +11,8 @@ import HeroShell from '../components/sections/HeroShell.jsx'
 import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
+import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
+import Alternatives from '../components/proyecto/Alternatives.jsx'
 import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
 import InnTeamAgents from '../components/proyecto/InnTeamAgents.jsx'
 import { ConciergeBellIcon } from '../components/icons/concierge-bell.jsx'
@@ -131,9 +133,9 @@ const SPACES_MODAL_GALLERIES = [
     label: 'Cocina',
     images: [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg', alt: 'Cocina', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación traventino', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación travertino', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador y freezer panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg', alt: 'Lavavajillas panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg', alt: 'Equipamiento Franke', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg' },
@@ -170,7 +172,7 @@ const SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg', alt: 'Baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Banos.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Mampara.jpg', alt: 'Mampara vidrio templado en baños', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Mampara.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg', alt: 'Grifería Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg', alt: 'Ducha Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg' },
+      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg', alt: 'Columna de ducha Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg', alt: 'Accesorios marca MK', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg' },
     ]
   },
@@ -213,6 +215,7 @@ export default function Inn() {
   const [showMapModal, setShowMapModal] = useState(false)
   const [apiProjects, setApiProjects] = useState(null)
   const [innProject, setInnProject] = useState(null)
+  const [selectedPlanta, setSelectedPlanta] = useState(null)
 
   // API - Proyectos con ID:9 proyecto INN precargado
   useEffect(() => {
@@ -229,9 +232,17 @@ export default function Inn() {
   // Selección estable: misma referencia entre renders para que el Cotizador
   // no se resetee (sus efectos dependen de la identidad de `selection`)
   const selection = useMemo(
-    () => (innProject ? { project: innProject } : undefined),
-    [innProject]
+    () => (selectedPlanta ? { planta: selectedPlanta } : innProject ? { project: innProject } : undefined),
+    [selectedPlanta, innProject]
   )
+
+  const handleCotizarPlanta = (planta) => {
+    setSelectedPlanta(planta)
+    const cot = document.getElementById('cotizador')
+    if (cot) {
+      cot.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   const infoList = useMemo(() => {
     if (!innProject) return INFO
@@ -340,7 +351,7 @@ export default function Inn() {
         </section>
 
         <ProjectFeatureSection
-          eyebrow={<>Home & Wellness</>}
+          eyebrow={<>Proyecto</>}
           title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
           description="Ubicado en primera línea frente al lago Llanquihue, INN combina la experiencia Home & Wellness con la sofisticación y comodidad de un hotel boutique. Sus departamentos de 2, 3 y 4 dormitorios, dúplex y deptos con patio privado ofrecen un refugio exclusivo donde el diseño y la naturaleza se integran para brindarte una experiencia de bienestar inigualable."
           highlight="Departamentos, dúplex y deptos. con patio privado."
@@ -390,6 +401,25 @@ export default function Inn() {
           universal
           projects={apiProjects}
           selection={selection}
+        />
+
+        {/* Plantas relacionadas */}
+        <RelatedProjects
+          data={{
+            eyebrow: 'Alternativas a Edificio INN • Puerto Varas',
+            highlight: 'Puerto Varas',
+            apiId: innProject?.id || 9,
+            projectName: innProject?.name || 'Edificio INN',
+          }}
+          onCotizar={handleCotizarPlanta}
+        />
+
+        {/* ¿Buscas otras opciones? */}
+        <Alternatives
+          data={{
+            title: '¿Buscas otras opciones?',
+            excludeName: innProject?.name || 'Edificio INN',
+          }}
         />
 
         <VideoTextSection

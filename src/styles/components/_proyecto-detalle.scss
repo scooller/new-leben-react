@@ -274,7 +274,8 @@
 // --- Cotizador ---
 .lb-proj-det-cotizador {
   background: $lb-cream;
-  padding-block: $lb-section-pad;
+  padding-bottom: 1px;
+  ;
 
   &--has-hero {
     padding-block: 0; // padding-block handled by .lb-cot-content-col so the hero image fills full height
@@ -569,7 +570,8 @@
 
 // --- Related Projects Table ---
 .lb-proj-det-related {
-  padding-block: $lb-section-pad;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   background: $lb-cream;
 }
 
@@ -618,7 +620,8 @@
 
 // --- Alternatives ---
 .lb-proj-det-alternatives {
-  padding-block: $lb-section-pad;
+  padding-top: 1rem;
+  padding-bottom: 4rem;
 }
 
 .lb-proj-det-alt-card {

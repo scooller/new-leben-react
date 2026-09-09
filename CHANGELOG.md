@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.54] - 2026-09-09
+
+### Added
+- `src/pages/Inn.jsx`: agregadas las secciones `RelatedProjects` ("Plantas relacionadas") y `Alternatives` ("¿Buscas otras opciones?") inmediatamente después del Cotizador.
+- `src/styles/components/_inn.scss`: incorporados estilos personalizados para `RelatedProjects` y `Alternatives` bajo el scope `.lb-inn`, adaptando tabla, tipografías y botones a la estética dorada y boutique de INN.
+
+### Changed
+- `src/pages/Inn.jsx`: conectada la acción "Cotizar" de la tabla de plantas relacionadas para seleccionar la planta en el Cotizador superior y realizar scroll suave hacia él.
+- `src/components/proyecto/Cotizador.jsx`: habilitada la resolución de la planta activa a partir de `selection?.planta?.id` al actualizarse externamente la selección.
+
 ## [0.9.53] - 2026-09-09
 
 ### Changed
