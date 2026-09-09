@@ -175,6 +175,8 @@ export default function Footer() {
                 'Información de la empresa': '/informacion-de-la-empresa',
                 'Privacidad': '/informacion-de-la-empresa',
                 'Términos': '/bases-legales',
+                'Política de cookies': '/cookies',
+                'Cookies': '/cookies',
               }
               const targetRoute = routeMap[link]
               return targetRoute ? (

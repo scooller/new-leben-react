@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
+import { useTrackingConsent } from './hooks/useTrackingConsent.js'
 
 // Layout
 import Navbar from './components/layout/Navbar.jsx'
@@ -10,6 +11,8 @@ import Footer from './components/layout/Footer.jsx'
 import Loader from './components/Loader.jsx'
 import PageLoader from './components/PageLoader.jsx'
 import ChatWidget from './components/ChatWidget.jsx'
+import CookieConsentModal from './components/cookies/CookieConsentModal.jsx'
+import CookieSettingsTrigger from './components/cookies/CookieSettingsTrigger.jsx'
 
 // Home sections
 import Hero from './components/sections/Hero.jsx'
@@ -28,6 +31,7 @@ const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
 const Inn = lazy(() => import('./pages/Inn.jsx'))
 const StaticPage = lazy(() => import('./pages/StaticPage.jsx'))
+const CookiesPage = lazy(() => import('./pages/CookiesPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 function Home() {
@@ -45,6 +49,7 @@ function Home() {
 
 export default function App() {
   useGsapAnimations()
+  useTrackingConsent()
 
   const dispatch = useDispatch()
 
@@ -168,6 +173,16 @@ export default function App() {
             <StaticPage slug="trabaja-en-leben" />
           </Suspense>
         } />
+        <Route path="/cookies" element={
+          <Suspense fallback={<PageLoader />}>
+            <CookiesPage />
+          </Suspense>
+        } />
+        <Route path="/politica-de-cookies" element={
+          <Suspense fallback={<PageLoader />}>
+            <CookiesPage />
+          </Suspense>
+        } />
         <Route path="*" element={
           <Suspense fallback={<PageLoader />}>
             <NotFound />
@@ -175,6 +190,8 @@ export default function App() {
         } />
       </Routes>
       <ChatWidget />
+      <CookieConsentModal />
+      <CookieSettingsTrigger />
     </>
   )
 }

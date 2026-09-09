@@ -1,0 +1,267 @@
+// ============================================================
+// Cookies Modal & Management Component Styles
+// ============================================================
+@use '../variables' as *;
+
+// When blocking modal is active, disallow background scrolling
+body.lb-cookie-blocking-active {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+// Backdrop
+.lb-cookie-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 17, 21, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: lbCookieFadeIn 0.25s ease-out forwards;
+}
+
+// Modal Card
+.lb-cookie-modal {
+  background-color: $lb-white;
+  color: $lb-dark;
+  width: 100%;
+  max-width: 620px;
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba($lb-dark, 0.08);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: lbCookieSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  .lb-cookie-modal-header {
+    padding: 1.5rem 1.75rem 1rem;
+    border-bottom: 1px solid $lb-gray-300;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: $lb-white;
+
+    .lb-cookie-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: $lb-fs-xs;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: $lb-red;
+      background-color: rgba($lb-red, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+    }
+
+    .lb-cookie-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $lb-dark;
+      margin: 0;
+      line-height: 1.3;
+    }
+  }
+
+  .lb-cookie-modal-body {
+    padding: 1.5rem 1.75rem;
+    overflow-y: auto;
+    font-size: $lb-fs-md;
+    line-height: 1.6;
+    color: $lb-body;
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .lb-cookie-legal-note {
+      font-size: $lb-fs-sm;
+      background-color: $lb-cream;
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      border-left: 3px solid $lb-red;
+      color: $lb-gray-700;
+      margin-bottom: 1rem;
+    }
+
+    .lb-cookie-link {
+      color: $lb-red;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: $lb-red-dark;
+      }
+    }
+  }
+
+  // Granular settings cards
+  .lb-cookie-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  .lb-cookie-card {
+    background-color: $lb-gray-100;
+    border: 1px solid rgba($lb-dark, 0.06);
+    border-radius: 0.85rem;
+    padding: 1rem 1.25rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background-color: #f1f3f5;
+      border-color: rgba($lb-dark, 0.12);
+    }
+
+    .lb-cookie-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+
+      .lb-cookie-card-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: $lb-dark;
+        margin: 0;
+      }
+    }
+
+    .lb-cookie-card-desc {
+      font-size: $lb-fs-sm;
+      color: $lb-gray-600;
+      margin: 0;
+      line-height: 1.45;
+    }
+  }
+
+  .lb-cookie-modal-footer {
+    padding: 1rem 1.75rem 1.5rem;
+    border-top: 1px solid $lb-gray-300;
+    background-color: $lb-white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .lb-cookie-btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+
+      @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn-cookie-accept {
+      background-color: $lb-red;
+      color: $lb-white;
+      font-weight: 600;
+      border-radius: 0.65rem;
+      padding: 0.65rem 1rem;
+      border: 1px solid $lb-red;
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: $lb-red-dark;
+        border-color: $lb-red-dark;
+        color: $lb-white;
+      }
+    }
+
+    .btn-cookie-essential {
+      background-color: transparent;
+      color: $lb-dark;
+      font-weight: 600;
+      border-radius: 0.65rem;
+      padding: 0.65rem 1rem;
+      border: 1.5px solid $lb-gray-400;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+
+      &:hover {
+        background-color: $lb-gray-100;
+        border-color: $lb-dark;
+        color: $lb-dark;
+      }
+    }
+
+    .btn-cookie-config {
+      background: none;
+      border: none;
+      color: $lb-gray-600;
+      font-size: $lb-fs-sm;
+      text-decoration: underline;
+      padding: 0.25rem;
+      align-self: center;
+      cursor: pointer;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: $lb-dark;
+      }
+    }
+  }
+}
+
+// Floating Trigger for Consent Revocation
+.lb-cookie-trigger {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1040;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: $lb-white;
+  color: $lb-dark;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    background-color: $lb-dark;
+    color: $lb-white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $lb-red;
+    outline-offset: 2px;
+  }
+}
+
+@keyframes lbCookieFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lbCookieSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

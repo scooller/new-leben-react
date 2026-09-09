@@ -38,6 +38,45 @@ npm run preview
 
 ---
 
+## Cumplimiento Ley 21.719 (Chile) y Sistema de Cookies & Analítica Anónima
+
+Este proyecto incorpora un sistema integral de consentimiento, bloqueo y privacidad adaptado a los estándares de la **Ley N° 21.719 sobre Protección de Datos Personales de Chile** (que crea la Agencia de Protección de Datos Personales - APDP) y directrices de SERNAC.
+
+### 1. El Principio de Anonimato y Prevención de Pérdida de Datos
+La Ley 21.719 estipula que la regulación de datos personales y consentimiento **no aplica a la información verdaderamente anónima o agregada**, ya que un dato que no identifica ni permite identificar a una persona natural no constituye un dato personal.
+
+Para no perder la información estadística del tráfico y métricas del sitio web sin infringir la ley:
+- **Google Consent Mode v2 (Cookieless Pings)**:
+  - Cuando un usuario ingresa por primera vez o selecciona **"Aceptar solo esenciales"**, el estado de almacenamiento se inicializa en `analytics_storage: 'denied'` y la IP se anonimiza (`anonymize_ip: true`).
+  - En este estado, Google Analytics **NO escribe ni lee cookies** en el navegador del usuario.
+  - En su lugar, emite únicamente **pings anónimos sin identificadores persistentes**. Google procesa estos pings mediante **modelado conductual (Behavioral Modeling)** con aprendizaje automático para computar el volumen de visitas, sesiones, páginas vistas y tasas de rebote en los informes de GA4 de forma agregada.
+  - **Resultado**: El negocio preserva la visibilidad analítica global del sitio web sin vulnerar la privacidad ni colocar cookies no autorizadas en el dispositivo del visitante.
+- **Activación de Métricas Completas**:
+  - Si el usuario pulsa **"Aceptar todas"** o activa Analítica en la configuración granular, `analytics_storage` pasa a `granted`, permitiendo la persistencia de cookies (`_ga`) y la atribución de recorridos completos.
+
+### 2. Control de Publicidad y Meta Pixel (Opt-in Estricto)
+A diferencia de la analítica que admite modelado anónimo agregado, la publicidad digital y el remarketing perfilan al usuario individual:
+- **Meta Pixel (Facebook/Instagram)** y **Google Ads**:
+  - Se configuran bloqueados por defecto (`fbq('consent', 'revoke')` y `ad_storage: 'denied'`).
+  - El script del Meta Pixel **solo se inyecta en el DOM una vez que el usuario otorga consentimiento explícito** para la categoría de *Marketing y Publicidad*.
+  - Si el usuario revoca su consentimiento posteriormente, se dispara `fbq('consent', 'revoke')` y se deniega `ad_storage` de inmediato.
+
+### 3. Mecánica del Modal Bloqueante y Revocación
+- **Bloqueo sin Cookie Wall Coactivo**: La pantalla se congela con un backdrop translúcido (`backdrop-filter: blur(8px)`) que desactiva el scroll del `body` e impide la navegación hasta que el usuario tome una acción informada.
+- **Opciones Simétricas**: "Aceptar solo esenciales" (desbloquea la web de inmediato con solo cookies técnicas) y "Aceptar todas" poseen idéntica relevancia visual, respetando la prohibición de dark patterns.
+- **Revocación en 1 Clic**: Un botón flotante inferior permanente (`#lb-cookie-trigger`) permite al usuario cambiar de opinión o retirar su autorización en cualquier momento con la misma facilidad con que la otorgó.
+- **Página Informativa Dedicada**: Ruta `/cookies` (alias `/politica-de-cookies`) con el detalle de la empresa responsable (Inmobiliaria Cenit Ltda.), derechos ARCOP-B, transferencias internacionales y canales de contacto.
+
+### 4. Configuración en `.env.local`
+Para conectar tus cuentas oficiales de analítica y pauta publicitaria:
+```env
+# Tracking & Analytics (Opcional - dejar vacío en desarrollo si no se requiere)
+VITE_GA_ID=G-XXXXXXXXXX
+VITE_META_PIXEL_ID=123456789012345
+```
+
+---
+
 ## Project Structure
 
 ```

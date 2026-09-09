@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.41] - 2026-09-09
+
+### Added
+- `README.md`: agregada sección exhaustiva sobre el **Cumplimiento de la Ley 21.719 (Chile) y Sistema de Cookies & Analítica Anónima**, detallando el principio de disociación/anonimato, cookieless pings y modelado de Google Consent Mode v2 sin cookies, y opt-in estricto de Meta Pixel.
+
+### Changed
+- `src/hooks/useTrackingConsent.js`: inicialización proactiva de GA4 en modo cookieless (`analytics_storage: denied`, `anonymize_ip: true`) para captura de pings anónimos agregados sin almacenamiento de cookies persistentes antes del consentimiento, evitando pérdida de métricas generales.
+
+## [0.9.40] - 2026-09-09
+
+### Added
+- `src/hooks/useTrackingConsent.js`: hook reactivo para control en tiempo real de **Google Consent Mode v2** (`analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization`) y **Meta Pixel Consent** (`fbq('consent', 'grant' | 'revoke')`), asegurando cumplimiento estricto de la Ley 21.719 de Chile.
+- `.env.example`: documentadas las variables opcionales `VITE_GA_ID` y `VITE_META_PIXEL_ID` para inyección de scripts bajo consentimiento previo.
+
+### Changed
+- `src/App.jsx`: integrado el hook `useTrackingConsent()` a nivel de aplicación para sincronización reactiva entre Redux y los servicios de analítica y marketing.
+
+## [0.9.39] - 2026-09-09
+
+### Added
+- `src/store/slices/cookieSlice.js`: slice de Redux Toolkit para persistencia de consentimiento conforme a Ley 21.719 (Chile), con almacenamiento en `localStorage`, control de interacción obligatoria y granularidad por finalidades.
+- `src/components/cookies/CookieConsentModal.jsx`: modal bloqueante con backdrop blur (`backdrop-filter: blur(8px)`) que impide la navegación libre hasta interactuar, con botones simétricos ("Aceptar solo esenciales" y "Aceptar todas") y panel detallado de toggles.
+- `src/components/cookies/CookieSettingsTrigger.jsx`: botón flotante inferior permanente para reconfiguración y revocación expedita del consentimiento en 1 clic.
+- `src/styles/components/_cookies.scss`: diseño SCSS para el modal, backdrop, tarjetas de categorías y switch toggles alineados a la estética Leben.
+- `src/data/cookiesPageData.js`: contenido legal integral estructurado bajo la Ley 21.719, rol de la Agencia de Protección de Datos Personales (APDP), derechos ARCOP-B, transferencias internacionales y finalidades comerciales de Meta Ads, Google Ads y mailings.
+- `src/pages/CookiesPage.jsx`: página de Política de Cookies y Seguridad con botón de reconfiguración interactivo y desglose de derechos.
+- `src/App.jsx`: registradas rutas `/cookies` y `/politica-de-cookies` e integrados los componentes de cookies a nivel raíz.
+
+### Changed
+- `src/store/store.js`: registrado `cookieReducer` en el store central.
+- `src/styles/main.scss`: importado `@use 'components/cookies';`.
+- `src/data/content.js`: agregado enlace `'Política de cookies'` en `copyrightLinks`.
+- `src/components/layout/Footer.jsx`: mapeado enlace a `/cookies` en el copyright strip.
+
 ## [0.9.38] - 2026-09-09
 
 ### Security
