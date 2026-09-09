@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.46] - 2026-09-09
+
+### Refactor
+- `src/components/announcement/AnnouncementModal.jsx`: adoptada la estructura canónica del modal de Bootstrap 5 dividida formalmente en `.modal-header` (con logo Leben oficial y botón `.btn-close`), `.modal-body` (título y mensaje) y `.modal-footer` (botón de acción), eliminando contenedores flex manuales.
+
+## [0.9.45] - 2026-09-09
+
+### Refactor
+- `src/components/cookies/CookieConsentModal.jsx`: refactorizado para usar la estructura nativa del componente Modal de Bootstrap 5 (`modal`, `modal-dialog-centered`, `modal-content`, `modal-header`, `modal-body`, `modal-footer`, `btn-close`), eliminando clases CSS propietarias.
+- `src/styles/components/_cookies.scss`: eliminado CSS repetitivo de modales y backdrops, conservando únicamente la clase de bloqueo de scroll y el estilo del botón flotante de revocación. Reducción del tamaño final del bundle CSS.
+
+## [0.9.44] - 2026-09-09
+
+### Refactor
+- `src/components/announcement/AnnouncementModal.jsx`: refactorizado para utilizar exclusivamente las clases nativas del componente Modal de Bootstrap 5 (`modal`, `modal-dialog-centered`, `modal-content`, `btn-close`, `modal-body`), eliminando CSS custom innecesario.
+- `src/styles/components/_announcement.scss`: eliminado en favor de las utilidades y estilos globales de Bootstrap 5.
+
+## [0.9.43] - 2026-09-09
+
+### Changed
+- `src/components/announcement/AnnouncementModal.jsx`: diseño simplificado al extremo para máxima elegancia minimalista, conservando únicamente el logo Leben oficial, título, mensaje y botón "Entendido" (removidos badge y sección de llamado secundario).
+- `src/data/announcementData.js`: estructura de datos compactada con solo título y mensaje informativo.
+- `src/styles/components/_announcement.scss`: refinados espacios, padding y tipografía del pop-up.
+
+## [0.9.42] - 2026-09-09
+
+### Added
+- `src/components/announcement/AnnouncementModal.jsx`: pop-up de avisos minimalista para ocasiones especiales (feriados, horarios especiales, cierres de sucursales) con logo Leben oficial, backdrop blur suave, cierre en tecla ESC y persistencia por sesión en `sessionStorage`.
+- `src/data/announcementData.js`: archivo de configuración modular para activar/desactivar el pop-up (`enabled: true/false`), personalizar ID único, badge, título, mensaje y texto destacado.
+- `src/styles/components/_announcement.scss`: estilos SCSS específicos para el modal de anuncio con animaciones suaves de entrada.
+
+### Changed
+- `src/App.jsx`: montado `AnnouncementModal` con renderizado secuencial condicionado estrictamente a que la web haya finalizado su carga inicial (`isLoaded: true`) y el consentimiento de cookies haya sido resuelto (`hasInteracted: true` y `!isSettingsOpen`).
+- `src/styles/main.scss`: importado `@use 'components/announcement';`.
+
 ## [0.9.41] - 2026-09-09
 
 ### Added

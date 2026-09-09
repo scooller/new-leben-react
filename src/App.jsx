@@ -13,6 +13,7 @@ import PageLoader from './components/PageLoader.jsx'
 import ChatWidget from './components/ChatWidget.jsx'
 import CookieConsentModal from './components/cookies/CookieConsentModal.jsx'
 import CookieSettingsTrigger from './components/cookies/CookieSettingsTrigger.jsx'
+import AnnouncementModal from './components/announcement/AnnouncementModal.jsx'
 
 // Home sections
 import Hero from './components/sections/Hero.jsx'
@@ -192,6 +193,7 @@ export default function App() {
       <ChatWidget />
       <CookieConsentModal />
       <CookieSettingsTrigger />
+      <AnnouncementModal />
     </>
   )
 }
