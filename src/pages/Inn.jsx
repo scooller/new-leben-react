@@ -22,12 +22,13 @@ import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
+import { mapApiProject } from '../lib/projectUtils.js'
 
 const INFO = [
   { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
   { id: 'tipologias', label: 'Tipologías', value: '2, 3 y dorms, Deptos, dúplex y deptos con patio privado' },
   { id: 'metrajes', label: 'Metrajes', value: 'Desde 85 m²' },
-  { id: 'precio', label: 'Precio desde', value: 'UF 9.816' },
+  { id: 'precio', label: 'Precio desde', value: '—' },
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
 ]
 
@@ -232,6 +233,14 @@ export default function Inn() {
     [innProject]
   )
 
+  const infoList = useMemo(() => {
+    if (!innProject) return INFO
+    const mapped = mapApiProject(innProject)
+    return INFO.map((item) =>
+      item.id === 'precio' ? { ...item, value: mapped.precioDesde || item.value } : item
+    )
+  }, [innProject])
+
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
@@ -318,7 +327,7 @@ export default function Inn() {
         <section className="lb-inn-info" aria-label="Datos del proyecto">
           <div className="container">
             <div className="row row-cols-1 row-cols-lg-5 text-center gx-4 gy-3">
-              {INFO.map((t, i) => (
+              {infoList.map((t, i) => (
                 <ScrollAnim animation='scale' delay={0.2 * (i + 1)} className="col" key={t.id}>
                   <div className="d-flex flex-column gap-1">
                     <small className="lb-inn-info__label text-uppercase">{t.label}</small>

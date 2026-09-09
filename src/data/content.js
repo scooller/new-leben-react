@@ -141,7 +141,7 @@ export const videosContent = {
   project: {
     name: 'Edificio INN',
     location: 'Puerto Varas, Chile',
-    price: 'UF 9.816',
+    price: '—',
     mainImage: img('home/img1-main.jpg'),
     sideImage: img('home/img1-right.jpg'),
   },

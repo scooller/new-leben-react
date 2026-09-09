@@ -809,7 +809,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       {plantasRelacionadas?.length > 0 && (
         <div className="row g-4 mt-2" animation="fade-up">
           <SplitTitle as="h3" className="lb-proj-det-cot-plantas-title mb-3 col-12" text='Plantas relacionadas' />
-          {plantasRelacionadas.map((p, i) => (
+          {plantasRelacionadas.slice(0, 3).map((p, i) => (
             <div key={i} className="col-md-6 col-lg-4">
               <button
                 className="card h-100 lb-proj-det-cot-planta-card"

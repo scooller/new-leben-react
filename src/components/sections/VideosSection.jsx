@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { videosContent, images } from '../../data/content.js'
+import { apiFetch } from '../../lib/apiFetch.js'
+import { mapApiProject } from '../../lib/projectUtils.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
@@ -10,6 +12,19 @@ export default function VideosSection() {
   const { monthLabel, project, gallery } = videosContent
   const sectionRef = useRef(null)
   const isLoaded = useSelector((s) => s.ui.isLoaded)
+  const [apiPrice, setApiPrice] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    apiFetch('/api/v1/proyectos').then(({ data }) => {
+      if (cancelled || !Array.isArray(data)) return
+      const p = data.find((x) => x.id === 9 || (x.name && x.name.toLowerCase().includes('inn')))
+      if (p) {
+        setApiPrice(mapApiProject(p).precioDesde)
+      }
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     if (!isLoaded) return
@@ -31,7 +46,7 @@ export default function VideosSection() {
   const meta = [
     { icon: 'user', label: 'Proyecto', value: project.name },
     { icon: 'mapPin', label: 'Ubicación', value: project.location },
-    { icon: 'building', label: 'Desde', value: project.price },
+    { icon: 'building', label: 'Desde', value: apiPrice || project.price || '—' },
   ]
 
   return (

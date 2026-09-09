@@ -75,6 +75,21 @@ VITE_GA_ID=G-XXXXXXXXXX
 VITE_META_PIXEL_ID=123456789012345
 ```
 
+### 5. Pop-up de Avisos para Ocasiones Especiales (Feriados / Cierres)
+El sistema incluye un modal minimalista nativo de Bootstrap 5 ([`AnnouncementModal.jsx`](file:///c:/laragon/app/new-leben-react/src/components/announcement/AnnouncementModal.jsx)) para comunicar horarios festivos, cierres de sucursales o comunicados importantes:
+- **Secuencia de aparición**: Solo se despliega tras finalizar la carga de la web (`isLoaded: true`) y tras resolver el consentimiento de cookies (`hasInteracted: true` y modal de cookies cerrado).
+- **Frecuencia por sesión**: Se muestra una sola vez por sesión del navegador mediante `sessionStorage`.
+- **Configuración centralizada en [`src/data/announcementData.js`](file:///c:/laragon/app/new-leben-react/src/data/announcementData.js)**:
+  ```javascript
+  export const announcementConfig = {
+    enabled: true,                       // true para mostrar el aviso, false para apagarlo
+    id: 'aviso-atencion-especial-2026',  // Al cambiar el ID, vuelve a mostrarse en una nueva sesión
+    title: 'Horario Especial de Atención',
+    message: 'Informamos a nuestros clientes e inversionistas...',
+    buttonText: 'Entendido',
+  }
+  ```
+
 ---
 
 ## Project Structure

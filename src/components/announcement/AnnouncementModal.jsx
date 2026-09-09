@@ -78,14 +78,14 @@ export default function AnnouncementModal() {
       >
         <div className="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="modal-header border-0 pb-0 pt-4 px-4 align-items-center">
+          <div className="modal-header bg-dark border-0 align-items-center" data-bs-theme="dark">
             <div className="d-flex align-items-center gap-2">
               <img src={images.logoIcon} alt="" width="24" height="24" />
               <img src={images.logoText} alt="Leben" height="22" />
             </div>
             <button
               type="button"
-              className="btn-close ms-auto"
+              className="btn-close btn-close-white ms-auto"
               aria-label="Cerrar"
               onClick={handleDismiss}
             />

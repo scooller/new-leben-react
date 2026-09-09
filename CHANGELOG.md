@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.53] - 2026-09-09
+
+### Changed
+- `src/pages/Inn.jsx`: la barra de datos del proyecto (`INFO`) ahora consume dinámicamente el precio desde la API (`innProject`) usando `mapApiProject` en lugar del valor hardcodeado `UF 9.816`.
+- `src/components/sections/VideosSection.jsx`: el proyecto destacado del mes ahora consulta la API de proyectos para resolver el precio base dinámico en lugar de tomar el valor estático de `content.js`.
+- `src/pages/ProyectoDetalle.jsx`: la pestaña "Precio desde" de la barra de navegación se actualiza dinámicamente con el valor provisto por la API del proyecto.
+- `src/data/projects.js` & `src/data/content.js`: eliminados valores de precio estáticos (`UF 9.816` y alternativas de maqueta) sustituyéndolos por marcadores neutrales de fallback.
+
+## [0.9.52] - 2026-09-09
+
+### Removed
+- `src/data/projects.js`: eliminados `columns`, `rows` y `title` obsoletos dentro de `relatedProjects`, eliminando datos estáticos residuales de maqueta que eran redundantes frente al consumo real de la API en `RelatedProjects.jsx`.
+
+## [0.9.51] - 2026-09-09
+
+### Changed
+- `src/components/proyecto/RelatedProjects.jsx` & `src/data/projects.js`: removido el asterisco (`*`) en la presentación de precios de la tabla de plantas/proyectos relacionados para evitar confusiones al no haber un disclaimer asociado.
+
+## [0.9.50] - 2026-09-09
+
+### Changed
+- `src/components/proyecto/RelatedProjects.jsx` & `src/components/proyecto/Cotizador.jsx`: limitada la sección "Plantas relacionadas" para mostrar únicamente las primeras 3 plantas disponibles en lugar del listado completo con paginación, simplificando la visualización y optimizando la carga.
+
+## [0.9.49] - 2026-09-09
+
+### Changed
+- `src/data/projects.js` & `src/components/proyecto/Alternatives.jsx`: generalizado el título de la sección de proyectos alternativos de "¿Buscas otras opciones en el sur de Chile?" a "¿Buscas otras opciones?", permitiendo reutilización para proyectos en cualquier zona geográfica.
+
+## [0.9.48] - 2026-09-09
+
+### Documentation
+- `README.md`: incorporada subsección detallada sobre el **Pop-up de Avisos para Ocasiones Especiales (Feriados / Cierres)**, documentando su secuencia de aparición condicional, frecuencia por sesión y configuración centralizada en `src/data/announcementData.js`.
+
+## [0.9.47] - 2026-09-09
+
+### Changed
+- `src/components/announcement/AnnouncementModal.jsx`: configurado `modal-header` con `data-bs-theme="dark"` y botón `.btn-close.btn-close-white` para renderizar la cruz de cierre en color blanco nítido sobre el fondo oscuro corporativo.
+
 ## [0.9.46] - 2026-09-09
 
 ### Refactor

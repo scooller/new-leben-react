@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
@@ -12,8 +11,6 @@ import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
 export default function RelatedProjects({ data, onCotizar }) {
   const [rows, setRows] = useState([])
   const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(0)
-  const PAGE_SIZE = 5
   const navigate = useNavigate()
 
   const handleCotizar = (row) => {
@@ -33,9 +30,8 @@ export default function RelatedProjects({ data, onCotizar }) {
     if (!data.apiId && !data.comuna) return
     let cancelled = false
     setLoading(true)
-    setPage(0)
 
-    // Fetch by comuna (universal mode) or by single project, paginating through all results
+    // Fetch by comuna (universal mode) or by single project
     const baseParams = data.comuna
       ? `comuna=${encodeURIComponent(data.comuna)}&disponible=1`
       : `proyecto_id=${data.apiId}`
@@ -44,15 +40,15 @@ export default function RelatedProjects({ data, onCotizar }) {
         const all = []
         let pg = 1
         while (true) {
-          const { data: page, error } = await apiFetch(`/api/v1/plantas?${baseParams}&perPage=100&page=${pg}`)
+          const { data: page, error } = await apiFetch(`/api/v1/plantas?${baseParams}&perPage=20&page=${pg}`)
           if (cancelled || error || !Array.isArray(page)) break
           all.push(...page)
-          if (page.length < 100) break
+          if (page.length < 20 || all.filter((p) => p.is_available).length >= 3) break
           pg++
         }
         if (cancelled) return
         setLoading(false)
-        const plantas = all.filter((p) => p.is_available)
+        const plantas = all.filter((p) => p.is_available).slice(0, 3)
         if (!plantas.length) return
         setRows(plantas
           .map((p) => ({
@@ -62,7 +58,7 @@ export default function RelatedProjects({ data, onCotizar }) {
             ubicacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion,
             tipologia: p.programa,
             superficie: `${Math.round(parseFloat(p.superficie_util) || 0)} m²`,
-            precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}*`,
+            precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}`,
             _planta: p,
           })))
       })()
@@ -93,7 +89,7 @@ export default function RelatedProjects({ data, onCotizar }) {
             </thead>
             <tbody>
               {loading ? (
-                Array.from({ length: 5 }).map((_, i) => (
+                Array.from({ length: 3 }).map((_, i) => (
                   <tr key={i}>
                     <td><span className="placeholder col-12" /></td>
                     <td><span className="placeholder col-12" /></td>
@@ -105,7 +101,7 @@ export default function RelatedProjects({ data, onCotizar }) {
                     <td><span className="placeholder col-6" /></td>
                   </tr>
                 ))
-              ) : (rows || []).slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((row, i) => (
+              ) : (rows || []).slice(0, 3).map((row, i) => (
                 <tr key={i}>
                   <td className="fw-semibold">{row.proyecto}</td>
                   <td className="fw-semibold">{row.nombre}</td>
@@ -133,32 +129,6 @@ export default function RelatedProjects({ data, onCotizar }) {
               ))}
             </tbody>
           </table>
-
-          {/* Pager */}
-          {!loading && rows.length > PAGE_SIZE && (
-            <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
-              <span className="text-muted small">
-                {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, rows.length)} de {rows.length}
-              </span>
-              <div className="d-flex align-items-center gap-2">
-                <button
-                  className="btn btn-outline-dark btn-sm"
-                  disabled={page === 0}
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <span className="small fw-semibold">{page + 1} / {Math.ceil(rows.length / PAGE_SIZE)}</span>
-                <button
-                  className="btn btn-outline-dark btn-sm"
-                  disabled={(page + 1) * PAGE_SIZE >= rows.length}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </div>
-          )}
         </ScrollAnim>
       </div>
     </section>

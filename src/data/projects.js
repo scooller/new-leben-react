@@ -16,7 +16,7 @@ export const projectDetails = {
     address: 'Vicente Pérez Rosales 991, Puerto Varas',
     status: 'EnVenta',
     statusLabel: 'En Venta',
-    priceFrom: 'UF 9.816',
+    priceFrom: '—',
 
     // --- Hero ---
     hero: {
@@ -32,7 +32,7 @@ export const projectDetails = {
       { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
       { id: 'tipologia', label: 'Tipología', value: '2-3-4 Dorms' },
       { id: 'metraje', label: 'Metraje', value: 'Desde 85 m²' },
-      { id: 'precio', label: 'Precio desde', value: 'UF 9.816' },
+      { id: 'precio', label: 'Precio desde', value: '—' },
       { id: 'estado', label: 'Estado', value: 'Venta en Verde' },
     ],
 
@@ -132,26 +132,15 @@ export const projectDetails = {
       ctaText: 'Cotizar',
     },
 
-    // --- Related Projects (table) ---
+    // --- Related Projects (table header) ---
     relatedProjects: {
       eyebrow: 'Alternativas a Edificio INN • Puerto Varas',
-      title: 'Proyectos similares que te pueden interesar',
-      columns: ['Proyecto', 'Ubicación', 'Tipología', 'Superficie', 'Precio', ''],
-      rows: [
-        { dpto: 'Piso 1', name: 'Edificio Mood', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '60-90 m²', precio: 'UF 6.200*' },
-        { dpto: 'Piso 10', name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '2-3 Dorms', superficie: '70-100 m²', precio: 'UF 7.100*' },
-        { dpto: 'Piso Duplex', name: 'Edificio Nordico', location: 'Puerto Varas', tipologia: '1-2 Dorms', superficie: '45-70 m²', precio: 'UF 4.800*' },
-      ],
     },
 
     // --- Alternatives ---
     alternatives: {
-      title: '¿Buscas otras opciones en el sur de Chile?',
-      cards: [
-        { name: 'Edificio Índigo', location: 'Puerto Varas', tipologia: '2-3 Dormitorios — Entrega Inmediata', price: 'Desde UF 8.906*', image: img('inn/inn-alt-1.jpg') },
-        { name: 'Edificio Nórdico', location: 'Puerto Varas', tipologia: '1-2-3 Dormitorios — Futuro Proyecto', price: 'Desde UF 4.746*', image: img('inn/inn-alt-2.jpg') },
-        { name: 'Edificio Bold', location: 'Valdivia', tipologia: '1-2 Dormitorios — Entrega Inmediata', price: 'Desde UF 3.521*', image: img('inn/inn-alt-3.jpg') },
-      ],
+      title: '¿Buscas otras opciones?',
+      cards: [],
     },
 
     // --- Spaces Gallery ---

@@ -21,7 +21,7 @@ export default function Alternatives({ data }) {
       const others = all.filter((p) => p.name !== data.excludeName)
       const picks = others.filter((p) => SUR_COMUNAS.includes((p.comuna || '').trim().toUpperCase())).slice(0, 3)
       setCards(picks.map(mapApiProject))
-      setTitle('¿Buscas otras opciones en el sur de Chile?')
+      setTitle('¿Buscas otras opciones?')
     })
     return () => { cancelled = true }
   }, [data.excludeName])

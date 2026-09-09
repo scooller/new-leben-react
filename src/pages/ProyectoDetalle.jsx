@@ -1,7 +1,9 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getProjectBySlug } from '../data/projects.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
+import { apiFetch } from '../lib/apiFetch.js'
+import { mapApiProject } from '../lib/projectUtils.js'
 
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
@@ -22,6 +24,28 @@ import TeamAgents from '../components/proyecto/TeamAgents.jsx'
 export default function ProyectoDetalle() {
   const { slug } = useParams()
   const project = useMemo(() => getProjectBySlug(slug), [slug])
+  const [apiProject, setApiProject] = useState(null)
+
+  useEffect(() => {
+    if (!project) return
+    let cancelled = false
+    apiFetch('/api/v1/proyectos').then(({ data }) => {
+      if (cancelled || !Array.isArray(data)) return
+      const found = data.find((p) => p.id === project.apiId || (p.name && project.name && p.name.toLowerCase() === project.name.toLowerCase()))
+      if (found) setApiProject(found)
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [project])
+
+  const dynamicTabs = useMemo(() => {
+    if (!project?.tabs) return []
+    if (!apiProject) return project.tabs
+    const mapped = mapApiProject(apiProject)
+    return project.tabs.map((tab) =>
+      tab.id === 'precio' ? { ...tab, value: mapped.precioDesde || tab.value } : tab
+    )
+  }, [project?.tabs, apiProject])
+
   useGsapAnimations([project])
 
   if (!project) {
@@ -43,7 +67,7 @@ export default function ProyectoDetalle() {
       <Navbar />
       <main>
         <ProjectHero data={project.hero} />
-        <ProjectTabs tabs={project.tabs} />
+        <ProjectTabs tabs={dynamicTabs} />
         <ProjectOverview data={project.overview} />
         <FloorPlans data={project.floorPlans} />
         <Vista360 data={project.vista360} />
