@@ -12,13 +12,10 @@ dist-ssr
 /graphify-out
 /public/images/
 /public/video/
-vite.config.js
 /assets high
-AGENTS.md
 /extra
 .vscode/extensions.json
 /docs
 /.sf
 
 graphify-out/
-AGENTS.md

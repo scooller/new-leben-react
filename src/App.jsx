@@ -158,6 +158,16 @@ export default function App() {
             <StaticPage slug="bases-legales" />
           </Suspense>
         } />
+        <Route path="/trabaja-en-leben" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="trabaja-en-leben" />
+          </Suspense>
+        } />
+        <Route path="/trabaja-con-nosotros" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="trabaja-en-leben" />
+          </Suspense>
+        } />
         <Route path="*" element={
           <Suspense fallback={<PageLoader />}>
             <NotFound />

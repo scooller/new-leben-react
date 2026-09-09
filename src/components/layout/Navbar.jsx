@@ -20,7 +20,7 @@ const mainLinks = [
 const menuLinks = [
   { label: 'Locales comerciales', href: '#' },
   { label: 'Mundo Invest', href: '#' },
-  { label: 'Trabaja en Leben', href: '#' },
+  { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
   { label: 'Bases legales', to: '/bases-legales' },
   { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
 ]

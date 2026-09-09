@@ -1,14 +1,15 @@
 {
   "name": "new-leben",
   "private": true,
-  "version": "0.9.35",
+  "version": "0.9.38",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:all": "npm run lint && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "mcp": "node .agents/mcp/leben-cli.js"
   },
   "dependencies": {
     "@fancyapps/ui": "^5.0.36",

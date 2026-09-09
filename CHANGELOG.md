@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.38] - 2026-09-09
+
+### Security
+- `vite.config.js`: removido el token de autenticación en texto plano del proxy local `/api`. Ahora se carga dinámicamente con `loadEnv` a través de la variable de entorno `DEV_API_TOKEN`.
+- `.env.local`: agregadas variables `DEV_API_TOKEN` y `DEV_API_TARGET` (excluidas del control de versiones).
+- `.env.example`: documentadas las variables de configuración del proxy de desarrollo.
+- `.gitignore`: removidas las exclusiones de `vite.config.js` y `AGENTS.md` para versionar la configuración segura y guías operativas.
+
+## [0.9.37] - 2026-09-09
+
+### Added
+- `public/images/home/hero-institucional.jpg`: imagen de arquitectura residencial contemporánea generada con IA para los heroes de páginas estáticas e institucionales.
+- `src/App.jsx`: agregadas rutas directas `/trabaja-en-leben` y `/trabaja-con-nosotros`.
+
+### Changed
+- `src/data/staticPages.js`: reemplazado `banner.jpg` en los heroes por `hero-institucional.jpg` (en nosotros y bases legales), `Trabaja-con-nosotros1.png` (en información de la empresa y trabaja en leben) y `banner-clientes.jpg` (en proceso de reserva en línea).
+- `src/components/layout/Navbar.jsx`: conectado el enlace de menú "Trabaja en Leben" a `/trabaja-en-leben`.
+
+## [0.9.36] - 2026-09-09
+
+### Added
+- `.agents/mcp/leben-bridge.js`: bridge stdio local para conectar cualquier cliente MCP (Antigravity IDE, Claude, Cursor, Copilot) al endpoint de WordPress Leben con bypass de Cloudflare Turnstile y lectura segura de credenciales desde `.env.local`.
+- `.agents/mcp/leben-cli.js`: interfaz de línea de comandos para listar (`npm run mcp -- list`) e invocar herramientas del MCP directamente desde la terminal.
+- `.agents/mcp_config.json` & `.vscode/mcp.json`: registro del servidor MCP `leben-wp` para el entorno de trabajo.
+- `package.json`: agregado script `"mcp"` para ejecución ágil de tools.
+
 ## [0.9.35] - 2026-09-09
 
 ### Added

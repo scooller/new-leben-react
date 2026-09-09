@@ -3,7 +3,7 @@ export const staticPages = {
     title: 'NUESTRA HISTORIA',
     subtitle: 'Leben Grupo Inmobiliario',
     badge: 'Sobre Nosotros',
-    heroImage: '/images/home/banner.jpg',
+    heroImage: '/images/home/hero-institucional.jpg',
     paragraphs: [
       'Desde su inicio, Leben Grupo Inmobiliario ha desarrollado modernos edificios con personalidad única y soluciones de diseño que resuelven de manera creativa las cambiantes necesidades de las personas de hoy.',
       'Como empresa inmobiliaria y constructora, contamos con la capacidad de diseñar y construir nuestros proyectos de manera coordinada, controlando de esta forma la calidad de nuestros productos.',
@@ -37,7 +37,7 @@ export const staticPages = {
     title: 'INFORMACIÓN DE LA EMPRESA',
     subtitle: 'Transparencia corporativa y seguridad de datos',
     badge: 'Corporativo',
-    heroImage: '/images/home/banner.jpg',
+    heroImage: '/images/home/Trabaja-con-nosotros1.png',
     companyDetails: {
       razonSocial: 'Inmobiliaria Cenit Limitada',
       rut: '76.065.957-6',
@@ -54,7 +54,7 @@ export const staticPages = {
     title: 'PROCESO DE RESERVA EN LÍNEA',
     subtitle: 'Condiciones y etapas para reservar tu unidad',
     badge: 'Proceso de Compra',
-    heroImage: '/images/home/banner.jpg',
+    heroImage: '/images/home/banner-clientes.jpg',
     intro: 'Para pagar la reserva de una unidad en línea:',
     steps: [
       'Selección del proyecto y unidad de oferta.',
@@ -75,7 +75,7 @@ export const staticPages = {
     title: 'BASES LEGALES',
     subtitle: 'Protocolización notarial y marco legal vigente',
     badge: 'Legal',
-    heroImage: '/images/home/banner.jpg',
+    heroImage: '/images/home/hero-institucional.jpg',
     paragraphs: [
       'La promoción se encuentra adscrita en las Bases de promoción protocolizadas con fecha 3 de diciembre de 2025 en la 45° Notaría de Santiago de don Juan Ignacio San Martín Schröder, Repertorio N° 17917-2025.',
       'Las imágenes, planos, textos y contenidos en este sitio web fueron elaborados con fines ilustrativos y no constituyen necesariamente una representación exacta de la realidad. Su objetivo es mostrar una caracterización general del proyecto y no cada uno de sus detalles.',
@@ -87,9 +87,20 @@ export const staticPages = {
       protocol: 'Notaría San Martín Schröder — Repertorio N° 17917-2025',
     },
   },
+  'trabaja-en-leben': {
+    title: 'TRABAJA CON NOSOTROS',
+    subtitle: 'Súmate a nuestro equipo de talentos',
+    badge: 'Equipo Leben',
+    heroImage: '/images/home/Trabaja-con-nosotros1.png',
+    paragraphs: [
+      'En Leben Grupo Inmobiliario creemos en el talento, la innovación y el compromiso de las personas para transformar la calidad de vida en cada uno de nuestros proyectos.',
+      'Si quieres formar parte de una empresa en constante crecimiento con un ambiente de trabajo dinámico, colaborativo y de excelencia, envíanos tus antecedentes a seleccion@ileben.cl.',
+    ],
+  },
 }
 
 // Alias map to resolve alternative slugs
 export const slugAliases = {
   'quienes-somos': 'nosotros',
+  'trabaja-con-nosotros': 'trabaja-en-leben',
 }
