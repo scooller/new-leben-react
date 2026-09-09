@@ -27,6 +27,7 @@ const Login = lazy(() => import('./pages/Login.jsx'))
 const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
 const Inn = lazy(() => import('./pages/Inn.jsx'))
+const StaticPage = lazy(() => import('./pages/StaticPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 function Home() {
@@ -130,6 +131,31 @@ export default function App() {
         <Route path="/perfil" element={
           <Suspense fallback={<PageLoader />}>
             <Perfil />
+          </Suspense>
+        } />
+        <Route path="/nosotros" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="nosotros" />
+          </Suspense>
+        } />
+        <Route path="/quienes-somos" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="nosotros" />
+          </Suspense>
+        } />
+        <Route path="/informacion-de-la-empresa" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="informacion-de-la-empresa" />
+          </Suspense>
+        } />
+        <Route path="/proceso-reserva-en-linea" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="proceso-reserva-en-linea" />
+          </Suspense>
+        } />
+        <Route path="/bases-legales" element={
+          <Suspense fallback={<PageLoader />}>
+            <StaticPage slug="bases-legales" />
           </Suspense>
         } />
         <Route path="*" element={

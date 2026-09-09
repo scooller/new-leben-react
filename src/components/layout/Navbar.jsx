@@ -21,8 +21,8 @@ const menuLinks = [
   { label: 'Locales comerciales', href: '#' },
   { label: 'Mundo Invest', href: '#' },
   { label: 'Trabaja en Leben', href: '#' },
-  { label: 'Bases legales', href: '#' },
-  { label: 'Proceso de Reserva en línea', href: '#' },
+  { label: 'Bases legales', to: '/bases-legales' },
+  { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
 ]
 
 /** Links agrupados bajo un encabezado */
@@ -30,9 +30,9 @@ const menuGroups = [
   {
     title: 'Nosotros',
     items: [
-      { label: 'Quienes somos', href: '#' },
-      { label: 'Información de la empresa', href: '#' },
-      { label: 'Proyectos realizados', href: '#' },
+      { label: 'Quienes somos', to: '/quienes-somos' },
+      { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
+      { label: 'Proyectos realizados', to: '/nosotros' },
     ],
   },
   {
@@ -155,6 +155,8 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
+              <hr className="lb-dropdown-divider my-1" />
+              <span className="lb-dropdown-header-text">Más</span>
               {/* Flat links */}
               {menuLinks.map((link) =>
                 <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,

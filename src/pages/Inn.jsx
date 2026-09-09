@@ -199,7 +199,7 @@ const TEAM_DATA = {
   eyebrow: 'Contactos',
   title: 'TE ACOMPAÑAMOS EN<br />CADA DECISIÓN',
   subtitle: '<b>Sala de ventas y departamento piloto</b> disponible en Vicente Pérez Rosales 991, Puerto Varas<br /><b>Horario:</b> Lunes a domingo de 10:00 a 14:00 horas y de 15:00 a 19:00 horas.',
-  wazeMap: 'https://embed.waze.com/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap',
+  wazeMap: 'https://embed.waze.com/es/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap&pin=1&desc=0',
   agents: [
     { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: `${base}images/team/Ramirez.jpg` },
     { name: 'Catalina Cid', phone: '+56 9 9577 3431', email: 'ccid@ileben.cl', avatar: `${base}images/team/Cid.jpg` },
@@ -411,7 +411,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Lorem ipsum dolor sit amet, consectetuer adipiscingelit nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam."
+          text="Despierta tu espíritu aventurero en la Región de Los Lagos"
           videoSrc="video/lipsum.mp4"
         />
 

@@ -14,6 +14,7 @@ Built with React 19, Vite 6, Redux Toolkit, Bootstrap 5, GSAP, and Motion.
 | **Routing** | React Router DOM 7 |
 | **Styling** | SCSS + Bootstrap 5.3 (custom variable overrides) |
 | **Animation** | GSAP + ScrollTrigger, Motion (formerly Framer Motion) |
+| **3D Mockup** | Three.js (`three`) |
 | **Lightbox** | Fancybox (`@fancyapps/ui`) |
 | **Icons** | Animated pqoqubbw icons (Motion), Lucide React, Font Awesome 7 |
 
@@ -49,8 +50,9 @@ src/
 │   │   ├── Navbar.jsx          # Fixed nav with hamburger dropdown
 │   │   └── Footer.jsx          # Footer with social links + badges
 │   │
-│   ├── sections/               # Home page sections
+│   ├── sections/               # Home & section components
 │   │   ├── Hero.jsx            # Hero banner with GSAP animations
+│   │   ├── HeroShell.jsx       # Reusable base shell for all hero headers
 │   │   ├── Diferenciadores.jsx # Search + value props
 │   │   ├── ValueProps.jsx      # Value proposition cards
 │   │   ├── Testimonials.jsx    # Client testimonials carousel
@@ -59,7 +61,9 @@ src/
 │   │   ├── ProjectOfMonthSection.jsx
 │   │   ├── ProjectFeatureSection.jsx # Reusable INN project/media block
 │   │   ├── CarouselNav.jsx      # External carousel navigation
-│   │   └── Recorridos360.jsx    # 360 tour iframe tabs
+│   │   ├── Recorridos360.jsx    # 360 tour iframe tabs
+│   │   ├── InteriorismoSection.jsx   # Designer interior cards & showcase
+│   │   └── VideoTextSection.jsx      # Video + text banner
 │   │
 │   ├── proyecto/               # Project detail page components
 │   │   ├── ProjectHero.jsx     # Project hero banner
@@ -68,9 +72,11 @@ src/
 │   │   ├── SpacesGallery.jsx   # Gallery + interactive amenities
 │   │   ├── FloorPlans.jsx      # Floor plan display
 │   │   ├── Vista360.jsx        # 360° view embed
+│   │   ├── Room3DMockup.jsx    # Three.js interactive 3D room viewer
 │   │   ├── LocationSection.jsx # Map + surroundings
 │   │   ├── AgentCard.jsx       # Agent with WhatsApp link
 │   │   ├── TeamAgents.jsx      # Agent grid
+│   │   ├── InnTeamAgents.jsx   # INN specific team & appointment scheduler
 │   │   ├── Cotizador.jsx       # Project-level cotizador
 │   │   ├── CotizadorForm.jsx   # Cotizador form fields
 │   │   ├── RelatedProjects.jsx # Related projects table + "Cotizar" button
@@ -102,11 +108,17 @@ src/
 │   ├── Proyectos.jsx           # Project listing page (API-driven)
 │   ├── ProyectoDetalle.jsx     # Project detail page (lazy)
 │   ├── CotizadorGeneral.jsx    # Universal cotizador (/cotizador, lazy)
+│   ├── Inn.jsx                 # INN project landing page (/inn-test, lazy)
 │   ├── Brokers.jsx             # Brokers listing page (lazy)
 │   ├── Login.jsx               # Auth login page (lazy)
 │   ├── Perfil.jsx              # Profile redirect (lazy)
 │   ├── PerfilBroker.jsx        # Broker profile page (lazy)
-│   └── PerfilComprador.jsx     # Buyer profile page (lazy)
+│   ├── PerfilComprador.jsx     # Buyer profile page (lazy)
+│   └── NotFound.jsx            # 404 page (lazy)
+│
+├── lib/
+│   ├── apiFetch.js             # Centralized API fetch wrapper with JSON validation
+│   └── projectUtils.js         # API response mappers and helpers
 │
 ├── store/
 │   ├── store.js                # Redux Toolkit store config
@@ -128,12 +140,12 @@ src/
     ├── main.scss               # Entry: imports Bootstrap + all components
     ├── global.scss             # Resets, fluid root font-size
     ├── variables.scss          # Design tokens (colors, breakpoints, etc.)
-    ├── components/             # 15 SCSS partials:
+    ├── components/             # 18 SCSS partials:
     │                           #   _brokers, _chat-widget, _cotizador-general,
     │                           #   _cta, _diferenciadores, _footer, _hero,
-    │                           #   _navbar, _perfil, _project-of-month,
-    │                           #   _proyecto-detalle, _proyectos,
-    │                           #   _search-filter, _testimonials, _videos
+    │                           #   _inn, _inn-team-agents, _navbar, _not-found,
+    │                           #   _perfil, _project-of-month, _proyecto-detalle,
+    │                           #   _proyectos, _testimonials, _utilities, _videos
     └── vendor/
         └── _fancybox.scss      # Fancybox lightbox overrides
 ```
@@ -429,7 +441,9 @@ if (user) return null
 
 ## Changelog
 
-All notable changes to this project are documented below.
+Para el historial completo de versiones y cambios recientes (v0.1.0 hasta v0.9.x), consulta [**CHANGELOG.md**](CHANGELOG.md).
+
+All notable historical changes are documented below.
 Dates in `YYYY-MM-DD` format.
 
 ---

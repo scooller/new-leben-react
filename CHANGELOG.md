@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.35] - 2026-09-09
+
+### Added
+- `src/pages/StaticPage.jsx`: componente genérico y reutilizable para páginas institucionales y legales con soporte de Hero, texto enriquecido, fichas corporativas, pasos del proceso de reserva y botón de descarga de documentos.
+- `src/data/staticPages.js`: repositorio de datos estructurados para páginas de `nosotros`, `quienes-somos`, `informacion-de-la-empresa`, `proceso-reserva-en-linea` y `bases-legales` (con enlace al PDF protocolizado oficial).
+- `src/App.jsx`: registradas las rutas directas `/nosotros`, `/quienes-somos`, `/informacion-de-la-empresa`, `/proceso-reserva-en-linea` y `/bases-legales` con lazy loading.
+- `.env.example`: plantilla de variables de entorno para configuración del MCP remoto de WordPress.
+
+### Documentation
+- `AGENTS.md`: documentada la configuración, protocolo JSON-RPC, autenticación Bearer vía variable `WP_MCP_TOKEN` en `.env.local` (sin exponer secretos en git), bypass de Cloudflare Turnstile y catálogo de 20 herramientas del servidor MCP remoto de WordPress Leben (`/wp-json/mcp/v1/http`).
+
+### Changed
+- `src/components/layout/Navbar.jsx`: vinculados los links de menú (`menuLinks` y `menuGroups`) a sus rutas directas correspondientes (`/bases-legales`, `/proceso-reserva-en-linea`, `/quienes-somos`, `/informacion-de-la-empresa`, `/nosotros`).
+- `src/components/layout/Footer.jsx`: actualizados los links del copyright strip para navegar a `/bases-legales` e `/informacion-de-la-empresa`.
+- `src/data/content.js`: actualizados los textos de `copyrightLinks`.
+
+## [0.9.34] - 2026-09-09
+
+### Fixed
+- `Navbar.jsx`: corregido atributo `class` a `className` en el divisor "Más" del menú dropdown móvil (resuelto error ESLint).
+
+### Documentation
+- `README.md`: actualizada la arquitectura del proyecto (árbol de componentes `sections`, `proyecto`, `lib`, `pages` como `Inn.jsx` y `NotFound.jsx`, y partials SCSS), añadido Three.js al Tech Stack y enlace directo a `CHANGELOG.md`.
+
 ## [0.9.33] - 2026-09-08
 
 ### Changed

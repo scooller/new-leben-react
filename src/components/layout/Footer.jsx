@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { footerContent } from '../../data/content.js'
 import { hover } from '../icons/animated-icon.jsx'
 import { MapPinIcon } from '../icons/map-pin.jsx'
@@ -168,9 +169,20 @@ export default function Footer() {
         <div className="d-flex flex-wrap justify-content-between align-items-center px-4 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-copyright-strip">
           <span className="lb-copyright">{copyright}</span>
           <div className="d-flex gap-3">
-            {copyrightLinks.map((link) => (
-              <a key={link} href="#" className="lb-footer-link">{link}</a>
-            ))}
+            {copyrightLinks.map((link) => {
+              const routeMap = {
+                'Bases legales': '/bases-legales',
+                'Información de la empresa': '/informacion-de-la-empresa',
+                'Privacidad': '/informacion-de-la-empresa',
+                'Términos': '/bases-legales',
+              }
+              const targetRoute = routeMap[link]
+              return targetRoute ? (
+                <Link key={link} to={targetRoute} className="lb-footer-link">{link}</Link>
+              ) : (
+                <a key={link} href="#" className="lb-footer-link">{link}</a>
+              )
+            })}
           </div>
         </div>
       </div>

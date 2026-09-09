@@ -146,6 +146,41 @@ When an agent needs to report a bug, request a feature, or log a finding:
 
 ***
 
+## MCP Server — WordPress Leben (Remote API)
+
+The remote WordPress Leben MCP endpoint is configured and active for inspecting posts, pages, custom meta, terms, media assets, and executing AI tools:
+
+- **Endpoint:** `https://ileben.cl/wp-json/mcp/v1/http` (or `WP_MCP_URL` in `.env.local`)
+- **Protocol:** JSON-RPC 2.0 via `POST`
+- **Auth:** `Bearer <WP_MCP_TOKEN>` (configured in `.env.local`, never commit plaintext tokens)
+- **Required Headers:**
+  - `Authorization: Bearer <WP_MCP_TOKEN>`
+  - `Content-Type: application/json`
+  - `Accept: application/json, text/event-stream`
+  - `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)` *(mandatory to bypass Cloudflare Turnstile)*
+
+### Available Tools
+- **Content:** `wp_get_posts`, `wp_get_post_snapshot`, `wp_get_post_meta`, `wp_update_post_meta`, `wp_delete_post_meta`
+- **Taxonomies:** `wp_get_taxonomies`, `wp_get_terms`, `wp_create_term`, `wp_update_term`, `wp_delete_term`, `wp_get_post_terms`, `wp_add_post_terms`
+- **Media:** `wp_get_media`, `wp_upload_media`, `wp_upload_request`, `wp_update_media`, `wp_delete_media`, `wp_set_featured_image`
+- **AI Tools:** `mwai_vision`, `mwai_image`
+
+### Quick Invocation Example
+```bash
+# Load token from .env.local or environment
+export WP_MCP_TOKEN="$(grep WP_MCP_TOKEN .env.local | cut -d '=' -f2)"
+
+curl -s -X POST \
+  -H "Authorization: Bearer $WP_MCP_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"wp_get_posts","arguments":{"post_type":"page","numberposts":5}}}' \
+  "https://ileben.cl/wp-json/mcp/v1/http"
+```
+
+***
+
 ## Quick Reference
 
 | Resource | Location | Purpose |
@@ -156,7 +191,8 @@ When an agent needs to report a bug, request a feature, or log a finding:
 | Documentation | `.agents/docs/` | Architecture, decisions, references |
 | CI/CD pipelines | `.github/workflows/` | Automated testing and deployment |
 | Issue templates | `.github/ISSUE_TEMPLATE/` | Structured bug/feature reporting |
+| Remote MCP | `https://ileben.cl/wp-json/mcp/v1/http` | WordPress live data, content & media |
 
 ***
 
-*Last updated: 2026-09-02*
+*Last updated: 2026-09-09*
