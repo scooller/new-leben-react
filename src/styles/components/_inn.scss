@@ -724,27 +724,133 @@ $inn-gold-bg: #faf4e8;
 // --- MODAL MAPA DE UBICACIÓN ---
 .lb-inn-map-modal {
   &__list {
-    background: #000;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba($inn-gold, 0.2);
     max-height: 70vh;
     overflow-y: auto;
   }
 
+  &__tabs {
+    .nav-link {
+      color: rgba($lb-white, 0.7);
+      background: transparent;
+      border: 1px solid rgba($inn-gold, 0.3);
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $lb-white;
+        border-color: $inn-gold;
+        background: rgba($inn-gold, 0.1);
+      }
+
+      &.active {
+        background: $inn-gold;
+        color: #000;
+        border-color: $inn-gold;
+        font-weight: 600;
+        box-shadow: 0 2px 10px rgba($inn-gold, 0.3);
+      }
+    }
+  }
+
+  &__group {
+    background: transparent;
+  }
+
   &__item {
-    color: $lb-white;
-    font-size: 0.8rem;
+    color: $lb-white !important;
+    font-size: 0.85rem;
     font-weight: 500;
+    background: transparent !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent !important;
+
+    &:hover,
+    &:focus,
+    &.active {
+      background: rgba($inn-gold, 0.18) !important;
+      color: $lb-white !important;
+      border-left: 3px solid $inn-gold !important;
+
+      .lb-inn-map-modal__number {
+        background: $inn-gold;
+        color: #000;
+        font-weight: 700;
+      }
+
+      .lb-inn-map-modal__badge {
+        background: $inn-gold;
+        color: #000;
+      }
+    }
+  }
+
+  &__name {
+    flex-grow: 1;
   }
 
   &__number {
     flex-shrink: 0;
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.6rem;
+    height: 1.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba($inn-gold, 0.35);
     border-radius: 50%;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    color: $lb-white;
+    transition: all 0.2s ease;
+  }
+
+  &__badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba($lb-white, 0.8);
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    transition: all 0.2s ease;
+  }
+
+  &__circle-frame {
+    width: min(70vw, 360px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid $inn-gold;
+    box-shadow: 0 0 30px rgba($inn-gold, 0.3);
+    position: relative;
+    background: #111;
+  }
+
+  &__circle-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    animation: lbFadeIn 0.35s ease forwards;
+  }
+
+  &__caption-distance {
+    color: $inn-gold;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+}
+
+@keyframes lbFadeIn {
+  from {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -754,6 +860,7 @@ $inn-gold-bg: #faf4e8;
     color: $lb-white;
   }
 }
+
 
 // --- GALERÍA (blanco y negro) ---
 .lb-inn-gallery {

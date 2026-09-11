@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.57] - 2026-09-11
+
+### Fixed
+- `_inn.scss`: corregido el estado hover en los items del modal de ubicación (`.lb-inn-map-modal__item`), unificándolo con el estilo active (fondo dorado translúcido con borde dorado) para eliminar el conflicto de texto blanco sobre fondo blanco proveniente de Bootstrap.
+
+## [0.9.56] - 2026-09-11
+
+### Added
+- `src/pages/Inn.jsx`: modal de ubicación interactivo con 2 pestañas ("A pie" y "En vehículo") usando `nav-pills` de Bootstrap e iconos animados (`FootprintsIcon`, `CarIcon`), lista interactiva con distancias en km y galería a la derecha con máscara circular vinculada al punto activo.
+- `src/components/icons/footprints.jsx`: icono animado de huellas/caminata con `motion/react`.
+- `src/components/icons/car.jsx`: icono animado de vehículo con `motion/react`.
+- `src/styles/components/_inn.scss`: estilos boutique dorados para tabs, lista interactiva y máscara circular del modal de ubicación.
+
 ## [0.9.55] - 2026-09-11
 
 ### Changed

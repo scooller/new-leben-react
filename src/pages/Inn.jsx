@@ -22,6 +22,9 @@ import { DumbbellIcon } from '../components/icons/dumbbell.jsx'
 import { WavesLadderIcon } from '../components/icons/waves-ladder.jsx'
 import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
+import { hover } from '../components/icons/animated-icon.jsx'
+import { FootprintsIcon } from '../components/icons/footprints.jsx'
+import { CarIcon } from '../components/icons/car.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
@@ -104,20 +107,24 @@ const GALLERY_IMAGES = [
   { img: 'images/inn/Ubicacion_02_Color.jpg', alt: 'Galería 5' },
 ]
 
-const MAP_FEATURES = [
-  'Museo Pablo Fierro',
-  'Monumento Héroes Patrios',
-  'Casino',
-  'Centro de Puerto Varas',
-  'Mall - Supermercado',
-  'Costanera',
-  'Muelle Piedralplen',
-  'Muelle Puerto Varas',
-  'Mesa Tropera',
-  'Hotel Cumbres',
-  'Cassis',
-  'La Olla',
-]
+const LOCATION_DATA = {
+  walking: [
+    { id: 1, name: 'Museo Pablo Fierro', distance: '0.4 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 2, name: 'Costanera', distance: '0.6 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 3, name: 'Muelle Piedraplen', distance: '0.8 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 4, name: 'Muelle Puerto Varas', distance: '0.9 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 5, name: 'Centro de Puerto Varas', distance: '1.0 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 6, name: 'Monumento Héroes Patrios', distance: '1.2 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+  ],
+  vehicle: [
+    { id: 1, name: 'Mesa Tropera', distance: '1.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 2, name: 'Hotel Cumbres', distance: '2.1 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 3, name: 'Casino', distance: '2.3 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 4, name: 'Cassis', distance: '2.5 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 5, name: 'Mall - Supermercado', distance: '3.1 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 6, name: 'La Olla', distance: '3.8 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+  ],
+}
 
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
 const SPACES_MODAL_GALLERIES = [
@@ -213,9 +220,18 @@ const TEAM_DATA = {
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [showMapModal, setShowMapModal] = useState(false)
+  const [mapTab, setMapTab] = useState('walking')
+  const [activeLocationIndex, setActiveLocationIndex] = useState(0)
+  const walkingIconRef = useRef(null)
+  const vehicleIconRef = useRef(null)
   const [apiProjects, setApiProjects] = useState(null)
   const [innProject, setInnProject] = useState(null)
   const [selectedPlanta, setSelectedPlanta] = useState(null)
+
+  const handleMapTabChange = (tab) => {
+    setMapTab(tab)
+    setActiveLocationIndex(0)
+  }
 
   // API - Proyectos con ID:9 proyecto INN precargado
   useEffect(() => {
@@ -478,6 +494,14 @@ export default function Inn() {
                   <ScrollAnim animation="fade-up" className="lh-lg mb-5 w-md-80">
                     {MAP.description}
                   </ScrollAnim>
+                  <button
+                    ref={mapRef}
+                    type="button"
+                    className="btn btn-primary lb-inn-map__btn"
+                    onClick={() => setShowMapModal(true)}
+                  >
+                    Ver mapa ampliado
+                  </button>
                 </div>
               </div>
               <div className="col-12 col-lg-5 order-1 order-lg-2">
@@ -560,29 +584,95 @@ export default function Inn() {
           className="modal-dialog modal-xl modal-dialog-centered"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="modal-content border-0 rounded-4 overflow-hidden">
-            <div className="modal-header border-0">
-              <h2 className="modal-title lb-inn-proyecto__title">UBICACIÓN</h2>
-              <button type="button" className="btn-close" aria-label="Cerrar" onClick={() => setShowMapModal(false)} />
+          <div className="modal-content border-0 rounded-4 overflow-hidden" data-bs-theme="dark">
+            <div className="modal-header border-0 px-4 pt-4 pb-0" data-bs-theme="dark">
+              <h2 className="modal-title lb-inn-proyecto__title mb-0">UBICACIÓN</h2>
+              <button type="button" className="btn-close btn-close-white ms-auto" aria-label="Cerrar" onClick={() => setShowMapModal(false)} />
             </div>
-            <div className="modal-body p-0">
-              <div className="row g-0">
-                <div className="col-12 col-md-4 lb-inn-map-modal__list p-4">
-                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                    {MAP_FEATURES.map((feature, i) => (
-                      <li key={feature} className="d-flex align-items-center gap-2 lb-inn-map-modal__item">
-                        <span className="lb-inn-map-modal__number">{i + 1}</span>
-                        <span>{feature}</span>
+            <div className="modal-body p-4">
+              <div className="row g-4 align-items-center">
+                {/* Columna izquierda: Tabs + Lista */}
+                <div className="col-12 col-lg-5">
+                  <div className="lb-inn-map-modal__list p-3 rounded-4">
+                    {/* Tabs con Bootstrap nav-pills e iconos animados */}
+                    <ul className="nav nav-pills nav-fill gap-2 mb-3 lb-inn-map-modal__tabs" role="tablist">
+                      <li className="nav-item" role="presentation">
+                        <button
+                          type="button"
+                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${
+                            mapTab === 'walking' ? 'active' : ''
+                          }`}
+                          onClick={() => handleMapTabChange('walking')}
+                          {...hover(walkingIconRef)}
+                        >
+                          <FootprintsIcon ref={walkingIconRef} size={18} />
+                          <span>A pie</span>
+                        </button>
                       </li>
-                    ))}
-                  </ul>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          type="button"
+                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${
+                            mapTab === 'vehicle' ? 'active' : ''
+                          }`}
+                          onClick={() => handleMapTabChange('vehicle')}
+                          {...hover(vehicleIconRef)}
+                        >
+                          <CarIcon ref={vehicleIconRef} size={18} />
+                          <span>En vehículo</span>
+                        </button>
+                      </li>
+                    </ul>
+
+                    {/* Lista interactiva */}
+                    <div className="list-group list-group-flush lb-inn-map-modal__group">
+                      {LOCATION_DATA[mapTab].map((item, i) => {
+                        const isSelected = i === activeLocationIndex
+                        return (
+                          <button
+                            key={item.id || i}
+                            type="button"
+                            onClick={() => setActiveLocationIndex(i)}
+                            className={`list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3 border-0 rounded-3 mb-1 text-white lb-inn-map-modal__item ${
+                              isSelected ? 'active' : ''
+                            }`}
+                          >
+                            <div className="d-flex align-items-center gap-3">
+                              <span className="lb-inn-map-modal__number">{i + 1}</span>
+                              <span className="lb-inn-map-modal__name">{item.name}</span>
+                            </div>
+                            <span className="badge rounded-pill lb-inn-map-modal__badge">
+                              {item.distance}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
                 </div>
-                <div className="col-12 col-md-8">
-                  <img
-                    src={`${base}images/inn/mapa-big.jpg`}
-                    alt="Mapa ampliado de Puerto Varas"
-                    className="img-fluid w-100 h-100 object-fit-cover"
-                  />
+
+                {/* Columna derecha: Galería con máscara circular vinculada al item activo */}
+                <div className="col-12 col-lg-7 d-flex flex-column align-items-center justify-content-center py-3">
+                  <div className="lb-inn-map-modal__circle-frame">
+                    {LOCATION_DATA[mapTab][activeLocationIndex] && (
+                      <img
+                        key={`${mapTab}-${activeLocationIndex}`}
+                        src={`${base}${LOCATION_DATA[mapTab][activeLocationIndex].img}`}
+                        alt={LOCATION_DATA[mapTab][activeLocationIndex].name}
+                        className="lb-inn-map-modal__circle-img"
+                      />
+                    )}
+                  </div>
+                  {LOCATION_DATA[mapTab][activeLocationIndex] && (
+                    <div className="text-center mt-3">
+                      <h3 className="h5 text-white fw-bold mb-1">
+                        {LOCATION_DATA[mapTab][activeLocationIndex].name}
+                      </h3>
+                      <span className="lb-inn-map-modal__caption-distance">
+                        A {LOCATION_DATA[mapTab][activeLocationIndex].distance} de distancia
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

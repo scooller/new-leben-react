@@ -5,7 +5,9 @@
 // --- Bootstrap (with variable overrides) ---
 @use 'bootstrap/scss/bootstrap' as * with (
   $primary:       #d44040,
-  $secondary:     #1b5e4a,
+  $secondary:     #6c757d,
+  $success:       #1b5e4a,
+  $info:          #1b5e4a,
   $dark:          #1a1a1a,
   $body-bg:       #f5f2ed,
   $body-color:    #333333,
