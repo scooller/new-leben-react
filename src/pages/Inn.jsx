@@ -585,11 +585,11 @@ export default function Inn() {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="modal-content border-0 rounded-4 overflow-hidden" data-bs-theme="dark">
-            <div className="modal-header border-0 px-4 pt-4 pb-0" data-bs-theme="dark">
+            <div className="modal-header border-0" data-bs-theme="dark">
               <h2 className="modal-title lb-inn-proyecto__title mb-0">UBICACIÓN</h2>
               <button type="button" className="btn-close btn-close-white ms-auto" aria-label="Cerrar" onClick={() => setShowMapModal(false)} />
             </div>
-            <div className="modal-body p-4">
+            <div className="modal-body">
               <div className="row g-4 align-items-center">
                 {/* Columna izquierda: Tabs + Lista */}
                 <div className="col-12 col-lg-5">
@@ -599,9 +599,8 @@ export default function Inn() {
                       <li className="nav-item" role="presentation">
                         <button
                           type="button"
-                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${
-                            mapTab === 'walking' ? 'active' : ''
-                          }`}
+                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${mapTab === 'walking' ? 'active' : ''
+                            }`}
                           onClick={() => handleMapTabChange('walking')}
                           {...hover(walkingIconRef)}
                         >
@@ -612,9 +611,8 @@ export default function Inn() {
                       <li className="nav-item" role="presentation">
                         <button
                           type="button"
-                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${
-                            mapTab === 'vehicle' ? 'active' : ''
-                          }`}
+                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${mapTab === 'vehicle' ? 'active' : ''
+                            }`}
                           onClick={() => handleMapTabChange('vehicle')}
                           {...hover(vehicleIconRef)}
                         >
@@ -633,9 +631,8 @@ export default function Inn() {
                             key={item.id || i}
                             type="button"
                             onClick={() => setActiveLocationIndex(i)}
-                            className={`list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3 border-0 rounded-3 mb-1 text-white lb-inn-map-modal__item ${
-                              isSelected ? 'active' : ''
-                            }`}
+                            className={`list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3 border-0 rounded-3 mb-1 text-white lb-inn-map-modal__item ${isSelected ? 'active' : ''
+                              }`}
                           >
                             <div className="d-flex align-items-center gap-3">
                               <span className="lb-inn-map-modal__number">{i + 1}</span>
