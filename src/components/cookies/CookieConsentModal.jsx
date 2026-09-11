@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { ShieldCheck, Settings2, Cookie, ArrowLeft, Check } from 'lucide-react'
+import { images } from '../../data/content.js'
 import {
   acceptAll,
   acceptEssentialOnly,
@@ -82,27 +83,32 @@ export default function CookieConsentModal() {
       >
         <div className="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="modal-header border-bottom p-4 d-flex align-items-start justify-content-between">
-            <div>
-              <span
-                className="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-1"
-                style={{ fontSize: '0.75rem', letterSpacing: '0.05em' }}
-              >
-                <ShieldCheck size={14} />
-                Ley 21.719 • Privacidad Chile
-              </span>
-              <h2 id="lb-cookie-title" className="h5 fw-bold text-dark mb-0">
-                {view === 'summary' ? 'Control de cookies y privacidad' : 'Preferencias de cookies'}
-              </h2>
+          <div className="modal-header bg-dark border-0 align-items-center" data-bs-theme="dark">
+            <div className="d-flex align-items-center gap-2">
+              <img src={images.logoIcon} alt="" width="24" height="24" />
+              <img src={images.logoText} alt="Leben" height="22" />
             </div>
             {hasInteracted && isSettingsOpen && (
               <button
                 type="button"
-                className="btn-close"
+                className="btn-close btn-close-white ms-auto"
                 onClick={handleClose}
                 aria-label="Cerrar preferencias"
               />
             )}
+          </div>
+
+          <div className="border-bottom px-4 pt-4 pb-3">
+            <span
+              className="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-1"
+              style={{ fontSize: '0.75rem', letterSpacing: '0.05em' }}
+            >
+              <ShieldCheck size={14} />
+              Ley 21.719 • Privacidad Chile
+            </span>
+            <h2 id="lb-cookie-title" className="h5 fw-bold text-dark mb-0">
+              {view === 'summary' ? 'Control de cookies y privacidad' : 'Preferencias de cookies'}
+            </h2>
           </div>
 
           {/* Body */}

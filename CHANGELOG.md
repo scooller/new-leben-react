@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.55] - 2026-09-11
+
+### Changed
+- `CookieConsentModal`: añadido encabezado oscuro (`modal-header bg-dark`) con el logotipo de Leben (`images.logoIcon` + `images.logoText`), alineado con el diseño del modal de aviso (`AnnouncementModal`).
+
 ## [0.9.54] - 2026-09-09
 
 ### Added
