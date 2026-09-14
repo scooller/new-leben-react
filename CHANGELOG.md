@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.58] - 2026-09-14
+
+### Added
+- `src/pages/Inn.jsx`: agregado icono interactivo `MapPinIcon` con micro-animación hover (`hover(mapIconRef)`) y layout flexible al botón "Ver mapa ampliado"; eliminada referencia huérfana duplicada en el botón de imagen.
+
 ## [0.9.57] - 2026-09-11
 
 ### Fixed

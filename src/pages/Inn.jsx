@@ -25,6 +25,7 @@ import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { hover } from '../components/icons/animated-icon.jsx'
 import { FootprintsIcon } from '../components/icons/footprints.jsx'
 import { CarIcon } from '../components/icons/car.jsx'
+import { MapPinIcon } from '../components/icons/map-pin.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
@@ -495,19 +496,19 @@ export default function Inn() {
                     {MAP.description}
                   </ScrollAnim>
                   <button
-                    ref={mapRef}
                     type="button"
-                    className="btn btn-primary lb-inn-map__btn"
+                    className="btn btn-primary lb-inn-map__btn d-inline-flex align-items-center gap-2"
                     onClick={() => setShowMapModal(true)}
+                    {...hover(mapRef)}
                   >
-                    Ver mapa ampliado
+                    <MapPinIcon ref={mapRef} size={18} />
+                    <span>Ver mapa ampliado</span>
                   </button>
                 </div>
               </div>
               <div className="col-12 col-lg-5 order-1 order-lg-2">
                 <ScrollAnim animation="fade-right">
                   <button
-                    ref={mapRef}
                     type="button"
                     className="lb-inn-map__image position-relative h-100 border-0 bg-transparent p-0 w-100"
                     onClick={() => setShowMapModal(true)}
