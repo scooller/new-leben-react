@@ -131,7 +131,7 @@ export default function ProjectFeatureSection({
               {(highlight || highlightLogos.length > 0) && (
                 <ScrollAnim
                   as="div"
-                  className={highlightLogos.length > 0 ? 'row row-cols-2 row-cols-md-4 g-2 align-items-stretch lb-inn-proyecto__highlight mt-5' : 'lb-inn-proyecto__highlight'}
+                  className={highlightLogos.length > 0 ? 'row row-cols-2 row-cols-md-4 g-2 align-items-stretch lb-inn-proyecto__highlight mt-5 mb-2' : 'lb-inn-proyecto__highlight'}
                 >
                   {highlight}
                   {highlightLogos.map((logo, index) => (
