@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.61] - 2026-09-14
+
+### Added
+- `AGENTS.md`: incorporada la directiva mandatoria y regla operativa para utilizar la herramienta CLI `tgrep` en búsquedas rápidas e indexadas en el código (compatible con ripgrep).
+
+### Changed
+- `src/components/sections/ProjectFeatureSection.jsx`: ajuste de espaciado inferior (`mb-2`) en el contenedor de logos destacados (`lb-inn-proyecto__highlight`).
+
 ## [0.9.60] - 2026-09-14
 
 ### Added

@@ -14,8 +14,9 @@
    - Relationships: `rtk graphify path "<A>" "<B>"` / `rtk graphify explain "<concept>"`
    - AFTER modifying code: `rtk graphify update .` — always, no excuses.
 4. **RTK prefix** — every terminal command runs as `rtk <command>` when available.
-5. **Build** — `rtk npm run build:all`, never bare `npm run build`.
-6. **Version on every change** — WHENEVER project files are modified:
+5. **tgrep for search** — use `tgrep` as the primary CLI search tool for fast codebase searching (classes, functions, strings, configs). Ripgrep-compatible syntax: `tgrep "query"`, `tgrep "query" -g "*.jsx"`.
+6. **Build** — `rtk npm run build:all`, never bare `npm run build`.
+7. **Version on every change** — WHENEVER project files are modified:
    - Bump `version` in `package.json` (semantic: patch = fix/refactor, minor = feature, major = breaking).
    - Add an entry to `CHANGELOG.md` (Keep a Changelog format) describing the changes.
    - Both must stay in sync (same version in `package.json` and `CHANGELOG.md`).
@@ -143,6 +144,7 @@ When an agent needs to report a bug, request a feature, or log a finding:
 9. **Preserve project conventions** — match the existing architecture, naming, style, and dependency choices unless instructed otherwise.
 10. **Use RTK by default** — in React applications, global state and async data flows must default to Redux Toolkit unless the repository explicitly uses another standard.
 11. **Use Graphify by default** — in graph-based or relationship-driven interfaces, Graphify is the preferred solution unless an existing project dependency already defines another tool.
+12. **Use tgrep for searching** — `tgrep` is the preferred search CLI across the codebase; use it proactively before modifying code.
 
 ***
 
@@ -189,10 +191,11 @@ curl -s -X POST \
 | Reusable skills | `.agents/skills/` | Modular capabilities for agents |
 | Agent workflows | `.agents/workflows/` | Step-by-step task processes |
 | Documentation | `.agents/docs/` | Architecture, decisions, references |
+| Code search | CLI (`tgrep`) | Fast indexed codebase search (ripgrep-compatible) |
 | CI/CD pipelines | `.github/workflows/` | Automated testing and deployment |
 | Issue templates | `.github/ISSUE_TEMPLATE/` | Structured bug/feature reporting |
 | Remote MCP | `https://ileben.cl/wp-json/mcp/v1/http` | WordPress live data, content & media |
 
 ***
 
-*Last updated: 2026-09-09*
+*Last updated: 2026-09-14*
