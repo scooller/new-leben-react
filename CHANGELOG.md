@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.59] - 2026-09-14
+
+### Added
+- `src/components/proyecto/WindowPanViewer.jsx`: visor de vistas por piso tipo ventana con movimiento de paneo fluido mediante cursor del mouse en desktop y arrastre táctil (drag) fluido en mobile, mapeo inteligente de fotos por departamento (`public/images/inn/vistas`) y selector de ángulos cuando hay tomas múltiples.
+
+### Changed
+- `src/components/proyecto/Cotizador.jsx`: reemplazado el visor 3D Three.js en el modal "Vistas por piso" por `WindowPanViewer`, optimizando rendimiento, eliminando la carga de Three.js en el modal y mostrando la foto real del ventanal del departamento actual.
+
 ## [0.9.58] - 2026-09-14
 
 ### Added

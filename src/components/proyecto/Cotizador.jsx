@@ -6,8 +6,8 @@ import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
-// Carga diferida: Three.js es pesado; se descarga al abrir el modal, no al cargar la página
-const Room3DMockup = lazy(() => import('./Room3DMockup.jsx'))
+// Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
+const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
 import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
@@ -889,14 +889,14 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         document.body
       )}
 
-      {/* MODAL VISTAS 3D POR PISO */}
+      {/* MODAL VISTAS POR PISO */}
       {showVistas && createPortal(
         <div className="modal d-block" tabIndex="-1" onClick={() => setShowVistas(false)}>
           <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content">
+            <div className="modal-content overflow-hidden">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  Vista 3D — Piso {activePlanta?.piso ?? '—'} · {activePlanta?.name || displayData.title}
+                  Vista por piso — Piso {activePlanta?.piso ?? '—'} · {activePlanta?.name || displayData.title}
                 </h5>
                 <button type="button" className="btn-close" onClick={() => setShowVistas(false)} aria-label="Cerrar" />
               </div>
@@ -904,7 +904,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                 {activePlanta?.vista_360_url ? (
                   <iframe
                     src={activePlanta.vista_360_url}
-                    title={`Vista 3D piso ${activePlanta?.piso}`}
+                    title={`Vista 360 piso ${activePlanta?.piso}`}
                     className="w-100"
                     style={{ height: '70vh', border: 0 }}
                     allowFullScreen
@@ -913,13 +913,13 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                 ) : (
                   <Suspense
                     fallback={(
-                      <div className="d-flex flex-column align-items-center justify-content-center gap-3" style={{ height: '70vh', background: '#0e1420' }}>
-                        <span className="spinner-border text-warning" style={{ width: '3rem', height: '3rem' }} role="status" />
-                        <span className="small text-white-50">Cargando vista 3D…</span>
+                      <div className="d-flex flex-column align-items-center justify-content-center gap-3" style={{ height: '70vh', background: '#090d16' }}>
+                        <span className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
+                        <span className="small text-white-50">Cargando vista…</span>
                       </div>
                     )}
                   >
-                    <Room3DMockup orientacion={activePlanta?.orientacion} planta={activePlanta} />
+                    <WindowPanViewer planta={activePlanta} />
                   </Suspense>
                 )}
               </div>
