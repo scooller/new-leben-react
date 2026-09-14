@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { EyeOff } from 'lucide-react'
 
 /** Catálogo de vistas por departamento y piso en Edificio INN */
 const INN_VISTAS = {
@@ -38,26 +39,47 @@ const INN_FLOOR_FALLBACK = {
 /** Resuelve departamento y conjunto de fotos a partir del objeto planta */
 function resolveVista(planta) {
   if (!planta) {
-    return { unit: '602', floor: 6, images: INN_VISTAS['602'], isExact: true }
+    return { available: false, unit: '—', floor: '—', images: [], isExact: false }
   }
 
-  // 1. Extraer número de depto de 3 dígitos (del 200 al 999)
+  // Extraer números del nombre o código
   const raw = `${planta.name || ''} ${planta.numero || ''} ${planta.codigo || ''}`
   const match = raw.match(/\b([2-9]\d{2})\b/)
-  if (match && INN_VISTAS[match[1]]) {
-    const unit = match[1]
-    return { unit, floor: parseInt(unit[0], 10), images: INN_VISTAS[unit], isExact: true }
+  const targetUnit = match ? match[1] : (planta.name || '').replace(/\D+/g, '')
+  const floorNum = parseInt(planta.piso, 10) || (targetUnit.length >= 3 ? parseInt(targetUnit[0], 10) : null)
+
+  // 1. Coincidencia exacta de departamento en catálogo
+  if (targetUnit && INN_VISTAS[targetUnit]) {
+    return {
+      available: true,
+      unit: targetUnit,
+      floor: parseInt(targetUnit[0], 10),
+      images: INN_VISTAS[targetUnit],
+      isExact: true,
+    }
   }
 
-  // 2. Fallback por número de piso
-  const floorNum = parseInt(planta.piso, 10) || (match ? parseInt(match[1][0], 10) : null)
+  // 2. Coincidencia referencial por piso
   if (floorNum && INN_FLOOR_FALLBACK[floorNum]) {
-    const unit = INN_FLOOR_FALLBACK[floorNum][0]
-    return { unit, floor: floorNum, images: INN_VISTAS[unit], isExact: false }
+    const fallbackUnit = INN_FLOOR_FALLBACK[floorNum][0]
+    return {
+      available: true,
+      unit: targetUnit || fallbackUnit,
+      floor: floorNum,
+      images: INN_VISTAS[fallbackUnit],
+      isExact: false,
+      referenceUnit: fallbackUnit,
+    }
   }
 
-  // 3. Fallback genérico
-  return { unit: '602', floor: 6, images: INN_VISTAS['602'], isExact: false }
+  // 3. No hay fotos para este departamento ni para su piso
+  return {
+    available: false,
+    unit: targetUnit || planta.name || '—',
+    floor: floorNum ?? planta.piso ?? '—',
+    images: [],
+    isExact: false,
+  }
 }
 
 export default function WindowPanViewer({ planta = null }) {
@@ -74,7 +96,7 @@ export default function WindowPanViewer({ planta = null }) {
   const vistaInfo = useMemo(() => resolveVista(planta), [planta])
   const currentImages = vistaInfo.images
   const currentImageFile = currentImages[shotIndex] || currentImages[0]
-  const imageSrc = `${base}images/inn/vistas/${currentImageFile}`
+  const imageSrc = currentImageFile ? `${base}images/inn/vistas/${currentImageFile}` : ''
 
   // Detectar touch
   useEffect(() => {
@@ -149,6 +171,48 @@ export default function WindowPanViewer({ planta = null }) {
     touchStartRef.current = null
   }
 
+  // Si no hay foto disponible para este departamento ni piso, mostrar alerta elegante
+  if (!vistaInfo.available || !currentImageFile) {
+    return (
+      <div
+        className="d-flex flex-column align-items-center justify-content-center text-center p-4"
+        style={{
+          height: '70vh',
+          minHeight: '420px',
+          maxHeight: '760px',
+          background: '#090d16',
+          color: '#fff',
+        }}
+      >
+        <div
+          className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+          style={{
+            width: '64px',
+            height: '64px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            color: '#a0aec0',
+          }}
+        >
+          <EyeOff size={32} />
+        </div>
+        <h5 className="fw-bold mb-2">Vista no disponible para este departamento</h5>
+        <p className="text-white-50 mb-3 mx-auto" style={{ maxWidth: '440px', fontSize: '0.9rem', lineHeight: 1.6 }}>
+          Actualmente no contamos con registro fotográfico para el{' '}
+          {vistaInfo.floor && vistaInfo.floor !== '—' ? `Piso ${vistaInfo.floor}` : ''}{' '}
+          {vistaInfo.unit && vistaInfo.unit !== '—' ? `· Dpto. ${vistaInfo.unit}` : ''}.
+          Te invitamos a consultar directamente con nuestros asesores comerciales o visitar la sala de ventas.
+        </p>
+        <span
+          className="badge bg-secondary bg-opacity-25 text-white-50 px-3 py-2 border border-secondary border-opacity-25"
+          style={{ fontSize: '0.8rem' }}
+        >
+          Próximamente disponible
+        </span>
+      </div>
+    )
+  }
+
   // Desplazamiento máximo: 7.5% en X y 5.5% en Y con zoom de 1.18x
   const translateX = -pan.x * 7.5
   const translateY = -pan.y * 5.5
@@ -205,22 +269,34 @@ export default function WindowPanViewer({ planta = null }) {
       <div
         className="position-absolute top-0 start-0 m-3 p-2 px-3 rounded-3 text-white"
         style={{
-          background: 'rgba(11, 15, 25, 0.72)',
+          background: 'rgba(11, 15, 25, 0.8)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          border: '1px solid rgba(255,255,255,0.14)',
           zIndex: 5,
         }}
       >
         <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-primary px-2 py-1" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+          <span
+            className={`badge ${vistaInfo.isExact ? 'bg-primary' : 'bg-warning text-dark'} px-2 py-1`}
+            style={{ fontSize: '0.75rem', fontWeight: 600 }}
+          >
             Piso {vistaInfo.floor}
           </span>
           <span className="fw-semibold" style={{ fontSize: '0.9rem' }}>
             Dpto. {vistaInfo.unit}
           </span>
         </div>
-        <div className="small text-white-50 mt-1" style={{ fontSize: '0.75rem' }}>
-          {vistaInfo.isExact ? 'Vista real desde ventanal' : `Vista referencial Piso ${vistaInfo.floor}`}
+        <div
+          className="small mt-1"
+          style={{
+            fontSize: '0.75rem',
+            color: vistaInfo.isExact ? 'rgba(255,255,255,0.65)' : '#ffc107',
+            fontWeight: vistaInfo.isExact ? 400 : 500,
+          }}
+        >
+          {vistaInfo.isExact
+            ? '✓ Vista real desde ventanal'
+            : `⚠ Vista referencial Piso ${vistaInfo.floor} (ref. Dpto. ${vistaInfo.referenceUnit})`}
         </div>
       </div>
 

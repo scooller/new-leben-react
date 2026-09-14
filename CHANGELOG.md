@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.60] - 2026-09-14
+
+### Added
+- `src/components/proyecto/WindowPanViewer.jsx`: estado de alerta elegante cuando un departamento o piso no cuenta con registro visual disponible; agregada distinción visual con badge de advertencia cuando la vista es referencial del piso (ref. depto alternativo).
+
 ## [0.9.59] - 2026-09-14
 
 ### Added
