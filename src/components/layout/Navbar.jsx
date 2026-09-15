@@ -58,6 +58,15 @@ const pageLinksMap = {
   '/proyectos': [
     { label: 'Proyectos destacados', href: '#proyectos' },
   ],
+  '/inn-test': [
+    { label: 'Proyecto', href: '#proyecto' },
+    { label: 'Equipamiento', href: '#departamentos' },
+    { label: 'Cotizador', href: '#cotizador' },
+    { label: 'Espacios', href: '#espacios' },
+    { label: 'Ubicación', href: '#ubicacion' },
+    { label: 'Interiorismo', href: '#interiorismo' },
+    { label: 'Contacto', href: '#contacto' },
+  ],
 }
 
 /** Coincidir path con prefijo para detectar página actual */
@@ -100,8 +109,8 @@ export default function Navbar() {
         <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
           <img src={images.logoIcon} alt="" width="23" height="22" className="flex-shrink-0" fetchPriority="high" />
           <img src={images.logoText} alt="iLeben" height="22" className="flex-shrink-0" fetchPriority="high" />
-          <span className="lb-nav-separator" />
-          <span className="d-flex align-items-baseline gap-1 lh-1">
+          <span className="lb-nav-separator d-none d-md-block" />
+          <span className="d-none d-md-flex align-items-baseline gap-1 lh-1">
             <img src={images.logoBest} alt="iLeben" height="40" className="flex-shrink-0" fetchPriority="high" />
           </span>
         </Link>

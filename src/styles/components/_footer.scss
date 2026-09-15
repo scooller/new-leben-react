@@ -138,3 +138,13 @@ a {
   font-size: $lb-fs-xs;
   color: rgba($lb-white, 0.7);
 }
+
+@include bs.media-breakpoint-down(md) {
+  .lb-footer {
+    .lb-footer-link {
+      display: inline-block;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+}
+

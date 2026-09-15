@@ -527,15 +527,15 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         )}
 
         {displayData.filters && (
-          <ScrollAnim as="div" className={`${hasHero ? 'col-lg-12 ps-5 pt-3' : 'col-lg-9'} lb-proj-det-cot-filters-col`}>
-            <div className="lb-proj-det-cot-filters d-flex gap-2">
+          <ScrollAnim as="div" className={`${hasHero ? 'col-lg-12 ps-0 ps-lg-5 pt-3' : 'col-lg-9'} lb-proj-det-cot-filters-col`}>
+            <div className="lb-proj-det-cot-filters d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 gap-lg-3">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
                   <span className="spinner-border spinner-border-sm" role="status" />
                   <span className="text-muted small">Cargando plantas…</span>
                 </div>
               ) : (<>
-                <div className="d-flex flex-wrap gap-2">
+                <div className="d-flex flex-wrap gap-2 flex-grow-1">
                   {universal ? (<>
                     <FilterDropdown
                       label="Todas las comunas"
@@ -588,7 +588,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                     />
                   </>)}
                 </div>
-                <div className="d-flex align-items-center gap-3 ms-auto">
+                <div className="d-flex align-items-center justify-content-between justify-content-lg-end gap-2 gap-md-3 mt-2 mt-lg-0 flex-shrink-0">
                   <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                     <MapPinHouseIcon ref={countIconRef} size={14} />
                     {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
@@ -602,7 +602,8 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                       window.history.replaceState(null, '', '/cotizador/')
                     }}
                   >
-                    <RotateCcw size={14} className="me-1" />Borrar filtros
+                    <RotateCcw size={13} className="me-1" />
+                    Limpiar
                   </button>
                 </div>
               </>)}

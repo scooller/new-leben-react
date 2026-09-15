@@ -8,7 +8,7 @@
   overflow: hidden;
 
   @include bs.media-breakpoint-down(md) {
-    min-height: 100dvh;
+    height: 55dvh;
     border-radius: 0;
 
     .lb-hero-bg-wrap {
@@ -38,7 +38,7 @@
 .lb-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.67) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.67) 100%);
 }
 
 .lb-hero-title {

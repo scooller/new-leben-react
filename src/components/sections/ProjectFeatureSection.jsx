@@ -52,17 +52,20 @@ export default function ProjectFeatureSection({
     carouselInstance.current = c
 
     const ctx = gsap.context(() => {
-      // Parallax sobre el carrusel completo con ease y retraso de inercia (scrub)
-      gsap.to(carousel, {
-        yPercent: parallaxStrength,
-        ease: parallaxEase,
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: parallaxScrub,
-          invalidateOnRefresh: true,
-        },
+      // Parallax sobre el carrusel completo con ease y retraso de inercia (scrub) solo en desktop
+      const mm = gsap.matchMedia()
+      mm.add('(min-width: 992px)', () => {
+        gsap.to(carousel, {
+          yPercent: parallaxStrength,
+          ease: parallaxEase,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: parallaxScrub,
+            invalidateOnRefresh: true,
+          },
+        })
       })
 
       Fancybox.bind(carousel, '[data-fancybox]', {
@@ -101,12 +104,29 @@ export default function ProjectFeatureSection({
     return () => Fancybox.unbind(el)
   }, [showSpacesModal])
 
+  // Bloquear scroll de body y cerrar con Escape
+  useEffect(() => {
+    if (!showSpacesModal) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setShowSpacesModal(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [showSpacesModal])
+
   const resolvedActiveSlide = typeof activeSlide === 'number' ? activeSlide : 0
 
   return (
     <section ref={sectionRef} className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
       <div
-        className="container lb-shadow-box px-5 py-4 pt-8"
+        className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
         style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
       >
         <div className="row align-items-stretch g-5">
@@ -143,7 +163,7 @@ export default function ProjectFeatureSection({
               )}
 
               {spacesModal?.galleries?.length > 0 && (
-                <ScrollAnim as="div" delay={0.2} animation='scale' className="lb-inn-proyecto__spaces-btn-wrap mt-3 position-absolute">
+                <ScrollAnim as="div" delay={0.2} animation='scale' className="lb-inn-proyecto__spaces-btn-wrap mt-4">
                   <button
                     type="button"
                     className="btn btn-lg lb-inn-proyecto__spaces-btn"
@@ -233,30 +253,33 @@ export default function ProjectFeatureSection({
           className={`modal fade lb-inn-spaces-modal ${showSpacesModal ? 'show d-block' : ''}`}
           tabIndex={-1}
           aria-label="Espacios del proyecto"
-          style={{ backgroundColor: 'var(--lb-inn-spaces-overlay)', zIndex: 1000 }}
+          style={{ backgroundColor: 'var(--lb-inn-spaces-overlay)', zIndex: 1050, overflowY: 'auto' }}
           onClick={() => setShowSpacesModal(false)}
         >
           <div
-            className="modal-dialog modal-fullscreen"
+            className="modal-dialog modal-fullscreen my-0 p-2 p-md-5"
             onClick={(e) => e.stopPropagation()}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%' }}
           >
             <button
               type="button"
-              className="btn position-fixed top-0 end-0 m-4 p-2 z-3 text-white rounded-circle d-flex align-items-center justify-content-center lb-inn-spaces-modal__close"
+              className="btn position-fixed top-0 end-0 m-3 m-md-4 p-2 text-white rounded-circle d-flex align-items-center justify-content-center lb-inn-spaces-modal__close"
               aria-label="Cerrar"
+              style={{ zIndex: 1060 }}
               onClick={() => setShowSpacesModal(false)}
             >
               <X size={24} />
             </button>
-            <div className="modal-content bg-transparent border-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ maxWidth: '1200px' }}>
+            <div className="modal-content bg-transparent border-0 w-100 my-auto d-flex flex-column justify-content-center align-items-center" style={{ maxWidth: '1200px' }}>
 
               <div className="modal-body p-0 w-100 d-flex flex-column align-items-center justify-content-center position-relative">
                 {/* Main image container */}
-                <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '70vh', border: '1px solid var(--lb-inn-spaces-frame-border)', borderRadius: 'var(--bs-border-radius-lg)', overflow: 'hidden' }}>
+                <div className="position-relative w-100 d-flex justify-content-center align-items-center" style={{ aspectRatio: '16/9', maxHeight: '65vh', border: '1px solid var(--lb-inn-spaces-frame-border)', borderRadius: 'var(--bs-border-radius-lg)', overflow: 'hidden' }}>
                   <button
-                    className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-3 d-flex align-items-center justify-content-center"
-                    style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    type="button"
+                    className="btn rounded-circle position-absolute start-0 top-50 translate-middle-y ms-2 ms-md-3 d-flex align-items-center justify-content-center"
+                    style={{ width: '40px', height: '40px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    aria-label="Imagen anterior"
                     onClick={() => {
                       if (activeImageIndex > 0) {
                         setActiveImageIndex(activeImageIndex - 1);
@@ -270,7 +293,7 @@ export default function ProjectFeatureSection({
                       }
                     }}
                   >
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={22} />
                   </button>
 
                   {(() => {
@@ -282,7 +305,7 @@ export default function ProjectFeatureSection({
                         data-fancybox="inn-espacios"
                         data-caption={activeImageObj.alt || ''}
                         aria-label={`Ampliar imagen`}
-                        className="w-100 h-100 position-relative"
+                        className="w-100 h-100 position-relative d-block"
                       >
                         <img
                           src={`${base}${activeImageObj.img}`}
@@ -297,8 +320,10 @@ export default function ProjectFeatureSection({
                   })()}
 
                   <button
-                    className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center justify-content-center"
-                    style={{ width: '48px', height: '48px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    type="button"
+                    className="btn rounded-circle position-absolute end-0 top-50 translate-middle-y me-2 me-md-3 d-flex align-items-center justify-content-center"
+                    style={{ width: '40px', height: '40px', backgroundColor: 'var(--lb-inn-spaces-arrow-bg)', border: 'none', color: 'var(--lb-inn-spaces-arrow-color)', zIndex: 2 }}
+                    aria-label="Siguiente imagen"
                     onClick={() => {
                       const currentGallery = spacesModal.galleries[activeGalleryIndex];
                       if (activeImageIndex < currentGallery.images.length - 1) {
@@ -312,20 +337,21 @@ export default function ProjectFeatureSection({
                       }
                     }}
                   >
-                    <ChevronRight size={24} />
+                    <ChevronRight size={22} />
                   </button>
                 </div>
 
                 {/* Tabs / Categories below image */}
-                <div className="d-flex justify-content-center gap-4 mt-4 text-uppercase fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>
+                <div className="d-flex justify-content-start justify-content-md-center align-items-center gap-3 gap-md-4 mt-3 mt-md-4 text-uppercase fw-semibold w-100 lb-inn-spaces-modal__tabs-scroll px-2" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>
                   {spacesModal.galleries.map((gallery, index) => {
                     const isActive = index === activeGalleryIndex;
                     return (
                       <button
                         key={index}
+                        type="button"
                         onClick={() => { setActiveGalleryIndex(index); setActiveImageIndex(0); }}
-                        className="btn btn-link text-decoration-none p-0 d-inline-flex align-items-center"
-                        style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s' }}
+                        className="btn btn-link text-decoration-none p-0 d-inline-flex align-items-center flex-shrink-0"
+                        style={{ color: isActive ? 'var(--lb-inn-spaces-accent)' : 'var(--lb-inn-spaces-tab-inactive)', transition: 'color 0.2s', whiteSpace: 'nowrap' }}
                       >
                         <span>{gallery.label}</span>
                         {isActive && (
@@ -340,17 +366,18 @@ export default function ProjectFeatureSection({
                 </div>
 
                 {/* Thumbnails of current category */}
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-start justify-content-md-center gap-2 mt-3 mt-md-4 w-100 lb-inn-spaces-modal__thumbs-scroll px-2">
                   {spacesModal.galleries[activeGalleryIndex]?.images.map((imgObj, idx) => {
                     const isActiveThumb = idx === activeImageIndex;
                     return (
                       <button
                         key={idx}
+                        type="button"
                         onClick={() => setActiveImageIndex(idx)}
-                        className="p-0 bg-transparent"
+                        className="p-0 bg-transparent flex-shrink-0"
                         style={{
-                          width: '80px',
-                          height: '60px',
+                          width: '72px',
+                          height: '52px',
                           overflow: 'hidden',
                           border: isActiveThumb ? '2px solid var(--lb-inn-spaces-accent)' : '2px solid transparent',
                           borderRadius: 'var(--bs-border-radius)',

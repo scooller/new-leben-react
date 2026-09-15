@@ -31,6 +31,26 @@
   &:hover { color: $lb-red; }
 }
 
+@include bs.media-breakpoint-down(sm) {
+  .lb-navbar {
+    padding: 0.5rem 0;
+
+    .lb-nav-separator {
+      height: 1.15rem;
+    }
+
+    img {
+      max-height: 28px;
+      width: auto;
+    }
+
+    .lb-nav-link {
+      font-size: 0.82rem;
+      padding: 0.35rem 0.5rem;
+    }
+  }
+}
+
 .lb-nav-cta {
   font-size: 0.8125rem !important;
   font-weight: 700 !important;

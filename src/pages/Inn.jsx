@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
 import Navbar from '../components/layout/Navbar.jsx'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
@@ -220,9 +220,28 @@ const TEAM_DATA = {
 
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const mobileNavRef = useRef(null)
   const [showMapModal, setShowMapModal] = useState(false)
   const [mapTab, setMapTab] = useState('walking')
   const [activeLocationIndex, setActiveLocationIndex] = useState(0)
+
+  useEffect(() => {
+    if (!mobileNavOpen) return
+    const handleClickOutside = (e) => {
+      if (mobileNavRef.current && !mobileNavRef.current.contains(e.target)) {
+        setMobileNavOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
+  }, [mobileNavOpen])
+
+  const activeTabLabel = TABS.find((t) => t.id === activeTab)?.label || 'Proyecto'
   const walkingIconRef = useRef(null)
   const vehicleIconRef = useRef(null)
   const [apiProjects, setApiProjects] = useState(null)
@@ -325,8 +344,8 @@ export default function Inn() {
           </div>
         </HeroShell>
 
-        {/* Botonera pinneada debajo del header (sticky se confina al padre, por eso vive fuera del hero) */}
-        <nav className="lb-inn-hero-tabs mx-auto" aria-label="Secciones del proyecto">
+        {/* Botonera desktop: pinneada debajo del header */}
+        <nav className="lb-inn-hero-tabs d-none d-lg-block mx-auto" aria-label="Secciones del proyecto">
           <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner shadow-lg">
             <div className="card-body py-4 px-4">
               <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-5">
@@ -337,7 +356,6 @@ export default function Inn() {
                       className={`nav-link nav-link__border ${t.id === activeTab ? 'active' : ''}`}
                       onClick={() => {
                         setActiveTab(t.id)
-                        // "Plantas" vive en la sección del cotizador
                         const target = document.getElementById(t.id)
                         target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                       }}
@@ -350,6 +368,48 @@ export default function Inn() {
             </div>
           </ScrollAnim>
         </nav>
+
+        {/* Botonera mobile: selector compacto flotante */}
+        <div className="d-lg-none lb-inn-mobile-nav" ref={mobileNavRef}>
+          <div className="container px-3">
+            <div className="lb-inn-mobile-nav__bar shadow-sm">
+              <button
+                type="button"
+                className="btn w-100 d-flex align-items-center justify-content-between px-3 py-2 text-decoration-none"
+                onClick={() => setMobileNavOpen((prev) => !prev)}
+                aria-expanded={mobileNavOpen}
+                aria-label="Seleccionar sección"
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <span className="badge rounded-pill lb-inn-mobile-nav__badge">SECCIÓN</span>
+                  <span className="fw-bold text-dark text-uppercase small">{activeTabLabel}</span>
+                </div>
+                <ChevronDown size={18} className={`lb-inn-mobile-nav__arrow ${mobileNavOpen ? 'open' : ''}`} />
+              </button>
+
+              {mobileNavOpen && (
+                <div className="lb-inn-mobile-nav__menu shadow-lg rounded-4 p-2 mt-2">
+                  {TABS.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      className={`dropdown-item py-2 px-3 rounded-3 d-flex align-items-center justify-content-between ${t.id === activeTab ? 'active fw-bold' : ''}`}
+                      onClick={() => {
+                        setActiveTab(t.id)
+                        setMobileNavOpen(false)
+                        const target = document.getElementById(t.id)
+                        target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }}
+                    >
+                      <span>{t.label}</span>
+                      {t.id === activeTab && <span className="lb-inn-dot" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
         {/* DATOS DEL PROYECTO */}
         <section className="lb-inn-info" aria-label="Datos del proyecto">
@@ -475,10 +535,10 @@ export default function Inn() {
         <section className="container-fluid lb-inn-map" id="ubicacion">
           <div className="container">
             <div className="row g-0">
-              <div className="col-12 col-lg-7 order-2 order-lg-1 p-5 d-flex flex-column justify-content-center">
-                <div className="mb-5 lb-inn-map__header">
-                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-5">{MAP.eyebrow}</ScrollAnim>
-                  <div className="d-flex align-items-center gap-4">
+              <div className="col-12 col-lg-7 p-3 p-md-4 p-lg-5 d-flex flex-column justify-content-center">
+                <div className="mb-4 mb-md-5 lb-inn-map__header">
+                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3 mb-md-5">{MAP.eyebrow}</ScrollAnim>
+                  <div className="d-flex align-items-center gap-3 gap-md-4">
                     <ScrollAnim as="span" animation="fade-left">
                       <img
                         src={`${base}${MAP.logo}`}
@@ -492,7 +552,7 @@ export default function Inn() {
                   </div>
                 </div>
                 <div className="lb-inn-map__text text-center text-lg-start">
-                  <ScrollAnim animation="fade-up" className="lh-lg mb-5 w-md-80">
+                  <ScrollAnim animation="fade-up" className="lh-lg mb-4 mb-md-5 w-md-80">
                     {MAP.description}
                   </ScrollAnim>
                   <button
@@ -506,7 +566,7 @@ export default function Inn() {
                   </button>
                 </div>
               </div>
-              <div className="col-12 col-lg-5 order-1 order-lg-2">
+              <div className="col-12 col-lg-5">
                 <ScrollAnim animation="fade-right">
                   <button
                     type="button"
@@ -527,7 +587,7 @@ export default function Inn() {
         </section>
 
         {/* Carousel de imágenes en blanco y negro */}
-        <section className="lb-inn-gallery pt-3 pb-3" id="galeria">
+        <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
           <ScrollAnim className='container' animation="fade-up">
             <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
               <div className="carousel-inner">

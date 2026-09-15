@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.66] - 2026-09-15
+
+### Fixed
+- `_utilities.scss`: añadido escalado automático global para paddings y márgenes estáticos grandes (`py-4`, `py-5`, `p-4`, `p-5`, `px-4`, `px-5`, `my-4`, `my-5`) en viewports móviles (<768px) cuando no tienen prefijos responsivos explícitos (`:not([class*='py-sm-'])`), evitando espacios verticales y horizontales muertos en teléfonos.
+- `global.scss`: utilidades `.pt-6`, `.pt-7` y `.pt-8` adaptadas para escalar progresivamente (40% en mobile, 70% en tablet, 100% en desktop) y añadidas variantes por breakpoint (`.pt-md-*`, `.pt-lg-*`).
+- `_inn.scss`: ajustado padding vertical de `.lb-inn-info` (1.5rem en mobile vs 5.5rem en desktop), `.lb-inn-360` (2rem en mobile vs 5.5rem en desktop) y `.lb-proj-det-alternatives` (2.25rem en mobile).
+- `_proyecto-detalle.scss`: columna de cotizador `.lb-cot-content-col` optimizada con `padding-block: 2rem` y `padding-inline: 1rem` en pantallas móviles/tablets (`< lg`).
+- `Inn.jsx`: padding de la galería de fotos adaptado responsivamente con `py-2 py-md-3`.
+
+## [0.9.65] - 2026-09-15
+
+### Fixed
+- `ProjectFeatureSection.jsx`, `InteriorismoSection.jsx` & `Inn.jsx`: reemplazados paddings estáticos excesivos en móviles (`px-5`, `py-4`, `p-5`) por escalas responsivas (`px-3 px-md-5`, `py-3 py-md-4`, `p-3 p-md-4 p-lg-5`), aliviando el espacio vertical y horizontal en smartphones.
+- `_inn.scss`: reducidos paddings y márgenes desproporcionados en móviles en `.lb-inn-info` (`padding: 2.25rem 0 1.5rem` vs 5.5rem en desktop; bordes divisores adaptados a separación horizontal), `.lb-inn-proyecto` (`padding-top: 2rem` vs 4.5rem; margen inferior de tarjeta reducido a 2.5rem en móvil vs 7rem en desktop).
+- `Footer.jsx`: espaciado vertical y horizontal adaptado con `py-2 py-md-3 px-3 px-md-5`.
+
+## [0.9.64] - 2026-09-15
+
+### Fixed
+- `src/components/sections/ProjectFeatureSection.jsx` & `_inn.scss`: optimizado el modal "Ver Detalles" (Espacios del proyecto) con scroll horizontal suave sin cortes en categorías y miniaturas (`.lb-inn-spaces-modal__tabs-scroll`, `.lb-inn-spaces-modal__thumbs-scroll`), scroll vertical garantizado para pantallas pequeñas, bloqueo de scroll en el body al abrir, cierre accesible con tecla Escape y flechas de navegación redimensionadas.
+
+## [0.9.63] - 2026-09-15
+
+### Fixed
+- `src/pages/Inn.jsx` & `_inn.scss`: implementado nuevo selector compacto flotante para móvil (`.lb-inn-mobile-nav`) con dropdown elegante de 7 secciones sincronizado en tiempo real con scrollspy, reemplazando la barra recortada en móvil y preservando la botonera horizontal completa en desktop.
+- `src/components/layout/Navbar.jsx`: ocultado logo secundario y separador en móviles (`d-none d-md-flex`) para despejar el header, e incorporadas las anclas de sección de `/inn-test` en el menú hamburguesa ("Navegación").
+- `src/components/sections/ProjectFeatureSection.jsx` & `_inn.scss`: corregido margen negativo del carrusel en móvil (`margin-bottom: 0`, `-10rem` solo en desktop `lg`), botón "Ver Detalles" reposicionado en flujo natural (`position: relative`) con `z-index: 25` para evitar bloqueo por Fancybox o imágenes, y parallax del carrusel restringido a desktop (`min-width: 992px`).
+
+## [0.9.62] - 2026-09-15
+
+### Fixed
+- `src/components/layout/Footer.jsx` & `_footer.scss`: adaptadas columnas a `col-12 col-md-*` en móvil, ocultada línea divisoria vertical en pantallas pequeñas (`d-none d-md-block`) y franja de copyright responsiva con apilamiento vertical.
+- `src/pages/Inn.jsx` & `_inn.scss`: tabs del hero (`.lb-inn-hero-tabs`) optimizados para móvil con scroll horizontal suave sin scrollbar visible, paddings reducidos y `gap` responsivo.
+- `src/components/sections/Recorridos360.jsx` & `_inn.scss`: ancho de tarjeta ajustado al 100% en móvil (eliminada compresión de `53dvw`) y gap de pills reducido a `gap-2 gap-md-4`.
+- `src/components/proyecto/Cotizador.jsx` & `_proyecto-detalle.scss`: padding lateral `ps-0 ps-lg-5` en filtros, apilamiento de contenedor en `flex-column flex-lg-row` y ajuste en grilla de 2 columnas para dropdowns en móviles.
+- `src/components/sections/InteriorismoSection.jsx` & `_inn.scss`: padding responsive `pt-4 pt-lg-8` y `px-3 px-md-5`, margen inferior de diseñadores en `2rem` en móvil (`-10rem` solo en desktop `lg`), altura responsive de tarjeta de diseñadores (`22rem` en móvil) y parallax GSAP restringido a desktop (`min-width: 992px`).
+- `_navbar.scss`: ajustes de tamaño de logo y espaciados de navegación para pantallas móviles angostas.
+
 ## [0.9.61] - 2026-09-14
 
 ### Added

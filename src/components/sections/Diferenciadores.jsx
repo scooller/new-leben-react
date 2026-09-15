@@ -68,7 +68,7 @@ export default function Diferenciadores() {
 
       <div className="container-fluid diferenciadores">
         <div className="container mx-auto row g-0 align-items-stretch justify-content-center position-relative">
-          <div className="col-md-5 position-relative d-flex align-items-center justify-content-center">
+          <div className="col-md-5 order-md-0 order-1 position-relative d-flex align-items-center justify-content-center">
             <img
               src={images.bgLogo}
               alt=""
@@ -84,7 +84,7 @@ export default function Diferenciadores() {
               decoding="async"
             />
           </div>
-          <ScrollAnim as="div" className="col-md-7 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
+          <ScrollAnim as="div" className="col-md-7 order-md-1 order-0 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {/* Title */}
             <ScrollAnim as="div" className="position-relative w-md-80 ms-4" animation="fade-right">
               <SplitTitle as="h2" className="lb-diff-title mb-4 mx-auto" text={diferenciadoresTitle.part1 + ' ' + diferenciadoresTitle.highlight + ' ' + diferenciadoresTitle.part2} />

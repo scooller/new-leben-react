@@ -66,17 +66,20 @@ export default function InteriorismoSection({
         },
       })
 
-      // Parallax de las tarjetas de designers con ease y retraso (scrub)
-      gsap.to(section.querySelectorAll('.designers > div'), {
-        yPercent: parallaxStrength,
-        ease: parallaxEase,
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: parallaxScrub,
-          invalidateOnRefresh: true,
-        },
+      // Parallax solo en desktop para evitar jank y solapamiento en móvil
+      const mm = gsap.matchMedia()
+      mm.add('(min-width: 992px)', () => {
+        gsap.to(section.querySelectorAll('.designers > div'), {
+          yPercent: parallaxStrength,
+          ease: parallaxEase,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: parallaxScrub,
+            invalidateOnRefresh: true,
+          },
+        })
       })
 
       Fancybox.bind(section, '[data-fancybox]', {
@@ -95,7 +98,7 @@ export default function InteriorismoSection({
   return (
     <section ref={sectionRef} className="lb-inn-proyecto lb-inn-interiorismo pb-5 mb-5" id={id} aria-label={ariaLabel}>
       <div
-        className="container lb-shadow-box px-5 py-4 pt-8"
+        className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
         style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
       >
         <div className="row align-items-stretch g-5">

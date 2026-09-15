@@ -95,12 +95,23 @@ $inn-gold-bg: #faf4e8;
   &__inner {
     border-radius: $lb-radius-pill;
 
+    .card-body {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
     .nav-link {
       border-radius: $lb-radius-pill;
       font-size: $lb-fs-xs;
       font-weight: 700;
       letter-spacing: 0.12em;
       color: $inn-gris;
+      white-space: nowrap;
 
       &__border {
         border: 1px solid;
@@ -117,6 +128,22 @@ $inn-gold-bg: #faf4e8;
         img {
           filter: brightness(1);
         }
+      }
+    }
+  }
+
+  @include bs.media-breakpoint-down(lg) {
+    top: 3.5rem;
+    margin-top: -1.75rem;
+    max-width: 96%;
+
+    &__inner {
+      border-radius: 1.5rem;
+
+      .nav-link {
+        font-size: 0.72rem;
+        padding: 0.35rem 0.75rem;
+        letter-spacing: 0.05em;
       }
     }
   }
@@ -171,6 +198,73 @@ $inn-gold-bg: #faf4e8;
   }
 }
 
+// Selector de secciones para Mobile en INN
+.lb-inn-mobile-nav {
+  position: sticky;
+  top: 3.5rem;
+  z-index: 85;
+  margin-top: -1.25rem;
+  margin-bottom: 1.5rem;
+
+  &__bar {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(158, 122, 76, 0.35);
+    border-radius: $lb-radius-pill;
+    position: relative;
+  }
+
+  &__badge {
+    background: $inn-gold;
+    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+    color: $lb-white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+  }
+
+  &__arrow {
+    color: $inn-gold;
+    transition: transform 0.25s ease;
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: $lb-white;
+    border: 1px solid rgba(158, 122, 76, 0.25);
+    z-index: 100;
+
+    .dropdown-item {
+      font-size: 0.85rem;
+      color: $lb-dark;
+      transition: background 0.15s ease, color 0.15s ease;
+
+      &:hover,
+      &.active {
+        background: $inn-gold-bg;
+        color: $inn-gold;
+      }
+    }
+  }
+}
+
+.lb-inn-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: $inn-gold;
+  display: inline-block;
+}
+
 // Variante apilada: icono arriba, texto debajo, sin degradado
 .lb-inn-hero-tabs--stacked {
   .nav-link {
@@ -202,10 +296,21 @@ $inn-gold-bg: #faf4e8;
 // --- DATOS ---
 .lb-inn-info {
   background: #fff;
-  padding: 5.5rem 0 2.25rem;
+  padding: 1.5rem 0 1.25rem;
 
-  .col:not(:last-child) {
-    border-right: 1px solid $lb-dark;
+  @include bs.media-breakpoint-up(lg) {
+    padding: 5.5rem 0 2.25rem;
+
+    .col:not(:last-child) {
+      border-right: 1px solid $lb-dark;
+    }
+  }
+
+  @include bs.media-breakpoint-down(lg) {
+    .col:not(:last-child) {
+      border-bottom: 1px solid rgba($lb-dark, 0.12);
+      padding-bottom: 0.75rem;
+    }
   }
 
   &__label {
@@ -218,17 +323,25 @@ $inn-gold-bg: #faf4e8;
 // --- PROYECTO ---
 .lb-inn-proyecto {
   background: #fff;
-  padding-top: 4.5rem;
+  padding-top: 2rem;
   padding-left: 0;
   padding-right: 0;
 
+  @include bs.media-breakpoint-up(lg) {
+    padding-top: 4.5rem;
+  }
+
   .container.lb-shadow-box {
-    margin-bottom: 7rem;
+    margin-bottom: 2.5rem;
     background-image: var(--lb-inn-proyecto-bg, url(/images/inn/bg-montain.svg));
     background-repeat: no-repeat;
     background-position: 55% 5%;
     background-size: cover;
     background-size: 70%;
+
+    @include bs.media-breakpoint-up(lg) {
+      margin-bottom: 7rem;
+    }
   }
 
   &#departamentos {
@@ -282,9 +395,18 @@ $inn-gold-bg: #faf4e8;
   }
 
   &__spaces-btn-wrap {
-    margin-top: 1.25rem;
-    left: 0;
-    bottom: -7rem;
+    position: relative;
+    z-index: 25;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+
+    @include bs.media-breakpoint-up(lg) {
+      position: absolute;
+      left: 0;
+      bottom: -7rem;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
   }
 
   &__spaces-btn {
@@ -333,7 +455,13 @@ $inn-gold-bg: #faf4e8;
   }
 
   .carousel {
-    margin-bottom: -10rem; // para que el carrusel se superponga al footer y no quede espacio en blanco;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+
+    @include bs.media-breakpoint-up(lg) {
+      margin-bottom: -10rem; // para que el carrusel se superponga al footer y no quede espacio en blanco;
+    }
   }
 
   // dots debajo de los textos (columna izquierda)
@@ -356,7 +484,7 @@ $inn-gold-bg: #faf4e8;
 .lb-inn-video-banner {
   color: rgba($lb-white, 0.94);
   position: relative;
-  min-height: clamp(34rem, 120vh, 52rem);
+  min-height: clamp(34rem, 120dvh, 52dvh);
   font-family: $font-primary;
   display: flex;
   align-items: center;
@@ -428,9 +556,23 @@ $inn-gold-bg: #faf4e8;
   padding-block: 4.5rem 5.5rem;
   background-color: $inn-gold-bg;
 
+  @include bs.media-breakpoint-down(md) {
+    padding-block: 2rem 2.5rem;
+  }
+
   .card.lb-inn-hero-tabs__inner {
     border: 0;
     width: min(90%, 53dvw);
+
+    @include bs.media-breakpoint-down(md) {
+      width: 100%;
+      border-radius: 1.25rem;
+
+      .nav-link {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.6rem;
+      }
+    }
   }
 
   &__title {
@@ -645,7 +787,27 @@ $inn-gold-bg: #faf4e8;
       // only desktop ancho máximo 40.5% para que no quede demasiado ancho en pantallas grandes
       width: 40.5%;
     }
+  }
 
+  &__tabs-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__thumbs-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   &__close {
@@ -848,6 +1010,7 @@ $inn-gold-bg: #faf4e8;
     opacity: 0.4;
     transform: scale(1.05);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -918,7 +1081,11 @@ $inn-gold-bg: #faf4e8;
 // --- INTERIORISMO ---
 .lb-inn-interiorismo {
   .designers {
-    margin-bottom: -10rem;
+    margin-bottom: 2rem;
+
+    @include bs.media-breakpoint-up(lg) {
+      margin-bottom: -10rem;
+    }
   }
 
   &__designer-btn {
@@ -927,11 +1094,19 @@ $inn-gold-bg: #faf4e8;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 40rem;
+    height: 22rem;
     padding: 0;
     border: none;
     overflow: hidden;
     background-repeat: no-repeat;
+
+    @include bs.media-breakpoint-up(md) {
+      height: 30rem;
+    }
+
+    @include bs.media-breakpoint-up(lg) {
+      height: 40rem;
+    }
 
     &:hover,
     &.active {
@@ -946,6 +1121,10 @@ $inn-gold-bg: #faf4e8;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center top;
+
+    @include bs.media-breakpoint-down(md) {
+      background-position: center center;
+    }
   }
 
   &__designer-name {
@@ -958,6 +1137,10 @@ $inn-gold-bg: #faf4e8;
     font-weight: 400;
     pointer-events: none;
     text-align: left;
+
+    @include bs.media-breakpoint-down(md) {
+      font-size: 1.25rem;
+    }
   }
 
   &__designer-text {
@@ -1033,6 +1216,10 @@ $inn-gold-bg: #faf4e8;
     background-color: $inn-gold-bg;
     padding-top: 1rem;
     padding-bottom: 4.5rem;
+
+    @include bs.media-breakpoint-down(md) {
+      padding-bottom: 2.25rem;
+    }
 
     .lb-proj-det-section-title,
     .lb-split-title,

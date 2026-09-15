@@ -183,9 +183,28 @@ button[type] {
   box-shadow: rgba(0, 0, 0, 0.01) 0px 2.5rem 4rem, rgba(0, 0, 0, 0.08) 0px 2.25rem 2.25rem;
 }
 
-//top utility: 1:0.25rem, 2:0.5rem, 3:1rem, 4:1.5rem, 5:3rem
-$lb-top-steps: (6:6rem, 7:9.5rem, 8:13rem);
+// top utility: 1:0.25rem, 2:0.5rem, 3:1rem, 4:1.5rem, 5:3rem
+// Pasos grandes: en mobile (<768px) escalan a un valor proporcional; full en desktop (>=992px)
+$lb-top-steps: (6: 6rem, 7: 9.5rem, 8: 13rem);
 
 @each $step, $value in $lb-top-steps {
-  .pt-#{$step} { padding-top: $value !important; }
+  .pt-#{$step} {
+    padding-top: calc($value * 0.4) !important;
+
+    @media (min-width: 768px) {
+      padding-top: calc($value * 0.7) !important;
+    }
+
+    @media (min-width: 992px) {
+      padding-top: $value !important;
+    }
+  }
+}
+
+@each $bp, $min in (sm: 576px, md: 768px, lg: 992px, xl: 1200px) {
+  @media (min-width: $min) {
+    @each $step, $value in $lb-top-steps {
+      .pt-#{$bp}-#{$step} { padding-top: $value !important; }
+    }
+  }
 }

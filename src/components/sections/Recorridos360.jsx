@@ -122,7 +122,7 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
 
         <ScrollAnim as='div' animation='fade-up' className="card lb-inn-hero-tabs__inner shadow-lg mt-3 mx-auto">
           <div className="card-body p-2 p-md-4">
-            <ul className="nav nav-pills nav-justified flex-wrap gap-5" role="tablist" aria-label="Recorridos del proyecto">
+            <ul className="nav nav-pills nav-justified flex-wrap gap-2 gap-md-4" role="tablist" aria-label="Recorridos del proyecto">
               {tours.map((tour, index) => (
                 <li className="nav-item" key={tour.label || index} role="presentation">
                   <button
