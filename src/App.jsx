@@ -82,7 +82,7 @@ export default function App() {
           element={
             <>
               <Navbar />
-              <main>
+              <main id="main-home">
                 <Home />
               </main>
               <Footer />

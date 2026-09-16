@@ -32,19 +32,33 @@ body {
 
 #root {
   width: 100%;
+
   main {
     width: 100%;
-    overflow-x: clip;  // clip previene scroll horizontal sin romper position: sticky (a diferencia de overflow: hidden)
+    overflow-x: clip; // clip previene scroll horizontal sin romper position: sticky (a diferencia de overflow: hidden)
+
+    &#main-home {
+      background-image: url(/images/home/fondo.jpeg);
+      background-repeat: no-repeat;
+      background-position: right;
+      background-attachment: fixed;
+      background-size: cover;
+    }
   }
 }
 
-.modal.d-block{
+.modal.d-block {
   background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(5px);
 }
 
 // --- Headings ---
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: $lb-heading-color;
   font-family: $font-primary;
   font-weight: $lb-heading-weight;
@@ -58,11 +72,14 @@ a {
   text-decoration: none;
   transition: $lb-transition;
 
-  &:hover { color: $lb-red-dark; }
+  &:hover {
+    color: $lb-red-dark;
+  }
 }
 
 // --- Container cap: override Bootstrap max-widths at ≥1900px ---
 @media (min-width: 1900px) {
+
   .container-xxl,
   .container-xl,
   .container-lg,
@@ -80,6 +97,7 @@ a {
 }
 
 .lb-img-trigger {
+
   &:hover,
   &:focus-visible,
   &:active {
@@ -98,16 +116,34 @@ a {
 
 // --- Utility: directional section radius ---
 // Apply per-corner: .lb-radius-tl .lb-radius-br etc.
-.lb-radius-tl { border-top-left-radius:     $lb-radius-section; }
-.lb-radius-tr { border-top-right-radius:    $lb-radius-section; }
-.lb-radius-bl { border-bottom-left-radius:  $lb-radius-section; }
-.lb-radius-br { border-bottom-right-radius: $lb-radius-section; }
+.lb-radius-tl {
+  border-top-left-radius: $lb-radius-section;
+}
 
-.lb-radius-pill    { border-radius: $lb-radius-pill; }
-.lb-radius-section { border-radius: $lb-radius-section; }
+.lb-radius-tr {
+  border-top-right-radius: $lb-radius-section;
+}
+
+.lb-radius-bl {
+  border-bottom-left-radius: $lb-radius-section;
+}
+
+.lb-radius-br {
+  border-bottom-right-radius: $lb-radius-section;
+}
+
+.lb-radius-pill {
+  border-radius: $lb-radius-pill;
+}
+
+.lb-radius-section {
+  border-radius: $lb-radius-section;
+}
 
 // --- Utility: pill button ---
-.btn-pill { border-radius: $lb-radius-pill !important; }
+.btn-pill {
+  border-radius: $lb-radius-pill !important;
+}
 
 // --- Global button micro-interactions (hover / focus-visible / active) ---
 .btn,
@@ -133,21 +169,34 @@ button[type] {
   // Icon-only round buttons — just press, no lift
   &.lb-btn-search,
   &.lb-chat-bubble {
-    &:hover { transform: none; }
-    &:active { transform: scale(0.92); }
+    &:hover {
+      transform: none;
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
   }
 }
 
 // --- Custom scrollbar ---
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: $lb-cream; }
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $lb-cream;
+}
+
 ::-webkit-scrollbar-thumb {
   background: $lb-gray-400;
   border-radius: 4px;
 }
 
 // --- Loader ---
-.lb-loader { transition: opacity 0.1s linear; }
+.lb-loader {
+  transition: opacity 0.1s linear;
+}
 
 .lb-loader-logo {
   animation: lb-pulse 1.2s ease-in-out infinite;
@@ -162,11 +211,26 @@ button[type] {
   animation: lb-spin 0.7s linear infinite;
 }
 
-@keyframes lb-spin { to { transform: rotate(360deg); } }
-@keyframes lb-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.9); }
+@keyframes lb-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
+
+@keyframes lb-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
 /*
   Additional global styles can be added here, but avoid adding component-specific styles.
   Use the _component.scss files for component-level styles.
@@ -176,16 +240,22 @@ button[type] {
 .lb-shadow {
   box-shadow: rgba(0, 0, 0, 0.45) 0px -25px 20px -20px;
 }
+
 .lb-shadow-down {
   box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
 }
-.lb-shadow-box{
+
+.lb-shadow-box {
   box-shadow: rgba(0, 0, 0, 0.01) 0px 2.5rem 4rem, rgba(0, 0, 0, 0.08) 0px 2.25rem 2.25rem;
 }
 
 // top utility: 1:0.25rem, 2:0.5rem, 3:1rem, 4:1.5rem, 5:3rem
 // Pasos grandes: en mobile (<768px) escalan a un valor proporcional; full en desktop (>=992px)
-$lb-top-steps: (6: 6rem, 7: 9.5rem, 8: 13rem);
+$lb-top-steps: (
+  6: 6rem,
+  7: 9.5rem,
+  8: 13rem
+);
 
 @each $step, $value in $lb-top-steps {
   .pt-#{$step} {
@@ -204,7 +274,9 @@ $lb-top-steps: (6: 6rem, 7: 9.5rem, 8: 13rem);
 @each $bp, $min in (sm: 576px, md: 768px, lg: 992px, xl: 1200px) {
   @media (min-width: $min) {
     @each $step, $value in $lb-top-steps {
-      .pt-#{$bp}-#{$step} { padding-top: $value !important; }
+      .pt-#{$bp}-#{$step} {
+        padding-top: $value !important;
+      }
     }
   }
 }

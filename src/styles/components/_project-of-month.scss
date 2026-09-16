@@ -4,14 +4,10 @@
 .lb-project-month {
   position: relative;
   padding-block: $lb-section-pad;
-  background: $lb-white;
-  background-image: url(/images/home/fondo.jpeg);
-  background-repeat: no-repeat;
-  background-position: right;
-  background-attachment: fixed;
-  background-size: cover;
 
-  .container { z-index: 1; }
+  .container {
+    z-index: 1;
+  }
 
   .lb-project-month-photo {
     img {
@@ -99,8 +95,17 @@
   @include bs.media-breakpoint-down(md) {
     padding-block: $lb-section-pad-sm;
 
-    .lb-project-month-band { display: none; }
-    .lb-project-month-photo { max-width: 14rem; margin-inline: auto; }
-    .lb-project-month-visual { max-width: 10rem; }
+    .lb-project-month-band {
+      display: none;
+    }
+
+    .lb-project-month-photo {
+      max-width: 14rem;
+      margin-inline: auto;
+    }
+
+    .lb-project-month-visual {
+      max-width: 10rem;
+    }
   }
 }

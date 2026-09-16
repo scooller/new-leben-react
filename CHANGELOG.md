@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.72] - 2026-09-16
+
+### Security
+- Dependencias parchadas con `rtk npm audit fix`: resueltas 3 vulnerabilidades de severidad alta en subdependencias (`brace-expansion`, `js-yaml`, `nanoid`). 0 vulnerabilidades detectadas.
+
+### Changed
+- `App.jsx` & `global.scss`: asignado id fijo `#main-home` al contenedor principal del home y trasladado el fondo fijo (`/images/home/fondo.jpeg`) a `main#main-home` en lugar de la sección individual de proyecto del mes.
+- `CTASection.jsx`: ancho de imagen ajustado con clase responsiva `w-md-75 mx-auto`.
+- `_project-of-month.scss`: removido fondo duplicado para heredar el fondo unificado del home.
+
 ## [0.9.71] - 2026-09-16
 
 ### Fixed
