@@ -166,7 +166,7 @@ export default function ProjectFeatureSection({
                 <ScrollAnim as="div" delay={0.2} animation='scale' className="lb-inn-proyecto__spaces-btn-wrap mt-4">
                   <button
                     type="button"
-                    className="btn btn-lg lb-inn-proyecto__spaces-btn"
+                    className="btn btn-gold"
                     onClick={() => {
                       setActiveGalleryIndex(0)
                       setActiveImageIndex(0)

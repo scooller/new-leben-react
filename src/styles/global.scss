@@ -145,6 +145,12 @@ a {
   border-radius: $lb-radius-pill !important;
 }
 
+// --- Utility: gold gradient button ---
+.btn-gold,
+.btn-inn-gold {
+  @include btn-gold-base;
+}
+
 // --- Global button micro-interactions (hover / focus-visible / active) ---
 .btn,
 button[class],

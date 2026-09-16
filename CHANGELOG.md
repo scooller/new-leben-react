@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.73] - 2026-09-16
+
+### Refactor
+- Unificación de botones con degradado dorado: creados `$lb-gradient-gold` y el mixin `@mixin btn-gold-base` en `variables.scss`, y expuestas las clases globales unificadas `.btn-gold` / `.btn-inn-gold` en `global.scss`.
+- Removidas por completo las clases CSS redundantes `&__spaces-btn` de `_inn.scss` y `&__cta` de `_inn-team-agents.scss`.
+- Limpiadas clases duplicadas en JSX (`ProjectFeatureSection.jsx` y `InnTeamAgents.jsx`), eliminando `lb-inn-proyecto__spaces-btn`, `lb-inn-team-agents__cta`, `rounded-pill` y `fw-bold` en favor de la clase unificada `btn-gold`.
+- Reemplazados los gradientes lineales repetidos en tabs/filtros activos por la variable compartida `$lb-gradient-gold`.
+
 ## [0.9.72] - 2026-09-16
 
 ### Security

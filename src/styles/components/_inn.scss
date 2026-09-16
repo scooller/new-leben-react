@@ -120,8 +120,7 @@ $inn-gold-bg: #faf4e8;
 
       &:hover,
       &.active {
-        background: $inn-gold;
-        background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        background: $lb-gradient-gold;
         color: $lb-white;
         border-color: $inn-gold;
 
@@ -168,8 +167,7 @@ $inn-gold-bg: #faf4e8;
 
       &:hover,
       &.active {
-        background: $inn-gold;
-        background: linear-gradient(360deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        background: $lb-gradient-gold;
         color: $lb-white;
         border-color: $inn-gold;
 
@@ -216,8 +214,7 @@ $inn-gold-bg: #faf4e8;
   }
 
   &__badge {
-    background: $inn-gold;
-    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+    background: $lb-gradient-gold;
     color: $lb-white;
     font-size: 0.65rem;
     font-weight: 700;
@@ -406,22 +403,6 @@ $inn-gold-bg: #faf4e8;
       bottom: -7rem;
       margin-top: 0;
       margin-bottom: 0;
-    }
-  }
-
-  &__spaces-btn {
-    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
-    color: $lb-white;
-    border: 0;
-    border-radius: $lb-radius-pill;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 0.65rem 1.75rem;
-    transition: filter 0.2s ease;
-
-    &:hover {
-      filter: brightness(1.05);
-      color: $lb-white;
     }
   }
 
@@ -627,7 +608,7 @@ $inn-gold-bg: #faf4e8;
 
     &:hover,
     &.active {
-      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      background: $lb-gradient-gold;
       color: $lb-white;
       border-color: $inn-gold;
     }
@@ -709,7 +690,7 @@ $inn-gold-bg: #faf4e8;
 
     &:hover,
     &.active {
-      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      background: $lb-gradient-gold;
       border-color: $inn-gold;
       color: $lb-white;
     }
@@ -726,7 +707,7 @@ $inn-gold-bg: #faf4e8;
     &:hover,
     &:active,
     &.active {
-      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+      background: $lb-gradient-gold;
       border-color: $inn-gold;
       color: $lb-white;
     }
@@ -758,13 +739,8 @@ $inn-gold-bg: #faf4e8;
   }
 
   .lb-proj-det-cot-cta {
-    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
-    border: 0;
+    @include btn-gold-base;
     border-radius: 2rem;
-
-    &:hover {
-      filter: brightness(1.05);
-    }
   }
 }
 
@@ -851,7 +827,7 @@ $inn-gold-bg: #faf4e8;
 
       &:hover,
       &.active {
-        background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+        background: $lb-gradient-gold;
         color: $lb-white;
         border-color: $inn-gold;
       }
@@ -1267,20 +1243,11 @@ $inn-gold-bg: #faf4e8;
     }
 
     .btn.btn-dark {
-      background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
-      border: 0;
+      @include btn-gold-base;
       border-radius: 2rem;
-      color: $lb-white;
       padding: 0.65rem 2rem;
       font-weight: 500;
       box-shadow: 0 4px 14px rgba(158, 122, 76, 0.25);
-      transition: filter 0.2s ease, transform 0.2s ease;
-
-      &:hover {
-        filter: brightness(1.08);
-        transform: translateY(-1px);
-        color: $lb-white;
-      }
     }
   }
 }

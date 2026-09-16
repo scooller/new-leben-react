@@ -89,3 +89,33 @@ $lb-navbar-height:    72px;
 $lb-section-pad:      5rem;     // default section vertical padding
 $lb-section-pad-lg:   6.25rem;  // large / featured sections
 $lb-section-pad-sm:   3rem;     // compact sections / mobile
+
+// --- Theme Gradients & Gold Button ---
+$lb-gradient-gold: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
+
+@mixin btn-gold-base {
+  background: $lb-gradient-gold;
+  color: $lb-white;
+  border: 0;
+  border-radius: $lb-radius-pill;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.65rem 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: filter 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    color: $lb-white;
+  }
+
+  &:active {
+    filter: brightness(0.98);
+    transform: translateY(0) scale(0.97);
+  }
+}

@@ -185,26 +185,6 @@ $inn-wa: #d1b578;
     object-position: 50% 30%;
   }
 
-  // CTA igual al .lb-inn-360 .nav-link.active (gradiente dorado) pero más grande
-  &__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 2.5rem;
-    background: linear-gradient(180deg, rgba(158, 122, 76, 1) 0%, rgba(216, 178, 92, 1) 65%, rgba(216, 178, 92, 1) 100%);
-    color: $lb-white;
-    border: 1px solid $inn-gold;
-    font-size: $lb-fs-base;
-    letter-spacing: 0.12em;
-    transition: $lb-transition-fast;
-    margin-top: 1rem;
-
-    &:hover {
-      color: $lb-white;
-      filter: brightness(1.08);
-    }
-  }
-
   // Columna derecha
   &__right {
     display: flex;
@@ -228,6 +208,7 @@ $inn-wa: #d1b578;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     min-height: 420px;
+    border: 2px solid $inn-border;
 
     iframe {
       width: 100%;

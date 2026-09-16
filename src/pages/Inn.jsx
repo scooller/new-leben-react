@@ -558,7 +558,7 @@ export default function Inn() {
                   </ScrollAnim>
                   <button
                     type="button"
-                    className="btn btn-primary lb-inn-map__btn d-inline-flex align-items-center gap-2"
+                    className="btn btn-gold"
                     onClick={() => setShowMapModal(true)}
                     {...hover(mapRef)}
                   >

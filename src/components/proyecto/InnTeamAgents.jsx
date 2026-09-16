@@ -127,7 +127,7 @@ export default function InnTeamAgents({ data, apiId }) {
             </div>
 
             <button
-              className="btn btn-lg rounded-pill text-uppercase fw-bold lb-inn-team-agents__cta"
+              className="btn btn-gold mt-3 px-4"
               onClick={() => {
                 setSelectedAgent(agents[0]?.email || '')
                 setShowModal(true)
