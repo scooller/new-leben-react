@@ -91,13 +91,13 @@ const ESPACIOS_COMUNES_NAV_ITEMS = [
 // Un slide por espacio, vinculado por navId (mismas claves que ESPACIOS_COMUNES_NAV_ITEMS.id)
 // Para asignar imagen real a un espacio: edita el img de su navId
 const ESPACIOS_COMUNES_SLIDES = [
-  { navId: 'hall', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Hall de acceso' },
-  { navId: 'atrio', img: 'images/inn/galerias/EECC_02.jpg', alt: 'Atrio' },
-  { navId: 'gourmet', img: 'images/inn/galerias/EECC_03.jpg', alt: 'Gourmet + Quincho equipado' },
-  { navId: 'training', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Training Zone' },
-  { navId: 'jacuzzi', img: 'images/inn/galerias/EECC_02.jpg', alt: 'Jacuzzi exterior' },
-  { navId: 'piscina', img: 'images/inn/galerias/EECC_03.jpg', alt: 'Piscina climatizada' },
-  { navId: 'bodega', img: 'images/inn/galerias/EECC_01.jpg', alt: 'Bodega náutica' },
+  { navId: 'hall', img: 'images/inn/eecc/EECC_Hall_Acceso_Edificio.jpg', link: 'images/inn/eecc/EECC_Hall_Acceso_Edificio.jpg', alt: 'Hall de acceso' },
+  { navId: 'atrio', img: 'images/inn/eecc/EECC_03.jpg', link: 'images/inn/eecc/EECC_Atrio_2.png', alt: 'Atrio' },
+  { navId: 'gourmet', img: 'images/inn/eecc/EECC_01.jpg', link: 'images/inn/eecc/EECC_Quincho_Gourmet.jpg', alt: 'Gourmet + Quincho equipado' },
+  { navId: 'training', img: 'images/inn/eecc/EECC_03.jpg', alt: 'Training Zone' },
+  { navId: 'jacuzzi', img: 'images/inn/eecc/EECC_02.jpg', alt: 'Jacuzzi exterior' },
+  { navId: 'piscina', img: 'images/inn/eecc/EECC_Piscina_Climatizada.jpg', alt: 'Piscina climatizada' },
+  { navId: 'bodega', img: 'images/inn/eecc/EECC_02.jpg', link: 'images/inn/eecc/EECC_Bodega_Nautica.jpg', alt: 'Bodega náutica' },
 ]
 
 const GALLERY_IMAGES = [

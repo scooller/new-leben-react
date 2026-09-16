@@ -222,24 +222,30 @@ export default function ProjectFeatureSection({
             <ScrollAnim className="col-lg-7 d-flex">
               <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100">
                 <div className="carousel-inner lb-inn-proyecto__frame">
-                  {slides.map((slide, index) => (
-                    <div
-                      className={`carousel-item ${index === 0 ? 'active' : ''}`}
-                      data-bs-interval="5000"
-                      key={index}
-                    >
-                      <div className="lb-inn-proyecto__parallax">
-                        <a
-                          href={`${base}${slide.img || slide.src}`}
-                          data-fancybox={slide.fancyboxGroup || 'project-gallery'}
-                          data-caption={slide.alt || ''}
-                          tabIndex={0}
-                        >
-                          <img src={`${base}${slide.img || slide.src}`} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
-                        </a>
+                  {slides.map((slide, index) => {
+                    const rawTarget = (slide.link && typeof slide.link === 'string' && slide.link.trim()) || slide.img || slide.src
+                    const fancyboxHref = /^(https?:)?\/\//.test(rawTarget) ? rawTarget : `${base}${rawTarget.replace(/^\//, '')}`
+                    const imgSrc = `${base}${slide.img || slide.src}`
+
+                    return (
+                      <div
+                        className={`carousel-item ${index === 0 ? 'active' : ''}`}
+                        data-bs-interval="5000"
+                        key={index}
+                      >
+                        <div className="lb-inn-proyecto__parallax">
+                          <a
+                            href={fancyboxHref}
+                            data-fancybox={slide.fancyboxGroup || 'project-gallery'}
+                            data-caption={slide.alt || ''}
+                            tabIndex={0}
+                          >
+                            <img src={imgSrc} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </ScrollAnim>

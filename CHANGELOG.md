@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.74] - 2026-09-16
+
+### Added
+- `ProjectFeatureSection.jsx`: el objeto `slide` ahora soporta la propiedad opcional `link`. Si `link` existe y no es nulo o vacío, Fancybox abre dicho link (soporta URLs externas, relativas e internas), manteniendo la imagen `img` como render del slide en el carrusel; de lo contrario, se abre `img` por defecto.
+- `Inn.jsx`: configurada la propiedad `link` en los slides de espacios comunes (`ESPACIOS_COMUNES_SLIDES`) para abrir las imágenes en alta resolución en Fancybox.
+
 ## [0.9.73] - 2026-09-16
 
 ### Refactor
