@@ -79,8 +79,8 @@ const EQUIPMENT_SLIDES = [
 
 // Espacios comunes: iconos animados (pqoqubbw/icons).
 const ESPACIOS_COMUNES_NAV_ITEMS = [
-  { id: 'hall', label: 'Hall de acceso<br />con doble altura', icon: ConciergeBellIcon },
-  { id: 'atrio', label: 'Atrio con 6<br />pisos de altura', icon: TableIcon },
+  { id: 'hall', label: 'Hall de acceso', icon: ConciergeBellIcon },
+  { id: 'atrio', label: 'Atrio con 7<br />pisos de altura', icon: TableIcon },
   { id: 'gourmet', label: 'Sala gourmet con<br />quincho techado', icon: ChefHatIcon },
   { id: 'training', label: 'Training Zone', icon: DumbbellIcon },
   { id: 'jacuzzi', label: 'Rooftop con jacuzzi', icon: HotTubIcon },
@@ -194,10 +194,11 @@ const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
 
 const MAP = {
   eyebrow: <>Ubicación</>,
-  title: <>VISTAS<br />INSUPERABLES</>,
-  description: 'Despertar con el marco imponente del lago Llanquihue y los volcanes es solo el comienzo. Imagina tan solo cruzar la calle y sentir el aire fresco del sur mientras caminas por la costanera, disfrutar un café de especialidad a pocos pasos de tu puerta o terminar la tarde cenando en los mejores restaurantes de Puerto Varas. Una ubicación privilegiada para disfrutar el lago, la ciudad y el sur como parte de tu rutina.',
+  title: <>LUGARES PARA<br />DESCUBRIR</>,
+  description: 'Primera línea frente al lago, <b>Vicente Pérez Rosales 991</b>. Despertar con el marco imponente del lago Llanquihue y los volcanes es solo el comienzo. Imagina tan solo cruzar la calle y sentir el aire fresco del sur mientras caminas por la costanera, disfrutar un café de especialidad a pocos pasos de tu puerta o terminar la tarde cenando en los mejores restaurantes de Puerto Varas. Una ubicación privilegiada para disfrutar el lago, la ciudad y el sur como parte de tu rutina.',
   image: 'images/inn/mapa.png',
   logo: 'images/inn/V.png',
+  btnText: 'Lugares para descubrir',
   features: [
     { id: 'direccion', icon: 'direccion', heading: 'Vicente Pérez Rosales 991', text: 'Puerto Varas, Región de Los Lagos' },
     { id: 'telefono', icon: 'telefono', heading: '+56 9 1234 5678', text: 'Contacto directo' },
@@ -553,7 +554,7 @@ export default function Inn() {
                 </div>
                 <div className="lb-inn-map__text text-center text-lg-start">
                   <ScrollAnim animation="fade-up" className="lh-lg mb-4 mb-md-5 w-md-80">
-                    {MAP.description}
+                    <span dangerouslySetInnerHTML={{ __html: MAP.description }} />
                   </ScrollAnim>
                   <button
                     type="button"
@@ -562,7 +563,7 @@ export default function Inn() {
                     {...hover(mapRef)}
                   >
                     <MapPinIcon ref={mapRef} size={18} />
-                    <span>Ver mapa ampliado</span>
+                    <span>{MAP.btnText}</span>
                   </button>
                 </div>
               </div>

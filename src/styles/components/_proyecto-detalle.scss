@@ -277,7 +277,19 @@
   padding-bottom: 1px;
 
   &--has-hero {
-    padding-block: 0; // padding-block handled by .lb-cot-content-col so the hero image fills full height
+    padding-top: 60px; // compensa navbar fija
+    padding-bottom: 0;
+
+    .lb-cot-content-col {
+      padding-top: 0;
+      padding-bottom: 0;
+
+      @include bs.media-breakpoint-down(lg) {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+        padding-inline: 1rem;
+      }
+    }
   }
 }
 
@@ -289,6 +301,10 @@
   // Margen derecho equivalente al de .container dentro de ese espacio
   padding-right: clamp(0.75rem, calc((75vw - 1320px) / 2 + 0.75rem), 5rem);
 
+  &>.container {
+    margin-top: var(--bs-gutter-y);
+  }
+
   @include bs.media-breakpoint-down(lg) {
     padding-block: 2rem;
     padding-inline: 1rem;
@@ -298,7 +314,7 @@
   &::before {
     content: '';
     position: absolute;
-    top: 10rem;
+    top: 6rem;
     left: 0;
     transform: translateX(-100%);
     width: 0;
@@ -319,11 +335,12 @@
 .lb-cot-hero-panel {
   position: relative;
   overflow: hidden;
-  border-radius: 0 2rem 2rem 0; // speech-bubble right rounded
-  min-height: 85dvh;
+  border-bottom-right-radius: 2rem; // speech-bubble right bottom rounded
   padding: 2.5rem 2rem;
-  display: flex;
+  min-height: 620px;
   align-items: flex-end;
+  height: auto;
+  align-self: stretch;
 
   @include bs.media-breakpoint-down(lg) {
     display: none !important;
@@ -376,6 +393,21 @@
 }
 
 // Filter dropdowns — Bootstrap .dropdown provides position:relative + toggle caret
+.lb-proj-det-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lb-proj-det-filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $lb-gray-warm;
+  line-height: 1.2;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
 .lb-proj-det-filter-btn {
   min-width: 9rem;
   height: 2.125rem;
@@ -440,8 +472,13 @@
 }
 
 @include bs.media-breakpoint-down(sm) {
-  .lb-proj-det-filter-dropdown {
+  .lb-proj-det-filter-group {
     flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+  }
+
+  .lb-proj-det-filter-dropdown {
+    width: 100%;
     min-width: 0;
 
     .lb-proj-det-filter-btn {

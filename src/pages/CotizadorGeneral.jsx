@@ -13,7 +13,7 @@ const COTIZADOR_DATA = {
   filters: { row1: [], row2: [] },
   mapCaption: getProjectBySlug('inn')?.cotizador?.mapCaption || '',
   mapImage: getProjectBySlug('inn')?.cotizador?.mapImage || null,
-  floorPlan: { thumbnails: [] },
+  floorPlan: getProjectBySlug('inn')?.cotizador?.floorPlan || { thumbnails: [] },
   details: [],
   pricing: { label: getProjectBySlug('inn')?.cotizador?.pricing?.label || 'Precios desde', price: '—', shareLabel: 'Compartir' },
   ctaText: getProjectBySlug('inn')?.cotizador?.ctaText || 'Cotizar',

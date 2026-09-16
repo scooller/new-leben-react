@@ -697,6 +697,10 @@ $inn-gold-bg: #faf4e8;
 .lb-inn-cot {
   background-color: $inn-gold-bg !important;
 
+  .lb-proj-det-filter-label {
+    color: $inn-gold-dark;
+  }
+
   // Botones dorados solo en INN
   .lb-proj-det-filter-btn {
     border-color: $inn-gold;
@@ -1082,8 +1086,10 @@ $inn-gold-bg: #faf4e8;
 .lb-inn-interiorismo {
   .designers {
     margin-bottom: 2rem;
+    gap: 10px;
 
     @include bs.media-breakpoint-up(lg) {
+      gap: 130px;
       margin-bottom: -10rem;
     }
   }
@@ -1116,11 +1122,12 @@ $inn-gold-bg: #faf4e8;
 
   &__designer-img {
     position: absolute;
-    inset: -12% 0;
     z-index: 1;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center top;
+    background-position: 50% 10%;
+    height: 100%;
+    width: 100%;
 
     @include bs.media-breakpoint-down(md) {
       background-position: center center;

@@ -134,11 +134,11 @@ export default function InteriorismoSection({
           </div>
 
           <div className="col-lg-6 d-flex flex-column gap-4">
-            <div className="row designers g-4 h-100">
+            <div className="d-flex designers g-4 h-100">
               {designers.map((designer, index) => (
                 <div
                   key={designer.name || index}
-                  className="col-12 col-md-6 d-flex"
+                  className="d-flex col"
                 >
                   <button
                     type="button"

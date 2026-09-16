@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.70] - 2026-09-16
+
+### Fixed
+- `Cotizador.jsx`: incorporado `ResizeObserver` en `.container` (`containerRef`) para sincronizar dinámicamente y al píxel la altura de la columna hero `.lb-cot-hero-panel` (`heroPanelRef.current.style.height = container.offsetHeight`) ante cualquier cambio de estado, filtro o planta.
+- `_proyecto-detalle.scss`: eliminado el `padding-top` y `padding-bottom` (ambos en `0`) en `.lb-cot-content-col` dentro de `.lb-proj-det-cotizador--has-hero` para evitar que la columna agregue desfase vertical respecto al `.container` interno, logrando igualdad exacta de altura entre la imagen y el cotizador.
+
+## [0.9.69] - 2026-09-16
+
+### Fixed
+- `CotizadorGeneral.jsx`: habilitada la carga de miniaturas/mockups en `COTIZADOR_DATA.floorPlan` utilizando los datos de `getProjectBySlug('inn')?.cotizador?.floorPlan` al igual que en `/inn-test`, permitiendo visualizar los renders y fotografías del departamento en las miniaturas y galería del cotizador general.
+- `Cotizador.jsx`: preservado `object-fit-contain` hardcodeado en la imagen principal y eliminadas expresiones dangling no utilizadas.
+
+## [0.9.68] - 2026-09-16
+
+### Fixed
+- `_proyecto-detalle.scss`: sincronizada dinámicamente la altura de la columna `.lb-cot-hero-panel` con el contenido derecho (`.lb-cot-content-col`) mediante flexbox stretch (`height: auto`, `align-self: stretch`), eliminando la altura rígida fija (`73dvh`) y el margen desincronizado.
+- `_proyecto-detalle.scss`: reubicado el espaciado de la navbar fija a `padding-top: 60px` en `.lb-proj-det-cotizador--has-hero` para que ambas columnas comiencen exactamente en la misma cota vertical, y ajustado el padding inferior de `.lb-cot-content-col` (`1rem`) para que la imagen termine alineada con los botones de acción (`.btn-outline-dark`).
+- `Cotizador.jsx`: eliminado el margen inferior sobrante `mb-4` en la fila principal `#detalle-cot` (`mb-0`) cuando `hasHero` está activo.
+
+## [0.9.67] - 2026-09-16
+
+### Added
+- `Cotizador.jsx`: agregado label semántico visible encima de cada dropdown de filtro (`.lb-proj-det-filter-label` dentro de `.lb-proj-det-filter-group`), tanto en modo universal (Comuna, Proyecto, Tipología, Orientación) como en modo detalle de proyecto (Tipología, Tipo de producto, Piso, Planta), preservando el texto por defecto / placeholder dentro del botón.
+- `_proyecto-detalle.scss`: estilos para `.lb-proj-det-filter-group` y `.lb-proj-det-filter-label`, alineando los botones de filtros y badges al pie (`align-items-end`) y manteniendo distribución responsiva en móviles (grilla de 2 columnas).
+- `_inn.scss`: color contextualizado `$inn-gold-dark` para `.lb-proj-det-filter-label` dentro de `.lb-inn-cot`.
+
 ## [0.9.66] - 2026-09-15
 
 ### Fixed

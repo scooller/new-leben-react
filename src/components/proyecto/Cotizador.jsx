@@ -104,7 +104,7 @@ async function fetchPages(baseUrl) {
 }
 
 /** Dropdown filter component */
-function FilterDropdown({ label, options, selected, onSelect }) {
+function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -114,34 +114,39 @@ function FilterDropdown({ label, options, selected, onSelect }) {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  const defaultText = placeholder || label
+
   return (
-    <div className="dropdown lb-proj-det-filter-dropdown" ref={ref}>
-      <button
-        type="button"
-        className="btn btn-outline-dark btn-sm dropdown-toggle lb-proj-det-filter-btn"
-        onClick={() => setOpen(!open)}
-      >
-        {selected || label}
-      </button>
-      {open && (
-        <ul className="dropdown-menu show lb-proj-det-filter-menu">
-          <li>
-            <button className="dropdown-item" onClick={() => { onSelect(''); setOpen(false) }}>
-              {label}
-            </button>
-          </li>
-          {options.map((opt) => (
-            <li key={opt}>
-              <button
-                className={`dropdown-item ${selected === opt ? 'active' : ''}`}
-                onClick={() => { onSelect(opt); setOpen(false) }}
-              >
-                {opt}
+    <div className="lb-proj-det-filter-group" ref={ref}>
+      {label && <label className="lb-proj-det-filter-label">{label}</label>}
+      <div className="dropdown lb-proj-det-filter-dropdown">
+        <button
+          type="button"
+          className="btn btn-outline-dark btn-sm dropdown-toggle lb-proj-det-filter-btn"
+          onClick={() => setOpen(!open)}
+        >
+          {selected || defaultText}
+        </button>
+        {open && (
+          <ul className="dropdown-menu show lb-proj-det-filter-menu">
+            <li>
+              <button className="dropdown-item" onClick={() => { onSelect(''); setOpen(false) }}>
+                {defaultText}
               </button>
             </li>
-          ))}
-        </ul>
-      )}
+            {options.map((opt) => (
+              <li key={opt}>
+                <button
+                  className={`dropdown-item ${selected === opt ? 'active' : ''}`}
+                  onClick={() => { onSelect(opt); setOpen(false) }}
+                >
+                  {opt}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }
@@ -175,10 +180,25 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const heroPanelRef = useRef(null)
   const heroBgRef = useRef(null)
   const heroTextRef = useRef(null)
+  const containerRef = useRef(null)
   const [showCotizar, setShowCotizar] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showVistas, setShowVistas] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  // Sincronizar altura de .lb-cot-hero-panel exactamente con .lb-cot-content-col > .container
+  useEffect(() => {
+    if (!hasHero || !containerRef.current || !heroPanelRef.current) return
+    const syncHeight = () => {
+      if (containerRef.current && heroPanelRef.current) {
+        heroPanelRef.current.style.height = `${containerRef.current.offsetHeight}px`
+      }
+    }
+    syncHeight()
+    const ro = new ResizeObserver(syncHeight)
+    ro.observe(containerRef.current)
+    return () => ro.disconnect()
+  }, [hasHero])
 
   // Parallax animation for hero panel background and text
   useEffect(() => {
@@ -512,14 +532,11 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   }, [switching, selected])
 
   const mainImage = displayData.floorPlan.thumbnails[imgIndex] ?? displayData.floorPlan.image
-  // Planta (floor plan) renders contained; gallery/mockup images render covered
-  const plantaImageUrl = activePlanta?.interior_image_url || null
-  const planFitClass = mainImage && mainImage === plantaImageUrl ? 'object-fit-contain' : 'object-fit-cover'
 
   const content = (
-    <div className="container">
+    <div className="container g-4" ref={hasHero ? containerRef : undefined}>
       {/* Header + Filters */}
-      <div className="row align-items-start g-4 mb-4" animation="fade-up">
+      <div className="row align-items-start mb-4" animation="fade-up">
         {!hasHero && (
           <div className="col-lg-3">
             <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
@@ -528,60 +545,68 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
         {displayData.filters && (
           <ScrollAnim as="div" className={`${hasHero ? 'col-lg-12 ps-0 ps-lg-5 pt-3' : 'col-lg-9'} lb-proj-det-cot-filters-col`}>
-            <div className="lb-proj-det-cot-filters d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 gap-lg-3">
+            <div className="lb-proj-det-cot-filters d-flex flex-column flex-lg-row align-items-stretch align-items-lg-end gap-2 gap-lg-3">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
                   <span className="spinner-border spinner-border-sm" role="status" />
                   <span className="text-muted small">Cargando plantas…</span>
                 </div>
               ) : (<>
-                <div className="d-flex flex-wrap gap-2 flex-grow-1">
+                <div className="d-flex flex-wrap gap-2 flex-grow-1 align-items-end">
                   {universal ? (<>
                     <FilterDropdown
-                      label="Todas las comunas"
+                      label="Comuna"
+                      placeholder="Todas las comunas"
                       options={filterOptions.comuna}
                       selected={filters.comuna}
                       onSelect={(v) => selectFilter({ comuna: v, proyecto: '', tipologia: '', orientacion: '' })}
                     />
                     <FilterDropdown
-                      label="Todos los proyectos"
+                      label="Proyecto"
+                      placeholder="Todos los proyectos"
                       options={filterOptions.proyecto}
                       selected={filters.proyecto}
                       onSelect={(v) => selectFilter((prev) => ({ ...prev, proyecto: v, tipologia: '', orientacion: '' }))}
                     />
                     <FilterDropdown
-                      label="Todas las tipologías"
+                      label="Tipología"
+                      placeholder="Todas las tipologías"
                       options={filterOptions.tipologia}
                       selected={filters.tipologia}
                       onSelect={(v) => selectFilter((f) => ({ ...f, tipologia: v }))}
                     />
                     <FilterDropdown
-                      label="Todas las orientaciones"
+                      label="Orientación"
+                      placeholder="Todas las orientaciones"
                       options={filterOptions.orientacion}
                       selected={filters.orientacion}
                       onSelect={(v) => selectFilter((f) => ({ ...f, orientacion: v }))}
                     />
                   </>) : (<>
                     <FilterDropdown
-                      label="Todas las tipologías"
+                      label="Tipología"
+                      placeholder="Todas las tipologías"
                       options={apiId ? filterOptions.tipologia : displayData.filters.row1[0].options}
                       selected={filters.tipologia}
                       onSelect={(v) => setFilters((f) => ({ ...f, tipologia: v }))}
                     />
                     <FilterDropdown
-                      label="Todos los tipos de producto"
+                      label="Tipo de producto"
+                      placeholder="Todos los tipos de producto"
                       options={apiId ? filterOptions.producto : displayData.filters.row1[1].options}
                       selected={filters.producto}
                       onSelect={(v) => selectFilter((f) => ({ ...f, producto: v }))}
                     />
                     <FilterDropdown
-                      label="Todos los pisos"
+                      label="Piso"
+                      placeholder="Todos los pisos"
                       options={apiId ? filterOptions.piso.map(String) : displayData.filters.row2[0].options}
                       selected={filters.piso ? String(filters.piso) : ''}
                       onSelect={(v) => selectFilter((f) => ({ ...f, piso: v }))}
                     />
                     <FilterDropdown
-                      label="Todas las plantas"
+                      label="Planta"
+                      placeholder="Todas las plantas"
                       options={apiId ? filterOptions.planta : displayData.filters.row2[1].options}
                       selected={filters.planta}
                       onSelect={(v) => selectFilter((f) => ({ ...f, planta: v }))}
@@ -614,7 +639,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
       {/* Main row: esquicio + plan + details (or empty state) */}
       {/* Main row: map always visible + content area changes (skeleton/empty/plan) */}
-      <div className={`${hasHero ? 'ms-4' : ''} row g-4 mb-4 lb-proj-det-cot-main`} id="detalle-cot">
+      <div className={`${hasHero ? 'ms-4 mb-0' : 'mb-4'} row g-4 lb-proj-det-cot-main`} id="detalle-cot">
 
         {/* Esquicio — hidden during empty state (no planta selected) */}
         {showEmptyState ? null : (
@@ -698,7 +723,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                   <img
                     src={mainImage}
                     alt="Planta del departamento"
-                    className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive ${planFitClass}${switching ? ' is-loading' : ''}`}
+                    className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
                     onLoad={() => setSwitching(false)}
                     loading="lazy"
                     decoding="async"
