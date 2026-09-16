@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.71] - 2026-09-16
+
+### Fixed
+- `CotizadorGeneral.jsx`: habilitada y conectada la sección de proyectos principales ("Main Projects") con los hooks `useSearchParams`, `useDynamicFilters` y `useFilteredGroups`, soportando filtrado por comuna, tipología y rango de precios UF, reseteo de filtros (`setSearchParams({})`), animaciones con `ScrollAnim`, y componentes de renderizado de tarjetas (`ProjectCard` y `ProjectCardSkeleton`).
+- `CotizadorGeneral.jsx`: adaptado `useApiProjects` para exponer el estado completo `{ data, loading, error }`, permitiendo tanto la carga del cotizador general como los estados de carga y error en la grilla de proyectos.
+- `Alternatives.jsx`: removida importación no utilizada de `Link` para cumplir con las reglas estrictas de linter (`max-warnings 0`).
+
 ## [0.9.70] - 2026-09-16
 
 ### Fixed

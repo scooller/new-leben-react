@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { apiFetch } from '../../lib/apiFetch.js'
 import { mapApiProject } from '../../lib/projectUtils.js'
 import ScrollAnim from '../ScrollAnim.jsx'
@@ -40,9 +39,6 @@ export default function Alternatives({ data }) {
             </div>
           ))}
         </ScrollAnim>
-        <div className="d-flex justify-content-end mt-4">
-          <Link to="/proyectos" className="btn btn-dark text-decoration-none">Ver todos los proyectos</Link>
-        </div>
       </div>
     </section>
   )
