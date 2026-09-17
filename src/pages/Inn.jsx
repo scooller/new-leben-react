@@ -521,7 +521,6 @@ export default function Inn() {
 
         <CarouselNav
           items={ESPACIOS_COMUNES_NAV_ITEMS}
-          targetId="espacios"
           variant="stacked"
           activeIndex={activeEspacioSlide}
           onSelect={setActiveEspacioSlide}

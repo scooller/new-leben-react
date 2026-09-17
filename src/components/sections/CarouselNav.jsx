@@ -24,10 +24,13 @@ export default function CarouselNav({
   onSelect,
   variant = 'button', // 'button' = degradado con texto+icono en línea | 'stacked' = icono arriba, texto debajo, sin degradado
   className = '',
+  scrollToTarget = false,
 }) {
   const handleSelect = (index) => {
     onSelect?.(index)
-    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (scrollToTarget && targetId) {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   return (

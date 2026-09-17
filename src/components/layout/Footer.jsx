@@ -31,6 +31,12 @@ export default function Footer() {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.street}, ${address.city}`)}`
   const phoneLink = `tel:${phone.replace(/\D/g, '')}`
 
+  const corporateLinks = [
+    { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
+    { label: 'Bases legales', to: '/bases-legales' },
+    { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
+  ]
+
   return (
     <footer className="lb-footer container-fluid">
       <div className="container text-white pt-4">
@@ -118,6 +124,17 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Información Corporativa */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-corporate-strip text-center text-md-start">
+          <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 ms-auto">
+            {corporateLinks.map((link) => (
+              <Link key={link.label} to={link.to} className="lb-footer-link">
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Copyright strip */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-copyright-strip text-center text-md-start">
           <span className="lb-copyright">{copyright}</span>
@@ -126,7 +143,6 @@ export default function Footer() {
               const routeMap = {
                 'Bases legales': '/bases-legales',
                 'Información de la empresa': '/informacion-de-la-empresa',
-                'Privacidad': '/informacion-de-la-empresa',
                 'Términos': '/bases-legales',
                 'Política de cookies': '/cookies',
                 'Cookies': '/cookies',

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.82] - 2026-09-17
+
+### Added
+- `Footer.jsx`: añadida sección "Información Corporativa" sobre la franja de copyright/routeMap con enlaces a Trabaja en Leben (`/trabaja-en-leben`), Bases legales (`/bases-legales`) y Proceso de Reserva en línea (`/proceso-reserva-en-linea`).
+
+### Removed
+- `Navbar.jsx`: removido bloque comentado de Información Corporativa en el menú de navegación superior.
+
+## [0.9.81] - 2026-09-17
+
+### Fixed
+- `CarouselNav.jsx` & `Inn.jsx`: eliminado el desplazamiento automático de scroll (`scrollIntoView`) al hacer clic en las pestañas/botones de navegación de la sección "Espacios", permitiendo cambiar de diapositiva sin desplazar la pantalla.
+
 ## [0.9.80] - 2026-09-17
 
 ### Added

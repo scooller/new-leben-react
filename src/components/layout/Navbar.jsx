@@ -70,14 +70,6 @@ const menuGroups = [
       { label: 'Acceso Colaboradores', href: 'https://ileben.cl/organigrama/' },
     ],
   },
-  {
-    title: 'Información Corporativa',
-    items: [
-      { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
-      { label: 'Bases legales', to: '/bases-legales' },
-      { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
-    ],
-  }
 ]
 
 const mainMobileLinks = mainLinks.slice(0, 1)
