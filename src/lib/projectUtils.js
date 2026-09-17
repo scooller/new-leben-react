@@ -4,21 +4,21 @@ const etapaLabel = (etapa) =>
   : /terminacion/.test(etapa) ? 'Próxima Entrega'
   : etapa
 
-/** Collapse tipologías into grouped ranges: '2D - 3D - 4D · 2B - 3B - 4B' */
+/** Collapse tipologías into grouped ranges: '2D - 3D - 4D' (only dorms) */
 export function tipologiaSummary(tipologias) {
   const dorms = new Set()
-  const baths = new Set()
   const others = new Set()
   for (const t of tipologias || []) {
     if (!t.programa || t.programa === 'LOCAL' || t.tipo_producto === 'LOCAL') continue
     const mD = t.programa.trim().match(/^(\d+)\s*D/i)
-    const mB = t.programa.trim().match(/\+\s*(\d+)\s*B/i)
-    if (mD && mB) { dorms.add(+mD[1]); baths.add(+mB[1]) }
-    else others.add(t.programa.trim())
+    if (mD) {
+      dorms.add(+mD[1])
+    } else {
+      others.add(t.programa.trim())
+    }
   }
   const parts = []
   if (dorms.size) parts.push([...dorms].sort((a, b) => a - b).map((d) => `${d}D`).join(' - '))
-  if (baths.size) parts.push([...baths].sort((a, b) => a - b).map((b) => `${b}B`).join(' - '))
   return [...parts, ...others].join(' · ')
 }
 

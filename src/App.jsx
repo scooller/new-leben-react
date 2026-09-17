@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
@@ -24,7 +24,6 @@ import ProjectOfMonthSection from './components/sections/ProjectOfMonthSection.j
 import VideosSection from './components/sections/VideosSection.jsx'
 
 // Pages — lazy loaded
-const Proyectos = lazy(() => import('./pages/Proyectos.jsx'))
 const ProyectoDetalle = lazy(() => import('./pages/ProyectoDetalle.jsx'))
 const Brokers = lazy(() => import('./pages/Brokers.jsx'))
 const Login = lazy(() => import('./pages/Login.jsx'))
@@ -94,11 +93,7 @@ export default function App() {
             <Inn />
           </Suspense>
         } />
-        <Route path="/proyectos" element={
-          <Suspense fallback={<PageLoader />}>
-            <Proyectos />
-          </Suspense>
-        } />
+        <Route path="/proyectos" element={<Navigate to="/cotizador#proyectos" replace />} />
         <Route path="/proyectos/:slug" element={
           <Suspense fallback={<PageLoader />}>
             <ProyectoDetalle />

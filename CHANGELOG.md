@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.80] - 2026-09-17
+
+### Added
+- `public/images/placeholder-floorplan.svg` y `public/images/placeholder-esquicio.svg`: placeholders visuales arquitectónicos para planta y esquicio.
+
+### Changed
+- `Cotizador.jsx`: preservada la estructura visual completa de `lb-proj` en estado inicial / sin filtros, mostrando valores en guion (`UF -`, `- m²`, `-`) e imágenes placeholder que se actualizan automáticamente al filtrar datos reales.
+- `Cotizador.jsx`: añadido mockup de prueba para Edificio Inn, ocultando el primer thumbnail en `lb-proj-det-cot-thumb` y seleccionando el segundo por defecto.
+- `CotizadorGeneral.jsx`: inicializado `COTIZADOR_DATA` con estructura base sin datos pre-cargados.
+
+## [0.9.79] - 2026-09-17
+
+### Changed
+- `projectUtils.js`: actualizada función `tipologiaSummary` para omitir la cuenta de baños y mostrar exclusivamente el rango/listado de dormitorios (`2D - 3D - 4D`) en las tarjetas de la sección de proyectos.
+
+## [0.9.78] - 2026-09-17
+
+### Changed
+- `App.jsx`: redirigida la ruta `/proyectos` permanentemente hacia `/cotizador#proyectos` mediante `<Navigate replace />`.
+- `VideosSection.jsx`: enlace actualizado a `/cotizador#proyectos`.
+- `Diferenciadores.jsx`: redirección de buscador actualizada a `/cotizador?${params}#proyectos`.
+- `ProyectoDetalle.jsx`: botón de retorno actualizado a `/cotizador#proyectos`.
+- `Navbar.jsx`: actualizado `pageLinksMap` para registrar `/cotizador` con anclas a `#cotizador` y `#proyectos`.
+
+## [0.9.77] - 2026-09-17
+
+### Fixed
+- `_navbar.scss`: configurado ancho dinámico intrínseco (`width: max-content`, `min-width: max-content`, `max-width: calc(100vw - 2rem)`) y `white-space: nowrap` en `.lb-dropdown` y `.lb-dropdown-link`, evitando que textos extensos como "Canal de denuncias y consultas" queden truncados.
+
+## [0.9.76] - 2026-09-17
+
+### Changed
+- `Navbar.jsx`: activado `featured: true` en el enlace `'Locales comerciales'` del menú desplegable y soporte de `target="_blank"` / `rel="noopener noreferrer"` para enlaces externos automáticos.
+
+## [0.9.75] - 2026-09-17
+
+### Added
+- `Navbar.jsx`: soporte en `Navlink` para destacar links mediante propiedades `featured: true` (o `highlight: true`) y `badge: 'Texto'` tanto en barra superior como en menú dropdown móvil.
+- `_navbar.scss`: clases `.lb-nav-link--featured` (estilo pill/botón CTA), `.lb-nav-badge`, `.lb-dropdown-link--featured` y `.lb-dropdown-badge` con estilos responsivos.
+
 ## [0.9.74] - 2026-09-16
 
 ### Added

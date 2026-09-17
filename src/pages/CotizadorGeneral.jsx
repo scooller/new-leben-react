@@ -11,17 +11,16 @@ import ProjectCardSkeleton from '../components/ProjectCardSkeleton.jsx'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { groupByComuna } from '../lib/projectUtils.js'
-import { getProjectBySlug } from '../data/projects.js'
 
 const COTIZADOR_DATA = {
-  title: getProjectBySlug('inn')?.cotizador?.title || 'Cotiza tu próximo departamento',
+  title: 'Cotiza tu próximo departamento',
   filters: { row1: [], row2: [] },
-  mapCaption: getProjectBySlug('inn')?.cotizador?.mapCaption || '',
-  mapImage: getProjectBySlug('inn')?.cotizador?.mapImage || null,
-  floorPlan: getProjectBySlug('inn')?.cotizador?.floorPlan || { thumbnails: [] },
+  mapCaption: '',
+  mapImage: null,
+  floorPlan: { thumbnails: [] },
   details: [],
-  pricing: { label: getProjectBySlug('inn')?.cotizador?.pricing?.label || 'Precios desde', price: '—', shareLabel: 'Compartir' },
-  ctaText: getProjectBySlug('inn')?.cotizador?.ctaText || 'Cotizar',
+  pricing: { label: 'Precio', price: 'UF -', shareLabel: 'Compartir' },
+  ctaText: 'Cotizar',
 }
 
 /** Fetch projects from API */

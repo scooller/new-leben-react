@@ -103,7 +103,7 @@ export default function VideosSection() {
               <ScrollAnim className="col-md-6 col-12 d-flex justify-content-md-end justify-content-start">
                 <div className="btn-group">
                   <Link to="/inn-test" className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
-                  <Link to="/proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
+                  <Link to="/cotizador#proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
                 </div>
               </ScrollAnim>
             </div>

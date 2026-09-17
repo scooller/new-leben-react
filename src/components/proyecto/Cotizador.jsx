@@ -56,6 +56,18 @@ function ActionButton({ icon: Icon, variant = 'btn-outline-dark', className = ''
 
 const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, compass: Compass, maximize: Maximize }
 
+const PLACEHOLDER_FLOORPLAN = '/images/placeholder-floorplan.svg'
+const PLACEHOLDER_ESQUICIO = '/images/placeholder-esquicio.svg'
+
+const DEFAULT_EMPTY_DETAILS = [
+  { icon: 'layers', label: 'Planta', value: '-' },
+  { icon: 'expand', label: 'Superficie útil', value: '- m²' },
+  { icon: 'home', label: 'Dorm + Baño', value: '-' },
+  { icon: 'compass', label: 'Orientación', value: '-' },
+  { icon: 'sun', label: 'Terraza', value: '- m²' },
+  { icon: 'maximize', label: 'Superficie total', value: '- m²' },
+]
+
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
@@ -447,23 +459,72 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   // where the empty-state message renders right away (no skeleton flash)
   const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
 
-  // Active details: from filtered planta if available, else from data
-  // Thumbnails: real planta image only (no fake mockup fallback)
+  // Detectar si el proyecto filtrado corresponde a Edificio Inn
+  const isInn = Boolean(
+    (filters.proyecto && norm(filters.proyecto).includes('inn')) ||
+    (activeProject && norm(activeProject.name).includes('inn')) ||
+    apiId === 1 ||
+    apiId === 'inn' ||
+    urlParams.slug === 'inn'
+  )
+
+  // Active details: from filtered planta if available, else placeholder '-'
   const displayData = useMemo(() => {
-    if ((universal && !plantas.length) || (!universal && (!apiId || !plantas.length))) return safeActiveData
+    if ((universal && !plantas.length) || (!universal && (!apiId || !plantas.length))) {
+      return {
+        ...safeActiveData,
+        mapImage: safeActiveData.mapImage || PLACEHOLDER_ESQUICIO,
+        details: safeActiveData.details?.length ? safeActiveData.details : DEFAULT_EMPTY_DETAILS,
+        pricing: { label: 'Precio', price: 'UF -', shareLabel: 'Compartir' },
+        floorPlan: {
+          image: safeActiveData.floorPlan?.image || PLACEHOLDER_FLOORPLAN,
+          thumbnails: safeActiveData.floorPlan?.thumbnails || [],
+        },
+      }
+    }
     const planta = filteredPlantas[Math.min(selected, filteredPlantas.length - 1)]
-    if (!planta) return { ...safeActiveData, details: [], pricing: { ...safeActiveData.pricing, price: 'Sin resultados' } }
+    if (!planta) {
+      return {
+        ...safeActiveData,
+        mapImage: safeActiveData.mapImage || PLACEHOLDER_ESQUICIO,
+        details: DEFAULT_EMPTY_DETAILS,
+        pricing: { ...safeActiveData.pricing, price: 'UF -' },
+        floorPlan: {
+          image: PLACEHOLDER_FLOORPLAN,
+          thumbnails: [],
+        },
+      }
+    }
     const enriched = plantaToDetails(planta)
     const thumbnails = enriched.floorPlanImage
       ? [enriched.floorPlanImage, ...safeActiveData.floorPlan.thumbnails]
       : safeActiveData.floorPlan.thumbnails
     return {
       ...safeActiveData,
+      mapImage: safeActiveData.mapImage || enriched.floorPlanImage || PLACEHOLDER_ESQUICIO,
       details: enriched.details,
       pricing: { ...safeActiveData.pricing, ...enriched.pricing },
       floorPlan: { ...safeActiveData.floorPlan, thumbnails },
     }
   }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
+
+  // Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto
+  const visibleThumbs = useMemo(() => {
+    const allThumbs = displayData.floorPlan?.thumbnails || []
+    if (isInn && allThumbs.length > 1) {
+      return allThumbs.slice(1).map((src, idx) => ({ src, originalIndex: idx + 1 }))
+    }
+    return allThumbs.map((src, idx) => ({ src, originalIndex: idx }))
+  }, [isInn, displayData.floorPlan?.thumbnails])
+
+  // Mockup de prueba: para Edificio Inn seleccionar el segundo thumb por defecto
+  useEffect(() => {
+    if (isInn && displayData.floorPlan?.thumbnails?.length > 1) {
+      setImgIndex(1)
+    } else {
+      setImgIndex(0)
+    }
+  }, [isInn, selected, displayData.floorPlan?.thumbnails?.length])
 
   // Resolve selected index from URL planta ID or external selection once filteredPlantas load
   useEffect(() => {
@@ -474,7 +535,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       : 0
     const valid = idx >= 0 ? idx : 0
     setSelected(valid)
-    setImgIndex(0)
+    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
     if (urlPlantaId != null || urlParams.slug) {
       const planta = filteredPlantas.find((p) => p.id === urlPlantaId)
       if (planta) {
@@ -486,7 +547,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         })
       }
     }
-  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id])
+  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update URL when selection changes — only if user navigated to a specific planta or has filters
   useEffect(() => {
@@ -510,9 +571,15 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const openGallery = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    const images = displayData.floorPlan.thumbnails.map((src) => ({ src, type: 'image' }))
+    const thumbsToUse = isInn && displayData.floorPlan.thumbnails?.length > 1
+      ? displayData.floorPlan.thumbnails.slice(1)
+      : displayData.floorPlan.thumbnails
+    const images = (thumbsToUse && thumbsToUse.length ? thumbsToUse : [mainImage])
+      .filter(Boolean)
+      .map((src) => ({ src, type: 'image' }))
     if (!images.length) return
-    Fancybox.show(images, { startIndex: imgIndex })
+    const targetIdx = isInn && imgIndex > 0 ? imgIndex - 1 : imgIndex
+    Fancybox.show(images, { startIndex: Math.max(0, Math.min(targetIdx, images.length - 1)) })
   }
 
   // Navigate between plantas — show loading effect until the new image loads
@@ -521,7 +588,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     if (next === selected || switching) return
     setSwitching(true)
     setSelected(next)
-    setImgIndex(0)
+    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
   }
 
   // Safety: never get stuck in loading state (cached or failed images)
@@ -531,7 +598,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     return () => clearTimeout(t)
   }, [switching, selected])
 
-  const mainImage = displayData.floorPlan.thumbnails[imgIndex] ?? displayData.floorPlan.image
+  const mainImage = displayData.floorPlan?.thumbnails?.[imgIndex] ?? displayData.floorPlan?.image ?? PLACEHOLDER_FLOORPLAN
 
   const content = (
     <div className="container g-4" ref={hasHero ? containerRef : undefined}>
@@ -637,199 +704,135 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         )}
       </div>
 
-      {/* Main row: esquicio + plan + details (or empty state) */}
-      {/* Main row: map always visible + content area changes (skeleton/empty/plan) */}
+      {/* Main row: esquicio + plan + details con placeholders y estructura lb-proj */}
       <div className={`${hasHero ? 'ms-4 mb-0' : 'mb-4'} row g-4 lb-proj-det-cot-main`} id="detalle-cot">
-
-        {/* Esquicio — hidden during empty state (no planta selected) */}
-        {showEmptyState ? null : (
-          <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
-            {showSkeleton ? (
-              <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
-            ) : displayData.mapImage ? (
-              <div className="lb-proj-det-cot-map-canvas">
-                <img
-                  src={displayData.mapImage}
-                  alt="Esquicio del edificio"
-                  className="w-100 h-100 object-fit-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-                {displayData.mapCaption && (
-                  <p className="lb-proj-det-cot-map-caption position-absolute start-0 bottom-0 text-muted small mb-0 m-2 px-2 py-1 bg-white bg-opacity-75 rounded">{displayData.mapCaption}</p>
-                )}
-              </div>
-            ) : null}
-          </ScrollAnim>
-        )}
-
-        {/* Content: skeleton | empty state | floor plan + details */}
-        {/* Empty state renders immediately — initial fetch with no filters shouldn't skeleton */}
-        {showSkeleton ? (
-          <>
-            {/* Skeleton: floor plan card */}
-            <div className="col-lg-6 lb-proj-det-cot-plan-card">
-              <div className="lb-skeleton" style={{ width: '100%', height: '300px', borderRadius: '0.5rem' }} />
-            </div>
-
-            {/* Skeleton: details grid (2 cols, 6 items) + pricing */}
-            <div className="col-lg-3 lb-proj-det-cot-details">
-              <div className="lb-proj-det-cot-detail-grid">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="d-flex align-items-center gap-2">
-                    <div className="lb-skeleton rounded-circle" style={{ width: '24px', height: '24px', flexShrink: 0 }} />
-                    <div className="flex-grow-1">
-                      <div className="lb-skeleton" style={{ width: '4rem', height: '0.75rem' }} />
-                      <div className="lb-skeleton mt-1" style={{ width: '5.5rem', height: '1rem' }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4">
-                <div className="lb-skeleton" style={{ width: '6rem', height: '0.75rem' }} />
-                <div className="lb-skeleton mt-1" style={{ width: '8rem', height: '1.5rem' }} />
-              </div>
-            </div>
-
-            {/* Skeleton: bottom row — thumbnails + CTA */}
-            <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
-              <div className="d-flex gap-2 flex-wrap">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="lb-skeleton" style={{ width: '64px', height: '64px', borderRadius: '0.375rem' }} />
-                ))}
-              </div>
-            </div>
-            <div className="col-lg-3 lb-proj-det-cot-bottom">
-              <div className="lb-skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '0.375rem' }} />
-            </div>
-          </>
-        ) : showEmptyState ? (
-          <div className="col-lg-9 offset-lg-4 text-start py-5 lb-cot-empty-state">
-            <div className="alert alert-warning d-inline-block text-center" role="alert">
-              <p className="text-muted mb-1">{hasFilters ? 'Sin resultados para tu búsqueda.' : 'Usa los filtros para encontrar tu departamento ideal.'}</p>
-              {hasFilters && (
-                <p className="text-muted small">Prueba con otra combinación de filtros.</p>
+        {/* Esquicio — canvas con imagen real o placeholder */}
+        <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
+          {showSkeleton ? (
+            <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
+          ) : (
+            <div className="lb-proj-det-cot-map-canvas">
+              <img
+                src={displayData.mapImage || PLACEHOLDER_ESQUICIO}
+                alt="Esquicio del edificio"
+                className="w-100 h-100 object-fit-contain"
+                loading="lazy"
+                decoding="async"
+              />
+              {displayData.mapCaption && (
+                <p className="lb-proj-det-cot-map-caption position-absolute start-0 bottom-0 text-muted small mb-0 m-2 px-2 py-1 bg-white bg-opacity-75 rounded">{displayData.mapCaption}</p>
               )}
             </div>
+          )}
+        </ScrollAnim>
+
+        {/* Floor plan card */}
+        <div className="col-lg-6 lb-proj-det-cot-plan-card">
+          <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
+            {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
+            <img
+              src={mainImage || PLACEHOLDER_FLOORPLAN}
+              alt="Planta del departamento"
+              className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
+              onLoad={() => setSwitching(false)}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
-        ) : (
-          <>
+          {filteredPlantas.length > 1 && (<>
+            <button
+              className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
+              onClick={() => changePlanta(-1)}
+              disabled={selected <= 0}
+              aria-label="Planta anterior"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
+              onClick={() => changePlanta(1)}
+              disabled={selected >= filteredPlantas.length - 1}
+              aria-label="Planta siguiente"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>)}
+        </div>
 
-            {/* Floor plan card */}
-            <div className="col-lg-6 lb-proj-det-cot-plan-card">
-              <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
-                {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
-                {mainImage ? (
-                  <img
-                    src={mainImage}
-                    alt="Planta del departamento"
-                    className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
-                    onLoad={() => setSwitching(false)}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <div className="d-flex align-items-center justify-content-center text-muted small" style={{ minHeight: '18rem' }}>
-                    Sin imágenes disponibles para esta planta
-                  </div>
-                )}
-              </div>
-              {filteredPlantas.length > 1 && (<>
-                <button
-                  className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
-                  onClick={() => changePlanta(-1)}
-                  disabled={selected <= 0}
-                  aria-label="Planta anterior"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
-                  onClick={() => changePlanta(1)}
-                  disabled={selected >= filteredPlantas.length - 1}
-                  aria-label="Planta siguiente"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </>)}
-            </div>
-
-            {/* Details grid */}
-            <div className="col-lg-3 lb-proj-det-cot-details">
-              {displayData.details?.length > 0 && (
-                <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
-                  {displayData.details.map((d) => (
-                    <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
-                      <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
-                        {(() => { const Icon = DETAIL_ICONS[d.icon] ?? Layers; return <Icon size={24} /> })()}
-                      </span>
-                      <div className="d-flex flex-column">
-                        <span className="lb-proj-det-cot-detail-label">{d.label}</span>
-                        <span className="lb-proj-det-cot-detail-value">{d.value}</span>
-                      </div>
-                    </div>
-                  ))}
-                </ScrollAnim>
-              )}
-
-              {/* Pricing */}
-              <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
-                <div className="row align-items-end">
-                  <div className="col-md">
-                    <span className="lb-proj-det-cot-price-label">{displayData.pricing.label}</span>
-                    <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
-                      <span className="lb-proj-det-cot-price">{displayData.pricing.price}</span>
-                    </div>
-                  </div>
-                  <div className="col-md">
-                    <button
-                      className="btn btn-danger w-100 lb-proj-det-cot-cta"
-                      onClick={() => setShowCotizar(true)}
-                    >
-                      {displayData.ctaText}
-                    </button>
-                  </div>
+        {/* Details grid */}
+        <div className="col-lg-3 lb-proj-det-cot-details">
+          <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
+            {(displayData.details?.length ? displayData.details : DEFAULT_EMPTY_DETAILS).map((d) => (
+              <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
+                <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
+                  {(() => { const Icon = DETAIL_ICONS[d.icon] ?? Layers; return <Icon size={24} /> })()}
+                </span>
+                <div className="d-flex flex-column">
+                  <span className="lb-proj-det-cot-detail-label">{d.label}</span>
+                  <span className="lb-proj-det-cot-detail-value">{d.value}</span>
                 </div>
-              </ScrollAnim>
-            </div>
+              </div>
+            ))}
+          </ScrollAnim>
 
-            {/* Bottom row: map caption + thumbnails + CTA */}
-            {displayData.mapImage && (
-              <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
-                <ActionButton className='w-100 h-100' icon={TelescopeIcon} onClick={() => setShowVistas(true)}>
-                  Vistas por piso de tu Dpto
-                </ActionButton></div>
-            )}
-            <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
-              <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
-                {displayData.floorPlan.thumbnails.map((thumb, i) => (
-                  <button
-                    key={i}
-                    className={`lb-proj-det-cot-thumb${imgIndex === i ? ' lb-proj-det-cot-thumb--active' : ''}`}
-                    onClick={() => setImgIndex(i)}
-                  >
-                    <img src={thumb} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
-                  </button>
-                ))}
+          {/* Pricing */}
+          <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
+            <div className="row align-items-end">
+              <div className="col-md">
+                <span className="lb-proj-det-cot-price-label">{displayData.pricing?.label || 'Precio'}</span>
+                <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
+                  <span className="lb-proj-det-cot-price">{displayData.pricing?.price || 'UF -'}</span>
+                </div>
               </div>
-            </div>
-            <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
-              <div className="btn-group w-100" role="group" aria-label="Acciones">
-                <ActionButton icon={DownloadIcon}>
-                  Descargar Brochure
-                </ActionButton>
-                <ActionButton
-                  variant="btn-outline-primary"
-                  icon={ExternalLinkIcon}
-                  iconRef={shareIconRef}
-                  onClick={() => setShowShare(true)}
+              <div className="col-md">
+                <button
+                  className="btn btn-danger w-100 lb-proj-det-cot-cta"
+                  onClick={() => setShowCotizar(true)}
                 >
-                  <span className="small me-2">{displayData.pricing.shareLabel || 'Compartir'}</span>
-                </ActionButton>
+                  {displayData.ctaText || 'Cotizar'}
+                </button>
               </div>
             </div>
-          </>
-        )}
+          </ScrollAnim>
+        </div>
+
+        {/* Bottom row: vistas 3D + thumbnails + acciones */}
+        <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
+          <ActionButton className="w-100 h-100" icon={TelescopeIcon} disabled={!activePlanta} onClick={() => activePlanta && setShowVistas(true)}>
+            Vistas por piso de tu Dpto
+          </ActionButton>
+        </div>
+
+        <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
+          <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
+            {/* Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto */}
+            {visibleThumbs.map(({ src, originalIndex }, i) => (
+              <button
+                key={originalIndex}
+                className={`lb-proj-det-cot-thumb${imgIndex === originalIndex ? ' lb-proj-det-cot-thumb--active' : ''}`}
+                onClick={() => setImgIndex(originalIndex)}
+              >
+                <img src={src} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
+          <div className="btn-group w-100" role="group" aria-label="Acciones">
+            <ActionButton icon={DownloadIcon}>
+              Descargar Brochure
+            </ActionButton>
+            <ActionButton
+              variant="btn-outline-primary"
+              icon={ExternalLinkIcon}
+              iconRef={shareIconRef}
+              onClick={() => setShowShare(true)}
+            >
+              <span className="small me-2">{displayData.pricing?.shareLabel || 'Compartir'}</span>
+            </ActionButton>
+          </div>
+        </div>
       </div>
 
       {/* Plantas relacionadas */}

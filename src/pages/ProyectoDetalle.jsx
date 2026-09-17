@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { getProjectBySlug } from '../data/projects.js'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
@@ -55,7 +55,7 @@ export default function ProyectoDetalle() {
         <main className="container text-center py-5">
           <h1 className="display-6 mb-3">Proyecto no encontrado</h1>
           <p className="text-muted">El proyecto &ldquo;{slug}&rdquo; no existe o ha sido removido.</p>
-          <a href="/proyectos" className="btn btn-outline-primary mt-3">Volver a proyectos</a>
+          <Link to="/cotizador#proyectos" className="btn btn-outline-primary mt-3">Volver a proyectos</Link>
         </main>
         <Footer />
       </>

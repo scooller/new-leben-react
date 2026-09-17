@@ -2,31 +2,59 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
-/** Render a link from {label, to?, href?, route?} config */
+/** Render a link from {label, to?, href?, route?, featured?, highlight?, badge?} config */
 function Navlink({ link, className }) {
   const to = link.to || link.route
+  const isFeatured = Boolean(link.featured || link.highlight)
+  const isDropdown = className?.includes('lb-dropdown-link')
+
+  const extraClass = isFeatured
+    ? (isDropdown ? ' lb-dropdown-link--featured' : ' lb-nav-link--featured')
+    : ''
+  const fullClass = `${className || ''}${extraClass}`
+
+  const content = (
+    <>
+      <span>{link.label}</span>
+      {link.badge && (
+        <span className={isDropdown ? 'lb-dropdown-badge' : 'lb-nav-badge'}>
+          {link.badge}
+        </span>
+      )}
+    </>
+  )
+
+  const target = link.target || (link.href?.startsWith('http') ? '_blank' : undefined)
+  const rel = target === '_blank' ? 'noopener noreferrer' : undefined
+
   return to
-    ? <Link key={link.label} to={to} className={className}>{link.label}</Link>
-    : <a key={link.label} href={link.href} className={className}>{link.label}</a>
+    ? <Link to={to} className={fullClass}>{content}</Link>
+    : <a href={link.href} target={target} rel={rel} className={fullClass}>{content}</a>
 }
 
 const mainLinks = [
+  { label: 'Mundo Invest', href: '#' },
+  { label: 'Clientes', to: '/login' },
   { label: 'Cotizar', to: '/cotizador' },
   { label: 'Brokers', to: '/brokers' },
-  { label: 'Clientes', to: '/login' },
 ]
 
 /** Links planos (sin submenú) */
-const menuLinks = [
-  { label: 'Locales comerciales', href: '#' },
-  { label: 'Mundo Invest', href: '#' },
-  { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
-  { label: 'Bases legales', to: '/bases-legales' },
-  { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
-]
+const menuLinks = []
+// const menuLinks = [
+//   { label: 'Locales comerciales', href: 'https://locales.ileben.cl/', featured: true },
+// ]
 
 /** Links agrupados bajo un encabezado */
 const menuGroups = [
+  {
+    title: 'Locales Comerciales',
+    items: [
+      { label: 'Independencia', href: 'https://locales.ileben.cl/#indi' },
+      { label: 'Santiago Centro', href: 'https://locales.ileben.cl/#living-town' },
+      { label: 'Puerto Montt', href: 'https://locales.ileben.cl/#parque-germania' },
+    ],
+  },
   {
     title: 'Nosotros',
     items: [
@@ -38,10 +66,18 @@ const menuGroups = [
   {
     title: 'Personas',
     items: [
-      { label: 'Canal de denuncias y consultas', href: '#' },
-      { label: 'Acceso Colaboradores', href: '#' },
+      { label: 'Canal de denuncias y consultas', href: 'https://denuncias.ileben.cl/' },
+      { label: 'Acceso Colaboradores', href: 'https://ileben.cl/organigrama/' },
     ],
   },
+  {
+    title: 'Información Corporativa',
+    items: [
+      { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
+      { label: 'Bases legales', to: '/bases-legales' },
+      { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
+    ],
+  }
 ]
 
 const mainMobileLinks = mainLinks.slice(0, 1)
@@ -55,7 +91,8 @@ const pageLinksMap = {
     { label: 'Eventos', href: '#eventos' },
     { label: 'Alianzas', href: '#alianzas' },
   ],
-  '/proyectos': [
+  '/cotizador': [
+    { label: 'Cotizador', href: '#cotizador' },
     { label: 'Proyectos destacados', href: '#proyectos' },
   ],
   '/inn-test': [
@@ -155,6 +192,11 @@ export default function Navbar() {
                 {/* {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />} */}
                 <hr className="lb-dropdown-divider my-1" />
               </div>
+              {/* Flat links */}
+              {menuLinks.map((link) =>
+                <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
+              )}
+              <hr className="lb-dropdown-divider my-1" />
               {/* Grouped links with sub-headers */}
               {menuGroups.map((group) => (
                 <div key={group.title} className="lb-dropdown-group">
@@ -164,12 +206,6 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              <hr className="lb-dropdown-divider my-1" />
-              <span className="lb-dropdown-header-text">Más</span>
-              {/* Flat links */}
-              {menuLinks.map((link) =>
-                <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
-              )}
               {/* Dynamic page links under Navegación */}
               {pageLinks.length > 0 && (
                 <div className="lb-dropdown-group">

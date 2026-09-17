@@ -1,7 +1,7 @@
 {
   "name": "new-leben",
   "private": true,
-  "version": "0.9.74",
+  "version": "0.9.80",
   "type": "module",
   "scripts": {
     "dev": "vite",

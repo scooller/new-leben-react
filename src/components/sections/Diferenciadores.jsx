@@ -34,7 +34,8 @@ export default function Diferenciadores() {
     searchFilters.filters.forEach((f) => {
       if (values[f.id]) params.set(f.id, values[f.id])
     })
-    navigate(`/proyectos?${params.toString()}`)
+    const query = params.toString()
+    navigate(query ? `/cotizador?${query}#proyectos` : '/cotizador#proyectos')
   }
 
   return (
