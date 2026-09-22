@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.83] - 2026-09-22
+
+### Changed
+- `InteriorismoSection.jsx`: habilitado renderizado de HTML en descripción mediante `dangerouslySetInnerHTML`.
+- `Inn.jsx`: actualizados textos comerciales, dirección con salto de línea, tipologías, descripción y botón de mapa ("Descubrir panoramas"), detalles de sala de ventas/piloto, descripción de proyecto y reseña extendida de interiorismo.
+
 ## [0.9.82] - 2026-09-17
 
 ### Added

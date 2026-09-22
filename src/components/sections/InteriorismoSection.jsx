@@ -115,9 +115,7 @@ export default function InteriorismoSection({
               )}
 
               {description && (
-                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text w-md-80">
-                  {description}
-                </ScrollAnim>
+                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text w-md-80" dangerouslySetInnerHTML={{ __html: description }} />
               )}
 
               {currentDesigner.text && (

@@ -31,8 +31,8 @@ import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
 
 const INFO = [
-  { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
-  { id: 'tipologias', label: 'Tipologías', value: '2, 3 y dorms, Deptos, dúplex y deptos con patio privado' },
+  { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991,<br /> Puerto Varas' },
+  { id: 'tipologias', label: 'Tipologías', value: '2, 3 y 4 dormitorios<br />Deptos, dúplex y deptos con patio privado' },
   { id: 'metrajes', label: 'Metrajes', value: 'Desde 85 m²' },
   { id: 'precio', label: 'Precio desde', value: '—' },
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
@@ -194,11 +194,11 @@ const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
 
 const MAP = {
   eyebrow: <>Ubicación</>,
-  title: <>LUGARES PARA<br />DESCUBRIR</>,
-  description: 'Primera línea frente al lago, <b>Vicente Pérez Rosales 991</b>. Despertar con el marco imponente del lago Llanquihue y los volcanes es solo el comienzo. Imagina tan solo cruzar la calle y sentir el aire fresco del sur mientras caminas por la costanera, disfrutar un café de especialidad a pocos pasos de tu puerta o terminar la tarde cenando en los mejores restaurantes de Puerto Varas. Una ubicación privilegiada para disfrutar el lago, la ciudad y el sur como parte de tu rutina.',
+  title: <>Despierta frente al lago<br />en un entorno insuperable</>,
+  description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
   image: 'images/inn/mapa.png',
   logo: 'images/inn/V.png',
-  btnText: 'Lugares para descubrir',
+  btnText: 'Descubrir panoramas',
   features: [
     { id: 'direccion', icon: 'direccion', heading: 'Vicente Pérez Rosales 991', text: 'Puerto Varas, Región de Los Lagos' },
     { id: 'telefono', icon: 'telefono', heading: '+56 9 1234 5678', text: 'Contacto directo' },
@@ -208,9 +208,9 @@ const MAP = {
 const base = import.meta.env.BASE_URL
 
 const TEAM_DATA = {
-  eyebrow: 'Contactos',
-  title: 'TE ACOMPAÑAMOS EN<br />CADA DECISIÓN',
-  subtitle: '<b>Sala de ventas y departamento piloto</b> disponible en Vicente Pérez Rosales 991, Puerto Varas<br /><b>Horario:</b> Lunes a domingo de 10:00 a 14:00 horas y de 15:00 a 19:00 horas.',
+  eyebrow: 'Contacto',
+  title: 'Conversemos',
+  subtitle: '<b>Sala de ventas y piloto:</b> Vicente Pérez Rosales 991, Puerto Varas.<br /><b>Horario:</b> Lun a Dom. 10:00 a 14:00 y 15:00 a 19:00 horas.',
   wazeMap: 'https://embed.waze.com/es/iframe?zoom=16&lat=-41.326080&lon=-72.970514&ct=livemap&pin=1&desc=0',
   agents: [
     { name: 'Patricia Ramírez', phone: '+56 9 3420 4833', email: 'pramirez@ileben.cl', avatar: `${base}images/team/Ramirez.jpg` },
@@ -420,7 +420,7 @@ export default function Inn() {
                 <ScrollAnim animation='scale' delay={0.2 * (i + 1)} className="col" key={t.id}>
                   <div className="d-flex flex-column gap-1">
                     <small className="lb-inn-info__label text-uppercase">{t.label}</small>
-                    <span className="fw-bold">{t.value}</span>
+                    <span className="fw-bold" dangerouslySetInnerHTML={{ __html: t.value }} />
                   </div>
                 </ScrollAnim>
               ))}
@@ -431,8 +431,7 @@ export default function Inn() {
         <ProjectFeatureSection
           eyebrow={<>Proyecto</>}
           title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
-          description="Ubicado en primera línea frente al lago Llanquihue, INN combina la experiencia Home & Wellness con la sofisticación y comodidad de un hotel boutique. Sus departamentos de 2, 3 y 4 dormitorios, dúplex y deptos con patio privado ofrecen un refugio exclusivo donde el diseño y la naturaleza se integran para brindarte una experiencia de bienestar inigualable."
-          highlight="Departamentos, dúplex y deptos. con patio privado."
+          description="El proyecto INN propone una forma de vivir Puerto Varas con mayor comodidad, amplitud y calidad en cada detalle con terminaciones de alto estándar, espacios amplios, luminosos y distribuciones pensadas para disfrutar cada ambiente durante todo el año. Con tipologías que se adaptan a distintas formas de vivir, el proyecto ofrece departamentos en formato tradicional, unidades con patio privado y exclusivos dúplex con vista al lago Llanquihue. Todo esto se complementa con una experiencia Home & Wellness con espacios comunes como sauna, bodega náutica y piscina climatizada invitan a relajarse, desconectarse y disfrutar el sur con una sensación de hotel boutique inigualable."
           highlightOffer="paga el pie en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
@@ -484,7 +483,7 @@ export default function Inn() {
         {/* Plantas relacionadas */}
         <RelatedProjects
           data={{
-            eyebrow: 'Alternativas a Edificio INN • Puerto Varas',
+            eyebrow: 'Alternativas a Edificio INN',
             highlight: 'Puerto Varas',
             apiId: innProject?.id || 9,
             projectName: innProject?.name || 'Edificio INN',
@@ -623,7 +622,10 @@ export default function Inn() {
           eyebrow={<>Interiorismo</>}
           title={<>MAESTRÍA EN<br />CADA DETALLE</>}
           parallaxStrength={PARALLAX_STRENGTH}
-          description="La experiencia de la reconocida interiorista Sofía Iturralde se une con la maestría en iluminación de Rafael Rivera para crear entornos en los que cada textura, línea y matriz de luz dialogan en armonía estética sureña y posicionan a este proyecto como el residencial más exclusivo para vivir en Puerto Varas."
+          description="
+          <p>La experiencia de <b>Sofía Iturralde</b> y la especialización lumínica de <b>Rafael Rivera</b> se encuentran en INN para dar forma a una propuesta de diseño integral, donde interiorismo y luz fueron concebidos como parte de una misma experiencia. Con cerca de 20 años de trayectoria, Sofía ha desarrollado proyectos inmobiliarios, corporativos y residenciales en distintos puntos de Chile y Argentina, incluyendo trabajos en Puerto Varas, Pucón, Concón, Santiago, Buenos Aires, El Golf, La Dehesa y Vitacura.</p>
+          <p>A esta visión se suma Rafael Rivera, diseñador especializado en iluminación en el Istituto Europeo di Design de Milán y dedicado al diseño lumínico desde 2003. Su estudio ha trabajado en proyectos residenciales, hoteleros, corporativos, comerciales y culturales, entre ellos Hotel Lago Grey, Museo El Carmen, Club La Unión, Casa Vitacura y Corporativo Apoquindo, además de desarrollar una trayectoria docente en iluminación desde 2012.</p>
+          <p>En <b>INN</b>, ambas disciplinas dialogan para que materiales, texturas, volúmenes y distintas escenas de luz construyan ambientes cálidos, sofisticados y conectados con la identidad del sur, reforzando el carácter exclusivo de un proyecto pensado para vivir Puerto Varas desde el diseño, el confort y el bienestar.</p>"
           backgroundImage="images/inn/Interiorismo.svg"
           id="interiorismo"
           ariaLabel="Interiorismo"
