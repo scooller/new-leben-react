@@ -5,6 +5,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const devToken = env.DEV_API_TOKEN || ''
   const apiTarget = env.DEV_API_TARGET || 'https://dev.ileben.cl'
+  const origin = env.DEV_API_ORIGIN || 'https://test.ileben.cl'
+  const referer = env.DEV_API_REFERER || 'https://test.ileben.cl/'
 
   return {
     plugins: [react()],
@@ -40,8 +42,8 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: true,
           headers: {
-            Origin: 'https://test.ileben.cl',
-            Referer: 'https://test.ileben.cl/',
+            Origin: origin,
+            Referer: referer,
             ...(devToken ? { Authorization: `Bearer ${devToken}` } : {}),
           },
         },
