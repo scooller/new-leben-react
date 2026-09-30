@@ -10,8 +10,9 @@ const TOURS = [
     label: 'Masterplan',
     title: 'Masterplan',
     images: [
-      { title: 'Masterplan', src: '/images/inn/masterplan-1.jpg' },
-      { title: 'Masterplan Primer Piso', src: '/images/inn/masterplan-2.jpg' },
+      { title: 'Masterplan', src: '/images/inn/masterplan inn.jpg' },
+      { title: 'Masterplan Primer Piso', src: '/images/inn/masterplan-piso-1.jpg' },
+      { title: 'Masterplan Piso 10', src: '/images/inn/masterplan-piso-10.jpg' },
     ],
     allow: 'fullscreen',
   },
