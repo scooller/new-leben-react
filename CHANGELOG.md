@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.86] - 2026-10-04
+
+### Changed
+- `_inn.scss`: incrementado `z-index` de pines en hover y focus a `50 !important` y tooltip a `60` para superponerse claramente sobre pines vecinos cercanos y pin activo.
+
+## [0.9.85] - 2026-10-04
+
+### Fixed
+- `Inn.jsx`: optimizado registro de clics en pines del mapa agregando `onPointerDown`, desactivado auto-avance conflictivo (`interval: false`) y encolado de transiciones de carrusel en caso de estar en deslizamiento (`_isSliding`).
+- `_inn.scss`: añadida zona de clic expandida (`::before` de 55px), `touch-action: manipulation` y `pointer-events: none` en elementos hijos del pin para evitar clics perdidos.
+
+## [0.9.84] - 2026-10-04
+
+### Changed
+- `Inn.jsx`: eliminada ampliación con modal en el mapa de ubicación; convertida la sección en mapa interactivo con pines de interés sincronizados bidireccionalmente con `innGalleryCarousel` (al hacer clic en un pin se selecciona la tarjeta del carrusel y viceversa).
+- `_inn.scss`: añadidos estilos para pines interactivos de mapa (`.lb-inn-map__pin`), pulsos, tooltips y tarjetas interactivas de galería con estado seleccionado (`.lb-inn-gallery__card--active`).
+
 ## [0.9.83] - 2026-09-22
 
 ### Changed

@@ -664,13 +664,198 @@ $inn-gold-bg: #faf4e8;
     }
   }
 
-  &__image {
-    cursor: pointer;
-    transition: opacity 0.25s ease;
+  &__interactive-wrap {
+    position: relative;
+    width: 100%;
+    user-select: none;
+    border-radius: 8px;
+    overflow: visible;
 
-    &:hover {
-      opacity: 0.85;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
     }
+  }
+
+  &__pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: $lb-dark;
+    border: 2px solid $inn-gold;
+    color: $lb-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+
+    // Hit area extendida para registrar clics con total precisión
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      pointer-events: auto;
+    }
+
+    // Los hijos no deben interceptar eventos de puntero
+    & > * {
+      pointer-events: none !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      transform: translate(-50%, -50%) scale(1.18);
+      background: $inn-gold;
+      color: #000;
+      z-index: 50 !important;
+
+      .lb-inn-map__pin-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -100%) translateY(-8px);
+      }
+    }
+
+    &.active {
+      background: $inn-gold;
+      color: #000;
+      transform: translate(-50%, -50%) scale(1.25);
+      z-index: 30;
+      border-color: #fff;
+      box-shadow: 0 0 16px rgba($inn-gold, 0.85);
+
+      .lb-inn-map__pin-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -100%) translateY(-8px);
+      }
+
+      &:hover,
+      &:focus-visible {
+        z-index: 50 !important;
+      }
+    }
+  }
+
+  &__pin-number {
+    line-height: 1;
+  }
+
+  &__pin-ring {
+    position: absolute;
+    inset: -6px;
+    border: 2px solid $inn-gold;
+    border-radius: 50%;
+    animation: lbPinPulse 1.8s infinite;
+    pointer-events: none;
+  }
+
+  &__pin-tooltip {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%) translateY(-2px);
+    background: rgba(#0a0a0a, 0.94);
+    backdrop-filter: blur(4px);
+    color: $lb-white;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba($inn-gold, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    z-index: 60;
+
+    strong {
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+
+    small {
+      color: $inn-gold;
+      font-size: 0.7rem;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px 5px 0;
+      border-style: solid;
+      border-color: rgba(#0a0a0a, 0.94) transparent transparent;
+    }
+  }
+
+  &__pin-inn {
+    transform: translate(-50%, -50%);
+    z-index: 8;
+    pointer-events: none;
+  }
+
+  &__pin-inn-badge {
+    background: #c92a2a;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    transform: translateY(-24px);
+  }
+
+  &__pin-inn-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: rgba(#c92a2a, 0.85);
+    border-radius: 50%;
+    animation: lbPinPulse 1.5s infinite;
+  }
+}
+
+@keyframes lbPinPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
   }
 }
 
@@ -1005,20 +1190,134 @@ $inn-gold-bg: #faf4e8;
 }
 
 
-// --- GALERÍA (blanco y negro) ---
+// --- GALERÍA (interactiva y sincronizada) ---
 .lb-inn-gallery {
   background: $inn-celeste;
   position: relative;
 
+  &__card {
+    background: #fff;
+    border: 2px solid transparent;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+
+      .lb-inn-gallery__img {
+        filter: grayscale(0%);
+      }
+    }
+
+    &--active {
+      border-color: $inn-gold !important;
+      box-shadow: 0 8px 24px rgba($inn-gold, 0.4) !important;
+      transform: translateY(-3px);
+
+      .lb-inn-gallery__img {
+        filter: grayscale(0%) !important;
+      }
+
+      .lb-inn-gallery__title {
+        color: $inn-gold !important;
+        font-weight: 700;
+      }
+
+      .lb-inn-gallery__number {
+        background: $inn-gold !important;
+        color: #000 !important;
+      }
+    }
+  }
+
+  &__img-wrap {
+    overflow: hidden;
+    aspect-ratio: 16/10;
+  }
+
   &__img {
-    aspect-ratio: 16/9;
+    aspect-ratio: 16/10;
     object-fit: cover;
     filter: grayscale(100%);
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, transform 0.3s ease;
 
     &:hover {
       filter: grayscale(0);
     }
+  }
+
+  &__badge {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  &__number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  &__zoom {
+    width: 1.85rem;
+    height: 1.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    border: none;
+    z-index: 2;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: $inn-gold !important;
+      color: #000 !important;
+      transform: scale(1.1);
+    }
+  }
+
+  &__info {
+    background: #fff;
+  }
+
+  &__title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: $inn-gris-dark;
+    transition: color 0.2s ease;
+  }
+
+  &__cat {
+    font-size: 0.75rem;
+    color: $inn-gris;
+  }
+
+  &__badge-active {
+    background: $inn-gold;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
   }
 
   &__nav {

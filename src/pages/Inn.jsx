@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import Navbar from '../components/layout/Navbar.jsx'
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronDown, Maximize2 } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
@@ -100,12 +101,13 @@ const ESPACIOS_COMUNES_SLIDES = [
   { navId: 'bodega', img: 'images/inn/eecc/EECC_02.jpg', link: 'images/inn/eecc/EECC_Bodega_Nautica.jpg', alt: 'Bodega náutica' },
 ]
 
-const GALLERY_IMAGES = [
-  { img: 'images/inn/Ubicacion_01_Color.jpg', alt: 'Galería 1' },
-  { img: 'images/inn/Ubicacion_02_Color.jpg', alt: 'Galería 2' },
-  { img: 'images/inn/Ubicacion_03_Color.jpg', alt: 'Galería 3' },
-  { img: 'images/inn/Ubicacion_01_Color.jpg', alt: 'Galería 4' },
-  { img: 'images/inn/Ubicacion_02_Color.jpg', alt: 'Galería 5' },
+const LOCATION_POINTS = [
+  { id: 1, name: 'Museo Pablo Fierro', distance: '0.4 km', category: 'Cultura', img: 'images/inn/Ubicacion_01_Color.jpg', x: 18.5, y: 11.5 },
+  { id: 2, name: 'Costanera', distance: '0.6 km', category: 'Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 17.5, y: 24.5 },
+  { id: 3, name: 'Muelle Puerto Varas', distance: '0.8 km', category: 'Navegación', img: 'images/inn/Ubicacion_03_Color.jpg', x: 20.5, y: 29.5 },
+  { id: 4, name: 'Muelle Piedraplen', distance: '0.8 km', category: 'Paseo', img: 'images/inn/Ubicacion_01_Color.jpg', x: 27.5, y: 49.0 },
+  { id: 5, name: 'Centro de Puerto Varas', distance: '1.0 km', category: 'Comercio', img: 'images/inn/Ubicacion_02_Color.jpg', x: 12.0, y: 53.5 },
+  { id: 6, name: 'Monumento Héroes Patrios', distance: '1.2 km', category: 'Patrimonio', img: 'images/inn/Ubicacion_03_Color.jpg', x: 19.5, y: 62.0 },
 ]
 
 const LOCATION_DATA = {
@@ -186,10 +188,15 @@ const SPACES_MODAL_GALLERIES = [
   },
 ]
 
-// Cada slide muestra 3 imágenes consecutivas empezando en la i-ésima,
-// avanzando de 1 en 1 (wrap-around para loop infinito)
-const GALLERY_SLIDES = GALLERY_IMAGES.map((_, i) =>
-  [0, 1, 2].map((offset) => GALLERY_IMAGES[(i + offset) % GALLERY_IMAGES.length])
+// Cada slide muestra 3 lugares empezando en la i-ésima posición (wrap-around para loop)
+const GALLERY_SLIDES = LOCATION_POINTS.map((_, i) =>
+  [0, 1, 2].map((offset) => {
+    const locIndex = (i + offset) % LOCATION_POINTS.length
+    return {
+      ...LOCATION_POINTS[locIndex],
+      itemIndex: locIndex,
+    }
+  })
 )
 
 const MAP = {
@@ -298,15 +305,57 @@ export default function Inn() {
   ))
   const mapRef = useRef(null)
   const galleryRef = useRef(null)
+  const galleryCarouselInstance = useRef(null)
 
   useEffect(() => {
     const galleryEl = galleryRef.current
     if (!galleryEl) return
+
+    const c = Carousel.getOrCreateInstance(galleryEl, { interval: false, ride: false, wrap: true })
+    galleryCarouselInstance.current = c
+
     Fancybox.bind(galleryEl, '[data-fancybox]', {
       Toolbar: { display: { left: [], right: ['close'] } },
     })
-    return () => Fancybox.unbind(galleryEl)
+
+    const onSlid = (event) => {
+      if (typeof event.to === 'number') {
+        setActiveLocationIndex(event.to)
+      }
+    }
+    galleryEl.addEventListener('slid.bs.carousel', onSlid)
+
+    return () => {
+      galleryEl.removeEventListener('slid.bs.carousel', onSlid)
+      Fancybox.unbind(galleryEl)
+      c.dispose()
+      galleryCarouselInstance.current = null
+    }
   }, [])
+
+  const handleSelectLocation = (index) => {
+    setActiveLocationIndex(index)
+    const galleryEl = galleryRef.current
+    if (!galleryEl) return
+    const c = galleryCarouselInstance.current || Carousel.getOrCreateInstance(galleryEl, {
+      interval: false,
+      ride: false,
+      wrap: true,
+    })
+    if (!c) return
+
+    if (c._isSliding) {
+      galleryEl.addEventListener(
+        'slid.bs.carousel',
+        () => {
+          c.to(index)
+        },
+        { once: true }
+      )
+    } else {
+      c.to(index)
+    }
+  }
 
   // Scrollspy: activa el tab segun la seccion visible (sin cambiar nombres)
   useEffect(() => {
@@ -557,7 +606,10 @@ export default function Inn() {
                   <button
                     type="button"
                     className="btn btn-gold"
-                    onClick={() => setShowMapModal(true)}
+                    onClick={() => {
+                      const el = document.getElementById('galeria')
+                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    }}
                     {...hover(mapRef)}
                   >
                     <MapPinIcon ref={mapRef} size={18} />
@@ -567,43 +619,123 @@ export default function Inn() {
               </div>
               <div className="col-12 col-lg-5">
                 <ScrollAnim animation="fade-right">
-                  <button
-                    type="button"
-                    className="lb-inn-map__image position-relative h-100 border-0 bg-transparent p-0 w-100"
-                    onClick={() => setShowMapModal(true)}
-                    aria-label="Ver mapa de ubicación ampliado"
-                  >
+                  <div className="lb-inn-map__interactive-wrap position-relative w-100">
                     <img
                       src={`${base}${MAP.image}`}
-                      alt="Mapa de ubicación (clic para ampliar)"
-                      className="img-fluid w-100 h-100 object-fit-contain"
+                      alt="Mapa interactivo de ubicación"
+                      className="img-fluid w-100 h-100 object-fit-contain d-block"
+                      loading="lazy"
                     />
-                  </button>
+
+                    {/* Pin INN */}
+                    <div
+                      className="lb-inn-map__pin-inn position-absolute"
+                      style={{ left: '39.8%', top: '68%' }}
+                      title="Proyecto INN - Vicente Pérez Rosales 991"
+                    >
+                      <div className="lb-inn-map__pin-inn-pulse" />
+                      <div className="lb-inn-map__pin-inn-badge">
+                        <span>INN</span>
+                      </div>
+                    </div>
+
+                    {/* Pines interactivos */}
+                    {LOCATION_POINTS.map((point, index) => {
+                      const isSelected = activeLocationIndex === index
+                      return (
+                        <button
+                          key={point.id}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleSelectLocation(index)
+                          }}
+                          onPointerDown={(e) => {
+                            if (e.button === 0) {
+                              handleSelectLocation(index)
+                            }
+                          }}
+                          className={`lb-inn-map__pin position-absolute ${isSelected ? 'active' : ''}`}
+                          style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                          aria-label={`${point.name} (${point.distance})`}
+                        >
+                          <span className="lb-inn-map__pin-number">{point.id}</span>
+                          {isSelected && <span className="lb-inn-map__pin-ring" />}
+                          <span className="lb-inn-map__pin-tooltip">
+                            <strong>{point.name}</strong>
+                            <small>{point.distance}</small>
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </ScrollAnim>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Carousel de imágenes en blanco y negro */}
+        {/* Carousel de imágenes con interacción sincronizada */}
         <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
           <ScrollAnim className='container' animation="fade-up">
-            <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-interval="false">
               <div className="carousel-inner">
-                {GALLERY_SLIDES.map((slideImages, slideIndex) => (
+                {GALLERY_SLIDES.map((slideItems, slideIndex) => (
                   <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
-                    <div className="row g-2">
-                      {slideImages.map((image, imageIndex) => (
-                        <div className="col-4" key={imageIndex}>
-                          <a href={`${base}${image.img}`} data-fancybox="inn-galeria" tabIndex={0}>
-                            <img
-                              src={`${base}${image.img}`}
-                              alt={image.alt}
-                              className="d-block w-100 lb-inn-gallery__img rounded rounded-3"
-                            />
-                          </a>
-                        </div>
-                      ))}
+                    <div className="row g-3">
+                      {slideItems.map((loc) => {
+                        const isSelected = loc.itemIndex === activeLocationIndex
+                        return (
+                          <div className="col-12 col-md-4" key={`${slideIndex}-${loc.id}`}>
+                            <div
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => handleSelectLocation(loc.itemIndex)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  handleSelectLocation(loc.itemIndex)
+                                }
+                              }}
+                              className={`lb-inn-gallery__card rounded rounded-3 overflow-hidden position-relative h-100 ${isSelected ? 'lb-inn-gallery__card--active' : ''}`}
+                              aria-label={`${loc.name} - ${loc.distance}`}
+                            >
+                              <div className="lb-inn-gallery__img-wrap position-relative">
+                                <img
+                                  src={`${base}${loc.img}`}
+                                  alt={loc.name}
+                                  className="d-block w-100 lb-inn-gallery__img"
+                                  loading="lazy"
+                                />
+                                <div className="lb-inn-gallery__badge position-absolute top-0 start-0 m-2">
+                                  <span className="lb-inn-gallery__number me-1">{loc.id}</span>
+                                  <span>{loc.distance}</span>
+                                </div>
+                                <a
+                                  href={`${base}${loc.img}`}
+                                  data-fancybox="inn-galeria"
+                                  className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
+                                  onClick={(e) => e.stopPropagation()}
+                                  title="Ver foto ampliada"
+                                  aria-label="Ver foto ampliada"
+                                  tabIndex={0}
+                                >
+                                  <Maximize2 size={13} />
+                                </a>
+                              </div>
+                              <div className="lb-inn-gallery__info p-2 px-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                  <h4 className="lb-inn-gallery__title mb-0">{loc.name}</h4>
+                                  <small className="lb-inn-gallery__cat">{loc.category}</small>
+                                </div>
+                                {isSelected && (
+                                  <span className="lb-inn-gallery__badge-active">Activo</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 ))}
