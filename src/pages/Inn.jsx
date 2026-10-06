@@ -102,15 +102,15 @@ const ESPACIOS_COMUNES_SLIDES = [
 ]
 
 const LOCATION_POINTS = [
-  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.8 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 14.6, y: 35.8 },
-  { id: 2, name: 'Costanera', label: 'COSTANERA', distance: '0.6 km', category: 'Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 15.1, y: 46.2 },
-  { id: 3, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 10.7, y: 49.9 },
-  { id: 4, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', img: 'images/inn/Ubicacion_03_Color.jpg', x: 5.1, y: 52.6 },
-  { id: 5, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', img: 'images/inn/Ubicacion_02_Color.jpg', x: 14.7, y: 51.3 },
-  { id: 6, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', img: 'images/inn/Ubicacion_01_Color.jpg', x: 15.7, y: 54.7 },
-  { id: 7, name: 'Playa Puerto Chico', label: 'PLAYA PUERTO CHICO', distance: '0.3 km', category: 'Playa & Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 42.7, y: 75.1 },
-  { id: 8, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', img: 'images/inn/Ubicacion_03_Color.jpg', x: 85.3, y: 66.4 },
-  { id: 9, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 79.3, y: 81.1 },
+  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.8 km', category: 'Gastronomía', time: '18 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 14.6, y: 35.8 },
+  { id: 2, name: 'Costanera', label: 'COSTANERA', distance: '0.6 km', category: 'Paseo', time: '6 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 15.1, y: 46.2 },
+  { id: 3, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 10.7, y: 49.9 },
+  { id: 4, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 5.1, y: 52.6 },
+  { id: 5, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 14.7, y: 51.3 },
+  { id: 6, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 15.7, y: 54.7 },
+  { id: 7, name: 'Playa Puerto Chico', label: 'PLAYA PUERTO CHICO', distance: '0.3 km', category: 'Playa & Paseo', time: '3 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 42.7, y: 75.1 },
+  { id: 8, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 85.3, y: 66.4 },
+  { id: 9, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 79.3, y: 81.1 },
 ]
 
 const LOCATION_DATA = {
@@ -193,13 +193,14 @@ const SPACES_MODAL_GALLERIES = [
   },
 ]
 
-// Cada slide muestra 3 lugares empezando en la i-ésima posición (wrap-around para loop)
+// Cada slide muestra 3 lugares con el seleccionado en el centro (offset -1, 0, 1)
 const GALLERY_SLIDES = LOCATION_POINTS.map((_, i) =>
-  [0, 1, 2].map((offset) => {
-    const locIndex = (i + offset) % LOCATION_POINTS.length
+  [-1, 0, 1].map((offset) => {
+    const locIndex = (i + offset + LOCATION_POINTS.length) % LOCATION_POINTS.length
     return {
       ...LOCATION_POINTS[locIndex],
       itemIndex: locIndex,
+      isCenter: offset === 0,
     }
   })
 )
@@ -232,6 +233,22 @@ const TEAM_DATA = {
   ],
 }
 
+function WalkIcon({ size = 14, className = '' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+      style={{ display: 'inline-block', verticalAlign: '-1px', flexShrink: 0 }}
+    >
+      <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z" />
+    </svg>
+  )
+}
+
 const InnGalleryCarousel = memo(function InnGalleryCarousel({
   slides,
   galleryRef,
@@ -244,7 +261,10 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
           <div className={`carousel-item ${slideIndex === 4 ? 'active' : ''}`} key={slideIndex}>
             <div className="row g-3">
               {slideItems.map((loc, cardIdx) => (
-                <div className="col-12 col-md-4" key={`${slideIndex}-${loc.id}`}>
+                <div
+                  className={`col-12 col-md-4 ${cardIdx !== 1 ? 'd-none d-md-block' : ''}`}
+                  key={`${slideIndex}-${loc.id}-${cardIdx}`}
+                >
                   <div
                     role="button"
                     tabIndex={0}
@@ -255,8 +275,8 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
                         onSelectLocation(loc.itemIndex)
                       }
                     }}
-                    className={`lb-inn-gallery__card rounded rounded-3 overflow-hidden position-relative h-100 ${cardIdx === 0 ? 'lb-inn-gallery__card--main' : ''}`}
-                    aria-label={`${loc.name} - ${loc.distance}`}
+                    className={`lb-inn-gallery__card ${cardIdx === 1 ? 'lb-inn-gallery__card--main lb-inn-gallery__card--active' : ''}`}
+                    aria-label={`${loc.label || loc.name} - a ${loc.time || '15 minutos'} de INN`}
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
@@ -265,10 +285,6 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
                         className="d-block w-100 lb-inn-gallery__img"
                         loading="lazy"
                       />
-                      <div className="lb-inn-gallery__badge position-absolute top-0 start-0 m-2">
-                        <span className="lb-inn-gallery__number me-1">{loc.id}</span>
-                        <span>{loc.distance}</span>
-                      </div>
                       <a
                         href={`${base}${loc.img}`}
                         data-fancybox="inn-galeria"
@@ -280,13 +296,13 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
                       >
                         <Maximize2 size={13} />
                       </a>
-                    </div>
-                    <div className="lb-inn-gallery__info p-2 px-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 className="lb-inn-gallery__title mb-0">{loc.name}</h4>
-                        <small className="lb-inn-gallery__cat">{loc.category}</small>
+                      <div className="lb-inn-gallery__overlay">
+                        <h4 className="lb-inn-gallery__title">{loc.label || loc.name}</h4>
+                        <div className="lb-inn-gallery__time">
+                          <WalkIcon size={14} />
+                          <span>a {loc.time || '15 minutos'} de INN</span>
+                        </div>
                       </div>
-                      <span className="lb-inn-gallery__badge-active">Activo</span>
                     </div>
                   </div>
                 </div>
@@ -751,7 +767,10 @@ export default function Inn() {
                             <span className="lb-inn-map__pin-dot" />
                           </span>
                           <span className="lb-inn-map__pin-line" />
-                          <span className="lb-inn-map__pin-pill">{point.label || point.name}</span>
+                          <span className="lb-inn-map__pin-pill">
+                            <strong>{point.label || point.name}</strong><br />
+                            {/* <small>{point.category} • {point.time}</small> */}
+                          </span>
                         </button>
                       )
                     })}

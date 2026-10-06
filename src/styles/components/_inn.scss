@@ -1207,83 +1207,114 @@ $inn-gold-bg: #faf4e8;
   background: $inn-gold-light;
   position: relative;
 
+  #innGalleryCarousel .carousel-inner {
+    padding: 0.5rem 0;
+  }
+
   &__card {
-    background: #fff;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
     border: 2px solid transparent;
-    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    background: #111;
 
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+      transform: scale(1.02);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+      z-index: 2;
 
       .lb-inn-gallery__img {
         filter: grayscale(0%);
       }
     }
 
-    &--active {
+    &--active,
+    &--main {
       border-color: $inn-gold !important;
-      box-shadow: 0 8px 24px rgba($inn-gold, 0.4) !important;
-      transform: translateY(-3px);
+      box-shadow: 0 4px 18px rgba($inn-gold, 0.35);
+      transform: scale(1.02);
+      z-index: 1;
 
       .lb-inn-gallery__img {
         filter: grayscale(0%) !important;
       }
 
-      .lb-inn-gallery__title {
-        color: $inn-gold !important;
-        font-weight: 700;
-      }
-
-      .lb-inn-gallery__number {
-        background: $inn-gold !important;
-        color: #000 !important;
+      &:hover {
+        transform: scale(1.035);
+        box-shadow: 0 8px 24px rgba($inn-gold, 0.45);
       }
     }
   }
 
   &__img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
-    aspect-ratio: 16/10;
-  }
 
-  &__img {
-    aspect-ratio: 16/10;
-    object-fit: cover;
-    filter: grayscale(100%);
-    transition: filter 0.3s ease, transform 0.3s ease;
-
-    &:hover {
-      filter: grayscale(0);
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.42) 32%,
+        rgba(0, 0, 0, 0.08) 58%,
+        transparent 75%
+      );
+      pointer-events: none;
+      z-index: 1;
     }
   }
 
-  &__badge {
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.55rem;
-    border-radius: 20px;
-    display: inline-flex;
-    align-items: center;
-    z-index: 2;
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.35s ease, transform 0.35s ease;
+    display: block;
   }
 
-  &__number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    background: rgba(255, 255, 255, 0.25);
+  &__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.85rem 1rem;
+    z-index: 2;
     color: #fff;
-    border-radius: 50%;
-    font-size: 0.7rem;
+    pointer-events: none;
+  }
+
+  &__title {
+    font-size: 0.95rem;
     font-weight: 700;
-    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fff;
+    margin: 0 0 0.2rem 0;
+    line-height: 1.25;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  &__time {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+
+    svg {
+      color: #fff;
+      flex-shrink: 0;
+    }
   }
 
   &__zoom {
@@ -1292,11 +1323,11 @@ $inn-gold-bg: #faf4e8;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(4px);
     color: #fff;
     border: none;
-    z-index: 2;
+    z-index: 3;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
 
     &:hover {
@@ -1304,33 +1335,6 @@ $inn-gold-bg: #faf4e8;
       color: #000 !important;
       transform: scale(1.1);
     }
-  }
-
-  &__info {
-    background: #fff;
-  }
-
-  &__title {
-    font-size: 0.92rem;
-    font-weight: 600;
-    color: $inn-gris-dark;
-    transition: color 0.2s ease;
-  }
-
-  &__cat {
-    font-size: 0.75rem;
-    color: $inn-gris;
-  }
-
-  &__badge-active {
-    display: none;
-    background: $inn-gold;
-    color: #000;
-    font-weight: 700;
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
   }
 
   &__nav {

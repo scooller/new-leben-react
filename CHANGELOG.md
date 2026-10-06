@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.90] - 2026-10-06
+
+### Changed
+- `_inn.scss`: modificado el comportamiento de animación en hover y activo de las tarjetas del carrusel de ubicación (`.lb-inn-gallery__card`) a `scale` (`scale(1.02)` / `scale(1.035)`) en lugar de desplazamiento vertical (`translateY`), con padding compensatorio en `.carousel-inner` para prevenir cortes por overflow.
+
+## [0.9.89] - 2026-10-06
+
+### Changed
+- `Inn.jsx`: rediseñadas las tarjetas del carrusel de ubicación `InnGalleryCarousel` a tarjetas full-bleed sin caja inferior blanca, con tarjeta central activa en color y borde dorado (`offset: [-1, 0, 1]`), tarjetas inactivas en escala de grises, degradado oscuro inferior con título en mayúsculas, icono `WalkIcon` y tiempo a pie (`a X minutos de INN`), preservando intacto el botón para ampliar imagen con Fancybox en la esquina superior derecha.
+- `_inn.scss`: actualizados estilos de `.lb-inn-gallery__card`, imagen con ratio `16/10`, `border-radius: 10px`, filtro grayscale condicional para inactivos y hover, overlay inferior con gradiente oscuro, tipografía de título y tiempo, y botón zoom Fancybox posicionado arriba a la derecha.
+
 ## [0.9.88] - 2026-10-06
 
 ### Changed
