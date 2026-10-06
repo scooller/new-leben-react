@@ -114,9 +114,9 @@ export default function InnTeamAgents({ data, apiId }) {
   return (
     <section className="lb-inn-team-agents" id="contacto">
       <div className="container">
-        <div className="lb-inn-team-agents__layout">
+        <div className="row">
           {/* Left column - Agents */}
-          <div className="lb-inn-team-agents__left">
+          <div className="lb-inn-team-agents__left col-md col-12">
             <ScrollAnim as='span' animation='flip-x' className="lb-inn-team-agents__eyebrow">{data.eyebrow}</ScrollAnim>
             <SplitTitle as='h2' delay={0.2} stagger={0.05} className="lb-inn-team-agents__title" dangerouslySetInnerHTML={{ __html: data.title }} />
 
@@ -140,18 +140,20 @@ export default function InnTeamAgents({ data, apiId }) {
           </div>
 
           {/* Right column - Info + Map */}
-          <div className="lb-inn-team-agents__right">
-            <ScrollAnim as='p' animation='fade-up' delay={0.2} className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
-            <ScrollAnim as='div' animation='scale' delay={0.4} className="lb-inn-team-agents__map">
-              <iframe
-                src={data.wazeMap}
-                title="Ubicación Waze"
-                width="100%"
-                height="100%"
-                allowFullScreen
-                loading="lazy"
-              />
-            </ScrollAnim>
+          <div className="col-md col-12">
+            <div className='d-flex flex-column w-md-80 h-100 ms-auto'>
+              <ScrollAnim as='p' animation='fade-up' delay={0.2} className="lb-inn-team-agents__subtitle" dangerouslySetInnerHTML={{ __html: data.subtitle }} />
+              <ScrollAnim as='div' animation='scale' delay={0.4} className="lb-inn-team-agents__map w-100">
+                <iframe
+                  src={data.wazeMap}
+                  title="Ubicación Waze"
+                  width="100%"
+                  height="100%"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </ScrollAnim>
+            </div>
           </div>
         </div>
       </div>

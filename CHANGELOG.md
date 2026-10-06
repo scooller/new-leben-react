@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.88] - 2026-10-06
+
+### Changed
+- `_inn.scss`: color de fondo de las secciones de ubicación y galería (`.lb-inn-map` y `.lb-inn-gallery`) actualizado a `#f9f2e7` idéntico al fondo del diseño.
+- `_inn.scss`: añadida línea conectora horizontal (`.lb-inn-map__pin-line`) entre el punto del pin y la pastilla de texto con separación de 1.15rem, con iluminación dorada en hover y activo.
+- `Inn.jsx`: extraído `InnGalleryCarousel` como componente memoizado (`memo`) con `handleSelectLocation` estabilizado (`useCallback`), evitando que re-renders de React fuercen o reseteen las clases del carrusel de Bootstrap al hacer clic en los pines.
+
+## [0.9.87] - 2026-10-06
+
+### Changed
+- `Inn.jsx`: actualizadas coordenadas de pines para calzar exactamente con el nuevo mapa base `Mapa_PV.png`, agregados los 9 puntos de interés (`Mesa Tropera`, `Costanera`, `Mall`, `Cassis`, `Casino Dreams`, `Playa Puerto Chico`, `Jumbo`, `La Olla`), renderizado el pin oficial de INN (`pin_logo.png`) en Vicente Pérez Rosales 991 e integrada la dirección con icono dorado bajo el mapa interactivo.
+- `_inn.scss`: rediseñados pines con marcador circular (punto gris con centro blanco / dorado activo) y pastilla blanca con borde y texto en mayúsculas, ajustado pin de INN y estilo de dirección `.lb-inn-map__address`.
+
 ## [0.9.86] - 2026-10-04
 
 ### Changed

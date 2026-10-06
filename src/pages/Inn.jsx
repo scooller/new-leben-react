@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback, memo } from 'react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import Navbar from '../components/layout/Navbar.jsx'
-import { ChevronLeft, ChevronRight, ChevronDown, Maximize2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronDown, Maximize2, MapPin } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
@@ -102,30 +102,35 @@ const ESPACIOS_COMUNES_SLIDES = [
 ]
 
 const LOCATION_POINTS = [
-  { id: 1, name: 'Museo Pablo Fierro', distance: '0.4 km', category: 'Cultura', img: 'images/inn/Ubicacion_01_Color.jpg', x: 18.5, y: 11.5 },
-  { id: 2, name: 'Costanera', distance: '0.6 km', category: 'Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 17.5, y: 24.5 },
-  { id: 3, name: 'Muelle Puerto Varas', distance: '0.8 km', category: 'Navegación', img: 'images/inn/Ubicacion_03_Color.jpg', x: 20.5, y: 29.5 },
-  { id: 4, name: 'Muelle Piedraplen', distance: '0.8 km', category: 'Paseo', img: 'images/inn/Ubicacion_01_Color.jpg', x: 27.5, y: 49.0 },
-  { id: 5, name: 'Centro de Puerto Varas', distance: '1.0 km', category: 'Comercio', img: 'images/inn/Ubicacion_02_Color.jpg', x: 12.0, y: 53.5 },
-  { id: 6, name: 'Monumento Héroes Patrios', distance: '1.2 km', category: 'Patrimonio', img: 'images/inn/Ubicacion_03_Color.jpg', x: 19.5, y: 62.0 },
+  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.8 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 14.6, y: 35.8 },
+  { id: 2, name: 'Costanera', label: 'COSTANERA', distance: '0.6 km', category: 'Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 15.1, y: 46.2 },
+  { id: 3, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 10.7, y: 49.9 },
+  { id: 4, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', img: 'images/inn/Ubicacion_03_Color.jpg', x: 5.1, y: 52.6 },
+  { id: 5, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', img: 'images/inn/Ubicacion_02_Color.jpg', x: 14.7, y: 51.3 },
+  { id: 6, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', img: 'images/inn/Ubicacion_01_Color.jpg', x: 15.7, y: 54.7 },
+  { id: 7, name: 'Playa Puerto Chico', label: 'PLAYA PUERTO CHICO', distance: '0.3 km', category: 'Playa & Paseo', img: 'images/inn/Ubicacion_02_Color.jpg', x: 42.7, y: 75.1 },
+  { id: 8, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', img: 'images/inn/Ubicacion_03_Color.jpg', x: 85.3, y: 66.4 },
+  { id: 9, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', img: 'images/inn/Ubicacion_01_Color.jpg', x: 79.3, y: 81.1 },
 ]
 
 const LOCATION_DATA = {
   walking: [
-    { id: 1, name: 'Museo Pablo Fierro', distance: '0.4 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 1, name: 'Playa Puerto Chico', distance: '0.3 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
     { id: 2, name: 'Costanera', distance: '0.6 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 3, name: 'Muelle Piedraplen', distance: '0.8 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
-    { id: 4, name: 'Muelle Puerto Varas', distance: '0.9 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 5, name: 'Centro de Puerto Varas', distance: '1.0 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 6, name: 'Monumento Héroes Patrios', distance: '1.2 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 3, name: 'Muelle Puerto Varas', distance: '0.9 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 4, name: 'Centro de Puerto Varas', distance: '1.0 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 5, name: 'Mesa Tropera', distance: '1.2 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 6, name: 'Cassis', distance: '1.4 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
   ],
   vehicle: [
-    { id: 1, name: 'Mesa Tropera', distance: '1.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 2, name: 'Hotel Cumbres', distance: '2.1 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 3, name: 'Casino', distance: '2.3 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
-    { id: 4, name: 'Cassis', distance: '2.5 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 5, name: 'Mall - Supermercado', distance: '3.1 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 6, name: 'La Olla', distance: '3.8 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 1, name: 'Playa Puerto Chico', distance: '0.3 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 2, name: 'Costanera', distance: '0.6 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 3, name: 'Jumbo', distance: '1.5 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 4, name: 'Mesa Tropera', distance: '1.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 5, name: 'Casino Dreams', distance: '2.3 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
+    { id: 6, name: 'Cassis', distance: '2.5 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
+    { id: 7, name: 'Mall Paseo Puerto Varas', distance: '3.1 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
+    { id: 8, name: 'La Olla', distance: '3.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
   ],
 }
 
@@ -201,11 +206,12 @@ const GALLERY_SLIDES = LOCATION_POINTS.map((_, i) =>
 
 const MAP = {
   eyebrow: <>Ubicación</>,
-  title: <>Despierta frente al lago<br />en un entorno insuperable</>,
+  title: <>ntorno<br />INNigualable</>,
   description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
-  image: 'images/inn/mapa.png',
-  logo: 'images/inn/V.png',
+  image: 'images/inn/Mapa_PV.png',
+  logo: 'images/inn/E_titulo.png',
   btnText: 'Descubrir panoramas',
+  address: 'Vicente Pérez Rosales 991, Puerto Varas',
   features: [
     { id: 'direccion', icon: 'direccion', heading: 'Vicente Pérez Rosales 991', text: 'Puerto Varas, Región de Los Lagos' },
     { id: 'telefono', icon: 'telefono', heading: '+56 9 1234 5678', text: 'Contacto directo' },
@@ -226,13 +232,86 @@ const TEAM_DATA = {
   ],
 }
 
+const InnGalleryCarousel = memo(function InnGalleryCarousel({
+  slides,
+  galleryRef,
+  onSelectLocation,
+}) {
+  return (
+    <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-interval="false">
+      <div className="carousel-inner">
+        {slides.map((slideItems, slideIndex) => (
+          <div className={`carousel-item ${slideIndex === 4 ? 'active' : ''}`} key={slideIndex}>
+            <div className="row g-3">
+              {slideItems.map((loc, cardIdx) => (
+                <div className="col-12 col-md-4" key={`${slideIndex}-${loc.id}`}>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onSelectLocation(loc.itemIndex)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        onSelectLocation(loc.itemIndex)
+                      }
+                    }}
+                    className={`lb-inn-gallery__card rounded rounded-3 overflow-hidden position-relative h-100 ${cardIdx === 0 ? 'lb-inn-gallery__card--main' : ''}`}
+                    aria-label={`${loc.name} - ${loc.distance}`}
+                  >
+                    <div className="lb-inn-gallery__img-wrap position-relative">
+                      <img
+                        src={`${base}${loc.img}`}
+                        alt={loc.name}
+                        className="d-block w-100 lb-inn-gallery__img"
+                        loading="lazy"
+                      />
+                      <div className="lb-inn-gallery__badge position-absolute top-0 start-0 m-2">
+                        <span className="lb-inn-gallery__number me-1">{loc.id}</span>
+                        <span>{loc.distance}</span>
+                      </div>
+                      <a
+                        href={`${base}${loc.img}`}
+                        data-fancybox="inn-galeria"
+                        className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Ver foto ampliada"
+                        aria-label="Ver foto ampliada"
+                        tabIndex={0}
+                      >
+                        <Maximize2 size={13} />
+                      </a>
+                    </div>
+                    <div className="lb-inn-gallery__info p-2 px-3 d-flex justify-content-between align-items-center">
+                      <div>
+                        <h4 className="lb-inn-gallery__title mb-0">{loc.name}</h4>
+                        <small className="lb-inn-gallery__cat">{loc.category}</small>
+                      </div>
+                      <span className="lb-inn-gallery__badge-active">Activo</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <button className="lb-inn-gallery__nav lb-inn-gallery__nav--prev" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="prev" aria-label="Anterior">
+        <ChevronLeft size={20} />
+      </button>
+      <button className="lb-inn-gallery__nav lb-inn-gallery__nav--next" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="next" aria-label="Siguiente">
+        <ChevronRight size={20} />
+      </button>
+    </div>
+  )
+})
+
 export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const mobileNavRef = useRef(null)
   const [showMapModal, setShowMapModal] = useState(false)
   const [mapTab, setMapTab] = useState('walking')
-  const [activeLocationIndex, setActiveLocationIndex] = useState(0)
+  const [activeLocationIndex, setActiveLocationIndex] = useState(4)
 
   useEffect(() => {
     if (!mobileNavOpen) return
@@ -333,7 +412,7 @@ export default function Inn() {
     }
   }, [])
 
-  const handleSelectLocation = (index) => {
+  const handleSelectLocation = useCallback((index) => {
     setActiveLocationIndex(index)
     const galleryEl = galleryRef.current
     if (!galleryEl) return
@@ -343,6 +422,14 @@ export default function Inn() {
       wrap: true,
     })
     if (!c) return
+
+    const activeItem = galleryEl.querySelector('.carousel-item.active')
+    if (activeItem) {
+      const allItems = Array.from(galleryEl.querySelectorAll('.carousel-item'))
+      if (allItems.indexOf(activeItem) === index) {
+        return
+      }
+    }
 
     if (c._isSliding) {
       galleryEl.addEventListener(
@@ -355,7 +442,7 @@ export default function Inn() {
     } else {
       c.to(index)
     }
-  }
+  }, [])
 
   // Scrollspy: activa el tab segun la seccion visible (sin cambiar nombres)
   useEffect(() => {
@@ -389,7 +476,7 @@ export default function Inn() {
           overlayClassName="lb-inn-hero__overlay"
         >
           <div className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
-            <ScrollAnim as='span' animation='zoom-in' className='mt-auto'><img src={`${base}images/inn/inn-logo.png`} className="lb-inn-hero__logo" alt="Logo INN" /></ScrollAnim>
+            <ScrollAnim as='span' animation='zoom-in' className='mt-auto'><img src={`${base}images/inn/Logo_INN_Header.png`} className="lb-inn-hero__logo" alt="Logo INN" /></ScrollAnim>
             <SplitTitle as='h1' delay={0.2} stagger={0.05} className="lb-inn-hero__title p-0">VIVE EL LUJO<br /> EN PUERTO VARAS</SplitTitle>
           </div>
         </HeroShell>
@@ -398,7 +485,7 @@ export default function Inn() {
         <nav className="lb-inn-hero-tabs d-none d-lg-block mx-auto" aria-label="Secciones del proyecto">
           <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner shadow-lg">
             <div className="card-body py-4 px-4">
-              <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-5">
+              <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-3">
                 {TABS.map((t) => (
                   <li className="nav-item" key={t.id}>
                     <button
@@ -583,7 +670,7 @@ export default function Inn() {
         <section className="container-fluid lb-inn-map" id="ubicacion">
           <div className="container">
             <div className="row g-0">
-              <div className="col-12 col-lg-7 p-3 p-md-4 p-lg-5 d-flex flex-column justify-content-center">
+              <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
                 <div className="mb-4 mb-md-5 lb-inn-map__header">
                   <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3 mb-md-5">{MAP.eyebrow}</ScrollAnim>
                   <div className="d-flex align-items-center gap-3 gap-md-4">
@@ -599,8 +686,8 @@ export default function Inn() {
                     </div>
                   </div>
                 </div>
-                <div className="lb-inn-map__text text-center text-lg-start">
-                  <ScrollAnim animation="fade-up" className="lh-lg mb-4 mb-md-5 w-md-80">
+                <div className="lb-inn-map__text text-start">
+                  <ScrollAnim animation="fade-up" className="lb-inn-proyecto__text lh-lg mb-4 mb-md-5 w-md-80">
                     <span dangerouslySetInnerHTML={{ __html: MAP.description }} />
                   </ScrollAnim>
                   <button
@@ -617,7 +704,7 @@ export default function Inn() {
                   </button>
                 </div>
               </div>
-              <div className="col-12 col-lg-5">
+              <div className="col-12 col-lg-7">
                 <ScrollAnim animation="fade-right">
                   <div className="lb-inn-map__interactive-wrap position-relative w-100">
                     <img
@@ -630,13 +717,14 @@ export default function Inn() {
                     {/* Pin INN */}
                     <div
                       className="lb-inn-map__pin-inn position-absolute"
-                      style={{ left: '39.8%', top: '68%' }}
+                      style={{ left: '40.0%', top: '68.1%' }}
                       title="Proyecto INN - Vicente Pérez Rosales 991"
                     >
-                      <div className="lb-inn-map__pin-inn-pulse" />
-                      <div className="lb-inn-map__pin-inn-badge">
-                        <span>INN</span>
-                      </div>
+                      <img
+                        src={`${base}images/inn/pin_logo.png`}
+                        alt="Proyecto INN - Vicente Pérez Rosales 991"
+                        className="lb-inn-map__pin-inn-img"
+                      />
                     </div>
 
                     {/* Pines interactivos */}
@@ -659,15 +747,20 @@ export default function Inn() {
                           style={{ left: `${point.x}%`, top: `${point.y}%` }}
                           aria-label={`${point.name} (${point.distance})`}
                         >
-                          <span className="lb-inn-map__pin-number">{point.id}</span>
-                          {isSelected && <span className="lb-inn-map__pin-ring" />}
-                          <span className="lb-inn-map__pin-tooltip">
-                            <strong>{point.name}</strong>
-                            <small>{point.distance}</small>
+                          <span className="lb-inn-map__pin-dot-wrap">
+                            <span className="lb-inn-map__pin-dot" />
                           </span>
+                          <span className="lb-inn-map__pin-line" />
+                          <span className="lb-inn-map__pin-pill">{point.label || point.name}</span>
                         </button>
                       )
                     })}
+                  </div>
+
+                  {/* Dirección bajo el mapa */}
+                  <div className="lb-inn-map__address d-flex align-items-center justify-content-center gap-2 mb-3 mb-md-4">
+                    <MapPin size={22} className="lb-inn-map__address-icon" />
+                    <span className="lb-inn-map__address-text">{MAP.address}</span>
                   </div>
                 </ScrollAnim>
               </div>
@@ -678,75 +771,11 @@ export default function Inn() {
         {/* Carousel de imágenes con interacción sincronizada */}
         <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
           <ScrollAnim className='container' animation="fade-up">
-            <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-interval="false">
-              <div className="carousel-inner">
-                {GALLERY_SLIDES.map((slideItems, slideIndex) => (
-                  <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
-                    <div className="row g-3">
-                      {slideItems.map((loc) => {
-                        const isSelected = loc.itemIndex === activeLocationIndex
-                        return (
-                          <div className="col-12 col-md-4" key={`${slideIndex}-${loc.id}`}>
-                            <div
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => handleSelectLocation(loc.itemIndex)}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault()
-                                  handleSelectLocation(loc.itemIndex)
-                                }
-                              }}
-                              className={`lb-inn-gallery__card rounded rounded-3 overflow-hidden position-relative h-100 ${isSelected ? 'lb-inn-gallery__card--active' : ''}`}
-                              aria-label={`${loc.name} - ${loc.distance}`}
-                            >
-                              <div className="lb-inn-gallery__img-wrap position-relative">
-                                <img
-                                  src={`${base}${loc.img}`}
-                                  alt={loc.name}
-                                  className="d-block w-100 lb-inn-gallery__img"
-                                  loading="lazy"
-                                />
-                                <div className="lb-inn-gallery__badge position-absolute top-0 start-0 m-2">
-                                  <span className="lb-inn-gallery__number me-1">{loc.id}</span>
-                                  <span>{loc.distance}</span>
-                                </div>
-                                <a
-                                  href={`${base}${loc.img}`}
-                                  data-fancybox="inn-galeria"
-                                  className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
-                                  onClick={(e) => e.stopPropagation()}
-                                  title="Ver foto ampliada"
-                                  aria-label="Ver foto ampliada"
-                                  tabIndex={0}
-                                >
-                                  <Maximize2 size={13} />
-                                </a>
-                              </div>
-                              <div className="lb-inn-gallery__info p-2 px-3 d-flex justify-content-between align-items-center">
-                                <div>
-                                  <h4 className="lb-inn-gallery__title mb-0">{loc.name}</h4>
-                                  <small className="lb-inn-gallery__cat">{loc.category}</small>
-                                </div>
-                                {isSelected && (
-                                  <span className="lb-inn-gallery__badge-active">Activo</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button className="lb-inn-gallery__nav lb-inn-gallery__nav--prev" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="prev" aria-label="Anterior">
-                <ChevronLeft size={20} />
-              </button>
-              <button className="lb-inn-gallery__nav lb-inn-gallery__nav--next" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="next" aria-label="Siguiente">
-                <ChevronRight size={20} />
-              </button>
-            </div>
+            <InnGalleryCarousel
+              slides={GALLERY_SLIDES}
+              galleryRef={galleryRef}
+              onSelectLocation={handleSelectLocation}
+            />
           </ScrollAnim>
         </section>
 
@@ -755,9 +784,18 @@ export default function Inn() {
           title={<>MAESTRÍA EN<br />CADA DETALLE</>}
           parallaxStrength={PARALLAX_STRENGTH}
           description="
-          <p>La experiencia de <b>Sofía Iturralde</b> y la especialización lumínica de <b>Rafael Rivera</b> se encuentran en INN para dar forma a una propuesta de diseño integral, donde interiorismo y luz fueron concebidos como parte de una misma experiencia. Con cerca de 20 años de trayectoria, Sofía ha desarrollado proyectos inmobiliarios, corporativos y residenciales en distintos puntos de Chile y Argentina, incluyendo trabajos en Puerto Varas, Pucón, Concón, Santiago, Buenos Aires, El Golf, La Dehesa y Vitacura.</p>
-          <p>A esta visión se suma Rafael Rivera, diseñador especializado en iluminación en el Istituto Europeo di Design de Milán y dedicado al diseño lumínico desde 2003. Su estudio ha trabajado en proyectos residenciales, hoteleros, corporativos, comerciales y culturales, entre ellos Hotel Lago Grey, Museo El Carmen, Club La Unión, Casa Vitacura y Corporativo Apoquindo, además de desarrollar una trayectoria docente en iluminación desde 2012.</p>
-          <p>En <b>INN</b>, ambas disciplinas dialogan para que materiales, texturas, volúmenes y distintas escenas de luz construyan ambientes cálidos, sofisticados y conectados con la identidad del sur, reforzando el carácter exclusivo de un proyecto pensado para vivir Puerto Varas desde el diseño, el confort y el bienestar.</p>"
+          <p>El interiorismo de <b>Sofía Iturralde</b> y la iluminación de <b>Rafael Rivera</b> se unen 
+          en INN para crear una experiencia integral de diseño. Sofía aporta cerca
+          de 20 años de trayectoria en proyectos inmobiliarios, corporativos y
+          residenciales en Chile y Argentina. Rafael, especializado en iluminación en
+          el Istituto Europeo di Design de Milán, desarrolla proyectos lumínicos
+          desde 2003.</p>
+          <p>En <b>INN</b>, ambas disciplinas dialogan para que materiales, texturas,
+            volúmenes y distintas escenas de luz construyan ambientes cálidos y
+            sofisticados, conectados con la identidad del sur. Una propuesta que
+            realza cada espacio y refuerza el carácter exclusivo de un proyecto
+            pensado para vivir Puerto Varas desde el diseño, el confort y el bienestar
+          </p>"
           backgroundImage="images/inn/Interiorismo.svg"
           id="interiorismo"
           ariaLabel="Interiorismo"

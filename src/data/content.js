@@ -21,7 +21,7 @@ export const images = {
   avatarHerman: img('home/avatar-herman.jpg'),
   avatarFernanda: img('home/avatar-fernanda.jpg'),
   avatarMaximiliano: img('home/avatar-maximiliano.jpg'),
-  ctaSection: img('home/banner.jpg'),
+  ctaSection: img('home/Mesa de trabajo.jpg'),
   star: img('icons/star.svg'),
   starHalf: img('icons/star-half.svg'),
   share: img('icons/share.svg'),

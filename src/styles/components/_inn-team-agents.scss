@@ -17,13 +17,6 @@ $inn-wa: #d1b578;
   padding: 4rem 0;
   margin-top: 4rem;
 
-  &__layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: stretch;
-  }
-
   &__eyebrow {
     display: block;
     font-size: $lb-fs-xl;
@@ -58,6 +51,10 @@ $inn-wa: #d1b578;
     // Al hacer hover sobre la fila, el avatar se expande
     &:hover .lb-inn-team-agents__avatar-wrapper {
       width: 180px;
+    }
+
+    &:hover .lb-inn-team-agents__avatar {
+      filter: grayscale(0);
     }
   }
 
@@ -183,12 +180,8 @@ $inn-wa: #d1b578;
     height: 100%;
     object-fit: cover;
     object-position: 50% 30%;
-  }
-
-  // Columna derecha
-  &__right {
-    display: flex;
-    flex-direction: column;
+    filter: grayscale(1);
+    transition: filter 0.3s ease;
   }
 
   &__subtitle {
@@ -250,11 +243,6 @@ $inn-wa: #d1b578;
 @include bs.media-breakpoint-down(lg) {
   .lb-inn-team-agents {
     padding: $lb-section-pad-sm 0;
-
-    &__layout {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
 
     &__map,
     &__map iframe {
