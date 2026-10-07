@@ -38,13 +38,23 @@ body {
     overflow-x: clip; // clip previene scroll horizontal sin romper position: sticky (a diferencia de overflow: hidden)
 
     &#main-home {
-      background-image: url(/images/home/fondo.jpeg);
-      background-repeat: no-repeat;
-      background-position: right;
-      background-attachment: fixed;
-      background-size: cover;
+      position: relative;
+
+      > :not(.lb-home-terrain-bg) {
+        position: relative;
+        z-index: 1;
+      }
     }
   }
+}
+
+.lb-home-terrain-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .modal.d-block {

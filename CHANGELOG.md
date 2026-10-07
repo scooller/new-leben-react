@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.94] - 2026-10-07
+
+### Changed
+- `global.scss`: removido `background-image: url(/images/home/fondo.jpeg)` estático en `#root main#main-home`, configurado `position: relative` con elevación de secciones hijas a `z-index: 1`, y añadida clase `.lb-home-terrain-bg` para renderizar el fondo de terreno procedural interactivo como lienzo fijo en `z-index: 0`.
+- `App.jsx`: montado `TerrainErosionCarve` como fondo dinámico dentro de `<main id="main-home">` en la ruta principal.
+- `TerrainErosionCarve.jsx`: adaptada la paleta de colores por defecto a la identidad Leben (`lineColor` en tono pizarra bosque `rgba(56, 71, 60, 0.20)` y `accentColor` en bronce patagónico `rgba(158, 110, 67, 0.70)`), y configurada captura no invasiva de tallado en `window` con filtro para elementos interactivos y soporte táctil sin bloqueo de scroll.
+
 ## [0.9.93] - 2026-10-07
 
 ### Changed

@@ -14,6 +14,7 @@ import ChatWidget from './components/ChatWidget.jsx'
 import CookieConsentModal from './components/cookies/CookieConsentModal.jsx'
 import CookieSettingsTrigger from './components/cookies/CookieSettingsTrigger.jsx'
 import AnnouncementModal from './components/announcement/AnnouncementModal.jsx'
+import TerrainErosionCarve from './components/TerrainErosionCarve.jsx'
 
 // Home sections
 import Hero from './components/sections/Hero.jsx'
@@ -82,6 +83,7 @@ export default function App() {
             <>
               <Navbar />
               <main id="main-home">
+                <TerrainErosionCarve className="lb-home-terrain-bg" />
                 <Home />
               </main>
               <Footer />

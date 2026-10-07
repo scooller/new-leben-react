@@ -49,8 +49,8 @@ export default function TerrainErosionCarve({
   healSpeed = 0.55,
   carveRadius = 3.5,
   carveDepth = 0.45,
-  lineColor = "rgba(100, 150, 180, 0.45)",
-  accentColor = "rgba(0, 180, 255, 0.8)",
+  lineColor = "rgba(56, 71, 60, 0.20)",
+  accentColor = "rgba(158, 110, 67, 0.70)",
   bgColor = "transparent",
   sedimentCount = 40,
   ambientSpeed = 0.08,
@@ -157,6 +157,15 @@ export default function TerrainErosionCarve({
     }
 
     function onPointerDown(e) {
+      if (e.pointerType === "touch") return;
+      if (e.button !== undefined && e.button !== 0) return;
+      if (
+        e.target &&
+        e.target.closest &&
+        e.target.closest("a, button, input, select, textarea, [role='button'], .btn, .card, .lb-cert, .lb-search-card, .lb-search-pill, .modal")
+      ) {
+        return;
+      }
       isCarving = true;
       const pos = getGridCoords(e);
       carveAt(pos.gx, pos.gy);
@@ -175,7 +184,7 @@ export default function TerrainErosionCarve({
       lastGridPos = null;
     }
 
-    canvas.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
     window.addEventListener("pointercancel", onPointerUp);
@@ -371,7 +380,7 @@ export default function TerrainErosionCarve({
     return () => {
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
-      canvas.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
