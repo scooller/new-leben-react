@@ -16,6 +16,7 @@ import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import Alternatives from '../components/proyecto/Alternatives.jsx'
 import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
 import InnTeamAgents from '../components/proyecto/InnTeamAgents.jsx'
+import InnPanoramasModal from '../components/proyecto/InnPanoramasModal.jsx'
 import { ConciergeBellIcon } from '../components/icons/concierge-bell.jsx'
 import { TableIcon } from '../components/icons/table.jsx'
 import { ChefHatIcon } from '../components/icons/chef-hat.jsx'
@@ -326,6 +327,7 @@ export default function Inn() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const mobileNavRef = useRef(null)
   const [showMapModal, setShowMapModal] = useState(false)
+  const [showPanoramasModal, setShowPanoramasModal] = useState(false)
   const [mapTab, setMapTab] = useState('walking')
   const [activeLocationIndex, setActiveLocationIndex] = useState(4)
 
@@ -709,10 +711,7 @@ export default function Inn() {
                   <button
                     type="button"
                     className="btn btn-gold"
-                    onClick={() => {
-                      const el = document.getElementById('galeria')
-                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                    }}
+                    onClick={() => setShowPanoramasModal(true)}
                     {...hover(mapRef)}
                   >
                     <MapPinIcon ref={mapRef} size={18} />
@@ -928,6 +927,12 @@ export default function Inn() {
           </div>
         </div>
       </div>
+
+      {/* NUEVO MODAL DE PANORAMAS (Experiencias) */}
+      <InnPanoramasModal
+        show={showPanoramasModal}
+        onClose={() => setShowPanoramasModal(false)}
+      />
 
       {/* SECCIÓN CONTACTO — asesores + mapa */}
       <InnTeamAgents data={TEAM_DATA} />

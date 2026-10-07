@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.92] - 2026-10-07
+
+### Added
+- `InnPanoramasModal.jsx`: modal de panoramas y experiencias ("EL SUR, A TU MANERA") basado en estructura modal de Bootstrap 5 (`modal fade`, `modal-dialog-centered modal-xl`, `modal-content`), con fondo de bosque nativo, tabs por categoría (`RUTA DEL LAGO`, `NATURALEZA EN GRANDE`, `CULTURA JUNTO AL LAGO`, `ESCAPADAS MEMORABLES`), navegación por slides con contador (`[1/3]`), tarjetas de panoramas con fotos y distancia en vehículo, soporte para teclado (Escape y flechas de navegación) y bloqueo de scroll.
+- `_inn.scss`: estilos integrados para `.lb-inn-panoramas-modal`, simplificados eliminando wrappers redundantes al aprovechar las clases de Bootstrap, fondo natural con gradiente oscuro, tipografía de título en `$font-title` y acento dorado `$inn-gold`, pestañas con línea activa, tarjetas en tono arena `#f6f1eb` y botones de navegación circulares.
+- Imágenes en `public/images/inn/panoramas/` para destinos y fondo del modal (`bg-forest.jpg`, `ensenada.jpg`, `playa-venado.jpg`, `saltos-petrohue.jpg`, `teatro-lago.jpg`, `peulla.jpg`).
+
+### Changed
+- `Inn.jsx`: re-habilitado el botón "Descubrir panoramas" para abrir el nuevo modal interactivo de experiencias y panoramas.
+
+## [0.9.91] - 2026-10-06
+
+### Added
+- `TerrainErosionCarve.jsx`: recreación interactiva del fondo animado de mapa topográfico con erosión dinámica (`terrain-erosion-carve`), implementado con Canvas 2D nativo, ruido procedural 2D (fBm), isolíneas calculadas con marching squares, tallado de cauces por arrastre/pointer, partículas de sedimento y auto-regeneración exponencial del terreno.
+
 ## [0.9.90] - 2026-10-06
 
 ### Changed
