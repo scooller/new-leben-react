@@ -4,13 +4,13 @@ import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
-import Alternatives from '../components/proyecto/Alternatives.jsx'
+// import Alternatives from '../components/proyecto/Alternatives.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import ProjectCardSkeleton from '../components/ProjectCardSkeleton.jsx'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
-import { groupByComuna } from '../lib/projectUtils.js'
+import { mapApiProject } from '../lib/projectUtils.js'
 
 const COTIZADOR_DATA = {
   title: 'Cotiza tu próximo departamento',
@@ -68,8 +68,8 @@ function useDynamicFilters(rawProjects) {
   }, [rawProjects])
 }
 
-/** Filter raw projects by searchParams, then group by comuna */
-function useFilteredGroups(searchParams, rawProjects) {
+/** Filter raw projects by searchParams, ordered by comuna */
+function useFilteredProjects(searchParams, rawProjects) {
   return useMemo(() => {
     const ubicacion = searchParams.get('ubicacion')
     const tipo = searchParams.get('tipo')
@@ -91,9 +91,13 @@ function useFilteredGroups(searchParams, rawProjects) {
       return true
     })
 
-    const groups = groupByComuna(filtered)
-    groups.forEach((g) => g.projects.sort((a, b) => a.name.localeCompare(b.name)))
-    return groups
+    return filtered
+      .map(mapApiProject)
+      .sort((a, b) => {
+        const comp = (a.comuna || '').localeCompare(b.comuna || '', 'es', { sensitivity: 'base' })
+        if (comp !== 0) return comp
+        return (a.name || '').localeCompare(b.name || '', 'es', { sensitivity: 'base' })
+      })
   }, [searchParams, rawProjects])
 }
 
@@ -102,7 +106,7 @@ export default function CotizadorGeneral() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { data: rawProjects, loading: projectsLoading, error: projectsError } = useApiProjects()
   const dynamicFilters = useDynamicFilters(rawProjects)
-  const filteredGroups = useFilteredGroups(searchParams, rawProjects)
+  const filteredProjects = useFilteredProjects(searchParams, rawProjects)
   const hasFilters = [...searchParams.keys()].length > 0
 
   const [activeProject, setActiveProject] = useState(null)
@@ -153,7 +157,7 @@ export default function CotizadorGeneral() {
               }}
               onCotizar={handleCotizarPlanta}
             />
-            <Alternatives data={{ excludeName: activeProject.name }} />
+            {/* <Alternatives data={{ excludeName: activeProject.name }} /> */}
           </>
         )}
 
@@ -209,25 +213,15 @@ export default function CotizadorGeneral() {
                 <button className="btn btn-outline-primary btn-sm" onClick={() => window.location.reload()}>Reintentar</button>
               </div>
             ) : (
-              <>
-                {filteredGroups.map((group, gi) => (
-                  <div className="d-flex flex-column gap-4" key={group.zone}>
-                    <ScrollAnim as="div" className="d-flex align-items-center justify-content-between" animation="fade-right" delay={gi * 0.1}>
-                      <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
-                    </ScrollAnim>
-
-                    <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-                      {group.projects.map((project) => (
-                        <div key={project.name} className="col">
-                          <ProjectCard project={project} />
-                        </div>
-                      ))}
-                    </ScrollAnim>
+              <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
+                {filteredProjects.map((project) => (
+                  <div key={project.name} className="col">
+                    <ProjectCard project={project} />
                   </div>
                 ))}
-              </>
+              </ScrollAnim>
             )}
-            {!projectsLoading && !projectsError && filteredGroups.length === 0 && (
+            {!projectsLoading && !projectsError && filteredProjects.length === 0 && (
               <p className="text-center text-muted py-5">No se encontraron proyectos con los filtros seleccionados.</p>
             )}
           </div>

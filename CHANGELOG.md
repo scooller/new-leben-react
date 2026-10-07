@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.100] - 2026-10-07
+
+### Fixed
+- `CotizadorGeneral.jsx`: corregido el mapeo de proyectos en `useFilteredProjects` aplicando `mapApiProject(p)`. Los datos de la API ahora se transforman correctamente a las propiedades esperadas por `ProjectCard` (`image`, `location`, `entrega`, `tipologia`, `precioDesde`), restaurando la visualización completa de información e imágenes en las tarjetas.
+
+## [0.9.99] - 2026-10-07
+
+### Changed
+- `CotizadorGeneral.jsx`: en la sección "Main Projects" (`#proyectos`), se eliminó la separación y títulos por comuna (`groupByComuna`). Ahora todos los proyectos se muestran unificados en una sola grilla continua (`row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4`), ordenados alfabéticamente por comuna y nombre de proyecto (`useFilteredProjects`).
+
 ## [0.9.98] - 2026-10-07
 
 ### Changed
