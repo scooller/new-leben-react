@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const base = import.meta.env.BASE_URL
 
@@ -258,15 +258,11 @@ export default function InnPanoramasModal({ show, onClose }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [show, onClose, handlePrevSlide, handleNextSlide])
 
-  // Bloqueo de scroll cuando el modal está abierto
+  // Bloqueo de scroll con clase estándar modal-open de Bootstrap
   useEffect(() => {
-    if (show) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.classList.toggle('modal-open', Boolean(show))
     return () => {
-      document.body.style.overflow = ''
+      document.body.classList.remove('modal-open')
     }
   }, [show])
 
@@ -297,15 +293,13 @@ export default function InnPanoramasModal({ show, onClose }) {
           {/* Overlay oscuro para legibilidad sobre fondo de bosque */}
           <div className="lb-inn-panoramas-modal__backdrop-filter" />
 
-          {/* Botón cerrar */}
+          {/* Botón cerrar nativo Bootstrap */}
           <button
             type="button"
-            className="lb-inn-panoramas-modal__close-btn"
+            className="btn-close btn-close-white position-absolute top-0 end-0 m-3 m-md-4 z-3"
             onClick={onClose}
             aria-label="Cerrar modal"
-          >
-            <X size={20} />
-          </button>
+          />
 
           <div className="modal-body lb-inn-panoramas-modal__content position-relative p-4 p-md-5">
             {/* Header */}
@@ -349,18 +343,18 @@ export default function InnPanoramasModal({ show, onClose }) {
             <div className="row g-4 mb-4">
               {currentCards.map((card) => (
                 <div key={card.id} className="col-12 col-md-6">
-                  <div className="lb-inn-panoramas-modal__card h-100">
-                    <div className="lb-inn-panoramas-modal__card-img-wrap">
+                  <div className="card lb-inn-panoramas-modal__card h-100 border-0 rounded-1 overflow-hidden">
+                    <div className="ratio ratio-16x9">
                       <img
                         src={`${base}${card.image}`}
                         alt={card.title}
-                        className="lb-inn-panoramas-modal__card-img"
+                        className="object-fit-cover w-100 h-100 lb-inn-panoramas-modal__card-img"
                         loading="lazy"
                       />
                     </div>
-                    <div className="lb-inn-panoramas-modal__card-info">
-                      <h3 className="lb-inn-panoramas-modal__card-title">{card.title}</h3>
-                      <div className="lb-inn-panoramas-modal__card-dist">
+                    <div className="card-body p-3 px-4">
+                      <h3 className="lb-inn-panoramas-modal__card-title mb-1">{card.title}</h3>
+                      <div className="d-flex align-items-center text-secondary small">
                         <CarFrontIcon size={16} className="me-2" />
                         <span>{card.distance}</span>
                       </div>
@@ -371,15 +365,15 @@ export default function InnPanoramasModal({ show, onClose }) {
             </div>
 
             {/* Barra de navegación inferior */}
-            <div className="lb-inn-panoramas-modal__footer">
+            <div className="d-flex align-items-center justify-content-between pt-2">
               <div className="lb-inn-panoramas-modal__counter">
                 {currentCategory.name} [{activeSlideIndex + 1}/{totalSlides}]
               </div>
 
-              <div className="lb-inn-panoramas-modal__controls">
+              <div className="d-flex align-items-center gap-2">
                 <button
                   type="button"
-                  className="lb-inn-panoramas-modal__arrow"
+                  className="btn lb-inn-panoramas-modal__arrow rounded-circle d-inline-flex align-items-center justify-content-center p-0"
                   onClick={handlePrevSlide}
                   aria-label="Panorama anterior"
                 >
@@ -387,7 +381,7 @@ export default function InnPanoramasModal({ show, onClose }) {
                 </button>
                 <button
                   type="button"
-                  className="lb-inn-panoramas-modal__arrow"
+                  className="btn lb-inn-panoramas-modal__arrow rounded-circle d-inline-flex align-items-center justify-content-center p-0"
                   onClick={handleNextSlide}
                   aria-label="Siguiente panorama"
                 >

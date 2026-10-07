@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.93] - 2026-10-07
+
+### Changed
+- `InnPanoramasModal.jsx`: simplificado adoptando utilidades y componentes nativos de Bootstrap 5 (`btn-close btn-close-white`, `card border-0`, `ratio ratio-16x9`, `object-fit-cover`, `modal-open`), removiendo icono `X` superfluo y reduciendo lógica de bloqueo de scroll a una línea.
+- `_inn.scss`: eliminados selectores CSS redundantes de close-button, card-img-wrap, card-info, card-dist, footer y controls en favor de utilidades estándar de Bootstrap 5.
+
 ## [0.9.92] - 2026-10-07
 
 ### Added
