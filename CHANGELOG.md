@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.97] - 2026-10-07
+
+### Changed
+- `Inn.jsx`: soporte dual para pestañas destacadas (`featured: true`) según presencia de `active: true`. Si `active` no está definido o es falso, renderiza como botón contorno (`btn-outline-primary nav-link--featured-outline`) con borde primario y relleno primario al `:hover`; si `active` es verdadero (o la sección está seleccionada/activa), permanece siempre relleno en color primario (`btn-primary nav-link--featured active`).
+- `_inn.scss`: añadidas clases `.nav-link--featured-outline` y `.btn-outline-primary` con fondo transparente, borde `$lb-red` y transición de relleno `$lb-red` en hover/focus/active, extendiendo también el soporte para ítems en menú móvil (`dropdown-item--featured-outline`).
+
+## [0.9.96] - 2026-10-07
+
+### Changed
+- `Inn.jsx`: integrado soporte para ítems destacados (`featured: true`) en el menú de navegación del proyecto (`TABS`). En la botonera desktop aplica clases `nav-link--featured btn btn-primary` preservando el estado activo/hover, y en el menú móvil aplica `dropdown-item--featured` con punto indicador primario `lb-inn-dot--primary`.
+- `_inn.scss`: añadidas reglas para `.nav-link--featured` y `.btn-primary` dentro de `.lb-inn-hero-tabs__inner` para utilizar el color primario de marca (`$lb-red` y hover/active `$lb-red-dark`) en lugar del degradado activo dorado (`$lb-gradient-gold`), junto con adaptaciones correspondientes en el selector móvil.
+
 ## [0.9.95] - 2026-10-07
 
 ### Changed

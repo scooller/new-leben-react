@@ -44,10 +44,11 @@ const INFO = [
 // Negativo = el elemento sube al hacer scroll (parallax clásico).
 const PARALLAX_STRENGTH = -12
 
+// {id:'string', label:'string', featured:bol, active:bol}
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Equipamiento' },
-  { id: 'cotizador', label: 'Cotizador' },
+  { id: 'cotizador', label: 'Cotizador', featured: true },
   { id: 'espacios', label: 'Espacios' },
   { id: 'ubicacion', label: 'Ubicación' },
   { id: 'interiorismo', label: 'Interiorismo' },
@@ -504,21 +505,38 @@ export default function Inn() {
           <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner shadow-lg">
             <div className="card-body py-4 px-4">
               <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-3">
-                {TABS.map((t) => (
-                  <li className="nav-item" key={t.id}>
-                    <button
-                      type="button"
-                      className={`nav-link nav-link__border ${t.id === activeTab ? 'active' : ''}`}
-                      onClick={() => {
-                        setActiveTab(t.id)
-                        const target = document.getElementById(t.id)
-                        target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                      }}
-                    >
-                      {t.label.toUpperCase()}
-                    </button>
-                  </li>
-                ))}
+                {TABS.map((t) => {
+                  const isFeatured = Boolean(t.featured)
+                  const isPermanentActive = Boolean(t.active)
+                  const isCurrentActive = t.id === activeTab
+
+                  let buttonClasses = 'nav-link'
+                  if (isFeatured) {
+                    if (isPermanentActive || isCurrentActive) {
+                      buttonClasses += ' nav-link--featured btn btn-primary active'
+                    } else {
+                      buttonClasses += ' nav-link--featured-outline btn btn-outline-primary'
+                    }
+                  } else {
+                    buttonClasses += ` nav-link__border ${isCurrentActive ? 'active' : ''}`
+                  }
+
+                  return (
+                    <li className="nav-item" key={t.id}>
+                      <button
+                        type="button"
+                        className={buttonClasses}
+                        onClick={() => {
+                          setActiveTab(t.id)
+                          const target = document.getElementById(t.id)
+                          target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }}
+                      >
+                        {t.label.toUpperCase()}
+                      </button>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           </ScrollAnim>
@@ -536,7 +554,7 @@ export default function Inn() {
                 aria-label="Seleccionar sección"
               >
                 <div className="d-flex align-items-center gap-2">
-                  <span className="badge rounded-pill lb-inn-mobile-nav__badge">SECCIÓN</span>
+                  <span className={`badge rounded-pill lb-inn-mobile-nav__badge ${TABS.find((t) => t.id === activeTab)?.featured ? 'lb-inn-mobile-nav__badge--primary' : ''}`}>SECCIÓN</span>
                   <span className="fw-bold text-dark text-uppercase small">{activeTabLabel}</span>
                 </div>
                 <ChevronDown size={18} className={`lb-inn-mobile-nav__arrow ${mobileNavOpen ? 'open' : ''}`} />
@@ -544,22 +562,40 @@ export default function Inn() {
 
               {mobileNavOpen && (
                 <div className="lb-inn-mobile-nav__menu shadow-lg rounded-4 p-2 mt-2">
-                  {TABS.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      className={`dropdown-item py-2 px-3 rounded-3 d-flex align-items-center justify-content-between ${t.id === activeTab ? 'active fw-bold' : ''}`}
-                      onClick={() => {
-                        setActiveTab(t.id)
-                        setMobileNavOpen(false)
-                        const target = document.getElementById(t.id)
-                        target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                      }}
-                    >
-                      <span>{t.label}</span>
-                      {t.id === activeTab && <span className="lb-inn-dot" />}
-                    </button>
-                  ))}
+                  {TABS.map((t) => {
+                    const isFeatured = Boolean(t.featured)
+                    const isPermanentActive = Boolean(t.active)
+                    const isCurrentActive = t.id === activeTab
+                    const isTabActive = isPermanentActive || isCurrentActive
+
+                    let itemClasses = 'dropdown-item py-2 px-3 rounded-3 d-flex align-items-center justify-content-between'
+                    if (isFeatured) {
+                      if (isTabActive) {
+                        itemClasses += ' dropdown-item--featured active fw-bold'
+                      } else {
+                        itemClasses += ' dropdown-item--featured-outline'
+                      }
+                    } else if (isCurrentActive) {
+                      itemClasses += ' active fw-bold'
+                    }
+
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        className={itemClasses}
+                        onClick={() => {
+                          setActiveTab(t.id)
+                          setMobileNavOpen(false)
+                          const target = document.getElementById(t.id)
+                          target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }}
+                      >
+                        <span>{t.label}</span>
+                        {isTabActive && <span className={`lb-inn-dot ${isFeatured ? 'lb-inn-dot--primary' : ''}`} />}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </div>

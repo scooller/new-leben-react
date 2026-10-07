@@ -103,7 +103,7 @@ const pageLinksMap = {
   '/inn-test': [
     { label: 'Proyecto', href: '#proyecto' },
     { label: 'Equipamiento', href: '#departamentos' },
-    { label: 'Cotizador', href: '#cotizador' },
+    { label: 'Cotizador', href: '#cotizador', featured: true, active: true },
     { label: 'Espacios', href: '#espacios' },
     { label: 'Ubicación', href: '#ubicacion' },
     { label: 'Interiorismo', href: '#interiorismo' },
@@ -148,7 +148,7 @@ export default function Navbar() {
     <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled || forceScrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
       <div className="container d-flex align-items-center justify-content-between g-5">
         {/* Logo group */}
-        <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
+        <Link className="lb-navbar__logo d-flex align-items-center gap-2 text-decoration-none" to="/">
           <img src={images.logoIcon} alt="" width="23" height="22" className="flex-shrink-0" fetchPriority="high" />
           <img src={images.logoText} alt="iLeben" height="22" className="flex-shrink-0" fetchPriority="high" />
           <span className="lb-nav-separator d-none d-md-block" />
@@ -158,14 +158,14 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="d-none d-lg-flex align-items-center gap-2 ms-auto">
+        <div className="lb-navbar__links d-none d-lg-flex align-items-center gap-2 ms-auto">
           {mainLinks.map((link) =>
             <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
           )}
         </div>
 
         {/* Mobile nav */}
-        <div className="d-lg-none d-flex align-items-center gap-2 ms-auto">
+        <div className="lb-navbar__links-mobile d-lg-none d-flex align-items-center gap-2 ms-auto">
           {mainMobileLinks.map((link) =>
             <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
           )}
