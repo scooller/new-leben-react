@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
@@ -111,6 +111,28 @@ export default function CotizadorGeneral() {
 
   const [activeProject, setActiveProject] = useState(null)
   const [externalPlanta, setExternalPlanta] = useState(null)
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash === '#proyectos') {
+      const scroll = () => {
+        const el = document.getElementById('proyectos')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          return true
+        }
+        return false
+      }
+      if (!scroll()) {
+        const t1 = setTimeout(scroll, 150)
+        const t2 = setTimeout(scroll, 450)
+        return () => {
+          clearTimeout(t1)
+          clearTimeout(t2)
+        }
+      }
+    }
+  }, [location.hash])
 
   const handleProjectChange = useCallback((p) => setActiveProject(p), [])
   const handleCotizarPlanta = useCallback((planta) => setExternalPlanta(planta), [])
@@ -118,7 +140,7 @@ export default function CotizadorGeneral() {
   return (
     <>
       <Navbar />
-      <main className="lb-cot-gen">
+      <main className="lb-cot-gen" id="cotizador-gral">
         {/* Banner encima del cotizador */}
         <section className="lb-cot-gen-banner position-relative">
           <div className="lb-cot-gen-banner__bg" />

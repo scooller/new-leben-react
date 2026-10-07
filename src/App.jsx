@@ -70,7 +70,29 @@ export default function App() {
   const location = useLocation()
 
   useEffect(() => {
-    if (!location.hash) window.scrollTo(0, 0)
+    if (!location.hash) {
+      window.scrollTo(0, 0)
+    } else {
+      const id = location.hash.replace('#', '')
+      const tryScroll = () => {
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          return true
+        }
+        return false
+      }
+      if (!tryScroll()) {
+        const t1 = setTimeout(tryScroll, 100)
+        const t2 = setTimeout(tryScroll, 300)
+        const t3 = setTimeout(tryScroll, 700)
+        return () => {
+          clearTimeout(t1)
+          clearTimeout(t2)
+          clearTimeout(t3)
+        }
+      }
+    }
   }, [location.pathname, location.hash])
 
   return (

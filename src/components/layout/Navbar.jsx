@@ -4,6 +4,7 @@ import { images } from '../../data/content.js'
 
 /** Render a link from {label, to?, href?, route?, featured?, highlight?, active?, className?, variant?, badge?} config */
 function Navlink({ link, className }) {
+  const location = useLocation()
   const to = link.to || link.route
   const isFeatured = Boolean(
     link.featured ||
@@ -39,15 +40,29 @@ function Navlink({ link, className }) {
   const target = link.target || (link.href?.startsWith('http') ? '_blank' : undefined)
   const rel = target === '_blank' ? 'noopener noreferrer' : undefined
 
+  const handleClick = (e) => {
+    if (to && to.includes('#')) {
+      const [path, hash] = to.split('#')
+      if (location.pathname === path || (!path && hash)) {
+        const el = document.getElementById(hash)
+        if (el) {
+          e.preventDefault()
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          window.history.pushState(null, '', `${path || location.pathname}#${hash}`)
+        }
+      }
+    }
+  }
+
   return to
-    ? <Link to={to} className={fullClass}>{content}</Link>
+    ? <Link to={to} className={fullClass} onClick={handleClick}>{content}</Link>
     : <a href={link.href} target={target} rel={rel} className={fullClass}>{content}</a>
 }
 
 const mainLinks = [
   { label: 'Inversión', href: '#' },
   { label: 'Brokers', to: '/brokers' },
-  { label: 'Cotizar', to: '/cotizador', featured: true, active: true },
+  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, active: true },
   { label: 'Clientes', to: '/login' },
 ]
 
@@ -134,9 +149,6 @@ export default function Navbar() {
   const location = useLocation()
   const pageLinks = getPageLinks(location.pathname)
 
-  // Pages without hero need the navbar always in "scrolled" state
-  const forceScrolled = location.pathname.startsWith('/cotizador')
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     onScroll()
@@ -145,7 +157,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled || forceScrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
+    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
       <div className="container d-flex align-items-center justify-content-between g-5">
         {/* Logo group */}
         <Link className="lb-navbar__logo d-flex align-items-center gap-2 text-decoration-none" to="/">

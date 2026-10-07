@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.102] - 2026-10-07
+
+### Changed
+- `Navbar.jsx`: removida la condición `forceScrolled` para la ruta `/cotizador`. Ahora la barra de navegación se inicia transparente sobre el nuevo banner hero (`.lb-cot-gen-banner`) y transiciona con fondo translúcido y desenfoque (`.lb-navbar-scrolled`) al hacer scroll, igual que en las demás páginas con hero.
+- `_cotizador-general.scss`: añadido `padding-top: $lb-navbar-height` a `.lb-cot-gen-banner` para compensar la altura del navbar fijo y centrar adecuadamente su contenido.
+
+## [0.9.101] - 2026-10-07
+
+### Fixed
+- Navegación a `#proyectos`:
+  - `Navbar.jsx`: añadido handler `handleClick` en `Navlink` para enlaces con hash (`to: '/cotizador#proyectos'`), asegurando scroll suave automático cuando el usuario ya se encuentra en la misma página.
+  - `App.jsx`: implementado scroll hacia el elemento `location.hash` con reintentos para soportar rutas con lazy-loading (`CotizadorGeneral`).
+  - `CotizadorGeneral.jsx`: añadido `useEffect` al montar y al cambiar hash para hacer `scrollIntoView` suave a `#proyectos`.
+  - `_cotizador-general.scss`: configurado `scroll-margin-top: 5rem` en `#proyectos` para compensar la altura del navbar fijo.
+
 ## [0.9.100] - 2026-10-07
 
 ### Fixed
