@@ -2,16 +2,28 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 
-/** Render a link from {label, to?, href?, route?, featured?, highlight?, badge?} config */
+/** Render a link from {label, to?, href?, route?, featured?, highlight?, active?, className?, variant?, badge?} config */
 function Navlink({ link, className }) {
   const to = link.to || link.route
-  const isFeatured = Boolean(link.featured || link.highlight)
+  const isFeatured = Boolean(
+    link.featured ||
+    link.highlight ||
+    link.active ||
+    link.variant === 'primary' ||
+    link.className?.includes('btn') ||
+    link.className?.includes('active'),
+  )
   const isDropdown = className?.includes('lb-dropdown-link')
 
-  const extraClass = isFeatured
-    ? (isDropdown ? ' lb-dropdown-link--featured' : ' lb-nav-link--featured')
-    : ''
-  const fullClass = `${className || ''}${extraClass}`
+  const extraClasses = []
+  if (isFeatured) {
+    extraClasses.push(isDropdown ? 'lb-dropdown-link--featured active' : 'lb-nav-link--featured btn btn-primary active')
+  }
+  if (link.className) {
+    extraClasses.push(link.className)
+  }
+
+  const fullClass = Array.from(new Set([className, ...extraClasses].filter(Boolean).join(' ').split(/\s+/))).join(' ')
 
   const content = (
     <>
@@ -33,28 +45,29 @@ function Navlink({ link, className }) {
 }
 
 const mainLinks = [
-  { label: 'Mundo Invest', href: '#' },
-  { label: 'Clientes', to: '/login' },
-  { label: 'Cotizar', to: '/cotizador' },
+  { label: 'Inversión', href: '#' },
   { label: 'Brokers', to: '/brokers' },
+  { label: 'Cotizar', to: '/cotizador', featured: true, active: true },
+  { label: 'Clientes', to: '/login' },
 ]
 
 /** Links planos (sin submenú) */
-const menuLinks = []
-// const menuLinks = [
-//   { label: 'Locales comerciales', href: 'https://locales.ileben.cl/', featured: true },
-// ]
+// const menuLinks = []
+const menuLinks = [
+  { label: 'Locales comerciales', href: 'https://locales.ileben.cl/' },
+  { label: 'Proyectos', to: '/cotizador#proyectos' },
+]
 
 /** Links agrupados bajo un encabezado */
 const menuGroups = [
-  {
-    title: 'Locales Comerciales',
-    items: [
-      { label: 'Independencia', href: 'https://locales.ileben.cl/#indi' },
-      { label: 'Santiago Centro', href: 'https://locales.ileben.cl/#living-town' },
-      { label: 'Puerto Montt', href: 'https://locales.ileben.cl/#parque-germania' },
-    ],
-  },
+  // {
+  //   title: 'Locales Comerciales',
+  //   items: [
+  //     { label: 'Independencia', href: 'https://locales.ileben.cl/#indi' },
+  //     { label: 'Santiago Centro', href: 'https://locales.ileben.cl/#living-town' },
+  //     { label: 'Puerto Montt', href: 'https://locales.ileben.cl/#parque-germania' },
+  //   ]
+  // },
   {
     title: 'Nosotros',
     items: [

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.95] - 2026-10-07
+
+### Changed
+- `Navbar.jsx`: ampliado componente interno `Navlink` para admitir `active`, `variant`, clases personalizadas (`className`), y clases Bootstrap (`btn btn-primary active`). Configurado el enlace `Cotizar` en `mainLinks` como destacado (`featured: true, active: true`) y actualizados `menuLinks` directos para Locales comerciales y Proyectos.
+- `_navbar.scss`: extendidas reglas `.lb-nav-link` y `.lb-dropdown-link` para que `.active` y `.btn-primary` adopten el estilo destacado de botón principal (`$lb-red`, pill redondeado, sombra y transiciones).
+
 ## [0.9.94] - 2026-10-07
 
 ### Changed
