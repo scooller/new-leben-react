@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.98] - 2026-10-07
+
+### Changed
+- `CotizadorGeneral.jsx`: rediseñado el layout para incorporar la imagen de fondo (`/images/Fondo_cotizar.jpg`) como banner superior (`.lb-cot-gen-banner`) con título, subtítulo y flecha estilizada en la base apuntando hacia el interior del banner (`.lb-cot-gen-banner__arrow`). El componente `Cotizador` ahora se renderiza directamente debajo en un contenedor estándar (`container g-4`), replicando la estructura de diseño de `Inn.jsx`.
+- `Cotizador.jsx`: simplificado eliminando la lógica y ramas específicas de `showHeroPanel`, `hasHero`, observador de resize y efectos GSAP de parallax lateral, estandarizando el Cotizador en su contenedor responsivo nativo en todas las vistas.
+- `_cotizador-general.scss`: agregados estilos de `.lb-cot-gen-banner` con fondo panorámico, gradiente oscuro de contraste, tipografía con `$font-title` y flecha notch en la base con fondo `$lb-cream` apuntando hacia el interior del banner.
+- `_proyecto-detalle.scss`: removidas reglas obsoletas `.lb-cot-hero-panel`, `.lb-cot-hero-bg`, `.lb-cot-content-col` y `&--has-hero`.
+
 ## [0.9.97] - 2026-10-07
 
 ### Changed

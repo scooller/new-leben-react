@@ -114,27 +114,48 @@ export default function CotizadorGeneral() {
   return (
     <>
       <Navbar />
-      <main>
-        <section className="lb-cot-gen container-fluid px-0">
-          <Cotizador data={COTIZADOR_DATA} universal showHeroPanel projects={rawProjects} onProjectChange={handleProjectChange} selection={externalPlanta ? { planta: externalPlanta } : undefined} />
-
-          {activeProject && (
-            <>
-              <RelatedProjects
-                data={{
-                  eyebrow: `Alternativas en `.trim(),
-                  highlight: activeProject.comuna || '',
-                  title: 'Proyectos similares que te pueden interesar',
-                  apiId: activeProject.id,
-                  comuna: activeProject.comuna,
-                  projectName: activeProject.name,
-                }}
-                onCotizar={handleCotizarPlanta}
-              />
-              <Alternatives data={{ excludeName: activeProject.name }} />
-            </>
-          )}
+      <main className="lb-cot-gen">
+        {/* Banner encima del cotizador */}
+        <section className="lb-cot-gen-banner position-relative">
+          <div className="lb-cot-gen-banner__bg" />
+          <div className="lb-cot-gen-banner__overlay" />
+          <div className="container position-relative lb-cot-gen-banner__content">
+            <ScrollAnim animation="fade-up">
+              <span className="lb-cot-gen-banner__eyebrow">COTIZADOR ONLINE</span>
+              <h1 className="lb-cot-gen-banner__title">Cotiza tu próximo departamento</h1>
+              <p className="lb-cot-gen-banner__subtitle">
+                Encuentra tu espacio ideal y simula tu cotización en línea en simples pasos
+              </p>
+            </ScrollAnim>
+          </div>
+          <div className="lb-cot-gen-banner__arrow" aria-hidden="true" />
         </section>
+
+        {/* Cotizador en container tal como en Inn.jsx */}
+        <Cotizador
+          data={COTIZADOR_DATA}
+          universal
+          projects={rawProjects}
+          onProjectChange={handleProjectChange}
+          selection={externalPlanta ? { planta: externalPlanta } : undefined}
+        />
+
+        {activeProject && (
+          <>
+            <RelatedProjects
+              data={{
+                eyebrow: `Alternativas en `.trim(),
+                highlight: activeProject.comuna || '',
+                title: 'Proyectos similares que te pueden interesar',
+                apiId: activeProject.id,
+                comuna: activeProject.comuna,
+                projectName: activeProject.name,
+              }}
+              onCotizar={handleCotizarPlanta}
+            />
+            <Alternatives data={{ excludeName: activeProject.name }} />
+          </>
+        )}
 
         {/* Main Projects */}
         <section className="lb-featured container-fluid" id="proyectos">

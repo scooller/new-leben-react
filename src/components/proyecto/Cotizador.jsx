@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { gsap } from 'gsap'
 import { Fancybox } from '@fancyapps/ui'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
@@ -181,78 +180,17 @@ function filtersFromSelection(selection) {
   return null
 }
 
-export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '', showHeroPanel = false }) {
-  const hasHero = Boolean(showHeroPanel)
+export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
   const [activeData, setActiveData] = useState(data)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
-  const heroPanelRef = useRef(null)
-  const heroBgRef = useRef(null)
-  const heroTextRef = useRef(null)
-  const containerRef = useRef(null)
   const [showCotizar, setShowCotizar] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showVistas, setShowVistas] = useState(false)
   const [copied, setCopied] = useState(false)
-
-  // Sincronizar altura de .lb-cot-hero-panel exactamente con .lb-cot-content-col > .container
-  useEffect(() => {
-    if (!hasHero || !containerRef.current || !heroPanelRef.current) return
-    const syncHeight = () => {
-      if (containerRef.current && heroPanelRef.current) {
-        heroPanelRef.current.style.height = `${containerRef.current.offsetHeight}px`
-      }
-    }
-    syncHeight()
-    const ro = new ResizeObserver(syncHeight)
-    ro.observe(containerRef.current)
-    return () => ro.disconnect()
-  }, [hasHero])
-
-  // Parallax animation for hero panel background and text
-  useEffect(() => {
-    if (!hasHero || !heroPanelRef.current) return
-    const mm = gsap.matchMedia()
-    mm.add('(min-width: 992px)', () => {
-      if (heroBgRef.current) {
-        gsap.fromTo(
-          heroBgRef.current,
-          { yPercent: -10 },
-          {
-            yPercent: 10,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: heroPanelRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        )
-      }
-
-      if (heroTextRef.current) {
-        gsap.fromTo(
-          heroTextRef.current,
-          { yPercent: 25 },
-          {
-            yPercent: -25,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: heroPanelRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        )
-      }
-    })
-    return () => mm.revert()
-  }, [hasHero])
 
   // Resolve planta ID + project slug from URL — read once on mount
   const [urlParams] = useState(() => {
@@ -601,17 +539,15 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   const mainImage = displayData.floorPlan?.thumbnails?.[imgIndex] ?? displayData.floorPlan?.image ?? PLACEHOLDER_FLOORPLAN
 
   const content = (
-    <div className="container g-4" ref={hasHero ? containerRef : undefined}>
+    <div className="container g-4">
       {/* Header + Filters */}
       <div className="row align-items-start mb-4" animation="fade-up">
-        {!hasHero && (
-          <div className="col-lg-3">
-            <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
-          </div>
-        )}
+        <div className="col-lg-3">
+          <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
+        </div>
 
         {displayData.filters && (
-          <ScrollAnim as="div" className={`${hasHero ? 'col-lg-12 ps-0 ps-lg-5 pt-3' : 'col-lg-9'} lb-proj-det-cot-filters-col`}>
+          <ScrollAnim as="div" className="col-lg-9 lb-proj-det-cot-filters-col">
             <div className="lb-proj-det-cot-filters d-flex flex-column flex-lg-row align-items-stretch align-items-lg-end gap-2 gap-lg-3">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
@@ -705,7 +641,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       </div>
 
       {/* Main row: esquicio + plan + details con placeholders y estructura lb-proj */}
-      <div className={`${hasHero ? 'ms-4 mb-0' : 'mb-4'} row g-4 lb-proj-det-cot-main`} id="detalle-cot">
+      <div className="mb-4 row g-4 lb-proj-det-cot-main" id="detalle-cot">
         {/* Esquicio — canvas con imagen real o placeholder */}
         <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
           {showSkeleton ? (
@@ -858,27 +794,8 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
   )
 
   return (
-    <section className={`lb-proj-det-cotizador ${hasHero ? 'lb-proj-det-cotizador--has-hero' : ''} ${className}`.trim()} id="cotizador" ref={ref}>
-      {hasHero ? (
-        <div className="container-fluid p-0">
-          <div className="row g-0 align-items-stretch">
-            {/* Left image panel with parallax */}
-            <div className="col-lg-3 lb-cot-hero-panel d-none d-lg-flex" ref={heroPanelRef}>
-              <div className="lb-cot-hero-bg" ref={heroBgRef} />
-              <div className="lb-cot-hero-content" ref={heroTextRef}>
-                <p className="lb-cot-hero-text">Cotiza tu próximo departamento</p>
-              </div>
-            </div>
-
-            {/* Right: cotizador content */}
-            <div className="col-lg-9 lb-cot-content-col">
-              {content}
-            </div>
-          </div>
-        </div>
-      ) : (
-        content
-      )}
+    <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
+      {content}
 
       <CotizadorForm
         show={showCotizar}

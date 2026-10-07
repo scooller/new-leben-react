@@ -44,7 +44,7 @@ const INFO = [
 // Negativo = el elemento sube al hacer scroll (parallax clásico).
 const PARALLAX_STRENGTH = -12
 
-// {id:'string', label:'string', featured:bol, active:bol}
+// {id:'string', label:'string', featured:boolean, active:boolean }
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Equipamiento' },

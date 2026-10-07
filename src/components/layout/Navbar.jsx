@@ -54,8 +54,8 @@ const mainLinks = [
 /** Links planos (sin submenú) */
 // const menuLinks = []
 const menuLinks = [
-  { label: 'Locales comerciales', href: 'https://locales.ileben.cl/' },
   { label: 'Proyectos', to: '/cotizador#proyectos' },
+  { label: 'Locales comerciales', href: 'https://locales.ileben.cl/' },
 ]
 
 /** Links agrupados bajo un encabezado */
