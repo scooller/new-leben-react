@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.104] - 2026-10-07
+
+### Fixed
+- `Cotizador.jsx` & `_proyecto-detalle.scss`: removida la clase `h-100` y sustituido `height: 100%` por `height: auto` en `.lb-img-trigger` y `.lb-proj-det-cot-plan-img`. Ahora el navegador no fuerza ambas dimensiones fijas y respeta correctamente el cálculo dinámico del `aspect-ratio: 133 / 60` a partir del ancho disponible.
+
+## [0.9.103] - 2026-10-07
+
+### Changed
+- `Cotizador.jsx`: unificado el esquicio del edificio y la planta del departamento en una sola tarjeta interactiva panorámica (`col-lg-9`), reduciendo el layout principal de 3 columnas a 2 columnas (`col-lg-9` imagen unificada, `col-lg-3` ficha técnica y cotización). Se eliminó la columna separada de esquicio (`.lb-proj-det-cot-map`) y la constante `PLACEHOLDER_ESQUICIO`.
+- `_proyecto-detalle.scss`: implementado aspect ratio nativo `133 / 60` (proporción exacta de 665×300) en el disparador de imagen y en la planta (`.lb-img-trigger`, `.lb-proj-det-cot-plan-img`, `.lb-proj-det-cot-skeleton`), con `object-fit: contain` para escalar nítidamente cualquier resolución HD/Retina sin recortes ni distorsión. Ajustado el contenedor de botones y thumbnails inferior para alinearse armónicamente con la nueva grilla.
+
 ## [0.9.102] - 2026-10-07
 
 ### Changed

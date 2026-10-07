@@ -56,7 +56,6 @@ function ActionButton({ icon: Icon, variant = 'btn-outline-dark', className = ''
 const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, compass: Compass, maximize: Maximize }
 
 const PLACEHOLDER_FLOORPLAN = '/images/placeholder-floorplan.svg'
-const PLACEHOLDER_ESQUICIO = '/images/placeholder-esquicio.svg'
 
 const DEFAULT_EMPTY_DETAILS = [
   { icon: 'layers', label: 'Planta', value: '-' },
@@ -411,7 +410,6 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     if ((universal && !plantas.length) || (!universal && (!apiId || !plantas.length))) {
       return {
         ...safeActiveData,
-        mapImage: safeActiveData.mapImage || PLACEHOLDER_ESQUICIO,
         details: safeActiveData.details?.length ? safeActiveData.details : DEFAULT_EMPTY_DETAILS,
         pricing: { label: 'Precio', price: 'UF -', shareLabel: 'Compartir' },
         floorPlan: {
@@ -424,7 +422,6 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
     if (!planta) {
       return {
         ...safeActiveData,
-        mapImage: safeActiveData.mapImage || PLACEHOLDER_ESQUICIO,
         details: DEFAULT_EMPTY_DETAILS,
         pricing: { ...safeActiveData.pricing, price: 'UF -' },
         floorPlan: {
@@ -439,7 +436,6 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       : safeActiveData.floorPlan.thumbnails
     return {
       ...safeActiveData,
-      mapImage: safeActiveData.mapImage || enriched.floorPlanImage || PLACEHOLDER_ESQUICIO,
       details: enriched.details,
       pricing: { ...safeActiveData.pricing, ...enriched.pricing },
       floorPlan: { ...safeActiveData.floorPlan, thumbnails },
@@ -640,41 +636,25 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         )}
       </div>
 
-      {/* Main row: esquicio + plan + details con placeholders y estructura lb-proj */}
+      {/* Main row: planta y esquicio unificados (ratio 133:60) + details */}
       <div className="mb-4 row g-4 lb-proj-det-cot-main" id="detalle-cot">
-        {/* Esquicio — canvas con imagen real o placeholder */}
-        <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-map">
+        {/* Floor plan card unificada */}
+        <div className="col-lg-9 lb-proj-det-cot-plan-card">
           {showSkeleton ? (
-            <div className="lb-skeleton" style={{ width: '100%', height: '100%', minHeight: '25rem', borderRadius: '0.5rem' }} />
+            <div className="lb-skeleton lb-proj-det-cot-skeleton w-100" />
           ) : (
-            <div className="lb-proj-det-cot-map-canvas">
+            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
+              {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
-                src={displayData.mapImage || PLACEHOLDER_ESQUICIO}
-                alt="Esquicio del edificio"
-                className="w-100 h-100 object-fit-contain"
+                src={mainImage || PLACEHOLDER_FLOORPLAN}
+                alt="Planta del departamento y esquicio del edificio"
+                className={`lb-proj-det-cot-plan-img w-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
+                onLoad={() => setSwitching(false)}
                 loading="lazy"
                 decoding="async"
               />
-              {displayData.mapCaption && (
-                <p className="lb-proj-det-cot-map-caption position-absolute start-0 bottom-0 text-muted small mb-0 m-2 px-2 py-1 bg-white bg-opacity-75 rounded">{displayData.mapCaption}</p>
-              )}
             </div>
           )}
-        </ScrollAnim>
-
-        {/* Floor plan card */}
-        <div className="col-lg-6 lb-proj-det-cot-plan-card">
-          <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
-            {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
-            <img
-              src={mainImage || PLACEHOLDER_FLOORPLAN}
-              alt="Planta del departamento"
-              className={`lb-proj-det-cot-plan-img w-100 h-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
-              onLoad={() => setSwitching(false)}
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
           {filteredPlantas.length > 1 && (<>
             <button
               className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
@@ -733,14 +713,13 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
         </div>
 
         {/* Bottom row: vistas 3D + thumbnails + acciones */}
-        <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-center align-items-center flex-column">
-          <ActionButton className="w-100 h-100" icon={TelescopeIcon} disabled={!activePlanta} onClick={() => activePlanta && setShowVistas(true)}>
-            Vistas por piso de tu Dpto
-          </ActionButton>
-        </div>
-
-        <div className="col-lg-6 lb-proj-det-cot-bottom d-flex justify-content-start">
-          <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center">
+        <div className="col-lg-9 lb-proj-det-cot-bottom d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-3">
+          <div className="flex-shrink-0">
+            <ActionButton className="w-100" icon={TelescopeIcon} disabled={!activePlanta} onClick={() => activePlanta && setShowVistas(true)}>
+              Vistas por piso de tu Dpto
+            </ActionButton>
+          </div>
+          <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center justify-content-md-end">
             {/* Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto */}
             {visibleThumbs.map(({ src, originalIndex }, i) => (
               <button
