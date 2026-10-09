@@ -68,7 +68,6 @@ function AgentRow({ agent, onSchedule }) {
 export default function InnTeamAgents({ data, apiId }) {
   const [agents, setAgents] = useState(data?.agents || [])
   const [showModal, setShowModal] = useState(false)
-  const calendarRef = useRef(null)
 
   const timeSlots = ['09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00']
   const today = new Date().toISOString().split('T')[0]
@@ -127,15 +126,13 @@ export default function InnTeamAgents({ data, apiId }) {
             </div>
 
             <button
-              className="btn btn-gold mt-3 px-4"
+              className="btn lb-inn-btn mt-3 px-4"
               onClick={() => {
                 setSelectedAgent(agents[0]?.email || '')
                 setShowModal(true)
               }}
-              {...hover(calendarRef)}
             >
-              <CalendarCheckIcon ref={calendarRef} size={18} />
-              Agenda tu visita
+              AGENDA TU VISITA
             </button>
           </div>
 

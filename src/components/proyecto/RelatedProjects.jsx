@@ -69,7 +69,7 @@ export default function RelatedProjects({ data, onCotizar }) {
     <section className="lb-proj-det-related" id="relacionados">
       <div className="container">
         <div>
-          <ScrollAnim as='span' animation='fade-up' className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </ScrollAnim>
+          {/* <ScrollAnim as='span' animation='fade-up' className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </ScrollAnim> */}
           <SplitTitle as='h2' text='Plantas relacionadas' />
         </div>
 

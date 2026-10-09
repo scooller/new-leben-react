@@ -122,7 +122,7 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
         </div>
 
         <ScrollAnim as='div' animation='fade-up' className="card lb-inn-hero-tabs__inner shadow-lg mt-3 mx-auto">
-          <div className="card-body p-2 p-md-4">
+          <div className="card-body py-3 py-md-4 px-3 px-md-4">
             <ul className="nav nav-pills nav-justified flex-wrap gap-2 gap-md-4" role="tablist" aria-label="Recorridos del proyecto">
               {tours.map((tour, index) => (
                 <li className="nav-item" key={tour.label || index} role="presentation">
@@ -133,7 +133,7 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
                     aria-selected={index === activeIndex}
                     onClick={() => setActiveIndex(index)}
                   >
-                    {tour.label}
+                    {tour.label.toUpperCase()}
                   </button>
                 </li>
               ))}

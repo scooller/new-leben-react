@@ -27,7 +27,6 @@ import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { hover } from '../components/icons/animated-icon.jsx'
 import { FootprintsIcon } from '../components/icons/footprints.jsx'
 import { CarIcon } from '../components/icons/car.jsx'
-import { MapPinIcon } from '../components/icons/map-pin.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
@@ -401,7 +400,6 @@ export default function Inn() {
   const espaciosSlideIndex = Math.max(0, ESPACIOS_COMUNES_SLIDES.findIndex(
     (s) => s.navId === ESPACIOS_COMUNES_NAV_ITEMS[activeEspacioSlide]?.id
   ))
-  const mapRef = useRef(null)
   const galleryRef = useRef(null)
   const galleryCarouselInstance = useRef(null)
 
@@ -512,10 +510,9 @@ export default function Inn() {
 
                   let buttonClasses = 'nav-link'
                   if (isFeatured) {
+                    buttonClasses += ' nav-link--featured btn btn-primary'
                     if (isPermanentActive || isCurrentActive) {
-                      buttonClasses += ' nav-link--featured btn btn-primary active'
-                    } else {
-                      buttonClasses += ' nav-link--featured-outline btn btn-outline-primary'
+                      buttonClasses += ' active'
                     }
                   } else {
                     buttonClasses += ` nav-link__border ${isCurrentActive ? 'active' : ''}`
@@ -570,10 +567,9 @@ export default function Inn() {
 
                     let itemClasses = 'dropdown-item py-2 px-3 rounded-3 d-flex align-items-center justify-content-between'
                     if (isFeatured) {
+                      itemClasses += ' dropdown-item--featured'
                       if (isTabActive) {
-                        itemClasses += ' dropdown-item--featured active fw-bold'
-                      } else {
-                        itemClasses += ' dropdown-item--featured-outline'
+                        itemClasses += ' active fw-bold'
                       }
                     } else if (isCurrentActive) {
                       itemClasses += ' active fw-bold'
@@ -746,12 +742,10 @@ export default function Inn() {
                   </ScrollAnim>
                   <button
                     type="button"
-                    className="btn btn-gold"
+                    className="btn lb-inn-btn"
                     onClick={() => setShowPanoramasModal(true)}
-                    {...hover(mapRef)}
                   >
-                    <MapPinIcon ref={mapRef} size={18} />
-                    <span>{MAP.btnText}</span>
+                    <span>{(MAP.btnText || '').toUpperCase()}</span>
                   </button>
                 </div>
               </div>

@@ -166,14 +166,14 @@ export default function ProjectFeatureSection({
                 <ScrollAnim as="div" delay={0.2} animation='scale' className="lb-inn-proyecto__spaces-btn-wrap mt-4">
                   <button
                     type="button"
-                    className="btn btn-gold"
+                    className="btn lb-inn-btn"
                     onClick={() => {
                       setActiveGalleryIndex(0)
                       setActiveImageIndex(0)
                       setShowSpacesModal(true)
                     }}
                   >
-                    {spacesModal.buttonLabel || 'Conoce los espacios'}
+                    {(spacesModal.buttonLabel || 'Conoce los espacios').toUpperCase()}
                   </button>
                 </ScrollAnim>
               )}

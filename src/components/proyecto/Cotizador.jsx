@@ -536,21 +536,23 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
   const content = (
     <div className="container g-4">
-      {/* Header + Filters */}
-      <div className="row align-items-start mb-4" animation="fade-up">
-        <div className="col-lg-3">
-          <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
+      {/* Header: Title (col-lg-3) + Filters (col-lg-6) + Filter Actions (col-lg-3) */}
+      <div className="row g-4 align-items-end mb-4 lb-proj-det-cot-filters-row" animation="fade-up">
+        <div className="col-lg-3 lb-proj-det-cot-title-col">
+          {displayData.title && (
+            <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
+          )}
         </div>
 
         {displayData.filters && (
-          <ScrollAnim as="div" className="col-lg-9 lb-proj-det-cot-filters-col">
-            <div className="lb-proj-det-cot-filters d-flex flex-column flex-lg-row align-items-stretch align-items-lg-end gap-2 gap-lg-3">
+          <ScrollAnim as="div" className="col-lg-6 lb-proj-det-cot-filters-col">
+            <div className="lb-proj-det-cot-filters">
               {(loading && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
                   <span className="spinner-border spinner-border-sm" role="status" />
                   <span className="text-muted small">Cargando plantas…</span>
                 </div>
-              ) : (<>
+              ) : (
                 <div className="d-flex flex-wrap gap-2 flex-grow-1 align-items-end">
                   {universal ? (<>
                     <FilterDropdown
@@ -612,28 +614,33 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                     />
                   </>)}
                 </div>
-                <div className="d-flex align-items-center justify-content-between justify-content-lg-end gap-2 gap-md-3 mt-2 mt-lg-0 flex-shrink-0">
-                  <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
-                    <MapPinHouseIcon ref={countIconRef} size={14} />
-                    {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
-                  </span>
-                  <button
-                    className="btn btn-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
-                    disabled={!hasFilters}
-                    onClick={() => {
-                      selectFilter(EMPTY_FILTERS)
-                      sessionStorage.clear()
-                      window.history.replaceState(null, '', '/cotizador/')
-                    }}
-                  >
-                    <RotateCcw size={13} className="me-1" />
-                    Limpiar
-                  </button>
-                </div>
-              </>)}
+              )}
             </div>
           </ScrollAnim>
         )}
+
+        <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-filter-actions-col">
+          {!(loading && !universal) && (
+            <div className="d-flex align-items-center justify-content-between gap-2 gap-md-3 w-100">
+              <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
+                <MapPinHouseIcon ref={countIconRef} size={14} />
+                {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
+              </span>
+              <button
+                className="btn btn-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
+                disabled={!hasFilters}
+                onClick={() => {
+                  selectFilter(EMPTY_FILTERS)
+                  sessionStorage.clear()
+                  window.history.replaceState(null, '', '/cotizador/')
+                }}
+              >
+                <RotateCcw size={13} className="me-1" />
+                Limpiar
+              </button>
+            </div>
+          )}
+        </ScrollAnim>
       </div>
 
       {/* Main row: planta y esquicio unificados (ratio 133:60) + details */}

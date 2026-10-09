@@ -281,10 +281,11 @@
   font-size: $lb-heading-2;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
-  max-width: 22.5rem;
 }
 
-.lb-proj-det-cot-filters-col {
+.lb-proj-det-cot-title-col,
+.lb-proj-det-cot-filters-col,
+.lb-proj-det-cot-filter-actions-col {
   position: relative;
   z-index: 10;
 }

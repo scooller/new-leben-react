@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.108] - 2026-10-09
+
+### Changed
+- `_navbar.scss`: invertido el comportamiento del botón `featured` (`.lb-nav-link--featured`, `.btn-primary`): fondo sólido primario (`$lb-red`) y texto blanco en estado normal, y borde con fondo transparente (`outline`) en estado `:hover` y `:focus`.
+- `_inn.scss`: ajustado `.nav-link--featured` y `.btn-primary` en el navbar del proyecto INN para que mantenga fondo rojo primario por defecto y pase a `outline` rojo transparente en `:hover`.
+- `Inn.jsx`: asignada la clase `nav-link--featured btn btn-primary` por defecto a los items destacados en pestañas de escritorio y menú móvil, respondiendo al nuevo comportamiento invertido.
+
+## [0.9.107] - 2026-10-09
+
+### Changed
+- `Cotizador.jsx`: unificada la cabecera del cotizador en una sola fila (`row g-4 align-items-end mb-4`) con tres columnas: `col-lg-3` para el título, `col-lg-6` para los selectores de filtro (ambas suman 9 columnas alineadas con la planta) y `col-lg-3` para las acciones de filtro (badge contador y botón Limpiar, alineada con los detalles).
+- `_proyecto-detalle.scss`: añadida clase `.lb-proj-det-cot-title-col` al grupo de posicionamiento relativo de la cabecera.
+
+## [0.9.106] - 2026-10-09
+
+### Changed
+- `Cotizador.jsx`: trasladado el título a fila superior (`col-12 mb-3`), reestructurados los filtros en `col-lg-9` (`lb-proj-det-cot-filters-col`) y los botones de acción del filtro (contador/badge y botón Limpiar) en `col-lg-3` (`lb-proj-det-cot-filter-actions-col`) para alinear perfectamente con las columnas principales de la planta (`col-lg-9`) y detalles (`col-lg-3`).
+- `_proyecto-detalle.scss`: removido `max-width` fijo en `.lb-proj-det-cot-title` y añadida clase `.lb-proj-det-cot-filter-actions-col` con posicionamiento relativo e índice de capa.
+
+## [0.9.105] - 2026-10-09
+
+### Changed
+- `_inn.scss`: creado estilo `.lb-inn-btn` (y `.lb-inn .btn-gold`) que homologa los botones CTA al diseño de `.nav-link.nav-link__border.active` pero invertido: por defecto con fondo degradado dorado, borde dorado y texto blanco, y en `:hover` fondo transparente con borde dorado y texto oscuro. Actualizado el contenedor `.card.lb-inn-hero-tabs__inner` en `.lb-inn-360` con diseño glassmorphism y pestañas activas con hover transparente y solo borde.
+- `Inn.jsx`: sustituido `btn btn-gold` por `btn lb-inn-btn` en el botón de Mapa, texto en mayúsculas y removido `MapPinIcon`.
+- `ProjectFeatureSection.jsx`: sustituido `btn btn-gold` por `btn lb-inn-btn` en el botón "Conoce los espacios" con texto en mayúsculas.
+- `InnTeamAgents.jsx`: sustituido `btn btn-gold` por `btn lb-inn-btn` en el botón "Agenda tu visita" con texto en mayúsculas y removido `CalendarCheckIcon`.
+- `Recorridos360.jsx`: homologado el padding del card-body y etiquetas en mayúsculas (`tour.label.toUpperCase()`) para igualar el navbar del proyecto.
+
 ## [0.9.104] - 2026-10-07
 
 ### Fixed
