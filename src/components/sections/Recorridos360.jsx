@@ -60,7 +60,7 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
   return (
     <section className={`lb-inn-360 container-fluid ${className}`.trim()} id="recorridos-360" aria-labelledby="recorridos-360-title">
       <div className="container">
-        <SplitTitle id="recorridos-360-title" as='h2' text="Descubre INN" />
+        <SplitTitle className='lb-inn-proyecto__title' id="recorridos-360-title" as='h2' text="Descubre INN" />
 
         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
           {/* <ScrollAnim as='h3' animation='fade-up' className="lb-inn-360__title mb-0">

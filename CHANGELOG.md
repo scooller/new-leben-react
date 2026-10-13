@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.110] - 2026-10-13
+
+### Changed
+- `InnPanoramasModal.jsx`: carrusel de panoramas implementado con componente nativo Carousel de Bootstrap (`.carousel.slide`, `.carousel-inner`, `.carousel-item`).
+- `InnPanoramasModal.jsx`: tarjetas agrupadas automáticamente en pares de 2 por slide (`chunkIntoPairs`) para que nunca desborden en una segunda fila.
+- `InnPanoramasModal.jsx`: integración con Fancybox en las imágenes del carrusel agrupadas por categoría (`panoramas-{categoryId}`).
+
+### Fixed
+- `_fancybox.scss`: fijado `z-index: 2000 !important` en `.fancybox__container` para que Fancybox se posicione por encima de modales de Bootstrap (`z-index: 1055`).
+
 ## [0.9.109] - 2026-10-13
 
 ### Fixed

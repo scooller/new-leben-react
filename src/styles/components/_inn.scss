@@ -9,6 +9,7 @@ $inn-gris: #808080;
 $inn-gris-dark: #101010;
 $inn-celeste: rgb(226, 237, 249);
 $inn-gold-bg: #faf4e8;
+$inn-map-card-bg: #f6f1eb;
 
 // Import team agents styles (namespace evita conflicto de variables $inn-*)
 @use './inn-team-agents';
@@ -1475,7 +1476,7 @@ $inn-gold-bg: #faf4e8;
   }
 
   &__card {
-    background: #f6f1eb;
+    background: $inn-map-card-bg;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -1484,8 +1485,14 @@ $inn-gold-bg: #faf4e8;
       box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
     }
 
+    // Bootstrap .ratio no tiene overflow:hidden — lo forzamos para clipear el scale de la imagen
+    .ratio {
+      overflow: hidden;
+      border-right: 1rem solid $inn-map-card-bg;
+    }
+
     .card-body {
-      background: #f6f1eb;
+      background: $inn-map-card-bg;
       color: #2c2520;
     }
   }
