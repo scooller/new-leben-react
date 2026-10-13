@@ -627,7 +627,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
                 {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
               </span>
               <button
-                className="btn btn-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
+                className="btn btn-outline-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
                 disabled={!hasFilters}
                 onClick={() => {
                   selectFilter(EMPTY_FILTERS)
@@ -709,7 +709,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
               </div>
               <div className="col-md">
                 <button
-                  className="btn btn-danger w-100 lb-proj-det-cot-cta"
+                  className="btn btn-primary w-100 lb-proj-det-cot-cta"
                   onClick={() => setShowCotizar(true)}
                 >
                   {displayData.ctaText || 'Cotizar'}

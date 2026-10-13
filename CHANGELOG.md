@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.109] - 2026-10-13
+
+### Fixed
+- `_proyecto-detalle.scss`: imagen de planta usa `aspect-ratio: 133/60` en el wrapper `.lb-img-trigger` con `width: 100%` y altura variable (no fija). La `<img>` interna pasa a `height: 100%` sin ratio propio.
+- `_proyecto-detalle.scss`: columna de detalles `.lb-proj-det-cot-details` declarada como `display: flex; flex-direction: column` para que sus hijos sean flex items.
+- `_proyecto-detalle.scss`: precio y botón Cotizar (`.lb-proj-det-cot-pricing`) siempre al fondo de la columna derecha con `margin-top: auto !important` para sobreescribir Bootstrap `.mt-4 { margin-top: 1.5rem !important }`.
+
 ## [0.9.108] - 2026-10-09
 
 ### Changed
