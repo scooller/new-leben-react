@@ -19,6 +19,7 @@ export default function ProjectFeatureSection({
   highlight,
   highlightLogos = [],
   highlightOffer,
+  dangerouslySetInnerHTML,
   slides = [],
   mediaVideoSrc,
   backgroundImage = 'images/inn/Volcan.svg',
@@ -145,6 +146,12 @@ export default function ProjectFeatureSection({
               {description && (
                 <ScrollAnim as="p" animation='fade-right' className="lb-inn-proyecto__text">
                   {description}
+                </ScrollAnim>
+              )}
+
+              {dangerouslySetInnerHTML && (
+                <ScrollAnim as="div" animation='fade-right' className="lb-inn-proyecto__text">
+                  <div dangerouslySetInnerHTML={{ __html: dangerouslySetInnerHTML }} />
                 </ScrollAnim>
               )}
 

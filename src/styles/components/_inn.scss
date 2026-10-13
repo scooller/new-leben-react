@@ -768,6 +768,34 @@ $inn-map-card-bg: #f6f1eb;
       }
     }
   }
+
+  &__subtabs {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(216, 179, 92, 0.35);
+    border-radius: $lb-radius-pill;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .btn {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: $inn-gris-dark;
+      border-radius: $lb-radius-pill;
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+
+      &:hover {
+        color: $lb-dark;
+        border-color: rgba($inn-gold, 0.5);
+      }
+
+      &.active {
+        background: $lb-gradient-gold;
+        color: $lb-white;
+        border-color: $inn-gold;
+        box-shadow: 0 2px 8px rgba(158, 122, 76, 0.3);
+      }
+    }
+  }
 }
 
 // --- SECCIÓN MAPA (ubicación) ---

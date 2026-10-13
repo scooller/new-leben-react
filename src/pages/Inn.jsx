@@ -635,9 +635,10 @@ export default function Inn() {
         />
 
         <ProjectFeatureSection
-          eyebrow={<>Equipamiento y terminaciones</>}
+          eyebrow={<>Equipamiento</>}
           title={<>SOFISTICACIÓN<br />EN CADA DETALLE</>}
-          description="Elevamos cada espacio con equipamiento y terminaciones de alto estándar: marca suiza Franke en cocina con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras. Las terrazas incorporan revestimiento parcial de tejas y cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural para completar una experiencia de diseño, confort y calidad."
+          dangerouslySetInnerHTML={`<p>Equipamiento y terminaciones de alto estándar: cocina Franke con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras.</p>
+          <p>Las terrazas incorporan revestimiento parcial de tejas, mientras cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural.</p>`}
           highlightLogos={EQUIPMENT_LOGOS}
           slides={EQUIPMENT_SLIDES}
           carouselId="innDepartamentosCarousel"

@@ -69,13 +69,12 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
           </ScrollAnim> */}
 
           {hasSubImages && (
-            <div className="d-inline-flex gap-1 p-1 bg-white rounded-pill shadow-sm border" role="tablist" aria-label="Subvistas de Masterplan">
+            <div className="d-inline-flex gap-1 p-1 lb-inn-360__subtabs" role="tablist" aria-label="Subvistas de Masterplan">
               {subImages.map((item, idx) => (
                 <button
                   key={item.src}
                   type="button"
-                  className={`btn btn-sm rounded-pill px-3 py-1 ${idx === activeSubIndex ? 'btn-dark' : 'btn-light border-0 text-muted'}`}
-                  style={{ fontSize: '0.8rem', fontWeight: 600 }}
+                  className={`btn btn-sm px-3 py-1 ${idx === activeSubIndex ? 'active' : ''}`}
                   role="tab"
                   aria-selected={idx === activeSubIndex}
                   onClick={() => setActiveSubIndex(idx)}
