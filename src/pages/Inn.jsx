@@ -47,7 +47,7 @@ const PARALLAX_STRENGTH = -12
 const TABS = [
   { id: 'proyecto', label: 'Proyecto' },
   { id: 'departamentos', label: 'Equipamiento' },
-  { id: 'cotizador', label: 'Cotizador', featured: true },
+  { id: 'cotizador', label: 'Cotizador', featured: true, class: 'btn-highlight' },
   { id: 'espacios', label: 'Espacios' },
   { id: 'ubicacion', label: 'Ubicación' },
   { id: 'interiorismo', label: 'Interiorismo' },
@@ -511,8 +511,9 @@ export default function Inn() {
                   const isCurrentActive = t.id === activeTab
 
                   let buttonClasses = 'nav-link'
+                  buttonClasses += t.class ? ` ${t.class}` : ''
                   if (isFeatured) {
-                    buttonClasses += ' nav-link--featured btn btn-primary'
+                    buttonClasses += ' nav-link--featured btn btn-outline-primary'
                     if (isPermanentActive || isCurrentActive) {
                       buttonClasses += ' active'
                     }
@@ -808,7 +809,7 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
                           style={{ left: `${point.x}%`, top: `${point.y}%` }}
                           aria-label={`${point.name} (${point.distance})`}
                         >
-                          <span className="lb-inn-map__pin-dot-wrap">
+                          <span className={`lb-inn-map__pin-dot-wrap ${isSelected ? 'dot-highlight' : ''}`}>
                             <span className="lb-inn-map__pin-dot" />
                           </span>
                           <span className="lb-inn-map__pin-line" />

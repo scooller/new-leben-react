@@ -296,3 +296,142 @@ $lb-top-steps: (
     }
   }
 }
+
+// ============================================================
+// Highlight button / element — Pulso animado rojo Leben ($lb-red)
+// ============================================================
+.highlight,
+.lb-highlight,
+.btn-highlight {
+  position: relative;
+  z-index: 1;
+  animation: lb-pulse-highlight 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: $lb-red;
+    filter: blur(6px);
+    opacity: 0.45;
+    z-index: -1;
+    pointer-events: none;
+    animation: lb-pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba($lb-red, 0.45);
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+@keyframes lb-pulse-highlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba($lb-red, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba($lb-red, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($lb-red, 0);
+  }
+}
+
+@keyframes lb-pulse-glow {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+}
+
+// ============================================================
+// Dot Highlight — Pulso animado para pines y puntos indicadores ($lb-red)
+// ============================================================
+.dot-highlight,
+.lb-dot-highlight {
+  position: relative;
+  border-radius: 50%;
+  animation: lb-dot-pulse 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: $lb-red;
+    filter: blur(3px);
+    opacity: 0.55;
+    z-index: -1;
+    pointer-events: none;
+    animation: lb-dot-glow 1.8s ease-in-out infinite alternate;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba($lb-red, 0.85);
+    z-index: -1;
+    pointer-events: none;
+    animation: lb-dot-radar 1.8s cubic-bezier(0.2, 0, 0.35, 1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba($lb-red, 0.5) !important;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes lb-dot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($lb-red, 0.85);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba($lb-red, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($lb-red, 0);
+  }
+}
+
+@keyframes lb-dot-radar {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes lb-dot-glow {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1.15);
+  }
+}
+

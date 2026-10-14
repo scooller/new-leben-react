@@ -146,6 +146,7 @@ $inn-map-card-bg: #f6f1eb;
 
     .nav-link {
       border-radius: $lb-radius-pill;
+      background-color: $lb-white;
       font-size: $lb-fs-xs;
       font-weight: 700;
       letter-spacing: 0.12em;
@@ -175,60 +176,35 @@ $inn-map-card-bg: #f6f1eb;
       }
 
       &--featured,
+      &.btn-outline-primary,
       &.btn-primary {
-        background: $lb-red;
-        border: 1px solid $lb-red;
-        color: $lb-white !important;
-        box-shadow: 0 2px 10px rgba($lb-red, 0.35);
-        transition: all 0.25s ease;
-
-        &:hover,
-        &:focus {
-          background: transparent !important;
-          border-color: $lb-red !important;
-          color: $lb-red !important;
-          box-shadow: none;
-        }
-
-        &.active,
-        &:active {
-          background: $lb-red;
-          border-color: $lb-red;
-          color: $lb-white !important;
-          box-shadow: 0 4px 14px rgba($lb-red, 0.5);
-
-          &:hover,
-          &:focus {
-            background: transparent !important;
-            border-color: $lb-red !important;
-            color: $lb-red !important;
-            box-shadow: none;
-          }
-        }
-      }
-
-      &--featured-outline,
-      &.btn-outline-primary {
-        background: transparent;
-        border: 1px solid $lb-red;
-        color: $lb-red;
+        background: transparent !important;
+        border: 1px solid $lb-red !important;
+        color: $lb-red !important;
         box-shadow: none;
         transition: all 0.25s ease;
 
         &:hover,
         &:focus {
-          background: $lb-red;
-          border-color: $lb-red;
+          background: $lb-red !important;
+          border-color: $lb-red !important;
           color: $lb-white !important;
           box-shadow: 0 2px 10px rgba($lb-red, 0.35);
         }
 
         &.active,
         &:active {
-          background: $lb-red-dark;
-          border-color: $lb-red-dark;
+          background: $lb-red !important;
+          border-color: $lb-red !important;
           color: $lb-white !important;
           box-shadow: 0 4px 14px rgba($lb-red, 0.5);
+
+          &:hover,
+          &:focus {
+            background: $lb-red-dark !important;
+            border-color: $lb-red-dark !important;
+            color: $lb-white !important;
+          }
         }
       }
     }
@@ -954,6 +930,16 @@ $inn-map-card-bg: #f6f1eb;
     z-index: 3;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
     transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &.dot-highlight,
+    &.highlight {
+      background: $lb-red !important;
+      border-color: #ffffff !important;
+
+      .lb-inn-map__pin-dot {
+        background: #ffffff !important;
+      }
+    }
   }
 
   &__pin-dot {

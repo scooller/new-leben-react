@@ -62,7 +62,7 @@ function Navlink({ link, className }) {
 const mainLinks = [
   { label: 'Invest', href: '#' },
   { label: 'Brokers', to: '/brokers' },
-  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, active: true },
+  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, active: true, class: 'btn-highlight' },
   { label: 'Clientes', to: '/login' },
 ]
 
@@ -172,7 +172,7 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="lb-navbar__links d-none d-lg-flex align-items-center gap-2 ms-auto">
           {mainLinks.map((link) =>
-            <Navlink key={link.label} link={link} className="lb-nav-link text-decoration-none" />,
+            <Navlink key={link.label} link={link} className={`lb-nav-link text-decoration-none ${link.class ? link.class : ''}`} />,
           )}
         </div>
 
@@ -204,7 +204,7 @@ export default function Navbar() {
               {/* Mobile: show main links first */}
               <div className="d-lg-none">
                 {mainLinks.map((link) =>
-                  <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
+                  <Navlink key={link.label} link={link} className={`lb-dropdown-link dropdown-item text-decoration-none ${link.class ? link.class : ''}`} />,
                 )}
                 {/* {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />} */}
                 <hr className="lb-dropdown-divider my-1" />

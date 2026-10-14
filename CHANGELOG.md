@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.114] - 2026-10-14
+
+### Changed
+- `_inn.scss`: ajustado estilo de botón destacado (`nav-link--featured`, `btn-outline-primary`) en la botonera de navegación de INN para que tenga fondo transparente con borde rojo Leben en reposo, y pase a rojo sólido primario con sombra en `:hover` y `:focus`.
+- `Inn.jsx`: asignada clase `btn-outline-primary` al botón destacado de Cotizador en la botonera desktop.
+
+## [0.9.113] - 2026-10-14
+
+### Added
+- `global.scss`: creada clase utilitaria `.dot-highlight` (y `.lb-dot-highlight`) con animación de pulso y halo radar en rojo-leben (`$lb-red`) para pines y puntos circulares.
+- `_inn.scss`: integrada la clase `.dot-highlight` sobre `.lb-inn-map__pin-dot-wrap` para resaltar pines seleccionados en el mapa de Puerto Varas.
+
+### Changed
+- `Inn.jsx`: asignada clase `.dot-highlight` al pin de ubicación activo en el mapa interactivo.
+
+## [0.9.112] - 2026-10-14
+
+### Added
+- `global.scss`: creada clase `.highlight` (junto con `.lb-highlight` y `.btn-highlight`) con animación de pulso y resplandor radial en color rojo-leben (`$lb-red`) detrás del elemento para captar atención.
+
 ## [0.9.111] - 2026-10-14
 
 ### Changed
