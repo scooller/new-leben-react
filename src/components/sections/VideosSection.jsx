@@ -22,7 +22,7 @@ export default function VideosSection() {
       if (p) {
         setApiPrice(mapApiProject(p).precioDesde)
       }
-    }).catch(() => {})
+    }).catch(() => { })
     return () => { cancelled = true }
   }, [])
 
@@ -53,7 +53,7 @@ export default function VideosSection() {
     <>
       <div className="lb-videos-spacer" />
       <div ref={sectionRef}>
-        <section className="lb-videos container lb-radius-tl lb-radius-tr" id="proyectos">
+        <section className="lb-videos container lb-radius-tl lb-radius-tr" id="proyecto-del-mes">
           <div className="d-flex flex-column gap-3">
             <div className="d-flex justify-content-between align-items-center lb-section-header lb-parallax-text">
               <SplitTitle className="lb-month-label" text={monthLabel} />

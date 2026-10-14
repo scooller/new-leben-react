@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
@@ -117,7 +117,6 @@ export default function App() {
             <Inn />
           </Suspense>
         } />
-        <Route path="/proyectos" element={<Navigate to="/cotizador#proyectos" replace />} />
         <Route path="/proyectos/:slug" element={
           <Suspense fallback={<PageLoader />}>
             <ProyectoDetalle />

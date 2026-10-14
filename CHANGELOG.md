@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.118] - 2026-10-14
+
+### Removed
+- `Proyectos.jsx`: eliminada la página legacy tras su fusión definitiva en `/cotizador`.
+- `App.jsx`: eliminada la ruta `/proyectos` del router principal.
+
+## [0.9.117] - 2026-10-14
+
+### Added
+- `ProjectsCatalog.jsx`: componente reutilizable para catálogo de proyectos con filtros dinámicos (ubicación, tipología, precio UF), barra de filtrado responsiva, soporte para datos externos o internos vía API, estado de carga skeleton, y vista agrupada por zona o lista plana.
+
+### Changed
+- `Proyectos.jsx`: refactorizado para reutilizar `ProjectsCatalog` con agrupación por comunas (`groupByZone`), eliminando ~160 líneas de código redundante.
+- `CotizadorGeneral.jsx`: refactorizado para reutilizar `ProjectsCatalog` pasando proyectos precargados (`projects={rawProjects}`), eliminando hooks duplicados y manteniendo la navegación directa al ancla `#proyectos`.
+
 ## [0.9.116] - 2026-10-14
 
 ### Added
