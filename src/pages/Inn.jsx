@@ -209,10 +209,12 @@ const GALLERY_SLIDES = LOCATION_POINTS.map((_, i) =>
 const MAP = {
   eyebrow: <>Ubicación</>,
   title: <>ntorno<br />INNigualable</>,
-  description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
+  // description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
+  descriptionHtml: `<p>Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. A un paso de INN, la costanera invita a caminar, disfrutar un café de especialidad, navegar o vivir nuevas aventuras.</p>
+  <p>Puerto Varas ofrece también una reconocida gastronomía, calles con identidad y una conexión permanente con la naturaleza del sur de Chile. Desde aquí se abren rutas hacia Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para integrar paisaje, gastronomía, aventura y vida al aire libre día a día</p>`,
   image: 'images/inn/Mapa_PV.png',
   logo: 'images/inn/E_titulo.png',
-  btnText: 'Descubrir panoramas',
+  btnText: 'Experiencias',
   address: 'Vicente Pérez Rosales 991, Puerto Varas',
   features: [
     { id: 'direccion', icon: 'direccion', heading: 'Vicente Pérez Rosales 991', text: 'Puerto Varas, Región de Los Lagos' },
@@ -617,7 +619,8 @@ export default function Inn() {
         <ProjectFeatureSection
           eyebrow={<>Proyecto</>}
           title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
-          description="El proyecto INN propone una forma de vivir Puerto Varas con mayor comodidad, amplitud y calidad en cada detalle con terminaciones de alto estándar, espacios amplios, luminosos y distribuciones pensadas para disfrutar cada ambiente durante todo el año. Con tipologías que se adaptan a distintas formas de vivir, el proyecto ofrece departamentos en formato tradicional, unidades con patio privado y exclusivos dúplex con vista al lago Llanquihue. Todo esto se complementa con una experiencia Home & Wellness con espacios comunes como sauna, bodega náutica y piscina climatizada invitan a relajarse, desconectarse y disfrutar el sur con una sensación de hotel boutique inigualable."
+          descriptionHtml={`<p>INN propone una nueva forma de vivir Puerto Varas, con espacios amplios y luminosos, terminaciones de alto estándar y distribuciones pensadas para disfrutar todo el año.</p>
+          <p>Departamentos tradicionales, unidades con patio privado y exclusivos dúplex con vista al lago Llanquihue se complementan con una experiencia Home & Wellness que invita a relajarse, desconectarse y disfrutar el sur con la esencia de un hotel boutique</p>`}
           highlightOffer="paga el pie en <b>60</b> cuotas"
           slides={SLIDES}
           carouselId="innCarousel"
@@ -637,7 +640,7 @@ export default function Inn() {
         <ProjectFeatureSection
           eyebrow={<>Equipamiento</>}
           title={<>SOFISTICACIÓN<br />EN CADA DETALLE</>}
-          dangerouslySetInnerHTML={`<p>Equipamiento y terminaciones de alto estándar: cocina Franke con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras.</p>
+          descriptionHtml={`<p>Equipamiento y terminaciones de alto estándar: cocina Franke con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras.</p>
           <p>Las terrazas incorporan revestimiento parcial de tejas, mientras cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural.</p>`}
           highlightLogos={EQUIPMENT_LOGOS}
           slides={EQUIPMENT_SLIDES}
@@ -687,13 +690,20 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Descubre todo lo que Puerto Varas tiene para ofrecerte"
+          text="Descubre todo lo que INN tiene para ofrecer|"
           videoSrc="video/exterior.mp4"
         />
 
         <ProjectFeatureSection
           title={<>ESPACIOS DE<br />OTRO NIVEL</>}
-          description="Los espacios están concebidos como una extensión natural de tu departamento, donde la sensación hotelera se integra con la serenidad del entorno. Cada ambiente ha sido cuidadosamente diseñado para enriquecer tu rutina diaria, ofreciendo espacios de encuentro, trabajo y descanso que combinan la calidez sureña, una delicada propuesta de interiorismo y vistas privilegiadas para disfrutar Puerto Varas al máximo."
+          eyebrow={<>Espacios</>}
+          descriptionHtml="<p>Los espacios están concebidos como una extensión natural de tu 
+departamento, donde la sensación hotelera se integra con la serenidad 
+del entorno.</p>
+<p>Cada ambiente ha sido cuidadosamente diseñado para enriquecer tu 
+rutina diaria, ofreciendo espacios de encuentro, trabajo y descanso que 
+combinan la calidez sureña, una delicada propuesta de interiorismo y 
+vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
           slides={ESPACIOS_COMUNES_SLIDES}
           carouselId="innEspaciosCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
@@ -739,7 +749,12 @@ export default function Inn() {
                 </div>
                 <div className="lb-inn-map__text text-start">
                   <ScrollAnim animation="fade-up" className="lb-inn-proyecto__text lh-lg mb-4 mb-md-5 w-md-80">
-                    <span dangerouslySetInnerHTML={{ __html: MAP.description }} />
+                    {MAP.description && (
+                      <span>{MAP.description}</span>
+                    )}
+                    {MAP.descriptionHtml && (
+                      <span dangerouslySetInnerHTML={{ __html: MAP.descriptionHtml }} />
+                    )}
                   </ScrollAnim>
                   <button
                     type="button"

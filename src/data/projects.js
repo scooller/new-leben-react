@@ -92,7 +92,8 @@ export const projectDetails = {
 
     // --- Cotizador (visual mock) ---
     cotizador: {
-      title: 'Cotiza tu próximo departamento',
+      title: 'Cotizador',
+      subtitle: 'Cotiza Aquí',
       filters: {
         row1: [
           { label: 'Todas las tipologías', options: ['2D+2B', '2D+3B', '3D+2B', '3D+3B', '3D+4B', '4D+4B'] },

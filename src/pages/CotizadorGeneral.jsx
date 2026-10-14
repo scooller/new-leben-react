@@ -12,17 +12,6 @@ import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
 
-const COTIZADOR_DATA = {
-  title: 'Cotiza tu próximo departamento',
-  filters: { row1: [], row2: [] },
-  mapCaption: '',
-  mapImage: null,
-  floorPlan: { thumbnails: [] },
-  details: [],
-  pricing: { label: 'Precio', price: 'UF -', shareLabel: 'Compartir' },
-  ctaText: 'Cotizar',
-}
-
 /** Fetch projects from API */
 function useApiProjects() {
   const [state, setState] = useState({ data: null, loading: true, error: null })
@@ -148,10 +137,10 @@ export default function CotizadorGeneral() {
           <div className="container position-relative lb-cot-gen-banner__content">
             <ScrollAnim animation="fade-up">
               <span className="lb-cot-gen-banner__eyebrow">COTIZADOR ONLINE</span>
-              <h1 className="lb-cot-gen-banner__title">Cotiza tu próximo departamento</h1>
-              <p className="lb-cot-gen-banner__subtitle">
+              <h1 className="lb-cot-gen-banner__title">Encuentra tu espacio ideal en simples pasos</h1>
+              {/* <p className="lb-cot-gen-banner__subtitle">
                 Encuentra tu espacio ideal y simula tu cotización en línea en simples pasos
-              </p>
+              </p> */}
             </ScrollAnim>
           </div>
           <div className="lb-cot-gen-banner__arrow" aria-hidden="true" />
@@ -159,7 +148,6 @@ export default function CotizadorGeneral() {
 
         {/* Cotizador en container tal como en Inn.jsx */}
         <Cotizador
-          data={COTIZADOR_DATA}
           universal
           projects={rawProjects}
           onProjectChange={handleProjectChange}

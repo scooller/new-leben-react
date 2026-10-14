@@ -60,7 +60,7 @@ function Navlink({ link, className }) {
 }
 
 const mainLinks = [
-  { label: 'Inversión', href: '#' },
+  { label: 'Invest', href: '#' },
   { label: 'Brokers', to: '/brokers' },
   { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, active: true },
   { label: 'Clientes', to: '/login' },

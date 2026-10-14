@@ -70,7 +70,7 @@ export default function RelatedProjects({ data, onCotizar }) {
       <div className="container">
         <div>
           {/* <ScrollAnim as='span' animation='fade-up' className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </ScrollAnim> */}
-          <SplitTitle as='h2' text='Plantas relacionadas' />
+          <SplitTitle as='h2' text={`Alternativas en ${data.projectName}`} />
         </div>
 
         <ScrollAnim as="div" className="mt-4" animation="fade-up" delay={0.1}>

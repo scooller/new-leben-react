@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.111] - 2026-10-14
+
+### Changed
+- `Cotizador.jsx`: definido `DEFAULT_COTIZADOR_DATA` internamente con `title` y `subtitle` (`data = DEFAULT_COTIZADOR_DATA`) y fallback seguro de estado.
+- `CotizadorGeneral.jsx`: eliminada la constante y prop redundante `COTIZADOR_DATA` y actualizado título de cabecera.
+- `ProjectFeatureSection.jsx`: renombrada prop a `descriptionHtml` para contenido HTML enriquecido.
+- `Inn.jsx`: adoptada prop `descriptionHtml` en secciones de proyecto y mapa de ubicación; actualizado texto de video y botones.
+- `RelatedProjects.jsx`: título dinámico con nombre del proyecto (`Alternativas en ${data.projectName}`).
+- `Navbar.jsx`: actualizado enlace de navegación a "Invest".
+- `projects.js`: configurado `subtitle` para cotizador de Edificio INN.
+
 ## [0.9.110] - 2026-10-13
 
 ### Changed

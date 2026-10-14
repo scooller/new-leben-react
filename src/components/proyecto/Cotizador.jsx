@@ -57,6 +57,18 @@ const DETAIL_ICONS = { layers: Layers, expand: Expand, home: Home, sun: Sun, com
 
 const PLACEHOLDER_FLOORPLAN = '/images/placeholder-floorplan.svg'
 
+const DEFAULT_COTIZADOR_DATA = Object.freeze({
+  title: 'Cotiza Aquí',
+  subtitle: '',
+  filters: { row1: [], row2: [] },
+  mapCaption: '',
+  mapImage: null,
+  floorPlan: { thumbnails: [] },
+  details: [],
+  pricing: { label: 'Precio', price: 'UF -', shareLabel: 'Compartir' },
+  ctaText: 'Cotizar',
+})
+
 const DEFAULT_EMPTY_DETAILS = [
   { icon: 'layers', label: 'Planta', value: '-' },
   { icon: 'expand', label: 'Superficie útil', value: '- m²' },
@@ -179,8 +191,8 @@ function filtersFromSelection(selection) {
   return null
 }
 
-export default function Cotizador({ data, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
-  const [activeData, setActiveData] = useState(data)
+export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
+  const [activeData, setActiveData] = useState(() => data || DEFAULT_COTIZADOR_DATA)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
   const ref = useRef(null)
@@ -261,7 +273,7 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
 
   // Sync when parent swaps data
   useEffect(() => {
-    setActiveData(data); setSelected(0)
+    setActiveData(data || DEFAULT_COTIZADOR_DATA); setSelected(0)
     setFilters(filtersFromSelection(selection) || EMPTY_FILTERS)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, selection, universal])
@@ -540,7 +552,10 @@ export default function Cotizador({ data, plantasRelacionadas, apiId, selection,
       <div className="row g-4 align-items-end mb-4 lb-proj-det-cot-filters-row" animation="fade-up">
         <div className="col-lg-3 lb-proj-det-cot-title-col">
           {displayData.title && (
-            <ScrollAnim as="h2" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
+            <ScrollAnim as="h3" className="lb-proj-det-cot-title mb-0" dangerouslySetInnerHTML={{ __html: displayData.title }} />
+          )}
+          {displayData.subtitle && (
+            <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" dangerouslySetInnerHTML={{ __html: displayData.subtitle }} />
           )}
         </div>
 
