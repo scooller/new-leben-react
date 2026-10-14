@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.116] - 2026-10-14
+
+### Added
+- `global.scss`: implementada animación cinemática para modales (`scale(0.92) + translateY(20px)` a `scale(1) translateY(0)` con curva `cubic-bezier(0.16, 1, 0.3, 1)`) y desenfoque progresivo de fondo (`backdrop-filter: blur(8px)`).
+
 ## [0.9.115] - 2026-10-14
 
 ### Changed

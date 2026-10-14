@@ -57,9 +57,66 @@ body {
   pointer-events: none;
 }
 
-.modal.d-block {
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
+// --- Modals — Transición cinemática (Scale + Float + Backdrop Blur) ---
+.modal {
+  &.d-block,
+  &.show {
+    background-color: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: lb-modal-backdrop-in 0.28s ease-out forwards;
+  }
+
+  &.show .modal-dialog {
+    animation: lb-modal-dialog-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+
+  // Modales fullscreen: escala más sutil
+  &.show .modal-dialog.modal-fullscreen {
+    animation: lb-modal-fullscreen-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes lb-modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lb-modal-dialog-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes lb-modal-fullscreen-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal.show .modal-dialog,
+  .modal.show .modal-dialog.modal-fullscreen,
+  .modal.d-block,
+  .modal.show {
+    animation: none !important;
+  }
 }
 
 // --- Headings ---
