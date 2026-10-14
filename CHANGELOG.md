@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.115] - 2026-10-14
+
+### Changed
+- `global.scss`: refactorizada la clase `.highlight` (`.btn-highlight`) aislando el pulso a ondas exteriores transparentes (`box-shadow` en pseudo-elementos `::before`/`::after` con `isolation: isolate`), eliminando filtros difusos y fondos bajo el texto para mantener la tipografía 100% nítida y legible.
+
 ## [0.9.114] - 2026-10-14
 
 ### Changed

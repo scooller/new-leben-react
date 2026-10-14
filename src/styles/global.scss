@@ -299,59 +299,59 @@ $lb-top-steps: (
 
 // ============================================================
 // Highlight button / element — Pulso animado rojo Leben ($lb-red)
+// Aislado exclusivamente al exterior/borde sin afectar legibilidad del texto
 // ============================================================
 .highlight,
 .lb-highlight,
 .btn-highlight {
   position: relative;
-  z-index: 1;
-  animation: lb-pulse-highlight 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  isolation: isolate;
 
-  &::before {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: $lb-red;
-    filter: blur(6px);
-    opacity: 0.45;
-    z-index: -1;
     pointer-events: none;
-    animation: lb-pulse-glow 2s ease-in-out infinite alternate;
+    z-index: -1;
+  }
+
+  &::after {
+    animation: lb-pulse-ring-outer 3.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  }
+
+  &::before {
+    animation: lb-pulse-ring-outer 3.5s cubic-bezier(0.24, 0, 0.38, 1) infinite 1s;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    box-shadow: 0 0 0 3px rgba($lb-red, 0.45);
 
-    &::before {
-      display: none;
+    &::before,
+    &::after {
+      animation: none;
+      box-shadow: 0 0 0 2px rgba($lb-red, 0.35);
     }
   }
 }
 
-@keyframes lb-pulse-highlight {
+@keyframes lb-pulse-ring-outer {
   0% {
     box-shadow: 0 0 0 0 rgba($lb-red, 0.7);
+    opacity: 1;
   }
+
   70% {
-    box-shadow: 0 0 0 14px rgba($lb-red, 0);
+    box-shadow: 0 0 0 12px rgba($lb-red, 0);
+    opacity: 0;
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba($lb-red, 0);
+    opacity: 0;
   }
 }
 
-@keyframes lb-pulse-glow {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.96);
-  }
-  100% {
-    opacity: 0.7;
-    transform: scale(1.04);
-  }
-}
 
 // ============================================================
 // Dot Highlight — Pulso animado para pines y puntos indicadores ($lb-red)
@@ -401,9 +401,11 @@ $lb-top-steps: (
   0% {
     box-shadow: 0 0 0 0 rgba($lb-red, 0.85);
   }
+
   70% {
     box-shadow: 0 0 0 10px rgba($lb-red, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba($lb-red, 0);
   }
@@ -414,10 +416,12 @@ $lb-top-steps: (
     transform: scale(1);
     opacity: 0.9;
   }
+
   70% {
     transform: scale(2.2);
     opacity: 0;
   }
+
   100% {
     transform: scale(2.5);
     opacity: 0;
@@ -429,9 +433,9 @@ $lb-top-steps: (
     opacity: 0.35;
     transform: scale(0.92);
   }
+
   100% {
     opacity: 0.85;
     transform: scale(1.15);
   }
 }
-
