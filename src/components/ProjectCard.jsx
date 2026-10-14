@@ -29,6 +29,11 @@ export default function ProjectCard({ project, to, onClick, ctaLabel = 'Ver Proy
               {project.entrega}
             </span>
           )}
+          {project.comuna && (
+            <span className="badge bg-secondary lb-proj-badge position-absolute top-0 end-0 m-2 text-capitalize">
+              {project.comuna.toLowerCase()}
+            </span>
+          )}
         </div>
       )}
       <div className="card-body p-4 d-flex flex-column gap-2">

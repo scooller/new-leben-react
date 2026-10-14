@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.120] - 2026-10-14
+
+### Added
+- `ProjectCard.jsx`: añadido badge `bg-secondary` en la esquina superior derecha (`top-0 end-0 m-2`) con la comuna del proyecto formateada en `text-capitalize`.
+
 ## [0.9.119] - 2026-10-14
 
 ### Changed
