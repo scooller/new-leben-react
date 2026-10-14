@@ -116,7 +116,7 @@ export default function ProjectsCatalog({
   return (
     <section className={`lb-featured container-fluid pb-4 pt-1 pb-md-5 ${className}`.trim()} id={id}>
       <div className="container d-flex flex-column">
-        <SplitTitle as="h2">Proyectos</SplitTitle>
+        <SplitTitle as="h2" className='mb-3 pb-3'>Proyectos</SplitTitle>
         {hasFilters && (
           <div className="d-flex align-items-center justify-content-end">
             <button

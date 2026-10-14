@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.122] - 2026-10-14
+
+### Fixed
+- `CotizadorGeneral.jsx`: corregido `useEffect` de scroll para soportar cualquier ancla (incluyendo `#cotizador-gral` y `#cotizador`) haciendo scroll suave a la parte superior (`top: 0`) o al elemento correspondiente.
+- `Navbar.jsx`: añadido soporte en `handleClick` para que los enlaces a `#cotizador-gral` realicen scroll suave al inicio de la página.
+
 ## [0.9.121] - 2026-10-14
 
 ### Changed

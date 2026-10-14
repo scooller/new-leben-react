@@ -44,12 +44,16 @@ function Navlink({ link, className }) {
     if (to && to.includes('#')) {
       const [path, hash] = to.split('#')
       if (location.pathname === path || (!path && hash)) {
-        const el = document.getElementById(hash)
-        if (el) {
-          e.preventDefault()
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          window.history.pushState(null, '', `${path || location.pathname}#${hash}`)
+        e.preventDefault()
+        if (hash === 'cotizador-gral') {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+          const el = document.getElementById(hash)
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
         }
+        window.history.pushState(null, '', `${path || location.pathname}#${hash}`)
       }
     }
   }

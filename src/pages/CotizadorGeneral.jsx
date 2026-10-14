@@ -39,22 +39,26 @@ export default function CotizadorGeneral() {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.hash === '#proyectos') {
-      const scroll = () => {
-        const el = document.getElementById('proyectos')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          return true
-        }
-        return false
+    if (!location.hash) return
+    const id = location.hash.replace('#', '')
+    const scroll = () => {
+      if (id === 'cotizador-gral') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return true
       }
-      if (!scroll()) {
-        const t1 = setTimeout(scroll, 150)
-        const t2 = setTimeout(scroll, 450)
-        return () => {
-          clearTimeout(t1)
-          clearTimeout(t2)
-        }
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return true
+      }
+      return false
+    }
+    if (!scroll()) {
+      const t1 = setTimeout(scroll, 150)
+      const t2 = setTimeout(scroll, 450)
+      return () => {
+        clearTimeout(t1)
+        clearTimeout(t2)
       }
     }
   }, [location.hash])
@@ -108,6 +112,7 @@ export default function CotizadorGeneral() {
         )}
 
         {/* Main Projects Catalog */}
+        <hr />
         <ProjectsCatalog
           id="proyectos"
           projects={rawProjects}
