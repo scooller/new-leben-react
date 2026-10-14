@@ -143,7 +143,6 @@
 // ============================================================
 .lb-featured {
   background: $lb-cream;
-  padding-block: $lb-section-pad-sm;
 }
 
 .lb-group-zone {
@@ -393,10 +392,6 @@
 // Mobile responsive
 // ============================================================
 @include bs.media-breakpoint-down(md) {
-  .lb-featured {
-    padding-block: $lb-section-pad-sm;
-  }
-
   .lb-group-zone {
     font-size: $lb-heading-2;
   }

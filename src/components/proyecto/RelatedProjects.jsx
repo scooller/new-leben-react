@@ -66,7 +66,7 @@ export default function RelatedProjects({ data, onCotizar }) {
   }, [data.apiId, data.comuna, data.projectName])
 
   return (
-    <section className="lb-proj-det-related" id="relacionados">
+    <section className="lb-proj-det-related py-4 py-md-5" id="relacionados">
       <div className="container">
         <div>
           {/* <ScrollAnim as='span' animation='fade-up' className="lb-eyebrow d-block mb-2 text-dark">{data.eyebrow} <strong className='text-danger'>{data.highlight}</strong> </ScrollAnim> */}

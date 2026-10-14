@@ -794,7 +794,7 @@ export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelaci
   )
 
   return (
-    <section className={`lb-proj-det-cotizador ${className}`.trim()} id="cotizador" ref={ref}>
+    <section className={`lb-proj-det-cotizador pt-4 pb-1 pt-md-5 ${className}`.trim()} id="cotizador" ref={ref}>
       {content}
 
       <CotizadorForm

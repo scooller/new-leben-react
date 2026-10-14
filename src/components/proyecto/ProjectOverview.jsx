@@ -18,7 +18,7 @@ export default function ProjectOverview({ data }) {
   }, [])
 
   return (
-    <section className="lb-proj-det-overview container" id="overview" ref={sectionRef}>
+    <section className="lb-proj-det-overview container py-4 py-md-5" id="overview" ref={sectionRef}>
       <div className="row align-items-center g-5">
         {/* Collage */}
         <ScrollAnim

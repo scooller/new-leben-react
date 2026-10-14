@@ -29,7 +29,7 @@ export default function BottomGallery({ images }) {
   }
 
   return (
-    <section className="lb-proj-det-bottom-gallery" id="bottom-gallery" ref={sectionRef}>
+    <section className="lb-proj-det-bottom-gallery py-3 py-md-4" id="bottom-gallery" ref={sectionRef}>
       <ScrollAnim as="div" className="lb-proj-det-bottom-scroller" animation="fade-up" stagger={0.1}>
         {images.map((src, i) => (
           <a

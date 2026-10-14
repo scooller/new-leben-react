@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.121] - 2026-10-14
+
+### Changed
+- `_proyecto-detalle.scss` & `_proyectos.scss`: eliminadas declaraciones manuales de `padding-block` en favor de las utilidades nativas de Bootstrap (`py-4 py-md-5` y `py-3 py-md-4`).
+- `Cotizador.jsx`, `ProjectsCatalog.jsx`, `ProjectOverview.jsx`, `FloorPlans.jsx`, `Vista360.jsx`, `SpacesGallery.jsx`, `LocationSection.jsx`, `BottomGallery.jsx`, `TeamAgents.jsx`, `RelatedProjects.jsx`: adoptadas clases utilitarias estándar de Bootstrap para espaciado vertical homologado y responsive.
+
 ## [0.9.120] - 2026-10-14
 
 ### Added

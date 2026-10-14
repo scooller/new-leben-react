@@ -21,7 +21,7 @@ export default function SpacesGallery({ data }) {
   const images = data.images || []
 
   return (
-    <section className="lb-proj-det-spaces container" id="espacios" ref={sectionRef}>
+    <section className="lb-proj-det-spaces container py-4 py-md-5" id="espacios" ref={sectionRef}>
       <div className="row g-5 align-items-center">
         <ScrollAnim
           as="div"

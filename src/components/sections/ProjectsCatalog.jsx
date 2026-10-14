@@ -114,7 +114,7 @@ export default function ProjectsCatalog({
   const hasFilters = [...searchParams.keys()].length > 0
 
   return (
-    <section className={`lb-featured container-fluid ${className}`.trim()} id={id}>
+    <section className={`lb-featured container-fluid pb-4 pt-1 pb-md-5 ${className}`.trim()} id={id}>
       <div className="container d-flex flex-column">
         <SplitTitle as="h2">Proyectos</SplitTitle>
         {hasFilters && (

@@ -67,7 +67,6 @@
 
 // --- Overview ---
 .lb-proj-det-overview {
-  padding-block: $lb-section-pad;
 }
 
 .lb-proj-det-collage {
@@ -140,7 +139,6 @@
 
 // --- Amenities Strip ---
 .lb-proj-det-amenities {
-  padding-block: $lb-section-pad-sm;
   background: $lb-gray-100;
   border-block: 1px solid $lb-gray-300;
 }
@@ -191,7 +189,6 @@
 
 // --- Floor Plans ---
 .lb-proj-det-floor-plans {
-  padding-block: $lb-section-pad;
 }
 
 .lb-proj-det-blueprint-wrap {
@@ -208,7 +205,6 @@
 // --- Vista 360 / Recorrido Virtual ---
 // Figma 2093:4 — white bg, red eyebrow, dark title, underline tabs
 .lb-proj-det-vista360 {
-  padding-block: $lb-section-pad;
   background: $lb-white;
 
   .lb-proj-det-vista360-eyebrow {
@@ -274,7 +270,6 @@
 // --- Cotizador ---
 .lb-proj-det-cotizador {
   background: $lb-cream;
-  padding-block: $lb-section-pad;
 }
 
 .lb-proj-det-cot-title {
@@ -564,8 +559,6 @@
 
 // --- Related Projects Table ---
 .lb-proj-det-related {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
   background: $lb-cream;
 }
 
@@ -654,7 +647,6 @@
 
 // --- Spaces Gallery (amenity-linked) ---
 .lb-proj-det-spaces {
-  padding-block: $lb-section-pad;
 }
 
 // --- Spaces grid: 1 full-width + 2 half-width ---
@@ -866,7 +858,6 @@
 
 // --- Location ---
 .lb-proj-det-location {
-  padding-block: $lb-section-pad;
 }
 
 .lb-proj-det-check-icon {
@@ -905,7 +896,6 @@
 // --- Bottom Gallery ---
 .lb-proj-det-bottom-gallery {
   position: relative;
-  padding-block: $lb-section-pad-sm * 0.833;
 }
 
 .lb-proj-det-bottom-scroller {
@@ -1002,7 +992,6 @@
 }
 
 .lb-proj-det-team {
-  padding-block: $lb-section-pad;
 }
 
 .lb-proj-det-team-subtitle {

@@ -14,7 +14,7 @@ export default function Vista360({ data }) {
   const isIframe = typeof currentImage === 'string' && /^https?:\/\//.test(currentImage)
 
   return (
-    <section className="lb-proj-det-vista360 pt-1" id="vista360">
+    <section className="lb-proj-det-vista360 py-4 py-md-5" id="vista360">
       <div className="container">
         <ScrollAnim as="div" className="lb-proj-det-vista360-header" animation="fade-up" start="center center">
           <span className="lb-proj-det-vista360-eyebrow d-block mb-3">{data.eyebrow}</span>

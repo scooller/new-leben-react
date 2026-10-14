@@ -18,7 +18,7 @@ export default function LocationSection({ data }) {
   }, [])
 
   return (
-    <section className="lb-proj-det-location container" id="ubicacion" ref={ref}>
+    <section className="lb-proj-det-location container py-4 py-md-5" id="ubicacion" ref={ref}>
       <div className="row g-5 align-items-center">
         <ScrollAnim as="div" className="col-lg-5" animation="fade-right">
           <span className="lb-eyebrow d-block mb-2 text-danger">{data.eyebrow}</span>

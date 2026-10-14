@@ -56,7 +56,7 @@ export default function FloorPlans({ data }) {
   }
 
   return (
-    <section className="lb-proj-det-spaces container pt-1" id="terminaciones" ref={sectionRef}>
+    <section className="lb-proj-det-spaces container py-4 py-md-5" id="terminaciones" ref={sectionRef}>
       {/* Item labels — below gallery */}
       <ScrollAnim as="div" className="lb-proj-det-spaces-amenities d-flex flex-wrap justify-content-center gap-3 mb-4 mt-5" animation="fade-up" stagger={0.08}>
         {(data.items || []).map((item, i) => {

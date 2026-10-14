@@ -36,7 +36,7 @@ export default function TeamAgents({ data, apiId }) {
   const wazeMap = data?.wazeMap
 
   return (
-    <section className="lb-proj-det-team container text-center" id="contacto">
+    <section className="lb-proj-det-team container text-center py-4 py-md-5" id="contacto">
       <div className="row">
         <div className='col-12'>
           <SplitTitle
