@@ -4,7 +4,8 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import ProjectCard from '../ProjectCard.jsx'
 import ProjectCardSkeleton from '../ProjectCardSkeleton.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { groupByComuna, mapApiProject } from '../../lib/projectUtils.js'
+import { groupByComuna, mapApiProject, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
+import SplitTitle from '../SplitTitle.jsx'
 
 /** Fetch raw projects from API when not supplied by parent */
 function useInternalApiProjects(enabled) {
@@ -77,17 +78,13 @@ function useFilteredProjects(searchParams, rawProjects, groupByZone) {
 
     if (groupByZone) {
       const groups = groupByComuna(filtered)
-      groups.forEach((g) => g.projects.sort((a, b) => a.name.localeCompare(b.name)))
+      groups.forEach((g) => {
+        g.projects = sortProjectsByCustomOrder(g.projects)
+      })
       return { groups, flat: [], count: filtered.length }
     }
 
-    const flat = filtered
-      .map(mapApiProject)
-      .sort((a, b) => {
-        const comp = (a.comuna || '').localeCompare(b.comuna || '', 'es', { sensitivity: 'base' })
-        if (comp !== 0) return comp
-        return (a.name || '').localeCompare(b.name || '', 'es', { sensitivity: 'base' })
-      })
+    const flat = sortProjectsByCustomOrder(filtered.map(mapApiProject))
 
     return { groups: [], flat, count: flat.length }
   }, [searchParams, rawProjects, groupByZone])
@@ -118,7 +115,8 @@ export default function ProjectsCatalog({
 
   return (
     <section className={`lb-featured container-fluid ${className}`.trim()} id={id}>
-      <div className="container d-flex flex-column gap-5">
+      <div className="container d-flex flex-column">
+        <SplitTitle as="h2">Proyectos</SplitTitle>
         {hasFilters && (
           <div className="d-flex align-items-center justify-content-end">
             <button
@@ -132,7 +130,7 @@ export default function ProjectsCatalog({
         )}
 
         {/* Filter bar */}
-        <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3">
+        <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3 mb-4">
           <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
             {dynamicFilters.map((f) => (
               <select
@@ -158,7 +156,7 @@ export default function ProjectsCatalog({
 
         {projectsLoading ? (
           /* Skeleton grid while API loads */
-          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-5">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="col">
                 <ProjectCardSkeleton />

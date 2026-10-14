@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.119] - 2026-10-14
+
+### Changed
+- `projectUtils.js`: incorporada lista de ordenamiento de proyectos preferida (`PROJECT_DISPLAY_ORDER`) y utilidades `getProjectOrderRank` y `sortProjectsByCustomOrder` con normalización robusta y búsqueda por palabra clave.
+- `ProjectsCatalog.jsx`: aplicado ordenamiento personalizado a proyectos planos y por zona (Baum, Mood, Living Town, Argomedo, Santo, Indi, Capitanes, Suecia, Bold, INN, Índigo, Nórdico, Parque Germania y resto).
+- `Cotizador.jsx`: ordenado el desplegable de proyectos en modo universal según el orden personalizado.
+
 ## [0.9.118] - 2026-10-14
 
 ### Removed

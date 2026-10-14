@@ -463,7 +463,7 @@
 
 // Precio + botón Cotizar siempre al fondo de la columna derecha
 // Necesita especificidad mayor que Bootstrap .mt-4 { margin-top: 1.5rem !important }
-.lb-proj-det-cot-details > .lb-proj-det-cot-pricing {
+.lb-proj-det-cot-details>.lb-proj-det-cot-pricing {
   margin-top: auto !important;
 }
 

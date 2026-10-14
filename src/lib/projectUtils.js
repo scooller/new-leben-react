@@ -59,3 +59,58 @@ export function groupByComuna(projects) {
   }))
 }
 
+export const PROJECT_DISPLAY_ORDER = [
+  'baum',
+  'mood',
+  'livingtown',
+  'argomedo',
+  'santo',
+  'indi',
+  'capitanes',
+  'suecia',
+  'bold',
+  'inn',
+  'indigo',
+  'nordico',
+  'parquegermania',
+]
+
+export function normalizeProjectName(name = '') {
+  return String(name)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/edificio\s+/i, '')
+    .replace(/[^a-z0-9]/g, '')
+    .trim()
+}
+
+export function getProjectOrderRank(name = '', orderList = PROJECT_DISPLAY_ORDER) {
+  const norm = normalizeProjectName(name)
+  const idx = orderList.findIndex((target) => normalizeProjectName(target) === norm)
+  if (idx !== -1) return idx
+
+  // Fallback: check if target is an exact word in the project name
+  const words = String(name)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/edificio\s+/i, '')
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+
+  const wordIdx = orderList.findIndex((target) => words.includes(normalizeProjectName(target)))
+  return wordIdx === -1 ? 9999 : wordIdx
+}
+
+export function sortProjectsByCustomOrder(projects = [], orderList = PROJECT_DISPLAY_ORDER) {
+  return [...projects].sort((a, b) => {
+    const nameA = typeof a === 'string' ? a : (a?.name || a?.title || '')
+    const nameB = typeof b === 'string' ? b : (b?.name || b?.title || '')
+    const rankA = getProjectOrderRank(nameA, orderList)
+    const rankB = getProjectOrderRank(nameB, orderList)
+    if (rankA !== rankB) return rankA - rankB
+    return nameA.localeCompare(nameB, 'es', { sensitivity: 'base' })
+  })
+}
+

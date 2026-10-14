@@ -8,7 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -304,11 +304,10 @@ export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelaci
       // Step 1: all comunas from projects (not just plantas — some projects have no available plantas)
       const comuna = [...new Set((projects || []).map((p) => (p.comuna || '').trim()).filter(Boolean))].sort()
 
-      // Step 2: proyectos filtered by selected comuna (from projects, not just plantas)
       const afterComunaProjects = filters.comuna
         ? (projects || []).filter((p) => norm(p.comuna) === norm(filters.comuna))
         : (projects || [])
-      const proyecto = [...new Set(afterComunaProjects.map((p) => p.name).filter(Boolean))].sort()
+      const proyecto = sortProjectsByCustomOrder([...new Set(afterComunaProjects.map((p) => p.name).filter(Boolean))])
 
       // Step 3: tipologías + orientaciones filtered by selected proyecto (from plantas)
       const afterProyecto = filters.proyecto
