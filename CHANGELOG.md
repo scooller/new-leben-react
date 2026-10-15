@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.129] - 2026-10-15
+
+### Changed
+- `BuscadorDepartamentos.jsx`: renombrado desde `FlightSearchForm.jsx` para reflejar con precisión el dominio inmobiliario del proyecto.
+- `CotizadorGeneral.jsx`: actualizado import y uso a `BuscadorDepartamentos`.
+- `_cotizador-general.scss`: migradas clases `.lb-flight-*` a `.lb-buscador-*`.
+
 ## [0.9.128] - 2026-10-15
 
 ### Removed

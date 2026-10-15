@@ -237,7 +237,7 @@
 // ============================================================
 // LATAM Flight Search Form Style Widget
 // ============================================================
-.lb-flight-search-section {
+.lb-buscador-search-section {
   position: relative;
   z-index: 10;
   margin-top: -15.5rem;
@@ -251,13 +251,13 @@
   }
 }
 
-.lb-flight-search-container {
+.lb-buscador-search-container {
   max-width: 1140px;
   margin: 0 auto;
 }
 
 // 1. Barra de categorías superior (estilo barra oscura de LATAM)
-.lb-flight-category-bar {
+.lb-buscador-category-bar {
   background: rgba(26, 26, 26, 0.78);
   backdrop-filter: blur(14px);
   border-radius: bs.$border-radius-xl bs.$border-radius-xl 0 0;
@@ -271,7 +271,7 @@
     display: none;
   }
 
-  .lb-flight-category-tab {
+  .lb-buscador-category-tab {
     border: none;
     background: transparent;
     color: rgba($lb-white, 0.8);
@@ -312,7 +312,7 @@
 }
 
 // 2. Card unificada blanca
-.lb-flight-search-card {
+.lb-buscador-search-card {
   background: $lb-white;
   border-radius: 0 0 bs.$border-radius-xl bs.$border-radius-xl;
   box-shadow: 0 24px 52px -12px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.05);
@@ -329,7 +329,7 @@
 }
 
 // Header dentro de la tarjeta: Título + Pills de intención
-.lb-flight-card-header {
+.lb-buscador-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -337,7 +337,7 @@
   flex-wrap: wrap;
   gap: 0.85rem;
 
-  .lb-flight-card-title {
+  .lb-buscador-card-title {
     font-family: $font-secondary;
     font-size: clamp(1.25rem, 2.2vw, 1.55rem);
     font-weight: 700;
@@ -345,12 +345,12 @@
     letter-spacing: -0.01em;
   }
 
-  .lb-flight-intent-pills {
+  .lb-buscador-intent-pills {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
 
-    .lb-flight-intent-pill {
+    .lb-buscador-intent-pill {
       border: 1px solid $lb-gray-300;
       background: $lb-white;
       border-radius: bs.$border-radius-pill;
@@ -379,7 +379,7 @@
 }
 
 // 3. Fila superior: Caja enmarcada tipo Origen / Destino (Comuna + Proyecto)
-.lb-flight-route-box {
+.lb-buscador-route-box {
   border: 1px solid $lb-gray-300;
   border-radius: bs.$border-radius-xl;
   display: flex;
@@ -397,12 +397,12 @@
   }
 }
 
-.lb-flight-route-segment {
+.lb-buscador-route-segment {
   flex: 1;
   position: relative;
   min-width: 0;
 
-  .lb-flight-route-btn {
+  .lb-buscador-route-btn {
     width: 100%;
     min-height: 4.5rem;
     border: none;
@@ -421,7 +421,7 @@
     }
   }
 
-  .lb-flight-route-icon {
+  .lb-buscador-route-icon {
     flex-shrink: 0;
     margin-right: 0.85rem;
     display: flex;
@@ -429,14 +429,14 @@
     justify-content: center;
   }
 
-  .lb-flight-route-text {
+  .lb-buscador-route-text {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
   }
 
-  .lb-flight-route-label {
+  .lb-buscador-route-label {
     font-size: $lb-fs-xs;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -445,7 +445,7 @@
     margin-bottom: 0.15rem;
   }
 
-  .lb-flight-route-value {
+  .lb-buscador-route-value {
     font-size: 1.05rem;
     font-weight: 700;
     color: $lb-dark;
@@ -459,20 +459,20 @@
     }
   }
 
-  .lb-flight-chevron {
+  .lb-buscador-chevron {
     flex-shrink: 0;
     margin-left: 0.5rem;
     color: $lb-gray-400;
     transition: transform 0.2s ease;
   }
 
-  .lb-flight-route-btn.is-open .lb-flight-chevron {
+  .lb-buscador-route-btn.is-open .lb-buscador-chevron {
     transform: rotate(180deg);
   }
 }
 
 // Divisor central con icono de intercambio
-.lb-flight-route-divider {
+.lb-buscador-route-divider {
   width: 1px;
   background: $lb-gray-300;
   position: relative;
@@ -486,7 +486,7 @@
     height: 1px;
   }
 
-  .lb-flight-swap-badge {
+  .lb-buscador-swap-badge {
     position: absolute;
     width: 1.85rem;
     height: 1.85rem;
@@ -503,8 +503,8 @@
 }
 
 // 4. Fila secundaria: Dormitorios + Orientación + Botón CTA
-.lb-flight-secondary-row {
-  .lb-flight-sub-segment {
+.lb-buscador-secondary-row {
+  .lb-buscador-sub-segment {
     border: 1px solid $lb-gray-300;
     border-radius: bs.$border-radius-lg;
     background: $lb-white;
@@ -516,7 +516,7 @@
       border-color: $lb-dark;
     }
 
-    .lb-flight-sub-btn {
+    .lb-buscador-sub-btn {
       width: 100%;
       height: 100%;
       min-height: 3.5rem;
@@ -536,14 +536,14 @@
       }
     }
 
-    .lb-flight-route-text {
+    .lb-buscador-route-text {
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
     }
 
-    .lb-flight-route-label {
+    .lb-buscador-route-label {
       font-size: $lb-fs-xs;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -552,7 +552,7 @@
       margin-bottom: 0.1rem;
     }
 
-    .lb-flight-route-value {
+    .lb-buscador-route-value {
       font-size: $lb-fs-md;
       font-weight: 700;
       color: $lb-dark;
@@ -566,19 +566,19 @@
       }
     }
 
-    .lb-flight-chevron {
+    .lb-buscador-chevron {
       flex-shrink: 0;
       margin-left: 0.5rem;
       color: $lb-gray-400;
       transition: transform 0.2s ease;
     }
 
-    .lb-flight-sub-btn.is-open .lb-flight-chevron {
+    .lb-buscador-sub-btn.is-open .lb-buscador-chevron {
       transform: rotate(180deg);
     }
   }
 
-  .lb-flight-submit-btn {
+  .lb-buscador-submit-btn {
     border: none;
     background: $lb-red;
     color: $lb-white;
@@ -607,7 +607,7 @@
 }
 
 // Dropdown flotante
-.lb-flight-dropdown-menu {
+.lb-buscador-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -623,7 +623,7 @@
   padding: 0.4rem;
   animation: lbFlightFadeIn 0.15s ease-out;
 
-  .lb-flight-dropdown-header {
+  .lb-buscador-dropdown-header {
     font-size: $lb-fs-xs;
     font-weight: 700;
     color: $lb-gray-500;
@@ -634,7 +634,7 @@
     margin-bottom: 0.35rem;
   }
 
-  .lb-flight-dropdown-item {
+  .lb-buscador-dropdown-item {
     width: 100%;
     border: none;
     background: transparent;
@@ -675,14 +675,14 @@
 }
 
 // 5. Quick Chips de comunas frecuentes
-.lb-flight-search-quick {
+.lb-buscador-search-quick {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 1.25rem;
   flex-wrap: wrap;
 
-  .lb-flight-quick-label {
+  .lb-buscador-quick-label {
     font-size: $lb-fs-xs;
     font-weight: 700;
     color: rgba($lb-dark, 0.7);
@@ -690,13 +690,13 @@
     letter-spacing: 0.05em;
   }
 
-  .lb-flight-quick-chips {
+  .lb-buscador-quick-chips {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
   }
 
-  .lb-flight-chip {
+  .lb-buscador-chip {
     border: 1px solid $lb-gray-300;
     background: $lb-white;
     border-radius: bs.$border-radius-pill;

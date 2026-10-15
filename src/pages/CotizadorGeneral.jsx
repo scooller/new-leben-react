@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
-import FlightSearchForm from '../components/cotizador/FlightSearchForm.jsx'
+import BuscadorDepartamentos from '../components/cotizador/BuscadorDepartamentos.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 // import Alternatives from '../components/proyecto/Alternatives.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
@@ -122,12 +122,12 @@ export default function CotizadorGeneral() {
           {hasSelection && <div className="lb-cot-gen-banner__arrow" aria-hidden="true" />}
         </section>
 
-        {/* Formulario de selección estilo LATAM (#flight-search-form) cuando no hay planta seleccionada */}
+        {/* Buscador de departamentos estilo card flotante cuando no hay planta seleccionada */}
         {!hasSelection ? (
-          <section className="lb-flight-search-section pb-5" id="formulario-busqueda">
+          <section className="lb-buscador-search-section pb-5" id="formulario-busqueda">
             <div className="container">
               <ScrollAnim animation="fade-up">
-                <FlightSearchForm
+                <BuscadorDepartamentos
                   projects={rawProjects || []}
                   onSearch={handleSearch}
                   initialFilters={searchFilters || {}}

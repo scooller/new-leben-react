@@ -28,7 +28,7 @@ const ORIENTACIONES = [
   ...Object.entries(ORIENTACION_LABELS).map(([k, label]) => ({ value: label, label, code: k })),
 ]
 
-export default function FlightSearchForm({
+export default function BuscadorDepartamentos({
   projects = [],
   onSearch,
   initialFilters = {},
@@ -124,14 +124,14 @@ export default function FlightSearchForm({
   }
 
   return (
-    <div className={`lb-flight-search-container ${className}`} ref={formRef} id="flight-search-form">
+    <div className={`lb-buscador-search-container ${className}`} ref={formRef} id="buscador-departamentos">
       {/* 1. Category Navigation Tabs (Dark Bar like LATAM) */}
-      <div className="lb-flight-category-bar">
+      <div className="lb-buscador-category-bar">
         {CATEGORY_TABS.map((tab) => (
           <button
             key={tab.id}
             type="button"
-            className={`lb-flight-category-tab ${activeCategory === tab.id ? 'active' : ''}`}
+            className={`lb-buscador-category-tab ${activeCategory === tab.id ? 'active' : ''}`}
             onClick={() => {
               setActiveCategory(tab.id)
               setProyecto('')
@@ -143,16 +143,16 @@ export default function FlightSearchForm({
       </div>
 
       {/* 2. Main White Card */}
-      <div className="lb-flight-search-card">
+      <div className="lb-buscador-search-card">
         {/* Card Header: Title + Intent Pills */}
-        <div className="lb-flight-card-header">
-          <h2 className="lb-flight-card-title mb-0">¿Dónde quieres vivir?</h2>
-          <div className="lb-flight-intent-pills">
+        <div className="lb-buscador-card-header">
+          <h2 className="lb-buscador-card-title mb-0">¿Dónde quieres vivir?</h2>
+          <div className="lb-buscador-intent-pills">
             {INTENT_PILLS.map((pill) => (
               <button
                 key={pill.id}
                 type="button"
-                className={`lb-flight-intent-pill ${intentPill === pill.id ? 'active' : ''}`}
+                className={`lb-buscador-intent-pill ${intentPill === pill.id ? 'active' : ''}`}
                 onClick={() => {
                   setIntentPill(pill.id)
                   setProyecto('')
@@ -165,36 +165,36 @@ export default function FlightSearchForm({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="lb-flight-card-body">
+        <form onSubmit={handleSubmit} className="lb-buscador-card-body">
           {/* Top Row: Origin & Destination style box (Comuna + Proyecto) */}
-          <div className="lb-flight-route-box">
+          <div className="lb-buscador-route-box">
             {/* Ubicación / Comuna */}
-            <div className="lb-flight-route-segment">
+            <div className="lb-buscador-route-segment">
               <button
                 type="button"
-                className={`lb-flight-route-btn ${openDropdown === 'comuna' ? 'is-open' : ''}`}
+                className={`lb-buscador-route-btn ${openDropdown === 'comuna' ? 'is-open' : ''}`}
                 onClick={() => setOpenDropdown(openDropdown === 'comuna' ? null : 'comuna')}
                 aria-label="Seleccionar comuna"
                 aria-expanded={openDropdown === 'comuna'}
               >
-                <div className="lb-flight-route-icon">
+                <div className="lb-buscador-route-icon">
                   <MapPin size={22} className="text-danger" />
                 </div>
-                <div className="lb-flight-route-text">
-                  <span className="lb-flight-route-label">Comuna / Ubicación</span>
-                  <span className={`lb-flight-route-value ${!comuna ? 'is-placeholder' : ''}`}>
+                <div className="lb-buscador-route-text">
+                  <span className="lb-buscador-route-label">Comuna / Ubicación</span>
+                  <span className={`lb-buscador-route-value ${!comuna ? 'is-placeholder' : ''}`}>
                     {comuna || 'Ingresa una comuna'}
                   </span>
                 </div>
-                <ChevronDown size={16} className="lb-flight-chevron" />
+                <ChevronDown size={16} className="lb-buscador-chevron" />
               </button>
 
               {openDropdown === 'comuna' && (
-                <div className="lb-flight-dropdown-menu">
-                  <div className="lb-flight-dropdown-header">Comunas disponibles</div>
+                <div className="lb-buscador-dropdown-menu">
+                  <div className="lb-buscador-dropdown-header">Comunas disponibles</div>
                   <button
                     type="button"
-                    className={`lb-flight-dropdown-item ${!comuna ? 'active' : ''}`}
+                    className={`lb-buscador-dropdown-item ${!comuna ? 'active' : ''}`}
                     onClick={() => handleSelectComuna('')}
                   >
                     <span>Todas las comunas</span>
@@ -204,7 +204,7 @@ export default function FlightSearchForm({
                     <button
                       key={c.name}
                       type="button"
-                      className={`lb-flight-dropdown-item ${comuna === c.name ? 'active' : ''}`}
+                      className={`lb-buscador-dropdown-item ${comuna === c.name ? 'active' : ''}`}
                       onClick={() => handleSelectComuna(c.name)}
                     >
                       <span>{c.name}</span>
@@ -218,41 +218,41 @@ export default function FlightSearchForm({
             </div>
 
             {/* Central divider with swap/route icon */}
-            <div className="lb-flight-route-divider">
-              <div className="lb-flight-swap-badge" aria-hidden="true">
+            <div className="lb-buscador-route-divider">
+              <div className="lb-buscador-swap-badge" aria-hidden="true">
                 <ArrowRightLeft size={14} />
               </div>
             </div>
 
             {/* Proyecto */}
-            <div className="lb-flight-route-segment">
+            <div className="lb-buscador-route-segment">
               <button
                 type="button"
-                className={`lb-flight-route-btn ${openDropdown === 'proyecto' ? 'is-open' : ''}`}
+                className={`lb-buscador-route-btn ${openDropdown === 'proyecto' ? 'is-open' : ''}`}
                 onClick={() => setOpenDropdown(openDropdown === 'proyecto' ? null : 'proyecto')}
                 aria-label="Seleccionar proyecto"
                 aria-expanded={openDropdown === 'proyecto'}
               >
-                <div className="lb-flight-route-icon">
+                <div className="lb-buscador-route-icon">
                   <Building2 size={22} className="text-secondary" />
                 </div>
-                <div className="lb-flight-route-text">
-                  <span className="lb-flight-route-label">Proyecto</span>
-                  <span className={`lb-flight-route-value ${!proyecto ? 'is-placeholder' : ''}`}>
+                <div className="lb-buscador-route-text">
+                  <span className="lb-buscador-route-label">Proyecto</span>
+                  <span className={`lb-buscador-route-value ${!proyecto ? 'is-placeholder' : ''}`}>
                     {proyecto || 'Ingresa o selecciona un proyecto'}
                   </span>
                 </div>
-                <ChevronDown size={16} className="lb-flight-chevron" />
+                <ChevronDown size={16} className="lb-buscador-chevron" />
               </button>
 
               {openDropdown === 'proyecto' && (
-                <div className="lb-flight-dropdown-menu">
-                  <div className="lb-flight-dropdown-header">
+                <div className="lb-buscador-dropdown-menu">
+                  <div className="lb-buscador-dropdown-header">
                     {comuna ? `Proyectos en ${comuna}` : 'Todos los proyectos'}
                   </div>
                   <button
                     type="button"
-                    className={`lb-flight-dropdown-item ${!proyecto ? 'active' : ''}`}
+                    className={`lb-buscador-dropdown-item ${!proyecto ? 'active' : ''}`}
                     onClick={() => handleSelectProyecto('')}
                   >
                     <span>Todos los proyectos</span>
@@ -262,7 +262,7 @@ export default function FlightSearchForm({
                     <button
                       key={pName}
                       type="button"
-                      className={`lb-flight-dropdown-item ${proyecto === pName ? 'active' : ''}`}
+                      className={`lb-buscador-dropdown-item ${proyecto === pName ? 'active' : ''}`}
                       onClick={() => handleSelectProyecto(pName)}
                     >
                       <span>{pName}</span>
@@ -275,38 +275,38 @@ export default function FlightSearchForm({
           </div>
 
           {/* Secondary Row: Dormitorios + Orientación + CTA Button */}
-          <div className="lb-flight-secondary-row mt-3">
+          <div className="lb-buscador-secondary-row mt-3">
             <div className="row g-3 align-items-stretch">
               {/* Dormitorios */}
               <div className="col-12 col-md-4">
-                <div className="lb-flight-sub-segment">
+                <div className="lb-buscador-sub-segment">
                   <button
                     type="button"
-                    className={`lb-flight-sub-btn ${openDropdown === 'dormitorios' ? 'is-open' : ''}`}
+                    className={`lb-buscador-sub-btn ${openDropdown === 'dormitorios' ? 'is-open' : ''}`}
                     onClick={() => setOpenDropdown(openDropdown === 'dormitorios' ? null : 'dormitorios')}
                     aria-label="Seleccionar dormitorios"
                     aria-expanded={openDropdown === 'dormitorios'}
                   >
                     <Home size={20} className="text-secondary me-2 flex-shrink-0" />
-                    <div className="lb-flight-route-text">
-                      <span className="lb-flight-route-label">Dormitorios</span>
-                      <span className={`lb-flight-route-value ${!dormitorios ? 'is-placeholder' : ''}`}>
+                    <div className="lb-buscador-route-text">
+                      <span className="lb-buscador-route-label">Dormitorios</span>
+                      <span className={`lb-buscador-route-value ${!dormitorios ? 'is-placeholder' : ''}`}>
                         {dormitorios
                           ? (DORMITORIOS_OPTIONS.find((d) => d.value === dormitorios)?.label || dormitorios)
                           : 'Cualquier distribución'}
                       </span>
                     </div>
-                    <ChevronDown size={16} className="lb-flight-chevron" />
+                    <ChevronDown size={16} className="lb-buscador-chevron" />
                   </button>
 
                   {openDropdown === 'dormitorios' && (
-                    <div className="lb-flight-dropdown-menu">
-                      <div className="lb-flight-dropdown-header">Distribución y dormitorios</div>
+                    <div className="lb-buscador-dropdown-menu">
+                      <div className="lb-buscador-dropdown-header">Distribución y dormitorios</div>
                       {DORMITORIOS_OPTIONS.map((d) => (
                         <button
                           key={d.value}
                           type="button"
-                          className={`lb-flight-dropdown-item ${dormitorios === d.value ? 'active' : ''}`}
+                          className={`lb-buscador-dropdown-item ${dormitorios === d.value ? 'active' : ''}`}
                           onClick={() => {
                             setDormitorios(d.value)
                             setOpenDropdown(null)
@@ -323,32 +323,32 @@ export default function FlightSearchForm({
 
               {/* Orientación */}
               <div className="col-12 col-md-4">
-                <div className="lb-flight-sub-segment">
+                <div className="lb-buscador-sub-segment">
                   <button
                     type="button"
-                    className={`lb-flight-sub-btn ${openDropdown === 'orientacion' ? 'is-open' : ''}`}
+                    className={`lb-buscador-sub-btn ${openDropdown === 'orientacion' ? 'is-open' : ''}`}
                     onClick={() => setOpenDropdown(openDropdown === 'orientacion' ? null : 'orientacion')}
                     aria-label="Seleccionar orientación"
                     aria-expanded={openDropdown === 'orientacion'}
                   >
                     <Compass size={20} className="text-secondary me-2 flex-shrink-0" />
-                    <div className="lb-flight-route-text">
-                      <span className="lb-flight-route-label">Orientación</span>
-                      <span className={`lb-flight-route-value ${!orientacion ? 'is-placeholder' : ''}`}>
+                    <div className="lb-buscador-route-text">
+                      <span className="lb-buscador-route-label">Orientación</span>
+                      <span className={`lb-buscador-route-value ${!orientacion ? 'is-placeholder' : ''}`}>
                         {orientacion || 'Cualquier orientación'}
                       </span>
                     </div>
-                    <ChevronDown size={16} className="lb-flight-chevron" />
+                    <ChevronDown size={16} className="lb-buscador-chevron" />
                   </button>
 
                   {openDropdown === 'orientacion' && (
-                    <div className="lb-flight-dropdown-menu">
-                      <div className="lb-flight-dropdown-header">Orientación solar</div>
+                    <div className="lb-buscador-dropdown-menu">
+                      <div className="lb-buscador-dropdown-header">Orientación solar</div>
                       {ORIENTACIONES.map((o) => (
                         <button
                           key={o.value}
                           type="button"
-                          className={`lb-flight-dropdown-item ${orientacion === o.value ? 'active' : ''}`}
+                          className={`lb-buscador-dropdown-item ${orientacion === o.value ? 'active' : ''}`}
                           onClick={() => {
                             setOrientacion(o.value)
                             setOpenDropdown(null)
@@ -365,7 +365,7 @@ export default function FlightSearchForm({
 
               {/* Botón CTA */}
               <div className="col-12 col-md-4">
-                <button type="submit" className="lb-flight-submit-btn w-100">
+                <button type="submit" className="lb-buscador-submit-btn w-100">
                   <Search size={20} className="me-2" />
                   <span>Buscar departamentos</span>
                 </button>
@@ -377,14 +377,14 @@ export default function FlightSearchForm({
 
       {/* 3. Comunas frecuentes */}
       {popularComunas.length > 0 && (
-        <div className="lb-flight-search-quick">
-          <span className="lb-flight-quick-label">Comunas frecuentes:</span>
-          <div className="lb-flight-quick-chips">
+        <div className="lb-buscador-search-quick">
+          <span className="lb-buscador-quick-label">Comunas frecuentes:</span>
+          <div className="lb-buscador-quick-chips">
             {popularComunas.map((cName) => (
               <button
                 key={cName}
                 type="button"
-                className={`lb-flight-chip ${comuna === cName ? 'active' : ''}`}
+                className={`lb-buscador-chip ${comuna === cName ? 'active' : ''}`}
                 onClick={() => handleSelectComuna(comuna === cName ? '' : cName)}
               >
                 {cName}
