@@ -15,12 +15,37 @@
   align-items: center;
   justify-content: center;
   background: $lb-dark;
+  transition: min-height 0.3s ease, padding 0.3s ease;
+
+  // Banner ampliado para formulario tipo LATAM
+  &--expanded {
+    min-height: clamp(32rem, 52vh, 42rem);
+    padding-bottom: 7.5rem;
+    align-items: flex-start;
+    padding-top: calc(#{$lb-navbar-height} + 3rem);
+
+    @include bs.media-breakpoint-down(lg) {
+      min-height: clamp(26rem, 45vh, 34rem);
+      padding-bottom: 5.5rem;
+      padding-top: calc(#{$lb-navbar-height} + 2rem);
+    }
+
+    @include bs.media-breakpoint-down(md) {
+      min-height: auto;
+      padding-bottom: 3.5rem;
+      padding-top: calc(#{$lb-navbar-height} + 1.5rem);
+    }
+  }
 
   &__bg {
     position: absolute;
     inset: 0;
     background: url('/images/Fondo_cotizar.jpg') center 40% / cover no-repeat;
     transform: scale(1.02);
+
+    @include bs.media-breakpoint-down(md) {
+      background-position: 12% 40%;
+    }
   }
 
   &__overlay {
@@ -207,4 +232,490 @@
 
 #proyectos {
   scroll-margin-top: 5rem;
+}
+
+// ============================================================
+// LATAM Flight Search Form Style Widget
+// ============================================================
+.lb-flight-search-section {
+  position: relative;
+  z-index: 10;
+  margin-top: -15.5rem;
+
+  @include bs.media-breakpoint-down(lg) {
+    margin-top: -4.5rem;
+  }
+
+  @include bs.media-breakpoint-down(md) {
+    margin-top: -2rem;
+  }
+}
+
+.lb-flight-search-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+// 1. Barra de categorías superior (estilo barra oscura de LATAM)
+.lb-flight-category-bar {
+  background: rgba(26, 26, 26, 0.78);
+  backdrop-filter: blur(14px);
+  border-radius: bs.$border-radius-xl bs.$border-radius-xl 0 0;
+  padding: 0.4rem 0.85rem 0;
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lb-flight-category-tab {
+    border: none;
+    background: transparent;
+    color: rgba($lb-white, 0.8);
+    font-size: $lb-fs-sm;
+    font-weight: 600;
+    padding: 0.75rem 1.4rem;
+    border-radius: bs.$border-radius-lg bs.$border-radius-lg 0 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      color: $lb-white;
+      background: rgba($lb-white, 0.12);
+    }
+
+    &.active {
+      background: $lb-white;
+      color: $lb-dark;
+      font-weight: 700;
+      position: relative;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 1.15rem;
+        right: 1.15rem;
+        height: 3px;
+        background: $lb-red;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// 2. Card unificada blanca
+.lb-flight-search-card {
+  background: $lb-white;
+  border-radius: 0 0 bs.$border-radius-xl bs.$border-radius-xl;
+  box-shadow: 0 24px 52px -12px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: none;
+  padding: 1.75rem 2rem;
+  position: relative;
+  z-index: 5;
+
+  @include bs.media-breakpoint-down(md) {
+    padding: 1.25rem 1rem;
+    border-radius: 0 0 bs.$border-radius-xl bs.$border-radius-xl;
+  }
+}
+
+// Header dentro de la tarjeta: Título + Pills de intención
+.lb-flight-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+
+  .lb-flight-card-title {
+    font-family: $font-secondary;
+    font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+    font-weight: 700;
+    color: $lb-dark;
+    letter-spacing: -0.01em;
+  }
+
+  .lb-flight-intent-pills {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+
+    .lb-flight-intent-pill {
+      border: 1px solid $lb-gray-300;
+      background: $lb-white;
+      border-radius: bs.$border-radius-pill;
+      font-size: $lb-fs-xs;
+      font-weight: 600;
+      color: $lb-body;
+      padding: 0.4rem 0.95rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+
+      &:hover {
+        border-color: $lb-dark;
+        color: $lb-dark;
+      }
+
+      &.active {
+        border-color: $lb-dark;
+        background: $lb-gray-100;
+        color: $lb-dark;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// 3. Fila superior: Caja enmarcada tipo Origen / Destino (Comuna + Proyecto)
+.lb-flight-route-box {
+  border: 1px solid $lb-gray-300;
+  border-radius: bs.$border-radius-xl;
+  display: flex;
+  align-items: stretch;
+  background: $lb-white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus-within {
+    border-color: $lb-dark;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+
+  @include bs.media-breakpoint-down(lg) {
+    flex-direction: column;
+  }
+}
+
+.lb-flight-route-segment {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+
+  .lb-flight-route-btn {
+    width: 100%;
+    min-height: 4.5rem;
+    border: none;
+    background: transparent;
+    padding: 0.85rem 1.35rem;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    border-radius: bs.$border-radius-lg;
+    cursor: pointer;
+    transition: background 0.18s ease;
+
+    &:hover,
+    &.is-open {
+      background: $lb-gray-100;
+    }
+  }
+
+  .lb-flight-route-icon {
+    flex-shrink: 0;
+    margin-right: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lb-flight-route-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lb-flight-route-label {
+    font-size: $lb-fs-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: $lb-gray-500;
+    margin-bottom: 0.15rem;
+  }
+
+  .lb-flight-route-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $lb-dark;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.is-placeholder {
+      font-weight: 500;
+      color: $lb-gray-500;
+    }
+  }
+
+  .lb-flight-chevron {
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    color: $lb-gray-400;
+    transition: transform 0.2s ease;
+  }
+
+  .lb-flight-route-btn.is-open .lb-flight-chevron {
+    transform: rotate(180deg);
+  }
+}
+
+// Divisor central con icono de intercambio
+.lb-flight-route-divider {
+  width: 1px;
+  background: $lb-gray-300;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  @include bs.media-breakpoint-down(lg) {
+    width: 100%;
+    height: 1px;
+  }
+
+  .lb-flight-swap-badge {
+    position: absolute;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    border: 1px solid $lb-gray-300;
+    background: $lb-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $lb-gray-500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+  }
+}
+
+// 4. Fila secundaria: Dormitorios + Orientación + Botón CTA
+.lb-flight-secondary-row {
+  .lb-flight-sub-segment {
+    border: 1px solid $lb-gray-300;
+    border-radius: bs.$border-radius-lg;
+    background: $lb-white;
+    height: 100%;
+    position: relative;
+    transition: border-color 0.2s ease;
+
+    &:focus-within {
+      border-color: $lb-dark;
+    }
+
+    .lb-flight-sub-btn {
+      width: 100%;
+      height: 100%;
+      min-height: 3.5rem;
+      border: none;
+      background: transparent;
+      padding: 0.75rem 1.15rem;
+      display: flex;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+      border-radius: bs.$border-radius;
+      transition: background 0.18s ease;
+
+      &:hover,
+      &.is-open {
+        background: $lb-gray-100;
+      }
+    }
+
+    .lb-flight-route-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lb-flight-route-label {
+      font-size: $lb-fs-xs;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: $lb-gray-500;
+      margin-bottom: 0.1rem;
+    }
+
+    .lb-flight-route-value {
+      font-size: $lb-fs-md;
+      font-weight: 700;
+      color: $lb-dark;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &.is-placeholder {
+        font-weight: 500;
+        color: $lb-gray-500;
+      }
+    }
+
+    .lb-flight-chevron {
+      flex-shrink: 0;
+      margin-left: 0.5rem;
+      color: $lb-gray-400;
+      transition: transform 0.2s ease;
+    }
+
+    .lb-flight-sub-btn.is-open .lb-flight-chevron {
+      transform: rotate(180deg);
+    }
+  }
+
+  .lb-flight-submit-btn {
+    border: none;
+    background: $lb-red;
+    color: $lb-white;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: bs.$border-radius-lg;
+    padding: 0.85rem 1.5rem;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(212, 64, 64, 0.35);
+
+    &:hover {
+      background: $lb-red-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 64, 64, 0.45);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Dropdown flotante
+.lb-flight-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 270px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: $lb-white;
+  border-radius: bs.$border-radius-lg;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $lb-gray-300;
+  z-index: 1050;
+  padding: 0.4rem;
+  animation: lbFlightFadeIn 0.15s ease-out;
+
+  .lb-flight-dropdown-header {
+    font-size: $lb-fs-xs;
+    font-weight: 700;
+    color: $lb-gray-500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid $lb-gray-100;
+    margin-bottom: 0.35rem;
+  }
+
+  .lb-flight-dropdown-item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0.55rem 0.75rem;
+    font-size: $lb-fs-sm;
+    font-weight: 500;
+    color: $lb-dark;
+    text-align: left;
+    border-radius: bs.$border-radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $lb-gray-100;
+    }
+
+    &.active {
+      background: rgba($lb-red, 0.08);
+      color: $lb-red;
+      font-weight: 700;
+    }
+  }
+}
+
+@keyframes lbFlightFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 5. Quick Chips de comunas frecuentes
+.lb-flight-search-quick {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+
+  .lb-flight-quick-label {
+    font-size: $lb-fs-xs;
+    font-weight: 700;
+    color: rgba($lb-dark, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .lb-flight-quick-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .lb-flight-chip {
+    border: 1px solid $lb-gray-300;
+    background: $lb-white;
+    border-radius: bs.$border-radius-pill;
+    font-size: $lb-fs-xs;
+    font-weight: 600;
+    color: $lb-body;
+    padding: 0.3rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    &:hover {
+      border-color: $lb-dark;
+      color: $lb-dark;
+    }
+
+    &.active {
+      background: $lb-dark;
+      color: $lb-white;
+      border-color: $lb-dark;
+    }
+  }
 }

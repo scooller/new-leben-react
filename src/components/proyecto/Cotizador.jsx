@@ -173,9 +173,10 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   )
 }
 
-/** Derive universal filters from a selection ({ planta?, project? }) */
+/** Derive universal filters from a selection ({ planta?, project?, filters? }) */
 function filtersFromSelection(selection) {
   if (!selection) return null
+  if (selection.filters) return selection.filters
   if (selection.planta) {
     const p = selection.planta
     return {
@@ -191,7 +192,18 @@ function filtersFromSelection(selection) {
   return null
 }
 
-export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelacionadas, apiId, selection, universal, projects, onProjectChange, className = '' }) {
+export default function Cotizador({
+  data = DEFAULT_COTIZADOR_DATA,
+  plantasRelacionadas,
+  apiId,
+  selection,
+  universal,
+  projects,
+  onProjectChange,
+  onReset,
+  onModifySearch,
+  className = '',
+}) {
   const [activeData, setActiveData] = useState(() => data || DEFAULT_COTIZADOR_DATA)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
@@ -282,7 +294,7 @@ export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelaci
   // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
   useEffect(() => {
     if (!universal && !apiId) { setPlantas([]); return }
-    const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion)
+    const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion || selection?.filters)
     if (universal && !universalHasFilter) { setPlantas([]); return }
     let cancelled = false
     setLoading(true)
@@ -296,7 +308,7 @@ export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelaci
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion])
+  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
@@ -635,23 +647,35 @@ export default function Cotizador({ data = DEFAULT_COTIZADOR_DATA, plantasRelaci
 
         <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-filter-actions-col">
           {!(loading && !universal) && (
-            <div className="d-flex align-items-center justify-content-between gap-2 gap-md-3 w-100">
+            <div className="d-flex align-items-center justify-content-between gap-2 gap-md-3 w-100 flex-wrap">
               <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                 <MapPinHouseIcon ref={countIconRef} size={14} />
                 {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
               </span>
-              <button
-                className="btn btn-outline-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
-                disabled={!hasFilters}
-                onClick={() => {
-                  selectFilter(EMPTY_FILTERS)
-                  sessionStorage.clear()
-                  window.history.replaceState(null, '', '/cotizador/')
-                }}
-              >
-                <RotateCcw size={13} className="me-1" />
-                Limpiar
-              </button>
+              <div className="d-flex align-items-center gap-2">
+                {onModifySearch && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-dark btn-sm text-decoration-none d-inline-flex align-items-center"
+                    onClick={onModifySearch}
+                  >
+                    Modificar búsqueda
+                  </button>
+                )}
+                <button
+                  className="btn btn-outline-danger btn-sm text-decoration-none d-inline-flex align-items-center lb-proj-det-filter-reset"
+                  disabled={!hasFilters}
+                  onClick={() => {
+                    selectFilter(EMPTY_FILTERS)
+                    sessionStorage.clear()
+                    window.history.replaceState(null, '', '/cotizador/')
+                    onReset?.()
+                  }}
+                >
+                  <RotateCcw size={13} className="me-1" />
+                  Limpiar
+                </button>
+              </div>
             </div>
           )}
         </ScrollAnim>

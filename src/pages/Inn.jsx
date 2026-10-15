@@ -24,9 +24,6 @@ import { DumbbellIcon } from '../components/icons/dumbbell.jsx'
 import { WavesLadderIcon } from '../components/icons/waves-ladder.jsx'
 import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
-import { hover } from '../components/icons/animated-icon.jsx'
-import { FootprintsIcon } from '../components/icons/footprints.jsx'
-import { CarIcon } from '../components/icons/car.jsx'
 import { getProjectBySlug } from '../data/projects.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { mapApiProject } from '../lib/projectUtils.js'
@@ -103,37 +100,13 @@ const ESPACIOS_COMUNES_SLIDES = [
 ]
 
 const LOCATION_POINTS = [
-  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.8 km', category: 'Gastronomía', time: '18 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 14.6, y: 35.8 },
-  { id: 2, name: 'Costanera', label: 'COSTANERA', distance: '0.6 km', category: 'Paseo', time: '6 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 15.1, y: 46.2 },
-  { id: 3, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 10.7, y: 49.9 },
-  { id: 4, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 5.1, y: 52.6 },
-  { id: 5, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 14.7, y: 51.3 },
-  { id: 6, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/Ubicacion_01_Color.jpg', x: 15.7, y: 54.7 },
-  { id: 7, name: 'Playa Puerto Chico', label: 'PLAYA PUERTO CHICO', distance: '0.3 km', category: 'Playa & Paseo', time: '3 minutos', img: 'images/inn/Ubicacion_02_Color.jpg', x: 42.7, y: 75.1 },
-  { id: 8, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 85.3, y: 66.4 },
-  { id: 9, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/Ubicacion_03_Color.jpg', x: 79.3, y: 81.1 },
+  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/ubicacion/Mesa_Tropera_AI.jpg', x: 10.7, y: 49.9 },
+  { id: 2, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/ubicacion/Supermercado_Jumbo_AI.jpg', x: 85.3, y: 66.4 },
+  { id: 3, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/ubicacion/Casino_Dreams_01_IA.jpg', x: 15.7, y: 54.7 },
+  { id: 4, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/ubicacion/Cassis_IA.jpg', x: 14.7, y: 51.3 },
+  { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 5.1, y: 52.6 },
+  { id: 6, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/ubicacion/La Olla_IA.jpg', x: 79.3, y: 81.1 },
 ]
-
-const LOCATION_DATA = {
-  walking: [
-    { id: 1, name: 'Playa Puerto Chico', distance: '0.3 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 2, name: 'Costanera', distance: '0.6 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 3, name: 'Muelle Puerto Varas', distance: '0.9 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
-    { id: 4, name: 'Centro de Puerto Varas', distance: '1.0 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 5, name: 'Mesa Tropera', distance: '1.2 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 6, name: 'Cassis', distance: '1.4 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-  ],
-  vehicle: [
-    { id: 1, name: 'Playa Puerto Chico', distance: '0.3 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 2, name: 'Costanera', distance: '0.6 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 3, name: 'Jumbo', distance: '1.5 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
-    { id: 4, name: 'Mesa Tropera', distance: '1.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 5, name: 'Casino Dreams', distance: '2.3 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-    { id: 6, name: 'Cassis', distance: '2.5 km', img: 'images/inn/Ubicacion_02_Color.jpg' },
-    { id: 7, name: 'Mall Paseo Puerto Varas', distance: '3.1 km', img: 'images/inn/Ubicacion_03_Color.jpg' },
-    { id: 8, name: 'La Olla', distance: '3.8 km', img: 'images/inn/Ubicacion_01_Color.jpg' },
-  ],
-}
 
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
 const SPACES_MODAL_GALLERIES = [
@@ -149,12 +122,12 @@ const SPACES_MODAL_GALLERIES = [
     label: 'Cocina',
     images: [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg', alt: 'Cocina', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Cocina.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación travertino', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Cubierta.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Encimera.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador y freezer panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Refrigerador.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg', alt: 'Lavavajillas panelado', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Lavavajillas.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg', alt: 'Equipamiento Franke', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Franke.jpg' },
-      { img: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación travertino' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador panelado Franke' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Lavavajillas.jpg', alt: 'Lavavajillas panelado Franke' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera vitrocerámica Franke' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Microondas_Horno_Franke.jpg', alt: 'Microondas y horno empotrados Franke' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini' },
     ]
   },
   {
@@ -261,7 +234,7 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
     <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-interval="false">
       <div className="carousel-inner">
         {slides.map((slideItems, slideIndex) => (
-          <div className={`carousel-item ${slideIndex === 4 ? 'active' : ''}`} key={slideIndex}>
+          <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
             <div className="row g-3">
               {slideItems.map((loc, cardIdx) => (
                 <div
@@ -328,10 +301,8 @@ export default function Inn() {
   const [activeTab, setActiveTab] = useState('proyecto')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const mobileNavRef = useRef(null)
-  const [showMapModal, setShowMapModal] = useState(false)
   const [showPanoramasModal, setShowPanoramasModal] = useState(false)
-  const [mapTab, setMapTab] = useState('walking')
-  const [activeLocationIndex, setActiveLocationIndex] = useState(4)
+  const [activeLocationIndex, setActiveLocationIndex] = useState(0)
 
   useEffect(() => {
     if (!mobileNavOpen) return
@@ -349,16 +320,9 @@ export default function Inn() {
   }, [mobileNavOpen])
 
   const activeTabLabel = TABS.find((t) => t.id === activeTab)?.label || 'Proyecto'
-  const walkingIconRef = useRef(null)
-  const vehicleIconRef = useRef(null)
   const [apiProjects, setApiProjects] = useState(null)
   const [innProject, setInnProject] = useState(null)
   const [selectedPlanta, setSelectedPlanta] = useState(null)
-
-  const handleMapTabChange = (tab) => {
-    setMapTab(tab)
-    setActiveLocationIndex(0)
-  }
 
   // API - Proyectos con ID:9 proyecto INN precargado
   useEffect(() => {
@@ -868,112 +832,6 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
 
 
       </main>
-
-      {/* MODAL MAPA DE UBICACIÓN */}
-      <div
-        className={`modal fade ${showMapModal ? 'show d-block' : ''}`}
-        id="innMapModal"
-        tabIndex={-1}
-        aria-label="Mapa de ubicación ampliado"
-        style={{ backgroundColor: 'rgba(0,0,0,.9)' }}
-        onClick={() => setShowMapModal(false)}
-      >
-        <div
-          className="modal-dialog modal-xl modal-dialog-centered"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="modal-content border-0 rounded-4 overflow-hidden" data-bs-theme="dark">
-            <div className="modal-header border-0" data-bs-theme="dark">
-              <h2 className="modal-title lb-inn-proyecto__title mb-0">UBICACIÓN</h2>
-              <button type="button" className="btn-close btn-close-white ms-auto" aria-label="Cerrar" onClick={() => setShowMapModal(false)} />
-            </div>
-            <div className="modal-body">
-              <div className="row g-4 align-items-center">
-                {/* Columna izquierda: Tabs + Lista */}
-                <div className="col-12 col-lg-5">
-                  <div className="lb-inn-map-modal__list p-3 rounded-4">
-                    {/* Tabs con Bootstrap nav-pills e iconos animados */}
-                    <ul className="nav nav-pills nav-fill gap-2 mb-3 lb-inn-map-modal__tabs" role="tablist">
-                      <li className="nav-item" role="presentation">
-                        <button
-                          type="button"
-                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${mapTab === 'walking' ? 'active' : ''
-                            }`}
-                          onClick={() => handleMapTabChange('walking')}
-                          {...hover(walkingIconRef)}
-                        >
-                          <FootprintsIcon ref={walkingIconRef} size={18} />
-                          <span>A pie</span>
-                        </button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button
-                          type="button"
-                          className={`nav-link d-inline-flex align-items-center justify-content-center gap-2 ${mapTab === 'vehicle' ? 'active' : ''
-                            }`}
-                          onClick={() => handleMapTabChange('vehicle')}
-                          {...hover(vehicleIconRef)}
-                        >
-                          <CarIcon ref={vehicleIconRef} size={18} />
-                          <span>En vehículo</span>
-                        </button>
-                      </li>
-                    </ul>
-
-                    {/* Lista interactiva */}
-                    <div className="list-group list-group-flush lb-inn-map-modal__group">
-                      {LOCATION_DATA[mapTab].map((item, i) => {
-                        const isSelected = i === activeLocationIndex
-                        return (
-                          <button
-                            key={item.id || i}
-                            type="button"
-                            onClick={() => setActiveLocationIndex(i)}
-                            className={`list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3 border-0 rounded-3 mb-1 text-white lb-inn-map-modal__item ${isSelected ? 'active' : ''
-                              }`}
-                          >
-                            <div className="d-flex align-items-center gap-3">
-                              <span className="lb-inn-map-modal__number">{i + 1}</span>
-                              <span className="lb-inn-map-modal__name">{item.name}</span>
-                            </div>
-                            <span className="badge rounded-pill lb-inn-map-modal__badge">
-                              {item.distance}
-                            </span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Columna derecha: Galería con máscara circular vinculada al item activo */}
-                <div className="col-12 col-lg-7 d-flex flex-column align-items-center justify-content-center py-3">
-                  <div className="lb-inn-map-modal__circle-frame">
-                    {LOCATION_DATA[mapTab][activeLocationIndex] && (
-                      <img
-                        key={`${mapTab}-${activeLocationIndex}`}
-                        src={`${base}${LOCATION_DATA[mapTab][activeLocationIndex].img}`}
-                        alt={LOCATION_DATA[mapTab][activeLocationIndex].name}
-                        className="lb-inn-map-modal__circle-img"
-                      />
-                    )}
-                  </div>
-                  {LOCATION_DATA[mapTab][activeLocationIndex] && (
-                    <div className="text-center mt-3">
-                      <h3 className="h5 text-white fw-bold mb-1">
-                        {LOCATION_DATA[mapTab][activeLocationIndex].name}
-                      </h3>
-                      <span className="lb-inn-map-modal__caption-distance">
-                        A {LOCATION_DATA[mapTab][activeLocationIndex].distance} de distancia
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* NUEVO MODAL DE PANORAMAS (Experiencias) */}
       <InnPanoramasModal

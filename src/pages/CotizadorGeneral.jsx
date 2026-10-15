@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
+import FlightSearchForm from '../components/cotizador/FlightSearchForm.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 // import Alternatives from '../components/proyecto/Alternatives.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
@@ -36,7 +37,42 @@ export default function CotizadorGeneral() {
 
   const [activeProject, setActiveProject] = useState(null)
   const [externalPlanta, setExternalPlanta] = useState(null)
+  const [searchFilters, setSearchFilters] = useState(null)
   const location = useLocation()
+
+  const hasUrlTarget = useMemo(() => {
+    return !!location.pathname.match(/\/cotizador\/proyecto\/[^/]+/)
+  }, [location.pathname])
+
+  const hasSelection = !!(externalPlanta || searchFilters || hasUrlTarget)
+
+  const handleSearch = useCallback((filters) => {
+    setSearchFilters(filters)
+    if (filters.proyecto && rawProjects) {
+      const match = rawProjects.find(
+        (p) => (p.name || '').trim().toLowerCase() === filters.proyecto.trim().toLowerCase()
+      )
+      if (match) setActiveProject(match)
+    }
+    // Smooth scroll to cotizador
+    setTimeout(() => {
+      const el = document.getElementById('detalle-cot') || document.getElementById('cotizador-gral')
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }, [rawProjects])
+
+  const handleModifySearch = useCallback(() => {
+    setExternalPlanta(null)
+    setSearchFilters(null)
+    setActiveProject(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  const handleReset = useCallback(() => {
+    setExternalPlanta(null)
+    setSearchFilters(null)
+    setActiveProject(null)
+  }, [])
 
   useEffect(() => {
     if (!location.hash) return
@@ -71,28 +107,50 @@ export default function CotizadorGeneral() {
       <Navbar />
       <main className="lb-cot-gen" id="cotizador-gral">
         {/* Banner encima del cotizador */}
-        <section className="lb-cot-gen-banner position-relative">
+        <section className={`lb-cot-gen-banner position-relative ${!hasSelection ? 'lb-cot-gen-banner--expanded' : ''}`}>
           <div className="lb-cot-gen-banner__bg" />
           <div className="lb-cot-gen-banner__overlay" />
           <div className="container position-relative lb-cot-gen-banner__content">
             <ScrollAnim animation="fade-up">
               <span className="lb-cot-gen-banner__eyebrow">COTIZADOR ONLINE</span>
               <h1 className="lb-cot-gen-banner__title">Encuentra tu espacio ideal en simples pasos</h1>
-              {/* <p className="lb-cot-gen-banner__subtitle">
-                Encuentra tu espacio ideal y simula tu cotización en línea en simples pasos
-              </p> */}
+              <p className="lb-cot-gen-banner__subtitle">
+                Simula tu financiamiento y encuentra el departamento perfecto para ti
+              </p>
             </ScrollAnim>
           </div>
-          <div className="lb-cot-gen-banner__arrow" aria-hidden="true" />
+          {hasSelection && <div className="lb-cot-gen-banner__arrow" aria-hidden="true" />}
         </section>
 
-        {/* Cotizador en container tal como en Inn.jsx */}
-        <Cotizador
-          universal
-          projects={rawProjects}
-          onProjectChange={handleProjectChange}
-          selection={externalPlanta ? { planta: externalPlanta } : undefined}
-        />
+        {/* Formulario de selección estilo LATAM (#flight-search-form) cuando no hay planta seleccionada */}
+        {!hasSelection ? (
+          <section className="lb-flight-search-section pb-5" id="formulario-busqueda">
+            <div className="container">
+              <ScrollAnim animation="fade-up">
+                <FlightSearchForm
+                  projects={rawProjects || []}
+                  onSearch={handleSearch}
+                  initialFilters={searchFilters || {}}
+                />
+              </ScrollAnim>
+            </div>
+          </section>
+        ) : (
+          <Cotizador
+            universal
+            projects={rawProjects}
+            onProjectChange={handleProjectChange}
+            selection={
+              externalPlanta
+                ? { planta: externalPlanta }
+                : searchFilters
+                  ? { filters: searchFilters }
+                  : undefined
+            }
+            onReset={handleReset}
+            onModifySearch={handleModifySearch}
+          />
+        )}
 
         {activeProject && (
           <>

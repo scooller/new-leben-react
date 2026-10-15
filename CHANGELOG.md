@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.128] - 2026-10-15
+
+### Removed
+- `public/images/inn/`: eliminados 47 archivos de imágenes y SVGs no referenciados (~14.3 MB liberados) tras auditoría exhaustiva:
+  - Carpeta en desuso `public/images/inn/galerias/` completa (16 imágenes).
+  - SVGs de prueba y assets obsoletos en raíz: `edificio.svg`, `espacio.svg`, `EECC_Atrio.jpg`, `EECC_Bodega_Nautica.jpg`, `EECC_Quincho_Gourmet.jpg`, `Foto_Iturralde_400x680.jpg`, `Foto_Rivera_400x680.jpg`, `Logo_INN_Mapa.png`, `mapa-big.jpg`, `mapa.png`, `masterplan-1.jpg`, `masterplan-2.jpg`, `RAPC_EXT_Elevacioen-Tarde_Media16.jpg`, `V.png`.
+  - Duplicados en `equipamiento/`: `Equipamiento_Detalle_Cocina_Franke.jpg`, 6 detalles de cocina duplicados fuera del subdirectorio activo `cocina/`, y mockup de instrucciones `Fotos_Cocina_Orden y Textos.png`.
+  - Alternativas en `panoramas/`: `Fundo Playa Venado_2.jpg`, `Playa Venado_06_IA.jpg`, `Reserva_Nacional_Llanquihue_AI.jpg`.
+  - Terminaciones obsoletas en `terminaciones/`: 6 archivos no referenciados (conservando las 2 utilizadas por `src/data/projects.js`).
+
+## [0.9.127] - 2026-10-15
+
+### Removed
+- `public/images/inn/Ubicacion_01_Color.jpg`, `public/images/inn/Ubicacion_02_Color.jpg`: eliminadas imágenes placeholder en desuso.
+
+### Changed
+- `Inn.jsx`: reemplazados puntos de ubicación por exclusivamente los 6 puntos nuevos con imágenes en `public/images/inn/ubicacion` (`Mesa Tropera`, `Jumbo`, `Casino Dreams`, `Cassis`, `Mall Paseo`, `La Olla`), sincronizando carrusel e índice activo a 0.
+
+## [0.9.126] - 2026-10-15
+
+### Removed
+- `Inn.jsx`: eliminada estructura duplicada y en desuso `LOCATION_DATA`, estado `mapTab`, `showMapModal`, refs de iconos e interfaz modal `#innMapModal`.
+- `public/images/inn/Ubicacion_03_Color.jpg`: eliminado archivo de imagen placeholder en desuso.
+- `public/images/inn/panoramas/Nueva carpeta`: eliminada carpeta duplicada con copias redundantes de imágenes de ubicación.
+
+### Changed
+- `Inn.jsx`: consolidada la base de datos de ubicación en un único array `LOCATION_POINTS`, eliminando punto duplicado de "Mesa Tropera" y enlazando imágenes individuales generadas (`Casino_Dreams_01_IA`, `Cassis_IA`, `La Olla_IA`, `Mesa_Tropera_AI`, `Paseo_Puerto_Varas_AI`, `Supermercado_Jumbo_AI`).
+
+## [0.9.125] - 2026-10-15
+
+### Changed
+- `_cotizador-general.scss`: reemplazados radios manuales/inconsistentes en `.lb-flight-category-bar`, pestañas, tarjeta, caja de ruta y dropdowns por variables nativas de Bootstrap (`bs.$border-radius-xl`, `bs.$border-radius-lg`, `bs.$border-radius`, `bs.$border-radius-pill`), corrigiendo el radio de la barra superior.
+
+## [0.9.124] - 2026-10-15
+
+### Changed
+- `CotizadorGeneral.jsx`: ampliado tamaño y respiro del banner hero (`lb-cot-gen-banner--expanded`) y ocultada la flecha triangular cuando no hay planta seleccionada para una integración limpia con el formulario flotante.
+- `FlightSearchForm.jsx`: rediseñado con fidelidad a la estructura del formulario de LATAM Airlines: barra de navegación superior oscura con indicador activo rojo, caja de ruta enmarcada (Comuna + Proyecto) con badge de intercambio, fila secundaria con selectores y botón CTA.
+- `_cotizador-general.scss`: perfeccionados estilos para el banner expandido, tarjeta flotante unificada, selectores de ruta y estados responsivos.
+
+## [0.9.123] - 2026-10-15
+
+### Added
+- `FlightSearchForm.jsx`: nuevo componente de selección y búsqueda de departamentos inspirado en el formulario `#flight-search-form` de LATAM Airlines, con tabs de categoría/intención, segmentos de búsqueda con iconos (`Ubicación`, `Proyecto`, `Dormitorios`, `Orientación`), botón CTA prominente y chips de comunas frecuentes.
+- `_cotizador-general.scss`: estilos responsive `.lb-flight-search-*` con diseño de tarjeta flotante unificada, divisores verticales, menús desplegables con conteo de proyectos y micro-animaciones.
+
+### Changed
+- `CotizadorGeneral.jsx`: integrado `FlightSearchForm` en el estado inicial sin planta seleccionada, enlazando la búsqueda al `Cotizador` con filtros preseleccionados y soporte para volver a buscar o limpiar.
+- `Cotizador.jsx`: soporte para `selection.filters`, disparador `onReset` y botón `onModifySearch` para retornar al formulario de búsqueda.
+
 ## [0.9.122] - 2026-10-14
 
 ### Fixed
