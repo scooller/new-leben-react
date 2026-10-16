@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.132] - 2026-10-16
+
+### Added
+- `Brokers.jsx`, `brokers.js`, `_brokers.scss`: implementado carrusel interactivo por categorías para la tabla de Tiers según Figma:
+  - Estructuradas las 6 categorías completas: `COMUNICACIÓN`, `CAPACITACIÓN`, `NEGOCIO`, `VISITAS`, `PAGOS` y `BENEFICIOS ADICIONALES`.
+  - Orden de columnas invertido según especificación: `PARTNER BLACK` (negro `#111111`), `PARTNER GOLD` (dorado `#c5a059`) y `PARTNER SILVER` (plata `#8e959e`).
+  - Navegación por carrusel: botones laterales con chevron (`<` y `>`), selector de pestañas superiores (`tabs`) por categoría y paginación inferior interactiva con indicador numérico.
+  - Columna de categoría vertical roja `#d1193e` con texto rotado 90° que abarca la altura completa de las filas de la categoría activa.
+  - Indicador de flecha/chevron en la celda de cabecera roja apuntando hacia `PARTNER BLACK`.
+
+## [0.9.131] - 2026-10-16
+
+### Changed
+- `Brokers.jsx` & `_brokers.scss`: ajustada tabla de categorías y barra KAM para coincidir fielmente con el diseño Figma:
+  - Cabecera: fondo rojo `#d1193e` en columna de categorías/título, plata `#8e959e` en Silver, dorado `#c5a059` en Gold y negro `#111111` en Black.
+  - Celdas: fondo rojo `#d1193e` con texto blanco en todas las etiquetas de categoría ("COMUNICACIÓN") y bordes redondeados en las esquinas inferiores.
+  - Checks: coloreados según tier (Silver `#8e959e`, Gold `#c5a059`, Black `#111111`).
+  - Navegación: añadidos botones flotantes circulares rojos con chevron (`<` y `>`) flanqueando la tabla.
+  - KAM Info Bar: icono de correo rojo `#d1193e` y barra chevron en cápsula continua entrelazada (`border-radius: 9999px`) con gradientes metálicos y etiquetas inferiores con flechas.
+
+## [0.9.130] - 2026-10-16
+
+### Changed
+- `Brokers.jsx` & `_brokers.scss`: alineada maquetación completa con el diseño Figma Desktop (nodo `2260:2`):
+  - Hero: curvatura inferior `120px` (`border-radius: 0 0 120px 120px`), botón CTA único "Postula ahora" (eliminado botón secundario no presente en Figma).
+  - Tabla de Tiers: añadida columna de categoría ("COMUNICACIÓN") a cada fila con grid proporcional de 5 columnas (`130px 450px repeat(3, 1fr)`).
+  - KAM Info Bar: chevrons entrelazados con clip-path e indicadores de gradiente metálico (Silver, Gold, Black) y etiquetas de venta.
+  - Formulario de Registro: ajustado card a contenedor oscuro `#111111` con borde sutil, campos de experiencia/contacto y disclaimer legal inferior sin checkboxes redundantes.
+  - Eventos: corregido título y descripción del evento 3 a "Lanzamiento Exclusivo Vitacura" con preventa VIP según Figma.
+  - Alianzas: tarjetas de logotipos individuales con fondo blanco, bordes redondeados y micro-interacción hover.
+- `src/data/brokers.js`: añadida propiedad `category: 'COMUNICACIÓN'` a filas de tiers y actualizada tarjeta de evento 3.
+
 ## [0.9.129] - 2026-10-15
 
 ### Changed

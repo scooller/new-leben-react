@@ -37,25 +37,79 @@ export const brokersData = {
     title: 'Categorías de Brokers Partner con Beneficios',
     columns: [
       {
-        name: 'PARTNER SILVER',
-        subtitle: 'VENTAS DESDE 0 HASTA 10.000 UF EN UN PERIODO DE 3 MESES',
+        name: 'PARTNER BLACK',
+        subtitle: 'VENTAS SOBRE 15.000 UF EN UN PERIODO DE 3 MESES',
       },
       {
         name: 'PARTNER GOLD',
         subtitle: 'VENTAS DESDE 10.000 HASTA 15.000 UF EN UN PERIODO DE 3 MESES',
       },
       {
-        name: 'PARTNER BLACK',
-        subtitle: 'VENTAS SOBRE 15.000 UF EN UN PERIODO DE 3 MESES',
+        name: 'PARTNER SILVER',
+        subtitle: 'VENTAS DESDE 0 HASTA 10.000 UF EN UN PERIODO DE 3 MESES',
       },
     ],
-    rows: [
-      { label: 'CONTACTO SEMANAL KAM / MAILING', values: [true, true, true] },
-      { label: 'CONTACTO QUINCENAL / MAILING COMISIONES Y AVANCES LEBEN', values: [true, true, true] },
-      { label: 'INVITACIÓN A PRE LANZAMIENTOS', values: [false, true, true] },
-      { label: 'CANAL DE DIFUSIÓN MAIL / WHATSAPP', values: [true, true, true] },
-      { label: 'REUNIONES SEMANALES DE SEGUIMIENTO', values: [false, true, true] },
-      { label: 'AGENDA DE APOYO EXCLUSIVO CIERRES', values: [false, false, true] },
+    categories: [
+      {
+        id: 'comunicacion',
+        name: 'COMUNICACIÓN',
+        rows: [
+          { label: 'CONTACTO SEMANAL KAM / MAILING', values: [true, true, true] },
+          { label: 'CONTACTO QUINCENAL / MAILING COMISIONES Y AVANCES LEBEN', values: [true, true, true] },
+          { label: 'INVITACIÓN A PRE LANZAMIENTOS', values: [true, true, false] },
+          { label: 'CANAL DE DIFUSIÓN MAIL / WHATS APP', values: [true, true, true] },
+          { label: 'REUNIONES SEMANALES DE SEGUIMIENTO', values: [true, true, false] },
+          { label: 'AGENDA DE APOYO EXCLUSIVO CIERRES', values: [true, false, false] },
+        ],
+      },
+      {
+        id: 'capacitacion',
+        name: 'CAPACITACIÓN',
+        rows: [
+          { label: 'CAPACITACION DRIVE E INFORMACION LEBEN', values: [true, true, true] },
+          { label: 'CAPACITACIONES EXCLUSIVAS LANZAMIENTOS', values: [true, true, false] },
+          { label: 'CAPACITACIÓN EQUIPO', values: [true, false, false] },
+        ],
+      },
+      {
+        id: 'negocio',
+        name: 'NEGOCIO',
+        rows: [
+          { label: 'PROMESA ASISTIDA ONLINE O PRESENCIAL', values: [true, true, true] },
+          { label: 'GESTIÓN HIPOTECARÍA', values: [true, true, true] },
+          { label: 'STOCK EXCLUSIVO DE UNIDADES ESPECIALES', values: [true, true, true] },
+          { label: 'EXCEPCIONES COMERCIALES EN VENTA VOLUMEN', values: [true, false, false] },
+        ],
+      },
+      {
+        id: 'visitas',
+        name: 'VISITAS',
+        rows: [
+          { label: 'VISITAS PREVIO AGENDAMIENTO CON 24 HRS', values: [true, true, true] },
+          { label: 'FREE PASS DE INGRESO Y VISITA', values: [true, false, false] },
+        ],
+      },
+      {
+        id: 'pagos',
+        name: 'PAGOS',
+        rows: [
+          { label: 'PAGO A 30 DÍAS, POSTERIOR A EMISIÓN DE FACTURA', values: [false, false, true] },
+          { label: 'PAGO A 20 DÍAS, POSTERIOR A EMISIÓN DE FACTURA', values: [false, true, false] },
+          { label: 'PAGO A 15 DÍAS, POSTERIOR A EMISIÓN DE FACTURA', values: [true, false, false] },
+          { label: 'POSIBILIDAD DE FACTORIZAR', values: [true, false, false] },
+          { label: 'PAGO DE COMISIÓN DIFERENCIADA', values: [true, false, false] },
+        ],
+      },
+      {
+        id: 'beneficios-adicionales',
+        name: 'BENEFICIOS ADICIONALES',
+        rows: [
+          { label: 'ASISTENCIA A EVENTO DE PREMIACIÓN ANUAL', values: [true, true, false] },
+          { label: 'PRESUPUESTO DE APOYO A VENTAS PRIVADAS LEBEN', values: [true, true, false] },
+          { label: 'PERFIL BROKER EN PLATAFORMA JETBROKERS', values: [true, false, false] },
+          { label: 'BENEFICIOS EXCLUSIVOS A MEJORES PARTICIPANTES DE EQUIPO BROKER', values: [true, false, false] },
+        ],
+      },
     ],
   },
 
@@ -109,8 +163,8 @@ export const brokersData = {
       },
       {
         image: img('brokers-event-3.jpg'),
-        title: 'Broker Summit Sur',
-        description: 'Encuentro regional de corredores con tour de proyectos en Puerto Varas.',
+        title: 'Lanzamiento Exclusivo Vitacura',
+        description: 'Preventa VIP del nuevo proyecto icónico con brokers Partner Black.',
       },
     ],
   },

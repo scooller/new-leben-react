@@ -10,11 +10,8 @@ import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
 import HeroShell from '../components/sections/HeroShell.jsx'
 
-// Router
-import { Link } from 'react-router-dom'
-
 // Icons
-import { Check, Mail, ChevronRight } from 'lucide-react'
+import { Check, Mail, ChevronRight, ChevronLeft } from 'lucide-react'
 import { BadgePercentIcon } from '../components/icons/badge-percent.jsx'
 import { HomeIcon } from '../components/icons/home.jsx'
 import { BellIcon } from '../components/icons/bell.jsx'
@@ -31,11 +28,22 @@ const benefitIcons = {
   gift: PartyPopperIcon,
 }
 
-
 export default function Brokers() {
   useGsapAnimations()
   const [activeYear, setActiveYear] = useState(data.events.years[0])
   const [formData, setFormData] = useState({})
+  const [categoryIndex, setCategoryIndex] = useState(0)
+
+  const categories = data.tiers.categories || []
+  const activeCategory = categories[categoryIndex] || categories[0]
+
+  const handlePrevCategory = () => {
+    setCategoryIndex((prev) => (prev > 0 ? prev - 1 : categories.length - 1))
+  }
+
+  const handleNextCategory = () => {
+    setCategoryIndex((prev) => (prev < categories.length - 1 ? prev + 1 : 0))
+  }
 
   const regRef = useRef(null)
   const benefitRefs = useRef([])
@@ -74,24 +82,21 @@ export default function Brokers() {
       <main className="lb-brokers">
         {/* ======================= HERO ======================= */}
         <HeroShell
-          className="lb-brokers-hero container-fluid position-relative d-flex align-items-center"
+          className="lb-brokers-hero lb-radius-bl-br container-fluid position-relative d-flex align-items-center"
           image={data.hero.backgroundImage}
           bgWrapClassName="lb-brokers-hero__bg"
           overlayClassName="lb-brokers-hero__overlay"
         >
           <div className="container">
-          <ScrollAnim animation="fade-up" className="lb-brokers-hero__content">
-            <h1 className="lb-brokers-hero__title">{data.hero.title}</h1>
-            <p className="lb-brokers-hero__subtitle">{data.hero.subtitle}</p>
-            <div className="d-flex flex-wrap gap-3">
-              <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4">
-                {data.hero.ctaText}
-              </a>
-              <Link to="/login" className="btn btn-outline-light fw-bold px-4">
-                Conectarse
-              </Link>
-            </div>
-          </ScrollAnim>
+            <ScrollAnim animation="fade-up" className="lb-brokers-hero__content">
+              <h1 className="lb-brokers-hero__title">{data.hero.title}</h1>
+              <p className="lb-brokers-hero__subtitle">{data.hero.subtitle}</p>
+              <div>
+                <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-pill">
+                  {data.hero.ctaText}
+                </a>
+              </div>
+            </ScrollAnim>
           </div>
         </HeroShell>
 
@@ -138,41 +143,103 @@ export default function Brokers() {
         <section className="lb-brokers-tiers" id="categorias">
           <div className="container">
             <ScrollAnim animation="fade-up" className="lb-brokers-section-heading text-center">
-              <p className="lb-eyebrow">{data.tiers.eyebrow}</p>
+              <p className="lb-eyebrow text-uppercase">{data.tiers.eyebrow}</p>
               <SplitTitle as="h2" text={data.tiers.title} className="lb-brokers-section-title" />
             </ScrollAnim>
-            <ScrollAnim animation="fade-up" delay={0.15} className="lb-brokers-tiers__table">
-              <div className="lb-brokers-tiers__header">
-                <div className="lb-brokers-tiers__col-label">
-                  <span className="lb-brokers-tiers__col-title">CATEGORÍAS DE BROKERS PARTNER</span>
-                  <span className="lb-brokers-tiers__col-sub">CON BENEFICIOS EXCLUSIVOS</span>
-                </div>
-                {data.tiers.columns.map((col, i) => (
-                  <div key={i} className={`lb-brokers-tiers__col-tier lb-brokers-tiers__col-tier--${i}`}>
-                    <span className="lb-brokers-tiers__tier-name">{col.name}</span>
-                    <span className="lb-brokers-tiers__tier-sub">{col.subtitle}</span>
+
+            {/* Category Carousel Tabs */}
+            <div className="lb-brokers-tiers__tabs" role="tablist">
+              {categories.map((cat, idx) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === categoryIndex}
+                  className={`lb-brokers-tiers__tab ${idx === categoryIndex ? 'lb-brokers-tiers__tab--active' : ''}`}
+                  onClick={() => setCategoryIndex(idx)}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="lb-brokers-tiers__wrapper">
+              <button
+                type="button"
+                className="lb-brokers-tiers__nav-btn lb-brokers-tiers__nav-btn--prev"
+                aria-label="Categoría anterior"
+                onClick={handlePrevCategory}
+              >
+                <ChevronLeft size={20} strokeWidth={2.5} />
+              </button>
+
+              <ScrollAnim animation="fade-up" delay={0.15} className="lb-brokers-tiers__table">
+                <div className="lb-brokers-tiers__header">
+                  <div className="lb-brokers-tiers__col-label">
+                    <span className="lb-brokers-tiers__col-title">CATEGORÍAS DE BROKERS PARTNER</span>
+                    <span className="lb-brokers-tiers__col-sub">CON BENEFICIOS EXCLUSIVOS</span>
                   </div>
-                ))}
-              </div>
-              <div className="lb-brokers-tiers__body">
-                {data.tiers.rows.map((row, ri) => (
-                  <div key={ri} className="lb-brokers-tiers__row">
-                    <div className="lb-brokers-tiers__row-label">{row.label}</div>
-                    {row.values.map((v, ci) => (
-                      <div key={ci} className="lb-brokers-tiers__cell">
-                        {v ? (
-                          <span className="lb-brokers-tiers__check">
-                            <Check size={18} strokeWidth={3} />
-                          </span>
-                        ) : (
-                          <span className="lb-brokers-tiers__na">NO APLICA</span>
-                        )}
+                  {data.tiers.columns.map((col, i) => (
+                    <div key={i} className={`lb-brokers-tiers__col-tier lb-brokers-tiers__col-tier--${i}`}>
+                      <span className="lb-brokers-tiers__tier-name">{col.name}</span>
+                      <span className="lb-brokers-tiers__tier-sub">{col.subtitle}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="lb-brokers-tiers__body-grid" key={activeCategory?.id}>
+                  <div className="lb-brokers-tiers__col-category">
+                    <span className="lb-brokers-tiers__category-badge">{activeCategory?.name}</span>
+                  </div>
+
+                  <div className="lb-brokers-tiers__rows">
+                    {activeCategory?.rows.map((row, ri) => (
+                      <div key={ri} className="lb-brokers-tiers__row">
+                        <div className="lb-brokers-tiers__row-label">{row.label}</div>
+                        {row.values.map((v, ci) => (
+                          <div key={ci} className={`lb-brokers-tiers__cell lb-brokers-tiers__cell--${ci}`}>
+                            {v ? (
+                              <span className={`lb-brokers-tiers__check lb-brokers-tiers__check--${ci}`}>
+                                <Check size={18} strokeWidth={2.5} />
+                              </span>
+                            ) : (
+                              <span className="lb-brokers-tiers__na">NO APLICA</span>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>
+                </div>
+              </ScrollAnim>
+
+              <button
+                type="button"
+                className="lb-brokers-tiers__nav-btn lb-brokers-tiers__nav-btn--next"
+                aria-label="Siguiente categoría"
+                onClick={handleNextCategory}
+              >
+                <ChevronRight size={20} strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Pagination dots & counter */}
+            <div className="lb-brokers-tiers__pagination">
+              <div className="lb-brokers-tiers__dots">
+                {categories.map((cat, idx) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    className={`lb-brokers-tiers__dot ${idx === categoryIndex ? 'lb-brokers-tiers__dot--active' : ''}`}
+                    onClick={() => setCategoryIndex(idx)}
+                    aria-label={`Ir a ${cat.name}`}
+                  />
                 ))}
               </div>
-            </ScrollAnim>
+              <span className="lb-brokers-tiers__counter">
+                {categoryIndex + 1} / {categories.length}
+              </span>
+            </div>
           </div>
         </section>
 
@@ -181,17 +248,14 @@ export default function Brokers() {
           <div className="container">
             <ScrollAnim animation="fade-up" className="lb-brokers-kam__inner text-center">
               <div className="lb-brokers-kam__prompt">
-                <Mail size={24} />
+                <Mail size={22} className="lb-brokers-kam__mail-icon" />
                 <span>{data.kam.text}</span>
               </div>
               <div className="lb-brokers-kam__chevrons">
                 {data.kam.tiers.map((tier, i) => (
-                  <div key={i} className="lb-brokers-kam__chevron-group">
-                    <div className={`lb-brokers-kam-chevron lb-brokers-kam-chevron--${i}`}>
-                      <span className="lb-brokers-kam-chevron__label d-inline-block me-1">PARTNER</span>
-                      <span className="lb-brokers-kam-chevron__name">{tier.label}</span>
-                    </div>
-                    {i < data.kam.tiers.length - 1 && <ChevronRight size={24} className="lb-brokers-kam__chevron-sep" />}
+                  <div key={i} className={`lb-brokers-kam-chevron lb-brokers-kam-chevron--${i}`}>
+                    <span className="lb-brokers-kam-chevron__label">PARTNER</span>
+                    <span className="lb-brokers-kam-chevron__name">{tier.label}</span>
                   </div>
                 ))}
               </div>
@@ -200,7 +264,7 @@ export default function Brokers() {
                   <span key={i} className="lb-brokers-kam__label-item">
                     <span className={`lb-brokers-kam__dot lb-brokers-kam__dot--${i}`} />
                     {tier.subtitle}
-                    {i < data.kam.tiers.length - 1 && <ChevronRight size={16} className="lb-brokers-kam__arrow" />}
+                    {i < data.kam.tiers.length - 1 && <span className="lb-brokers-kam__arrow">→</span>}
                   </span>
                 ))}
               </div>
@@ -234,26 +298,13 @@ export default function Brokers() {
                         placeholder={field.placeholder}
                         value={formData[field.name] || ''}
                         onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                        required={field.name !== 'empresa'}
                       />
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 d-flex flex-column gap-2">
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="brokerTerms" required />
-                    <label className="form-check-label" htmlFor="brokerTerms">
-                      He leído los términos y condiciones y los acepto
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="brokerData" required />
-                    <label className="form-check-label" htmlFor="brokerData">
-                      Acepto que usen mis datos para contactarme y marketing
-                    </label>
-                  </div>
-                </div>
-                <div className="lb-brokers-registration__footer">
-                  <button type="submit" className="btn btn-danger fw-bold w-100 py-2">
+                <div className="lb-brokers-registration__footer mt-4">
+                  <button type="submit" className="btn btn-danger fw-bold w-100 py-3 rounded-pill">
                     {data.registration.submitText}
                   </button>
                   <p className="lb-brokers-registration__disclaimer">{data.registration.disclaimer}</p>
