@@ -1,0 +1,132 @@
+// ============================================================
+// Invest Page SCSS — Ponytail pruned (relying on Bootstrap 5)
+// ============================================================
+
+@use '../variables' as *;
+@use 'bootstrap/scss/bootstrap' as bs;
+
+.lb-invest-page {
+  font-family: 'Lexend Deca', sans-serif;
+  position: relative;
+  background-color: $lb-white;
+  color: $lb-dark;
+  overflow-x: hidden;
+
+  // Eyebrow badge
+  .lb-invest-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    color: #d44040;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+  }
+
+  // Hero section parallax container & fluid title clamp
+  .lb-invest-hero {
+    min-height: 720px;
+    background: #0d0d0d;
+    padding: 8rem 0 5rem;
+
+    @include bs.media-breakpoint-down(lg) {
+      min-height: 560px;
+      padding: 7rem 0 4rem;
+    }
+
+    &__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 120%;
+        object-fit: cover;
+        object-position: center 30%;
+        will-change: transform;
+      }
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.72) 100%
+      );
+    }
+
+    &__title {
+      font-size: clamp(2.4rem, 4.5vw, 65px);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      max-width: 1044px;
+    }
+  }
+
+  // Clamped titles
+  .lb-invest-value__title,
+  .lb-invest-advisory__title {
+    font-size: clamp(1.8rem, 2.5vw, 36px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1f1f1f;
+  }
+
+  .lb-invest-process__title {
+    font-size: clamp(1.8rem, 2.5vw, 32px);
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .lb-invest-smart__title {
+    font-size: clamp(1.8rem, 2.6vw, 40px);
+    font-weight: 500;
+    line-height: 1.2;
+    color: $lb-white;
+  }
+
+  // Micro-interactions & Project Card specific styling
+  .lb-invest-card {
+    background: #f0f3f7;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08) !important;
+
+      .lb-invest-card__image {
+        transform: scale(1.04);
+      }
+    }
+
+    &__image-container {
+      height: 180px;
+      overflow: hidden;
+      background: #e5e7eb;
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    &__action-link:hover {
+      color: #d1193e !important;
+    }
+  }
+
+  // Process Step hover elevation
+  .lb-invest-step {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06) !important;
+    }
+  }
+}

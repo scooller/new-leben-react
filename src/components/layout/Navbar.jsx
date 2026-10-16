@@ -6,19 +6,34 @@ import { images } from '../../data/content.js'
 function Navlink({ link, className }) {
   const location = useLocation()
   const to = link.to || link.route
+  const isDropdown = className?.includes('lb-dropdown-link')
+
+  // Check if current route matches this link
+  let isActive = false
+  if (to) {
+    const [path, hash] = to.split('#')
+    if (hash) {
+      isActive = location.pathname === path && location.hash === `#${hash}`
+    } else if (path === '/') {
+      isActive = location.pathname === '/'
+    } else {
+      isActive = location.pathname === path || location.pathname.startsWith(`${path}/`)
+    }
+  }
+
   const isFeatured = Boolean(
     link.featured ||
     link.highlight ||
-    link.active ||
     link.variant === 'primary' ||
-    link.className?.includes('btn') ||
-    link.className?.includes('active'),
+    link.className?.includes('btn'),
   )
-  const isDropdown = className?.includes('lb-dropdown-link')
 
   const extraClasses = []
   if (isFeatured) {
-    extraClasses.push(isDropdown ? 'lb-dropdown-link--featured active' : 'lb-nav-link--featured btn btn-primary active')
+    extraClasses.push(isDropdown ? 'lb-dropdown-link--featured' : 'lb-nav-link--featured btn btn-primary')
+  }
+  if (isActive) {
+    extraClasses.push('active')
   }
   if (link.className) {
     extraClasses.push(link.className)
@@ -64,9 +79,9 @@ function Navlink({ link, className }) {
 }
 
 const mainLinks = [
-  { label: 'Invest', href: '#' },
+  { label: 'Invest', to: '/invest' },
   { label: 'Brokers', to: '/brokers' },
-  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, active: true, class: 'btn-highlight' },
+  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, class: 'btn-highlight' },
   { label: 'Clientes', to: '/login' },
 ]
 
@@ -108,6 +123,12 @@ const mainMobileLinks = mainLinks.slice(0, 1)
 
 /** Links dinámicos por página — aparecen después del separador */
 const pageLinksMap = {
+  '/invest': [
+    { label: 'Oportunidad', href: '#oportunidad' },
+    { label: 'Formulario', href: '#formulario' },
+    { label: 'Proyectos', href: '#proyectos' },
+    { label: 'Preguntas frecuentes', href: '#faq' },
+  ],
   '/brokers': [
     { label: 'Beneficios', href: '#beneficios' },
     { label: 'Categorías', href: '#categorias' },

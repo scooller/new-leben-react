@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.137] - 2026-10-16
+
+### Added
+- `Navbar.jsx` & `_navbar.scss`: estado `.active` automático y dinámico para enlaces de navegación:
+  - Detección precisa de la página activa mediante `useLocation()` (`pathname` y prefijo de ruta).
+  - Estilo visual de enlace activo con color blanco de alto contraste, tipografía destacada e indicador inferior rojo `#d1193e`.
+  - Enlaces destacados (como "Cotizar") conservan su estilo botón pill sin interferir con la navegación activa.
+
+## [0.9.136] - 2026-10-16
+
+### Changed
+- `Invest.jsx` & `_invest.scss`: refactorización ponytail para reemplazar estilos propietarios por utilidades nativas de Bootstrap 5.3:
+  - Reemplazo de `.lb-invest-form-card*` por `card bg-dark text-white rounded-4`, `form-control`, `form-select` y `btn btn-danger`.
+  - Reemplazo de estilos de tarjetas y badges por `card`, `card-body`, `card-footer`, `badge`, `bg-body-tertiary` y utilidades flex/spacing (`d-flex`, `gap-3`, `align-items-start`).
+  - Reducción de más del 80% del archivo `_invest.scss`, conservando únicamente tokens de layout parallax, títulos clamp y microinteracciones de hover.
+
+## [0.9.135] - 2026-10-16
+
+### Changed
+- `Invest.jsx` & `_invest.scss`: centrado completo de todos los elementos del banner principal (hero):
+  - Eyebrow, título de 65px, bajada descriptiva y botón CTA "QUIERO INVERTIR" perfectamente centrados horizontal y verticalmente según Figma `2260:1072`.
+
+## [0.9.134] - 2026-10-16
+
+### Changed
+- `Invest.jsx`, `_invest.scss`, `index.html`: igualado diseño pixel-perfect con Figma Desktop (`2260:1044`):
+  - **Tipografía**: añadida fuente `Lexend Deca` (pesos 400, 500, 600, 700) aplicada globalmente a la página.
+  - **Hero**: altura 720px con borde recto, tipografía exacta (título 65px/600 `#f5f2ed`), botón rectangular `218x51` radio 8px `#d1193e`.
+  - **Oportunidad Única**: bullets con insignias circulares verde esmeralda `#1b5e4a` y check blanco, imagen `592x480` con radio 16px.
+  - **Formulario**: contenedor oscuro `#1a1a1a` radio 24px con rejilla exacta de 3x3 (inputs blancos altura 42px radio 8px y botón Enviar `#d1193e` integrado en la tercera columna).
+  - **Asesoría Experta**: estructura de 2 columnas (imagen izquierda + lista vertical de 4 beneficios con check-circle `#1b5e4a`).
+  - **Proyectos**: pestañas `SANTIAGO | REGIONES` con separador rojo, tarjetas `#f0f3f7` con barra de estado (`Entrega Inmediata` `#d1193e` / `Venta en Blanco` `#5a6e7f`) y enlace `Conocer proyecto →`.
+  - **Proceso**: tarjetas `#f5f8fc` radio 16px con insignia circular roja `44x44` superpuesta.
+  - **Smart Banner**: contenedor `#141414` altura 515px con imagen lateral y botón redondeado `#d1193e`.
+  - **FAQ**: acordeón de 2 columnas de 5 tarjetas blancas radio 12px y banner inferior de contacto con botón `Quiero invertir`.
+
+## [0.9.133] - 2026-10-16
+
+### Added
+- `Invest.jsx`, `invest.js`, `_invest.scss`: implementada la página completa de Leben Invest desde Figma (nodos `2260:1044` y `2260:1489`):
+  - **Hero Section**: curvatura inferior `120px`, título con split typography, fondo parallax, CTA principal y badges rápidos.
+  - **Oportunidad Única**: split layout con imagen destacada y 3 beneficios con iconografía diferenciadora (10% pie, 60 cuotas sin interés, arriendo garantizado 36 meses).
+  - **Formulario de Inversión**: captura de leads con campos de contacto, RUT, renta líquida, comuna y proyecto.
+  - **Asesoría Experta**: 4 tarjetas de valor (análisis financiero, servicio llave en mano, proyectos exclusivos y simplicidad operativa).
+  - **Oportunidades de Inversión**: listado interactivo con pestañas de filtro (Todos, Santiago, Regiones) y tarjetas con tags de entrega y valores UF.
+  - **Proceso de Inversión**: 4 pasos estructurados con fotografía, insignia numérica y descripción paso a paso.
+  - **Banner Smart**: callout en tarjeta oscura `#141414` destacando opción 0 pie y arriendo garantizado con CTA directo.
+  - **Preguntas Frecuentes**: acordeón interactivo en 2 columnas con 10 respuestas clave del mercado inmobiliario chileno y banner de contacto.
+- `Navbar.jsx` & `App.jsx`: enlazada ruta `/invest` (y alias `/inversionistas`) en el menú principal y navbar dinámico.
+
 ## [0.9.132] - 2026-10-16
 
 ### Added

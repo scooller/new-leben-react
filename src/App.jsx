@@ -27,6 +27,7 @@ import VideosSection from './components/sections/VideosSection.jsx'
 // Pages — lazy loaded
 const ProyectoDetalle = lazy(() => import('./pages/ProyectoDetalle.jsx'))
 const Brokers = lazy(() => import('./pages/Brokers.jsx'))
+const Invest = lazy(() => import('./pages/Invest.jsx'))
 const Login = lazy(() => import('./pages/Login.jsx'))
 const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
@@ -130,6 +131,16 @@ export default function App() {
         <Route path="/brokers" element={
           <Suspense fallback={<PageLoader />}>
             <Brokers />
+          </Suspense>
+        } />
+        <Route path="/invest" element={
+          <Suspense fallback={<PageLoader />}>
+            <Invest />
+          </Suspense>
+        } />
+        <Route path="/inversionistas" element={
+          <Suspense fallback={<PageLoader />}>
+            <Invest />
           </Suspense>
         } />
         <Route path="/cotizador" element={
