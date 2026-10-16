@@ -1,5 +1,5 @@
 // ============================================================
-// Brokers Page Styles — from Figma "Brokers" (node 2260:2)
+// Brokers Page Styles — Ponytail pruned (relying on Bootstrap 5)
 // ============================================================
 
 @use '../variables' as *;
@@ -77,85 +77,16 @@
       background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.27) 60%, rgba(0, 0, 0, 0.6));
     }
 
-    &__content {
-      position: relative;
-      z-index: 1;
-      max-width: 640px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-    }
-
     &__title {
       font-size: $lb-heading-1;
       font-weight: $lb-heading-weight;
       line-height: 1.25;
       color: $lb-white;
     }
-
-    &__subtitle {
-      font-size: $lb-fs-xl;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.9);
-    }
   }
 
   // ============================================================
-  // BENEFITS
-  // ============================================================
-  &-benefits {
-    padding: 6rem 0;
-
-    @include bs.media-breakpoint-down(md) {
-      padding: 3rem 0;
-    }
-
-    &__photo {
-      border-radius: 24px;
-      overflow: hidden;
-      aspect-ratio: 480 / 400;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    &__list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      margin-top: 2rem;
-    }
-  }
-
-  &-benefit-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  &-benefit-icon {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background: $lb-red;
-    color: $lb-white;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &-benefit-text {
-    font-size: $lb-fs-base;
-    line-height: 1.4;
-    color: $lb-dark;
-  }
-
-  // ============================================================
-  // TIERS TABLE
+  // TIERS TABLE (SPECIFIC FIGMA GEOMETRY)
   // ============================================================
   &-tiers {
     padding: 5rem 0;
@@ -251,49 +182,26 @@
     }
 
     &__table {
-      border-radius: 12px;
-      overflow: hidden;
       background: $lb-white;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e5e7eb;
+      border-radius: 12px;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      box-shadow: $lb-shadow-card;
+      border: 1px solid #e5e7eb;
     }
 
     &__header {
       display: grid;
       grid-template-columns: 550px repeat(3, 1fr);
-      min-height: 80px;
       min-width: 820px;
     }
 
     &__col-label {
-      position: relative;
-      padding: 1.25rem 1.75rem;
       background: $lb-red;
-      color: $lb-white;
+      padding: 1.25rem 2rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 0.25rem;
-
-      &::after {
-        content: '';
-        position: absolute;
-        right: -12px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-top: 12px solid transparent;
-        border-bottom: 12px solid transparent;
-        border-left: 12px solid $lb-red;
-        z-index: 2;
-
-        @include bs.media-breakpoint-down(lg) {
-          display: none;
-        }
-      }
+      border-top-left-radius: 12px;
     }
 
     &__col-title {
@@ -496,175 +404,112 @@
   }
 
   // ============================================================
-  // KAM INFO BAR
+  // KAM INFO BAR (CHEVRONS)
   // ============================================================
-  &-kam {
-    padding: 3.5rem 0 4rem;
-    background: $lb-white;
+  .lb-brokers-kam__chevrons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 860px;
+    height: 64px;
+    border-radius: 9999px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
-    &__inner {
-      display: flex;
+    @include bs.media-breakpoint-down(md) {
+      height: auto;
       flex-direction: column;
-      align-items: center;
-      gap: 1.75rem;
-    }
-
-    &__prompt {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 18px;
-      font-weight: 700;
-      color: #111111;
-    }
-
-    &__mail-icon {
-      color: $lb-red;
-      stroke-width: 2.25;
-    }
-
-    &__chevrons {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 860px;
-      height: 64px;
-      border-radius: 9999px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-
-      @include bs.media-breakpoint-down(md) {
-        height: auto;
-        flex-direction: column;
-        border-radius: 16px;
-        gap: 0.5rem;
-      }
-    }
-
-    &-chevron {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 64px;
-      position: relative;
-      transition: $lb-transition;
-      color: $lb-white;
-
-      @include bs.media-breakpoint-down(md) {
-        width: 100% !important;
-        margin-left: 0 !important;
-        clip-path: none !important;
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-      }
-
-      &--0 {
-        flex: 1.15;
-        background: linear-gradient(90deg, #cbcccd 0%, #a0a7b0 100%);
-        @include bs.media-breakpoint-up(md) {
-          clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%);
-        }
-      }
-
-      &--1 {
-        flex: 1.15;
-        background: linear-gradient(90deg, #d8b76e 0%, #b8963e 100%);
-        @include bs.media-breakpoint-up(md) {
-          clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%);
-          margin-left: -24px;
-        }
-      }
-
-      &--2 {
-        flex: 1;
-        background: #111111;
-        @include bs.media-breakpoint-up(md) {
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 24px 50%);
-          margin-left: -24px;
-        }
-      }
-
-      &__label {
-        font-size: 11px;
-        font-weight: 500;
-        letter-spacing: 0.1em;
-        color: rgba(255, 255, 255, 0.85);
-        line-height: 1;
-      }
-
-      &__name {
-        font-size: 22px;
-        font-weight: 800;
-        line-height: 1.2;
-        letter-spacing: 0.05em;
-        color: $lb-white;
-      }
-    }
-
-    &__labels {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &__label-item {
-      display: flex;
-      align-items: center;
+      border-radius: 16px;
       gap: 0.5rem;
-      font-size: 10px;
-      font-weight: 600;
-      color: $lb-gray-500;
-      letter-spacing: 0.05em;
+    }
+  }
+
+  .lb-brokers-kam-chevron {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+    position: relative;
+    transition: $lb-transition;
+    color: $lb-white;
+
+    @include bs.media-breakpoint-down(md) {
+      width: 100% !important;
+      margin-left: 0 !important;
+      clip-path: none !important;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
     }
 
-    &__dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-
-      &--0 {
-        background: #8e959e;
-      }
-
-      &--1 {
-        background: #c5a059;
-      }
-
-      &--2 {
-        background: #111111;
+    &--0 {
+      flex: 1.15;
+      background: linear-gradient(90deg, #cbcccd 0%, #a0a7b0 100%);
+      @include bs.media-breakpoint-up(md) {
+        clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%);
       }
     }
 
-    &__arrow {
-      color: #94a3b8;
-      font-weight: 700;
-      margin-left: 0.5rem;
+    &--1 {
+      flex: 1.15;
+      background: linear-gradient(90deg, #d8b76e 0%, #b8963e 100%);
+      @include bs.media-breakpoint-up(md) {
+        clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%);
+        margin-left: -24px;
+      }
     }
 
-    &__footnote {
+    &--2 {
+      flex: 1;
+      background: #111111;
+      @include bs.media-breakpoint-up(md) {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 24px 50%);
+        margin-left: -24px;
+      }
+    }
+
+    &__label {
       font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1;
+    }
+
+    &__name {
+      font-size: 22px;
       font-weight: 800;
-      color: #999999;
-      text-align: center;
-      letter-spacing: 0.08em;
-      margin-top: 0.5rem;
+      line-height: 1.2;
+      letter-spacing: 0.05em;
+      color: $lb-white;
+    }
+  }
+
+  .lb-brokers-kam__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    &--0 {
+      background: #8e959e;
+    }
+
+    &--1 {
+      background: #c5a059;
+    }
+
+    &--2 {
+      background: #111111;
     }
   }
 
   // ============================================================
-  // REGISTRATION
+  // REGISTRATION PARALLAX BG
   // ============================================================
   &-registration {
     position: relative;
-    padding: 6rem 0;
-
-    @include bs.media-breakpoint-down(md) {
-      padding: 3rem 0;
-    }
+    overflow: hidden;
 
     &__bg {
       position: absolute;
@@ -686,215 +531,48 @@
       inset: 0;
       background: rgba(0, 0, 0, 0.72);
     }
-
-    .container {
-      position: relative;
-      z-index: 1;
-    }
-
-    &__form-card {
-      max-width: 840px;
-      margin: 0 auto;
-      background: #111;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 3rem;
-
-      @include bs.media-breakpoint-down(md) {
-        padding: 1.5rem;
-      }
-    }
-
-    &__title {
-      font-size: $lb-heading-2;
-      font-weight: $lb-heading-weight;
-      color: $lb-white;
-      line-height: 1.25;
-    }
-
-    &__desc {
-      font-size: $lb-fs-md;
-      color: rgba(255, 255, 255, 0.7);
-      margin: 1rem 0 2rem;
-    }
-
-    &__form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    &__footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-
-    &__disclaimer {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
-      text-align: center;
-    }
-  }
-
-  // Form fields
-  &-field__label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 0.5rem;
-  }
-
-  &-field__input {
-    background: $lb-white !important;
-    border: 1px solid $lb-white !important;
-    border-radius: 6px !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 14px !important;
-    color: $lb-dark !important;
-
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.4);
-    }
-
-    &:focus {
-      box-shadow: 0 0 0 2px rgba($lb-red, 0.5) !important;
-      border-color: $lb-red !important;
-    }
   }
 
   // ============================================================
-  // EVENTS
+  // ALLIANCES CONTINUOUS CAROUSEL
   // ============================================================
-  &-events {
-    padding: 6rem 0;
-    background: $lb-white;
-
-    @include bs.media-breakpoint-down(md) {
-      padding: 3rem 0;
-    }
-
-    &__tabs {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin: 2rem 0;
-    }
-
-    &__tab {
-      padding: 0.5rem 1.25rem;
-      border-radius: 20px;
-      border: none;
-      font-size: $lb-fs-md;
-      font-weight: 700;
-      background: #e5e7eb;
-      color: #666;
-      cursor: pointer;
-      transition: $lb-transition;
-
-      &.is-active {
-        background: $lb-red;
-        color: $lb-white;
-      }
-    }
-  }
-
-  &-event-card {
-    background: #faf9f6;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
+  &-alliances-marquee {
+    width: 100%;
     overflow: hidden;
-    height: 100%;
-    transition: $lb-transition;
-
-    &:hover {
-      box-shadow: $lb-shadow-card;
-      transform: translateY(-4px);
-    }
-
-    &__image {
-      height: 200px;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    &__body {
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    &__title {
-      font-size: $lb-heading-4;
-      font-weight: $lb-heading-weight;
-      color: $lb-heading-color;
-    }
-
-    &__desc {
-      font-size: 14px;
-      line-height: 1.4;
-      color: #666;
-    }
+    position: relative;
+    user-select: none;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   }
 
-  // ============================================================
-  // ALLIANCES
-  // ============================================================
-  &-alliances {
-    padding: 4rem 0;
-    background: #faf9f6;
-    border-top: 1px solid #e5e7eb;
-    border-bottom: 1px solid #e5e7eb;
-
-    &__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 2rem;
-      align-items: center;
-
-      @include bs.media-breakpoint-down(md) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  }
-
-  &-alliance-logo {
+  &-alliances-track {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 1.5rem;
-    height: 84px;
-    background: $lb-white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    transition: $lb-transition;
-
-    img {
-      max-height: 48px;
-      width: auto;
-      object-fit: contain;
-      opacity: 0.85;
-      transition: $lb-transition;
-    }
+    width: max-content;
+    animation: scrollAlliances 40s linear infinite;
 
     &:hover {
-      border-color: rgba($lb-red, 0.4);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-
-      img {
-        opacity: 1;
-      }
+      animation-play-state: paused;
     }
+  }
+
+  &-alliance-item {
+    flex-shrink: 0;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    filter: grayscale(20%);
+
+    &:hover {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
+  }
+}
+
+@keyframes scrollAlliances {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 

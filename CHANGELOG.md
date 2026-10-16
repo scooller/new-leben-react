@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.141] - 2026-10-16
+
+### Changed
+- `Brokers.jsx` & `_brokers.scss`: carrusel de eventos adaptado para paginación de 3 en 3 elementos:
+  - Visualización en cuadrícula de 3 fotos por diapositiva con controles de navegación prev/next circulares y puntos de paginación interactivos.
+  - Sincronización automática de diapositivas al alternar pestañas (`2025`, `2024`, `2023`, `Nuevas Alianzas`).
+
+## [0.9.140] - 2026-10-16
+
+### Changed
+- `Brokers.jsx`, `brokers.js`, `_brokers.scss`: transformada la sección de eventos en un carrusel dinámico interactivo:
+  - Extracción directa de las 40 fotos reales de eventos desde `https://brokers.ileben.cl/` categorizadas por pestaña (`2025`, `2024`, `2023`, `Nuevas Alianzas`).
+  - Implementación de carrusel continuo infinito (`marquee`) que se actualiza reactivamente al cambiar de pestaña.
+  - Pausa de movimiento al pasar el cursor (`:hover`), elevación sutil de las diapositivas y bordes degradados.
+
+## [0.9.139] - 2026-10-16
+
+### Changed
+- `Brokers.jsx`, `brokers.js`, `_brokers.scss`: reemplazada la cuadrícula fija de alianzas por un carrusel continuo e infinito de logos:
+  - Extracción e incorporación de los 20 logos oficiales activos desde `https://brokers.ileben.cl/`.
+  - Animación suave infinita (`marquee`) con pausa al pasar el cursor (`:hover`), desvanecimiento lateral en gradiente y logos con hover interactivo.
+
+## [0.9.138] - 2026-10-16
+
+### Changed
+- `Brokers.jsx` & `_brokers.scss`: refactorización ponytail para reemplazar estilos propios por utilidades nativas de Bootstrap 5.3:
+  - Hero, beneficios y manager photo adaptados a utilidades de Bootstrap (`rounded-4`, `img-fluid`, `d-flex align-items-center gap-3`, badges circulares `rounded-circle bg-danger`).
+  - Formulario de postulación optimizado con `card bg-black text-white border-light border-opacity-10`, `form-control` y `btn btn-danger rounded-pill`.
+  - Pestañas de eventos migradas a botones pill nativos (`btn rounded-pill px-4 py-2`).
+  - Tarjetas de eventos y logos de alianzas adaptados a `card`, `card-body` y sistema de rejilla `row row-cols-2 row-cols-md-4 g-4`.
+  - Reducción de más de 450 líneas en `_brokers.scss`, manteniendo únicamente la tabla de tiers (carrusel específico de Figma) y los chevrons geométricos.
+
 ## [0.9.137] - 2026-10-16
 
 ### Added

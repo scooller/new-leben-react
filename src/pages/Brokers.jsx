@@ -30,12 +30,29 @@ const benefitIcons = {
 
 export default function Brokers() {
   useGsapAnimations()
-  const [activeYear, setActiveYear] = useState(data.events.years[0])
+  const [activeEventTab, setActiveEventTab] = useState(data.events.tabs[0].id)
+  const [eventSlideIndex, setEventSlideIndex] = useState(0)
   const [formData, setFormData] = useState({})
   const [categoryIndex, setCategoryIndex] = useState(0)
 
   const categories = data.tiers.categories || []
   const activeCategory = categories[categoryIndex] || categories[0]
+
+  const currentEventPhotos = data.events.gallery[activeEventTab] || []
+  const totalEventSlides = Math.ceil(currentEventPhotos.length / 3)
+
+  const handlePrevEvent = () => {
+    setEventSlideIndex((prev) => (prev > 0 ? prev - 1 : Math.max(0, totalEventSlides - 1)))
+  }
+
+  const handleNextEvent = () => {
+    setEventSlideIndex((prev) => (prev < totalEventSlides - 1 ? prev + 1 : 0))
+  }
+
+  const handleEventTabChange = (tabId) => {
+    setActiveEventTab(tabId)
+    setEventSlideIndex(0)
+  }
 
   const handlePrevCategory = () => {
     setCategoryIndex((prev) => (prev > 0 ? prev - 1 : categories.length - 1))
@@ -88,11 +105,11 @@ export default function Brokers() {
           overlayClassName="lb-brokers-hero__overlay"
         >
           <div className="container">
-            <ScrollAnim animation="fade-up" className="lb-brokers-hero__content">
-              <h1 className="lb-brokers-hero__title">{data.hero.title}</h1>
-              <p className="lb-brokers-hero__subtitle">{data.hero.subtitle}</p>
+            <ScrollAnim animation="fade-up" className="d-flex flex-column gap-4" style={{ maxWidth: '640px' }}>
+              <h1 className="lb-brokers-hero__title mb-0">{data.hero.title}</h1>
+              <p className="lead text-white text-opacity-90 mb-0">{data.hero.subtitle}</p>
               <div>
-                <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-pill">
+                <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-pill shadow">
                   {data.hero.ctaText}
                 </a>
               </div>
@@ -101,12 +118,12 @@ export default function Brokers() {
         </HeroShell>
 
         {/* ======================= BENEFITS ======================= */}
-        <section className="lb-brokers-benefits" id="beneficios">
-          <div className="container">
+        <section className="py-5 bg-white" id="beneficios">
+          <div className="container py-lg-4">
             <div className="row align-items-center g-5">
               <ScrollAnim as="div" animation="fade-right" className="col-lg-5">
-                <div className="lb-brokers-benefits__photo">
-                  <img src={data.benefits.managerPhoto} alt="Manager Leben" />
+                <div className="rounded-4 overflow-hidden shadow-sm" style={{ aspectRatio: '480 / 400' }}>
+                  <img src={data.benefits.managerPhoto} alt="Manager Leben" className="w-100 h-100 object-fit-cover d-block" />
                 </div>
               </ScrollAnim>
               <div className="col-lg-7">
@@ -116,20 +133,23 @@ export default function Brokers() {
                     <span className="text-danger">{data.benefits.titleAccent}</span>
                   </SplitTitle>
                 </ScrollAnim>
-                <ScrollAnim animation="fade-up" delay={0.15} stagger={0.08} className="lb-brokers-benefits__list">
+                <ScrollAnim animation="fade-up" delay={0.15} stagger={0.08} className="d-flex flex-column gap-3 mt-4">
                   {data.benefits.items.map((item, i) => {
                     const Icon = benefitIcons[item.icon]
                     return (
                       <div
                         key={i}
-                        className="lb-brokers-benefit-row"
+                        className="d-flex align-items-center gap-3"
                         onMouseEnter={() => benefitRefs.current[i]?.startAnimation()}
                         onMouseLeave={() => benefitRefs.current[i]?.stopAnimation()}
                       >
-                        <span className="lb-brokers-benefit-icon">
+                        <span
+                          className="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm"
+                          style={{ width: '32px', height: '32px' }}
+                        >
                           <Icon size={16} ref={(el) => { benefitRefs.current[i] = el }} />
                         </span>
-                        <span className="lb-brokers-benefit-text">{item.text}</span>
+                        <span className="text-dark fw-medium">{item.text}</span>
                       </div>
                     )
                   })}
@@ -244,11 +264,11 @@ export default function Brokers() {
         </section>
 
         {/* ======================= KAM INFO BAR ======================= */}
-        <section className="lb-brokers-kam">
+        <section className="py-5 bg-white">
           <div className="container">
-            <ScrollAnim animation="fade-up" className="lb-brokers-kam__inner text-center">
-              <div className="lb-brokers-kam__prompt">
-                <Mail size={22} className="lb-brokers-kam__mail-icon" />
+            <ScrollAnim animation="fade-up" className="d-flex flex-column align-items-center gap-4 text-center">
+              <div className="d-flex align-items-center gap-2 fs-5 fw-bold text-dark">
+                <Mail size={22} className="text-danger flex-shrink-0" />
                 <span>{data.kam.text}</span>
               </div>
               <div className="lb-brokers-kam__chevrons">
@@ -259,42 +279,42 @@ export default function Brokers() {
                   </div>
                 ))}
               </div>
-              <div className="lb-brokers-kam__labels">
+              <div className="d-flex flex-wrap justify-content-center align-items-center gap-4">
                 {data.kam.tiers.map((tier, i) => (
-                  <span key={i} className="lb-brokers-kam__label-item">
+                  <span key={i} className="d-flex align-items-center gap-2 small fw-semibold text-secondary">
                     <span className={`lb-brokers-kam__dot lb-brokers-kam__dot--${i}`} />
                     {tier.subtitle}
-                    {i < data.kam.tiers.length - 1 && <span className="lb-brokers-kam__arrow">→</span>}
+                    {i < data.kam.tiers.length - 1 && <span className="ms-2 text-muted fw-bold">→</span>}
                   </span>
                 ))}
               </div>
-              <p className="lb-brokers-kam__footnote">{data.kam.footnote}</p>
+              <p className="small fw-bold text-secondary text-uppercase tracking-wider mt-2 mb-0">{data.kam.footnote}</p>
             </ScrollAnim>
           </div>
         </section>
 
         {/* ======================= REGISTRATION ======================= */}
-        <section className="lb-brokers-registration" id="registro" ref={regRef}>
+        <section className="lb-brokers-registration py-5" id="registro" ref={regRef}>
           <div className="lb-brokers-registration__bg" aria-hidden>
             <img src={data.registration.backgroundImage} alt="" />
             <div className="lb-brokers-registration__overlay" />
           </div>
-          <div className="container">
-            <ScrollAnim animation="fade-up" className="lb-brokers-registration__form-card">
-              <div className="lb-brokers-section-heading text-center">
+          <div className="container position-relative z-1 py-lg-4">
+            <ScrollAnim animation="fade-up" className="card bg-black text-white border border-light border-opacity-10 rounded-4 p-4 p-md-5 mx-auto shadow-lg" style={{ maxWidth: '840px' }}>
+              <div className="lb-brokers-section-heading text-center mb-3">
                 <p className="lb-eyebrow">{data.registration.eyebrow}</p>
                 <SplitTitle as="h2" text={data.registration.title} className="lb-brokers-registration__title" />
               </div>
-              <p className="lb-brokers-registration__desc text-center">{data.registration.description}</p>
-              <form onSubmit={handleSubmit} className="lb-brokers-registration__form">
+              <p className="text-white text-opacity-75 text-center mb-4">{data.registration.description}</p>
+              <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
                 <div className="row g-3">
                   {data.registration.fields.map((field) => (
                     <div key={field.name} className={field.col === 2 ? 'col-md-6' : 'col-12'}>
-                      <label className="lb-brokers-field__label">{field.label}</label>
+                      <label className="form-label text-light text-opacity-75 small fw-semibold mb-1">{field.label}</label>
                       <input
                         type={field.type}
                         name={field.name}
-                        className="form-control lb-brokers-field__input"
+                        className="form-control bg-white text-dark rounded-2 py-2 px-3"
                         placeholder={field.placeholder}
                         value={formData[field.name] || ''}
                         onChange={(e) => handleFieldChange(field.name, e.target.value)}
@@ -303,11 +323,11 @@ export default function Brokers() {
                     </div>
                   ))}
                 </div>
-                <div className="lb-brokers-registration__footer mt-4">
-                  <button type="submit" className="btn btn-danger fw-bold w-100 py-3 rounded-pill">
+                <div className="d-flex flex-column align-items-center gap-3 mt-4">
+                  <button type="submit" className="btn btn-danger fw-bold w-100 py-3 rounded-pill shadow">
                     {data.registration.submitText}
                   </button>
-                  <p className="lb-brokers-registration__disclaimer">{data.registration.disclaimer}</p>
+                  <p className="small text-white text-opacity-50 text-center mb-0">{data.registration.disclaimer}</p>
                 </div>
               </form>
             </ScrollAnim>
@@ -315,54 +335,117 @@ export default function Brokers() {
         </section>
 
         {/* ======================= EVENTS ======================= */}
-        <section className="lb-brokers-events" id="eventos">
-          <div className="container">
-            <ScrollAnim animation="fade-up" className="lb-brokers-section-heading text-center">
+        <section className="py-5 bg-white" id="eventos">
+          <div className="container py-lg-4">
+            <ScrollAnim animation="fade-up" className="lb-brokers-section-heading text-center mb-4">
               <p className="lb-eyebrow">{data.events.eyebrow}</p>
               <SplitTitle as="h2" text={data.events.title} className="lb-brokers-section-title" />
             </ScrollAnim>
-            <ScrollAnim animation="scale" delay={0.1} className="lb-brokers-events__tabs">
-              {data.events.years.map((year) => (
+
+            <ScrollAnim animation="scale" delay={0.1} className="d-flex justify-content-center flex-wrap gap-2 my-4">
+              {data.events.tabs.map((tab) => (
                 <button
-                  key={year}
-                  className={`lb-brokers-events__tab ${year === activeYear ? 'is-active' : ''}`}
-                  onClick={() => setActiveYear(year)}
+                  key={tab.id}
+                  className={`btn rounded-pill px-4 py-2 fw-bold ${tab.id === activeEventTab ? 'btn-danger shadow-sm' : 'btn-light text-secondary'}`}
+                  onClick={() => handleEventTabChange(tab.id)}
                 >
-                  {year}
+                  {tab.label}
                 </button>
               ))}
             </ScrollAnim>
-            <ScrollAnim animation="fade-up" delay={0.15} stagger={0.1} className="row g-4">
-              {data.events.cards.map((card, i) => (
-                <div key={i} className="col-md-4">
-                  <article className="lb-brokers-event-card">
-                    <div className="lb-brokers-event-card__image">
-                      <img src={card.image} alt={card.title} />
+
+            {/* 3-by-3 Carousel with Controls */}
+            <div className="position-relative px-md-5 my-4">
+              {totalEventSlides > 1 && (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-danger position-absolute top-50 start-0 translate-middle-y rounded-circle d-flex align-items-center justify-content-center shadow z-2"
+                    style={{ width: '42px', height: '42px', marginLeft: '-10px' }}
+                    onClick={handlePrevEvent}
+                    aria-label="Anterior"
+                  >
+                    <ChevronLeft size={22} strokeWidth={2.5} />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-danger position-absolute top-50 end-0 translate-middle-y rounded-circle d-flex align-items-center justify-content-center shadow z-2"
+                    style={{ width: '42px', height: '42px', marginRight: '-10px' }}
+                    onClick={handleNextEvent}
+                    aria-label="Siguiente"
+                  >
+                    <ChevronRight size={22} strokeWidth={2.5} />
+                  </button>
+                </>
+              )}
+
+              <div className="row g-4 justify-content-center">
+                {currentEventPhotos
+                  .slice(eventSlideIndex * 3, eventSlideIndex * 3 + 3)
+                  .map((src, i) => (
+                    <div key={i} className="col-12 col-md-4">
+                      <div
+                        className="rounded-4 overflow-hidden shadow-sm h-100"
+                        style={{ height: '260px', transition: 'transform 0.25s ease' }}
+                      >
+                        <img
+                          src={src}
+                          alt={`Evento Broker ${activeEventTab} - ${eventSlideIndex * 3 + i + 1}`}
+                          className="w-100 h-100 object-fit-cover d-block"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
-                    <div className="lb-brokers-event-card__body">
-                      <h3 className="lb-brokers-event-card__title">{card.title}</h3>
-                      <p className="lb-brokers-event-card__desc">{card.description}</p>
-                    </div>
-                  </article>
+                  ))}
+              </div>
+
+              {/* Pagination Dots */}
+              {totalEventSlides > 1 && (
+                <div className="d-flex justify-content-center align-items-center gap-2 mt-4 pt-2">
+                  {Array.from({ length: totalEventSlides }).map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`btn p-0 border-0 ${idx === eventSlideIndex ? 'bg-danger' : 'bg-secondary bg-opacity-25'}`}
+                      style={{
+                        width: idx === eventSlideIndex ? '26px' : '10px',
+                        height: '10px',
+                        borderRadius: '50rem',
+                        transition: 'all 0.25s ease',
+                      }}
+                      onClick={() => setEventSlideIndex(idx)}
+                      aria-label={`Ir a grupo ${idx + 1}`}
+                    />
+                  ))}
                 </div>
-              ))}
-            </ScrollAnim>
+              )}
+            </div>
           </div>
         </section>
 
         {/* ======================= ALLIANCES ======================= */}
-        <section className="lb-brokers-alliances" id="alianzas">
-          <div className="container">
-            <ScrollAnim animation="fade-up" className="text-center">
-              <p className="lb-eyebrow">{data.alliances.title}</p>
+        <section className="py-5 border-top border-bottom bg-white overflow-hidden" id="alianzas">
+          <div className="container py-lg-3">
+            <ScrollAnim animation="fade-up" className="text-center mb-4">
+              <p className="lb-eyebrow mb-0">{data.alliances.title}</p>
             </ScrollAnim>
-            <ScrollAnim animation="fade-up" delay={0.1} stagger={0.08} className="lb-brokers-alliances__grid">
-              {data.alliances.logos.map((item, i) => (
-                <div key={i} className="lb-brokers-alliance-logo">
-                  <img src={item.logo} alt={item.name} />
+          </div>
+
+          <div className="lb-brokers-alliances-marquee py-2">
+            <div className="lb-brokers-alliances-track">
+              {[...data.alliances.logos, ...data.alliances.logos].map((item, i) => (
+                <div key={i} className="lb-brokers-alliance-item d-flex align-items-center justify-content-center px-4">
+                  <img
+                    src={item.logo}
+                    alt={item.name}
+                    className="img-fluid"
+                    style={{ maxHeight: '60px', maxWidth: '160px', objectFit: 'contain' }}
+                    loading="lazy"
+                  />
                 </div>
               ))}
-            </ScrollAnim>
+            </div>
           </div>
         </section>
       </main>
