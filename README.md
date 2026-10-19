@@ -14,7 +14,6 @@ Built with React 19, Vite 6, Redux Toolkit, Bootstrap 5, GSAP, and Motion.
 | **Routing** | React Router DOM 7 |
 | **Styling** | SCSS + Bootstrap 5.3 (custom variable overrides) |
 | **Animation** | GSAP + ScrollTrigger, Motion (formerly Framer Motion) |
-| **3D Mockup** | Three.js (`three`) |
 | **Lightbox** | Fancybox (`@fancyapps/ui`) |
 | **Icons** | Animated pqoqubbw icons (Motion), Lucide React, Font Awesome 7 |
 
@@ -148,24 +147,30 @@ src/
 │   │   ├── waves-ladder.jsx, kayak.jsx, hot-tub.jsx   # espacios comunes INN
 │   │   └── facebook.jsx, instagram.jsx, linkedin.jsx, whatsapp.jsx
 │   │
+│   ├── announcement/           # Holiday & special announcements pop-up
+│   ├── cookies/                # Cookie consent banner & settings modal
+│   ├── cotizador/              # Interactive apartment finder components
 │   ├── ChatWidget.jsx          # Floating chat bubble
 │   ├── Loader.jsx              # Full-screen initial loader
 │   ├── PageLoader.jsx          # Suspense fallback spinner
 │   ├── ProjectCard.jsx         # Reusable project listing card
 │   ├── ProjectCardSkeleton.jsx # Skeleton loader (shimmer) for project cards
 │   ├── ScrollAnim.jsx          # GSAP scroll animation wrapper
-│   └── SplitTitle.jsx          # Word-split text for GSAP reveals
+│   ├── SplitTitle.jsx          # Word-split text for GSAP reveals
+│   └── TerrainErosionCarve.jsx # Procedural topographic canvas background
 │
 ├── pages/
-│   ├── Proyectos.jsx           # Project listing page (API-driven)
 │   ├── ProyectoDetalle.jsx     # Project detail page (lazy)
 │   ├── CotizadorGeneral.jsx    # Universal cotizador (/cotizador, lazy)
 │   ├── Inn.jsx                 # INN project landing page (/inn-test, lazy)
 │   ├── Brokers.jsx             # Brokers listing page (lazy)
+│   ├── Invest.jsx              # Investor section & projects (/invest, lazy)
 │   ├── Login.jsx               # Auth login page (lazy)
 │   ├── Perfil.jsx              # Profile redirect (lazy)
 │   ├── PerfilBroker.jsx        # Broker profile page (lazy)
 │   ├── PerfilComprador.jsx     # Buyer profile page (lazy)
+│   ├── StaticPage.jsx          # Dynamic institutional page renderer (lazy)
+│   ├── CookiesPage.jsx         # Cookie policy & configuration page (lazy)
 │   └── NotFound.jsx            # 404 page (lazy)
 │
 ├── lib/
@@ -175,16 +180,22 @@ src/
 ├── store/
 │   ├── store.js                # Redux Toolkit store config
 │   └── slices/
-│       ├── uiSlice.js          # isLoaded, activeFilter
-│       └── authSlice.js        # user, token, isAuthenticated
+│       ├── uiSlice.js          # isLoaded
+│       ├── authSlice.js        # user, error
+│       └── cookieSlice.js      # Ley 21.719 consent preferences & persistence
 │
 ├── hooks/
 │   ├── useGsapAnimations.js    # GSAP + ScrollTrigger hook
-│   └── useBsTooltips.js        # Init tooltips Bootstrap (data-bs-toggle="tooltip")
+│   ├── useBsTooltips.js        # Init tooltips Bootstrap (data-bs-toggle="tooltip")
+│   └── useTrackingConsent.js   # Google Consent Mode v2 & Meta Pixel sync
 │
 ├── data/
+│   ├── announcementData.js     # Pop-up announcement config
 │   ├── content.js              # Site content / images
+│   ├── cookiesPageData.js      # Cookie declaration details & purposes
+│   ├── invest.js               # Investment page stats & FAQ
 │   ├── projects.js             # Project data
+│   ├── staticPages.js          # Institutional static pages content & aliases
 │   ├── brokers.js              # Broker data
 │   └── users.js                # User data
 │
@@ -192,10 +203,10 @@ src/
     ├── main.scss               # Entry: imports Bootstrap + all components
     ├── global.scss             # Resets, fluid root font-size
     ├── variables.scss          # Design tokens (colors, breakpoints, etc.)
-    ├── components/             # 18 SCSS partials:
-    │                           #   _brokers, _chat-widget, _cotizador-general,
-    │                           #   _cta, _diferenciadores, _footer, _hero,
-    │                           #   _inn, _inn-team-agents, _navbar, _not-found,
+    ├── components/             # 19 SCSS partials:
+    │                           #   _brokers, _chat-widget, _cookies, _cotizador-general,
+    │                           #   _diferenciadores, _footer, _hero, _inn,
+    │                           #   _inn-team-agents, _invest, _navbar, _not-found,
     │                           #   _perfil, _project-of-month, _proyecto-detalle,
     │                           #   _proyectos, _testimonials, _utilities, _videos
     └── vendor/

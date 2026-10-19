@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.147] - 2026-10-19
+
+### Documentation
+- `README.md`:
+  - Removida referencia a Three.js en la tabla de Tech Stack.
+  - Sincronizada la estructura completa del proyecto (`src/`): incorporados subdirectorios `announcement/`, `cookies/`, `cotizador/`, fondo procedural `TerrainErosionCarve.jsx`, páginas (`Invest.jsx`, `StaticPage.jsx`, `CookiesPage.jsx`), hooks (`useTrackingConsent.js`), fuentes de datos y parciales SCSS (`_cookies`, _`invest`), y eliminadas referencias a archivos borrados (`Proyectos.jsx`, `_cta.scss`).
+
 ## [0.9.146] - 2026-10-19
 
 ### Changed
