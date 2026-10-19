@@ -61,13 +61,13 @@ export const projectDetails = {
       description:
         'Equipamiento premium marca Franke: horno, horno microondas, lavavajillas panelable, encimera y campana. Cubierta de cocina ultra compacto terminación Travertino.',
       images: [
-        img('inn/Horno.jpg'),
-        img('inn/Horno-microondas.jpg'),
-        img('inn/Lavavajillas-panelable-scaled.jpg'),
-        img('inn/Encimera-y-campana-scaled.jpg'),
+        img('inn/terminaciones/terminacion-horno.jpg'),
+        img('inn/terminaciones/terminacion-microondas.jpg'),
+        img('inn/terminaciones/terminacion-lavavajillas.jpg'),
+        img('inn/terminaciones/terminacion-encimera-campana.jpg'),
         img('inn/terminaciones/terminacion-cubierta-cocina.jpg'),
-        img('inn/Griferia-cocina.jpg'),
-        img('inn/Griferia-bano-principal.jpg'),
+        img('inn/terminaciones/terminacion-griferia-cocina.jpg'),
+        img('inn/terminaciones/terminacion-griferia-bano.jpg'),
         img('inn/terminaciones/terminacion-puertas.jpg'),
       ],
       items: [

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.150] - 2026-10-19
+
+### Removed
+- `public/images/`: Limpieza exhaustiva de 82 imágenes no utilizadas (47.48 MB recuperados):
+  - `proyectos/`: Eliminados 8 mockups locales gigantes (`proj-argomedo.jpg`, `proj-piloto.jpg`, etc.) obsoletos tras integración con API de Salesforce.
+  - `inn/`: Eliminados SVGs sobredimensionados (`espacio.svg`, `edificio.svg`), renders y mapas huérfanos (`360.png`, `Mapa_PV.png`, `mapa-big.jpg`, etc.).
+  - `inn/galerias/` y `inn/3d/`: Eliminadas carpetas completas y sus archivos huérfanos/duplicados.
+  - `inn/panoramas/`: Eliminados duplicados y descartes de IA (`Fundo Playa Venado.png`, `Reserva_Nacional_Llanquihue_AI.jpg`, etc.).
+  - `brokers/`: Eliminadas fotos de eventos y logos SVG locales obsoletos (reemplazados por endpoint remoto en producción).
+  - `icons/`: Eliminados 14 archivos SVG obsoletos sustituidos por componentes React en `src/components/icons/`.
+  - `team/`, `home/`, `brand/`: Eliminadas versiones duplicadas o temporales (`catalina.jpg`, `Prueba fondo.png`, `sello9.png`).
+
+### Fixed
+- `src/data/projects.js`: Corregidas referencias de imágenes de terminaciones en Edificio INN para apuntar a los archivos existentes en `images/inn/terminaciones/terminacion-*.jpg`.
+- `src/components/proyecto/InnPanoramasModal.jsx`: Sincronizada extensión a `.jpg` para `Fundo Playa Venado_2.jpg`.
+
 ## [0.9.149] - 2026-10-19
 
 ### Changed

@@ -21,7 +21,7 @@ export const PANORAMAS_CATEGORIES = [
         id: 'playa-venado',
         title: 'Playa Venado, Ruta 225, km 16',
         distance: '14 km',
-        image: 'images/inn/panoramas/Fundo Playa Venado_2.png',
+        image: 'images/inn/panoramas/Fundo Playa Venado_2.jpg',
       },
       {
         id: 'once-bellavista',
