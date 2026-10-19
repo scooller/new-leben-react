@@ -56,16 +56,8 @@ export default function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // ponytail: 800ms arbitrary, replace with LCP-based timing if bounce rate on fast connections rises
-    const onLoad = () => setTimeout(() => dispatch(setLoaded()), 800)
-
-    if (document.readyState === 'complete') {
-      onLoad()
-    } else {
-      window.addEventListener('load', onLoad, { once: true })
-    }
-
-    return () => window.removeEventListener('load', onLoad)
+    const timer = setTimeout(() => dispatch(setLoaded()), 800)
+    return () => clearTimeout(timer)
   }, [dispatch])
 
   const location = useLocation()
@@ -73,27 +65,13 @@ export default function App() {
   useEffect(() => {
     if (!location.hash) {
       window.scrollTo(0, 0)
-    } else {
-      const id = location.hash.replace('#', '')
-      const tryScroll = () => {
-        const el = document.getElementById(id)
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          return true
-        }
-        return false
-      }
-      if (!tryScroll()) {
-        const t1 = setTimeout(tryScroll, 100)
-        const t2 = setTimeout(tryScroll, 300)
-        const t3 = setTimeout(tryScroll, 700)
-        return () => {
-          clearTimeout(t1)
-          clearTimeout(t2)
-          clearTimeout(t3)
-        }
-      }
+      return
     }
+    const id = location.hash.slice(1)
+    const timer = setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 150)
+    return () => clearTimeout(timer)
   }, [location.pathname, location.hash])
 
   return (
@@ -118,22 +96,20 @@ export default function App() {
           <Route path="/proyectos/:slug" element={<ProyectoDetalle />} />
           <Route path="/proyectos/:slug/planta/:plantaId" element={<ProyectoDetalle />} />
           <Route path="/brokers" element={<Brokers />} />
-          <Route path="/invest" element={<Invest />} />
-          <Route path="/inversionistas" element={<Invest />} />
+          {['/invest', '/inversionistas'].map((p) => (
+            <Route key={p} path={p} element={<Invest />} />
+          ))}
           <Route path="/cotizador" element={<CotizadorGeneral />} />
           <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={<CotizadorGeneral />} />
           <Route path="/cotizador/proyecto/:proyectoSlug" element={<CotizadorGeneral />} />
           <Route path="/login" element={<Login />} />
           <Route path="/perfil" element={<Perfil />} />
-          <Route path="/nosotros" element={<StaticPage slug="nosotros" />} />
-          <Route path="/quienes-somos" element={<StaticPage slug="nosotros" />} />
-          <Route path="/informacion-de-la-empresa" element={<StaticPage slug="informacion-de-la-empresa" />} />
-          <Route path="/proceso-reserva-en-linea" element={<StaticPage slug="proceso-reserva-en-linea" />} />
-          <Route path="/bases-legales" element={<StaticPage slug="bases-legales" />} />
-          <Route path="/trabaja-en-leben" element={<StaticPage slug="trabaja-en-leben" />} />
-          <Route path="/trabaja-con-nosotros" element={<StaticPage slug="trabaja-en-leben" />} />
-          <Route path="/cookies" element={<CookiesPage />} />
-          <Route path="/politica-de-cookies" element={<CookiesPage />} />
+          {['/nosotros', '/quienes-somos', '/informacion-de-la-empresa', '/proceso-reserva-en-linea', '/bases-legales', '/trabaja-en-leben', '/trabaja-con-nosotros'].map((p) => (
+            <Route key={p} path={p} element={<StaticPage slug={p.slice(1)} />} />
+          ))}
+          {['/cookies', '/politica-de-cookies'].map((p) => (
+            <Route key={p} path={p} element={<CookiesPage />} />
+          ))}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

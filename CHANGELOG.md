@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.146] - 2026-10-19
+
+### Changed
+- `src/App.jsx` (`ponytail`):
+  - Simplificado temporizador de carga: reemplazado detector de `document.readyState` y listener `load` por un único `setTimeout` con cleanup en montaje.
+  - Simplificado desplazamiento por ancla (hash): reemplazada cascada de 3 timeouts (100, 300, 700ms) por un único temporizador con cleanup.
+  - Rutas consolidadas: mapeo conciso con `.map()` para aliases (`/invest`, `/inversionistas`, `/cookies`, `/politica-de-cookies`) y páginas estáticas integrando resolución automática de slugs en `StaticPage`.
+
 ## [0.9.145] - 2026-10-19
 
 ### Removed
