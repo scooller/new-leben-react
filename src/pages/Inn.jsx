@@ -466,7 +466,7 @@ export default function Inn() {
 
         {/* Botonera desktop: pinneada debajo del header */}
         <nav className="lb-inn-hero-tabs d-none d-lg-block mx-auto" aria-label="Secciones del proyecto">
-          <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner shadow-lg">
+          <ScrollAnim animation='scale' className="card lb-inn-hero-tabs__inner rounded-pill shadow-lg">
             <div className="card-body py-4 px-4">
               <ul className="nav nav-pills nav-justified flex-nowrap align-items-center gap-3">
                 {TABS.map((t) => {

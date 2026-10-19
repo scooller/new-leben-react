@@ -32,8 +32,6 @@
     position: relative;
     min-height: 680px;
     overflow: hidden;
-    border-bottom-left-radius: 120px;
-    border-bottom-right-radius: 120px;
 
     .container {
       position: relative;
@@ -49,16 +47,12 @@
       }
 
       min-height: 600px;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
     }
 
     &__bg {
       position: absolute;
       inset: 0;
       overflow: hidden;
-      border-bottom-left-radius: inherit;
-      border-bottom-right-radius: inherit;
 
       img {
         position: absolute;
@@ -72,8 +66,6 @@
     &__overlay {
       position: absolute;
       inset: 0;
-      border-bottom-left-radius: inherit;
-      border-bottom-right-radius: inherit;
       background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.27) 60%, rgba(0, 0, 0, 0.6));
     }
 
@@ -123,6 +115,7 @@
 
       &--prev {
         left: -18px;
+
         @include bs.media-breakpoint-down(xl) {
           left: -10px;
         }
@@ -130,6 +123,7 @@
 
       &--next {
         right: -18px;
+
         @include bs.media-breakpoint-down(xl) {
           right: -10px;
         }
@@ -446,6 +440,7 @@
     &--0 {
       flex: 1.15;
       background: linear-gradient(90deg, #cbcccd 0%, #a0a7b0 100%);
+
       @include bs.media-breakpoint-up(md) {
         clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%);
       }
@@ -454,6 +449,7 @@
     &--1 {
       flex: 1.15;
       background: linear-gradient(90deg, #d8b76e 0%, #b8963e 100%);
+
       @include bs.media-breakpoint-up(md) {
         clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%);
         margin-left: -24px;
@@ -463,6 +459,7 @@
     &--2 {
       flex: 1;
       background: #111111;
+
       @include bs.media-breakpoint-up(md) {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 24px 50%);
         margin-left: -24px;
@@ -571,6 +568,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -585,17 +583,12 @@
   }
 }
 
-// Radius helpers for hero
-.lb-radius-bl-br {
-  border-bottom-left-radius: $lb-radius-section;
-  border-bottom-right-radius: $lb-radius-section;
-}
-
 @keyframes fadeInTier {
   from {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

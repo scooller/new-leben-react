@@ -100,7 +100,7 @@ export default function Brokers() {
       <main className="lb-brokers">
         {/* ======================= HERO ======================= */}
         <HeroShell
-          className="lb-brokers-hero lb-radius-bl-br container-fluid position-relative d-flex align-items-center"
+          className="lb-brokers-hero container-fluid position-relative d-flex align-items-center"
           image={data.hero.backgroundImage}
           bgWrapClassName="lb-brokers-hero__bg"
           overlayClassName="lb-brokers-hero__overlay"
@@ -408,11 +408,10 @@ export default function Brokers() {
                     <button
                       key={idx}
                       type="button"
-                      className={`btn p-0 border-0 ${idx === eventSlideIndex ? 'bg-danger' : 'bg-secondary bg-opacity-25'}`}
+                      className={`btn p-0 border-0 rounded-pill ${idx === eventSlideIndex ? 'bg-danger' : 'bg-secondary bg-opacity-25'}`}
                       style={{
                         width: idx === eventSlideIndex ? '26px' : '10px',
                         height: '10px',
-                        borderRadius: '50rem',
                         transition: 'all 0.25s ease',
                       }}
                       onClick={() => setEventSlideIndex(idx)}

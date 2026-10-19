@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.144] - 2026-10-19
+
+### Changed
+- Auditoría global de border-radius en todas las páginas y componentes (`ponytail`):
+  - `Inn.jsx` & `_inn.scss`: tabs de héroe de INN adaptados a utilidad nativa `rounded-pill` de Bootstrap; eliminada declaración manual redundante en `_inn.scss`.
+  - `_inn.scss`: mapa interactivo pin y hit areas actualizados de `999px` hardcoded al token `$lb-radius-pill`.
+  - `_navbar.scss`: barra de navegación y badges de navegación actualizados de `50rem` al token estándar `$lb-radius-pill`.
+  - `_hero.scss` & `_proyectos.scss`: eliminadas declaraciones inertes `border-radius: 0` en breakpoints mobile.
+
+## [0.9.143] - 2026-10-19
+
+### Changed
+- `Brokers.jsx` & `_brokers.scss`: estandarización de border-radius con utilidades globales (`ponytail`):
+  - Uso de clases atómicas `.lb-radius-bl .lb-radius-br` (de `global.scss`) en `HeroShell` de Brokers en lugar de clases ad-hoc.
+  - Eliminados estilos manuales de `border-bottom-left-radius` / `border-bottom-right-radius` en `_brokers.scss`.
+  - Reemplazado `borderRadius: '50rem'` inline por utilidad nativa `rounded-pill` de Bootstrap en paginación de eventos.
+
 ## [0.9.142] - 2026-10-19
 
 ### Added

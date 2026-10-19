@@ -9,11 +9,6 @@
 
   @include bs.media-breakpoint-down(md) {
     height: 55dvh;
-    border-radius: 0;
-
-    .lb-hero-bg-wrap {
-      border-radius: 0;
-    }
   }
 }
 

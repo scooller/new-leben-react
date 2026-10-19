@@ -132,8 +132,6 @@ $inn-map-card-bg: #f6f1eb;
   }
 
   &__inner {
-    border-radius: $lb-radius-pill;
-
     .card-body {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -861,7 +859,7 @@ $inn-map-card-bg: #f6f1eb;
       content: '';
       position: absolute;
       inset: -8px -12px -8px -8px;
-      border-radius: 999px;
+      border-radius: $lb-radius-pill;
       pointer-events: auto;
     }
 
@@ -963,7 +961,7 @@ $inn-map-card-bg: #f6f1eb;
   &__pin-pill {
     background: #ffffff;
     border: 1px solid #73777d;
-    border-radius: 999px;
+    border-radius: $lb-radius-pill;
     padding: 0.14rem 0.65rem 0.14rem 0.55rem;
     position: relative;
     z-index: 2;
