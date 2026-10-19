@@ -1,7 +1,7 @@
 {
   "name": "new-leben",
   "private": true,
-  "version": "0.9.147",
+  "version": "0.9.149",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,8 @@
     "build:all": "npm run lint && vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "mcp": "node .agents/mcp/leben-cli.js"
+    "mcp": "node .agents/mcp/leben-cli.js",
+    "map-editor": "python tools/map_pin_editor/main.py"
   },
   "dependencies": {
     "@fancyapps/ui": "^5.0.36",

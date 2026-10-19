@@ -20,3 +20,4 @@ dist-ssr
 
 graphify-out/
 /brag-output*
+/tools/map_pin_editor/__pycache__

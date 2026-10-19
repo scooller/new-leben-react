@@ -185,7 +185,7 @@ const MAP = {
   // description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
   descriptionHtml: `<p>Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. A un paso de INN, la costanera invita a caminar, disfrutar un café de especialidad, navegar o vivir nuevas aventuras.</p>
   <p>Puerto Varas ofrece también una reconocida gastronomía, calles con identidad y una conexión permanente con la naturaleza del sur de Chile. Desde aquí se abren rutas hacia Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para integrar paisaje, gastronomía, aventura y vida al aire libre día a día</p>`,
-  image: 'images/inn/Mapa_PV.png',
+  image: 'images/inn/Muestra-Mapa.jpg',
   logo: 'images/inn/E_titulo.png',
   btnText: 'Experiencias',
   address: 'Vicente Pérez Rosales 991, Puerto Varas',

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.149] - 2026-10-19
+
+### Changed
+- `tools/map_pin_editor/main.py`: Ahora extrae dinámicamente tanto la imagen del mapa desde `const MAP = { ... image: '...' }` como los puntos desde `const LOCATION_POINTS` leyendo directamente `src/pages/Inn.jsx` (u otro archivo JSX seleccionado), con botón de sincronización y guardado directo.
+
+## [0.9.148] - 2026-10-19
+
+### Added
+- `tools/map_pin_editor/`: Editor visual e interactivo de escritorio en Python (`main.py`, `run.bat`, `requirements.txt`, `README.md`) para cargar planos y mapas, ubicar y arrastrar pines interactivamente, y exportar/importar el array `LOCATION_POINTS` listo para pegar en React.
+- `package.json`: Script `"map-editor"` para ejecutar la herramienta con `npm run map-editor`.
+
 ## [0.9.147] - 2026-10-19
 
 ### Documentation
