@@ -36,12 +36,44 @@ function ShareButton({ icon: Icon, label, href, onClick }) {
 }
 
 /** Reusable action button with animated icon + hover */
-function ActionButton({ icon: Icon, variant = 'btn-outline-dark', className = '', onClick, iconRef, children }) {
+function ActionButton({
+  icon: Icon,
+  variant = 'btn-outline-dark',
+  className = '',
+  onClick,
+  iconRef,
+  href,
+  download,
+  target,
+  rel,
+  disabled,
+  children,
+}) {
   const innerRef = useRef(null)
   const ref = iconRef || innerRef
+
+  if (href && !disabled) {
+    return (
+      <a
+        href={href}
+        download={download}
+        target={target}
+        rel={target === '_blank' ? (rel || 'noopener noreferrer') : rel}
+        aria-label={typeof children === 'string' ? children : undefined}
+        onClick={onClick}
+        className={`btn ${variant} d-flex align-items-center justify-content-center gap-2 ${className}`}
+        {...hover(ref)}
+      >
+        <Icon ref={ref} size={24} />
+        {children}
+      </a>
+    )
+  }
+
   return (
     <button
       type="button"
+      disabled={disabled}
       aria-label={typeof children === 'string' ? children : undefined}
       onClick={onClick}
       className={`btn ${variant} d-flex align-items-center justify-content-center gap-2 ${className}`}
@@ -465,6 +497,9 @@ export default function Cotizador({
     }
   }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
+  // Mockup brochure para Edificio Inn o desde displayData
+  const brochureUrl = displayData.brochureUrl || (isInn ? `${import.meta.env.BASE_URL}images/inn/Brochure_Digital_2026.pdf` : null)
+
   // Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto
   const visibleThumbs = useMemo(() => {
     const allThumbs = displayData.floorPlan?.thumbnails || []
@@ -780,7 +815,13 @@ export default function Cotizador({
 
         <div className="col-lg-3 lb-proj-det-cot-bottom d-flex justify-content-start">
           <div className="btn-group w-100" role="group" aria-label="Acciones">
-            <ActionButton icon={DownloadIcon}>
+            <ActionButton
+              icon={DownloadIcon}
+              href={brochureUrl || undefined}
+              target={brochureUrl ? '_blank' : undefined}
+              download={brochureUrl ? 'Brochure_Digital_2026.pdf' : undefined}
+              disabled={!brochureUrl}
+            >
               Descargar Brochure
             </ActionButton>
             <ActionButton

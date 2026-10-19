@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.142] - 2026-10-19
+
+### Added
+- `Cotizador.jsx`, `projects.js`: soporte para descarga de brochure en cotizador con mockup digital de Edificio INN:
+  - Enlace al PDF mockup `images/inn/Brochure_Digital_2026.pdf` para Edificio INN (`isInn`).
+  - `ActionButton` adaptado para admitir props de enlaces (`href`, `download`, `target`, `rel`, `disabled`).
+
 ## [0.9.141] - 2026-10-16
 
 ### Changed

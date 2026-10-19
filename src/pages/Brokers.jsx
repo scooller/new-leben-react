@@ -69,7 +69,8 @@ export default function Brokers() {
     const ctx = gsap.context(() => {
       gsap.fromTo('.lb-brokers-registration__bg img',
         { yPercent: -15, scale: 1.2 },
-        { yPercent: 15, ease: 'none',
+        {
+          yPercent: 15, ease: 'none',
           scrollTrigger: {
             trigger: regRef.current,
             start: 'top bottom',

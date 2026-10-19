@@ -30,7 +30,7 @@ import { mapApiProject } from '../lib/projectUtils.js'
 
 const INFO = [
   { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991,<br /> Puerto Varas' },
-  { id: 'tipologias', label: 'Tipologías', value: '2, 3 y 4 dormitorios<br />Deptos, dúplex y deptos con patio privado' },
+  { id: 'tipologias', label: 'Tipologías', value: 'Deptos de 2, 3 y 4 dorms, dúplex <br />y deptos con patio privado' },
   { id: 'metrajes', label: 'Metrajes', value: 'Desde 85 m²' },
   { id: 'precio', label: 'Precio desde', value: '—' },
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
@@ -655,7 +655,7 @@ export default function Inn() {
         />
 
         <VideoTextSection
-          text="Descubre todo lo que INN tiene para ofrecer|"
+          text="Descubre todo lo que INN tiene para ofrecer"
           videoSrc="video/exterior.mp4"
         />
 

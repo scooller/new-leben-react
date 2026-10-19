@@ -125,6 +125,7 @@ export const projectDetails = {
         { icon: 'maximize', label: 'Superficie total', value: '150,08 m²' },
       ],
       actions: ['Descargar Brochure', 'Vistas por piso'],
+      brochureUrl: `${import.meta.env.BASE_URL}images/inn/Brochure_Digital_2026.pdf`,
       pricing: {
         label: 'Precios desde',
         price: 'UF 9.816',
