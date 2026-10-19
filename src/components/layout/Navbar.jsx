@@ -39,7 +39,7 @@ function Navlink({ link, className }) {
     extraClasses.push(link.className)
   }
 
-  const fullClass = Array.from(new Set([className, ...extraClasses].filter(Boolean).join(' ').split(/\s+/))).join(' ')
+  const fullClass = [className, ...extraClasses].filter(Boolean).join(' ')
 
   const content = (
     <>

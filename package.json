@@ -1,7 +1,7 @@
 {
   "name": "new-leben",
   "private": true,
-  "version": "0.9.144",
+  "version": "0.9.145",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,8 +21,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.18.2",
-    "three": "^0.185.1"
+    "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.145] - 2026-10-19
+
+### Removed
+- `src/components/proyecto/Room3DMockup.jsx`: eliminado componente 3D huérfano sustituido previamente por `WindowPanViewer`.
+- Dependencia `three`: removida de `package.json` reduciendo bundle y eliminando chunk no utilizado.
+- `src/components/sections/ValueProps.jsx`: eliminado componente obsoleto sin referencias en el proyecto.
+- `src/components/icons/car.jsx`, `src/components/icons/footprints.jsx`: eliminados iconos animados en desuso tras refactor de ubicación en INN.
+- `src/styles/components/_cta.scss`: eliminado archivo CSS redundante; reemplazado por utilidades Bootstrap `.img-fluid .d-block` en `CTASection.jsx`.
+
+### Changed
+- `src/App.jsx`: simplificado enrutador envolviendo `<Routes>` en un único `<Suspense fallback={<PageLoader />}>`, eliminando 21 wrappers repetitivos por ruta.
+- `src/components/layout/Navbar.jsx`: simplificada concatenación de clases CSS en `Navlink`, eliminando lógica redundante con `Set` y `Array.from`.
+- `vite.config.js`: removido comentario sobre chunk de `Room3DMockup`.
+- `README.md`: actualizadas referencias en la estructura del proyecto.
+
 ## [0.9.144] - 2026-10-19
 
 ### Changed

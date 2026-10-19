@@ -108,7 +108,6 @@ src/
 │   │   ├── Hero.jsx            # Hero banner with GSAP animations
 │   │   ├── HeroShell.jsx       # Reusable base shell for all hero headers
 │   │   ├── Diferenciadores.jsx # Search + value props
-│   │   ├── ValueProps.jsx      # Value proposition cards
 │   │   ├── Testimonials.jsx    # Client testimonials carousel
 │   │   ├── CTASection.jsx      # Call-to-action band
 │   │   ├── VideosSection.jsx   # Video showcase
@@ -126,7 +125,6 @@ src/
 │   │   ├── SpacesGallery.jsx   # Gallery + interactive amenities
 │   │   ├── FloorPlans.jsx      # Floor plan display
 │   │   ├── Vista360.jsx        # 360° view embed
-│   │   ├── Room3DMockup.jsx    # Three.js interactive 3D room viewer
 │   │   ├── LocationSection.jsx # Map + surroundings
 │   │   ├── AgentCard.jsx       # Agent with WhatsApp link
 │   │   ├── TeamAgents.jsx      # Agent grid

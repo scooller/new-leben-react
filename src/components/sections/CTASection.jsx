@@ -5,7 +5,7 @@ export default function CTASection() {
   return (
     <ScrollAnim as="section" className="lb-cta" animation="scale" duration={1}>
       <div className="container text-center p-0">
-        <img src={images.ctaSection} alt="" className="lb-cta-img w-100 mx-auto" loading="lazy" decoding="async" />
+        <img src={images.ctaSection} alt="" className="img-fluid d-block w-100 mx-auto" loading="lazy" decoding="async" />
       </div>
     </ScrollAnim>
   )

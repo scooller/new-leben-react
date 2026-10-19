@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      // Room3DMockup (Three.js, ~800 kB) es un chunk lazy separado; no afecta el load inicial
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {

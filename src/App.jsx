@@ -99,126 +99,44 @@ export default function App() {
   return (
     <>
       <Loader />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Navbar />
-              <main id="main-home">
-                <TerrainErosionCarve className="lb-home-terrain-bg" />
-                <Home />
-              </main>
-              <Footer />
-            </>
-          }
-        />
-        <Route path="/inn-test" element={
-          <Suspense fallback={<PageLoader />}>
-            <Inn />
-          </Suspense>
-        } />
-        <Route path="/proyectos/:slug" element={
-          <Suspense fallback={<PageLoader />}>
-            <ProyectoDetalle />
-          </Suspense>
-        } />
-        <Route path="/proyectos/:slug/planta/:plantaId" element={
-          <Suspense fallback={<PageLoader />}>
-            <ProyectoDetalle />
-          </Suspense>
-        } />
-        <Route path="/brokers" element={
-          <Suspense fallback={<PageLoader />}>
-            <Brokers />
-          </Suspense>
-        } />
-        <Route path="/invest" element={
-          <Suspense fallback={<PageLoader />}>
-            <Invest />
-          </Suspense>
-        } />
-        <Route path="/inversionistas" element={
-          <Suspense fallback={<PageLoader />}>
-            <Invest />
-          </Suspense>
-        } />
-        <Route path="/cotizador" element={
-          <Suspense fallback={<PageLoader />}>
-            <CotizadorGeneral />
-          </Suspense>
-        } />
-        <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={
-          <Suspense fallback={<PageLoader />}>
-            <CotizadorGeneral />
-          </Suspense>
-        } />
-        <Route path="/cotizador/proyecto/:proyectoSlug" element={
-          <Suspense fallback={<PageLoader />}>
-            <CotizadorGeneral />
-          </Suspense>
-        } />
-        <Route path="/login" element={
-          <Suspense fallback={<PageLoader />}>
-            <Login />
-          </Suspense>
-        } />
-        <Route path="/perfil" element={
-          <Suspense fallback={<PageLoader />}>
-            <Perfil />
-          </Suspense>
-        } />
-        <Route path="/nosotros" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="nosotros" />
-          </Suspense>
-        } />
-        <Route path="/quienes-somos" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="nosotros" />
-          </Suspense>
-        } />
-        <Route path="/informacion-de-la-empresa" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="informacion-de-la-empresa" />
-          </Suspense>
-        } />
-        <Route path="/proceso-reserva-en-linea" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="proceso-reserva-en-linea" />
-          </Suspense>
-        } />
-        <Route path="/bases-legales" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="bases-legales" />
-          </Suspense>
-        } />
-        <Route path="/trabaja-en-leben" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="trabaja-en-leben" />
-          </Suspense>
-        } />
-        <Route path="/trabaja-con-nosotros" element={
-          <Suspense fallback={<PageLoader />}>
-            <StaticPage slug="trabaja-en-leben" />
-          </Suspense>
-        } />
-        <Route path="/cookies" element={
-          <Suspense fallback={<PageLoader />}>
-            <CookiesPage />
-          </Suspense>
-        } />
-        <Route path="/politica-de-cookies" element={
-          <Suspense fallback={<PageLoader />}>
-            <CookiesPage />
-          </Suspense>
-        } />
-        <Route path="*" element={
-          <Suspense fallback={<PageLoader />}>
-            <NotFound />
-          </Suspense>
-        } />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <main id="main-home">
+                  <TerrainErosionCarve className="lb-home-terrain-bg" />
+                  <Home />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route path="/inn-test" element={<Inn />} />
+          <Route path="/proyectos/:slug" element={<ProyectoDetalle />} />
+          <Route path="/proyectos/:slug/planta/:plantaId" element={<ProyectoDetalle />} />
+          <Route path="/brokers" element={<Brokers />} />
+          <Route path="/invest" element={<Invest />} />
+          <Route path="/inversionistas" element={<Invest />} />
+          <Route path="/cotizador" element={<CotizadorGeneral />} />
+          <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={<CotizadorGeneral />} />
+          <Route path="/cotizador/proyecto/:proyectoSlug" element={<CotizadorGeneral />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/perfil" element={<Perfil />} />
+          <Route path="/nosotros" element={<StaticPage slug="nosotros" />} />
+          <Route path="/quienes-somos" element={<StaticPage slug="nosotros" />} />
+          <Route path="/informacion-de-la-empresa" element={<StaticPage slug="informacion-de-la-empresa" />} />
+          <Route path="/proceso-reserva-en-linea" element={<StaticPage slug="proceso-reserva-en-linea" />} />
+          <Route path="/bases-legales" element={<StaticPage slug="bases-legales" />} />
+          <Route path="/trabaja-en-leben" element={<StaticPage slug="trabaja-en-leben" />} />
+          <Route path="/trabaja-con-nosotros" element={<StaticPage slug="trabaja-en-leben" />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/politica-de-cookies" element={<CookiesPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <ChatWidget />
       <CookieConsentModal />
       <CookieSettingsTrigger />
