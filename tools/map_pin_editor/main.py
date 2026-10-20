@@ -8,16 +8,37 @@ import os
 import re
 import json
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, colorchooser
 from PIL import Image, ImageTk
 
 # Rutas del proyecto
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
 DEFAULT_PAGE_JSX = os.path.normpath(os.path.join(PROJECT_ROOT, "src", "pages", "Inn.jsx"))
 PUBLIC_DIR = os.path.normpath(os.path.join(PROJECT_ROOT, "public"))
+DEFAULT_NEW_POINT_IMG = "images/inn/ubicacion/nuevo.jpg"
+
+
+def ensure_default_point_image():
+    """
+    Garantiza que exista la imagen por defecto para puntos nuevos (public/images/inn/ubicacion/nuevo.jpg).
+    Si no existe en disco, crea un archivo placeholder de alta resolución (1200x675) para evitar errores 404.
+    """
+    target_abs = os.path.normpath(os.path.join(PUBLIC_DIR, DEFAULT_NEW_POINT_IMG.replace("/", os.sep)))
+    if os.path.exists(target_abs):
+        return True
+
+    try:
+        os.makedirs(os.path.dirname(target_abs), exist_ok=True)
+        img = Image.new("RGB", (1200, 675), color=(30, 34, 42))
+        img.save(target_abs, "JPEG", quality=90, optimize=True)
+        return True
+    except Exception as e:
+        print(f"Error creando imagen por defecto {target_abs}: {e}")
+        return False
+
 
 # Fallbacks por defecto si no se encuentra el archivo JSX
-FALLBACK_MAP_REL = "images/inn/Mapa_PV.png"
+FALLBACK_MAP_REL = "images/inn/Muestra-Mapa.jpg"
 FALLBACK_POINTS = [
     {"id": 1, "name": "Mesa Tropera", "label": "MESA TROPERA", "distance": "1.2 km", "category": "Gastronomía", "time": "12 minutos", "img": "images/inn/ubicacion/Mesa_Tropera_AI.jpg", "x": 10.7, "y": 49.9},
     {"id": 2, "name": "Jumbo", "label": "JUMBO", "distance": "1.5 km", "category": "Supermercado", "time": "15 minutos", "img": "images/inn/ubicacion/Supermercado_Jumbo_AI.jpg", "x": 85.3, "y": 66.4},
@@ -42,7 +63,7 @@ COLOR_BORDER = "#3a3f4d"
 def parse_jsx_file(jsx_path):
     """
     Lee un archivo JSX y extrae:
-    1. La propiedad `image` del objeto MAP (ej. 'images/inn/Muestra-Mapa.jpg')
+    1. La propiedad `image` del objeto MAP (ej. 'images/inn/Mapa_Ok_Sitio.png')
     2. Las coordenadas del pin de referencia del proyecto
     3. El array LOCATION_POINTS
     """
@@ -70,18 +91,26 @@ def parse_jsx_file(jsx_path):
         if img_match:
             image_rel = img_match.group(1).strip()
 
-    # 2. Extraer pin de referencia INN
-    ref_pin = {"name": "PROYECTO INN", "x": 40.0, "y": 68.1}
+    # 2. Extraer pin de referencia del proyecto
+    ref_pin = {"name": "PROYECTO INN", "x": 40.0, "y": 68.1, "enabled": False}
     ref_match = re.search(
-        r"pin-inn[\s\S]*?style=\{\{\s*left:\s*['\"]([0-9.]+)%['\"],\s*top:\s*['\"]([0-9.]+)%['\"]",
+        r"(?:lb-[\w-]+-map__pin-(?:inn|project|main)|pin-inn)[\s\S]*?style=\{\{\s*left:\s*['\"]([0-9.]+)%['\"],\s*top:\s*['\"]([0-9.]+)%['\"]",
         content,
     )
     if ref_match:
         try:
             ref_pin["x"] = round(float(ref_match.group(1)), 1)
             ref_pin["y"] = round(float(ref_match.group(2)), 1)
+            ref_pin["enabled"] = True
         except ValueError:
             pass
+        title_match = re.search(r'title=["\']([^"\']+)["\']', ref_match.group(0)) or re.search(r'alt=["\']([^"\']+)["\']', ref_match.group(0))
+        if title_match:
+            clean_title = title_match.group(1).split(" - ")[0].strip()
+            if clean_title:
+                ref_pin["name"] = clean_title
+    elif "pin-inn" in content:
+        ref_pin["enabled"] = True
 
     # 3. Extraer array LOCATION_POINTS
     points = []
@@ -130,6 +159,7 @@ class MapPinEditorApp:
         self.map_image_path = ""
         self.pil_original_image = None
         self.tk_image = None
+        self._cached_image_size = None
         self.img_rect = (0, 0, 1, 1)  # (offset_x, offset_y, rendered_w, rendered_h)
 
         # Estado de pines
@@ -137,7 +167,23 @@ class MapPinEditorApp:
         self.selected_index = -1
         self.dragging_index = -1
         self.show_reference_pin = tk.BooleanVar(value=True)
-        self.reference_pin = {"name": "PROYECTO INN", "x": 40.0, "y": 68.1}
+        self.reference_pin = {"name": "PROYECTO INN", "x": 40.0, "y": 68.1, "enabled": True}
+        self.is_ref_selected = False
+        self.dragging_reference = False
+
+        self.ref_name_var = tk.StringVar(value=self.reference_pin["name"])
+        self.ref_x_var = tk.DoubleVar(value=self.reference_pin["x"])
+        self.ref_y_var = tk.DoubleVar(value=self.reference_pin["y"])
+
+        # Color de fondo del lienzo
+        self.canvas_bg_color = "#131418"
+        self.bg_presets = {
+            "Oscuro": "#131418",
+            "Grafito": "#22252c",
+            "Gris": "#3e4451",
+            "Claro": "#dbe0e8",
+            "Blanco": "#ffffff",
+        }
 
         self._configure_styles()
         self._build_ui()
@@ -148,6 +194,7 @@ class MapPinEditorApp:
         else:
             self.points = [dict(p) for p in FALLBACK_POINTS]
             self.selected_index = 0
+            self._sync_ref_vars()
             self._update_all_views()
             self.status_var.set("Modo offline: Usa los botones de la barra superior para cargar un archivo JSX.")
 
@@ -191,13 +238,43 @@ class MapPinEditorApp:
         )
         btn_open_img.pack(side=tk.LEFT, padx=6)
 
+        # Botón para agregar o seleccionar Pin Principal
+        btn_add_ref_tool = tk.Button(
+            toolbar, text="⭐ Pin Principal", bg="#423516", fg=COLOR_GOLD_HOVER,
+            activebackground="#594820", activeforeground="#fff", relief=tk.FLAT,
+            font=("Segoe UI", 9, "bold"), padx=10, pady=4, cursor="hand2",
+            command=self.on_add_or_select_reference_pin
+        )
+        btn_add_ref_tool.pack(side=tk.LEFT, padx=6)
+
         chk_ref = tk.Checkbutton(
-            toolbar, text="Pin Referencia Proyecto", variable=self.show_reference_pin,
+            toolbar, text="Mostrar Pin Principal", variable=self.show_reference_pin,
             bg=COLOR_PANEL_HEADER, fg="#e0e0e0", selectcolor="#1c2128",
             activebackground=COLOR_PANEL_HEADER, activeforeground="#fff",
-            font=("Segoe UI", 9), command=self.redraw_canvas
+            font=("Segoe UI", 9), command=self.on_toggle_reference_pin
         )
-        chk_ref.pack(side=tk.LEFT, padx=12)
+        chk_ref.pack(side=tk.LEFT, padx=6)
+
+        # Selector de color de fondo del lienzo
+        sep_bg = tk.Frame(toolbar, width=1, height=22, bg=COLOR_BORDER)
+        sep_bg.pack(side=tk.LEFT, padx=(6, 8))
+
+        tk.Label(toolbar, text="🎨 Fondo:", bg=COLOR_PANEL_HEADER, fg="#e0e0e0", font=("Segoe UI", 9)).pack(side=tk.LEFT, padx=(0, 4))
+
+        self.bg_combo_var = tk.StringVar(value="Oscuro")
+        self.bg_combo = ttk.Combobox(
+            toolbar, textvariable=self.bg_combo_var,
+            values=list(self.bg_presets.keys()) + ["Personalizado..."],
+            state="readonly", width=11, font=("Segoe UI", 9)
+        )
+        self.bg_combo.pack(side=tk.LEFT, padx=(0, 4))
+        self.bg_combo.bind("<<ComboboxSelected>>", self.on_bg_preset_selected)
+
+        self.btn_bg_swatch = tk.Button(
+            toolbar, text="  ", bg=self.canvas_bg_color, activebackground=self.canvas_bg_color,
+            relief=tk.SOLID, bd=1, width=2, cursor="hand2", command=self.on_choose_custom_bg_color
+        )
+        self.btn_bg_swatch.pack(side=tk.LEFT, padx=(0, 6))
 
         # Acciones de exportación
         btn_copy = tk.Button(
@@ -207,6 +284,14 @@ class MapPinEditorApp:
             command=self.on_copy_code
         )
         btn_copy.pack(side=tk.RIGHT, padx=4)
+
+        btn_copy_ref = tk.Button(
+            toolbar, text="⭐ Copiar JSX Pin Principal", bg="#3d3725", fg=COLOR_GOLD,
+            activebackground="#50472d", activeforeground="#fff", relief=tk.FLAT,
+            font=("Segoe UI", 9), padx=10, pady=4, cursor="hand2",
+            command=self.on_copy_reference_pin_jsx
+        )
+        btn_copy_ref.pack(side=tk.RIGHT, padx=4)
 
         btn_save_to_jsx = tk.Button(
             toolbar, text="💾 Guardar en Inn.jsx", bg="#2e5d32", fg="#e8f5e9",
@@ -236,18 +321,18 @@ class MapPinEditorApp:
         paned.pack(fill=tk.BOTH, expand=True)
 
         # Canvas a la izquierda
-        canvas_frame = tk.Frame(paned, bg=COLOR_BG)
-        paned.add(canvas_frame, stretch="always", minsize=600)
+        self.canvas_frame = tk.Frame(paned, bg=self.canvas_bg_color)
+        paned.add(self.canvas_frame, stretch="always", minsize=600)
 
         # Indicador de origen e imagen cargada
         self.source_indicator_var = tk.StringVar(value="")
         lbl_source = tk.Label(
-            canvas_frame, textvariable=self.source_indicator_var,
+            self.canvas_frame, textvariable=self.source_indicator_var,
             bg="#16181d", fg="#b0b8c4", font=("Segoe UI", 8), pady=4, padx=10, anchor="w"
         )
         lbl_source.pack(side=tk.TOP, fill=tk.X)
 
-        self.canvas = tk.Canvas(canvas_frame, bg="#131418", highlightthickness=0, cursor="crosshair")
+        self.canvas = tk.Canvas(self.canvas_frame, bg=self.canvas_bg_color, highlightthickness=0, cursor="crosshair")
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
         self.canvas.bind("<Configure>", self.on_canvas_resize)
@@ -261,7 +346,73 @@ class MapPinEditorApp:
         sidebar = tk.Frame(paned, bg=COLOR_SIDEBAR, width=440, padx=12, pady=10)
         paned.add(sidebar, stretch="never", minsize=390)
 
-        lbl_side_title = ttk.Label(sidebar, text="Pines en el Mapa", style="Header.TLabel")
+        # Panel Pin Principal del Proyecto
+        ref_frame = tk.LabelFrame(
+            sidebar, text=" ⭐ Pin Principal del Proyecto ", bg="#1f232d", fg=COLOR_GOLD,
+            font=("Segoe UI", 9, "bold"), padx=10, pady=8, relief=tk.GROOVE
+        )
+        ref_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ref_top = tk.Frame(ref_frame, bg="#1f232d")
+        ref_top.pack(fill=tk.X, pady=(0, 6))
+
+        self.btn_add_ref = tk.Button(
+            ref_top, text="➕ Agregar / Seleccionar", bg="#3a3219", fg=COLOR_GOLD_HOVER,
+            activebackground="#4d4323", activeforeground="#fff", relief=tk.FLAT,
+            font=("Segoe UI", 8, "bold"), padx=6, pady=2, cursor="hand2",
+            command=self.on_add_or_select_reference_pin
+        )
+        self.btn_add_ref.pack(side=tk.LEFT, padx=(0, 4))
+
+        self.btn_del_ref = tk.Button(
+            ref_top, text="🗑️ Quitar", bg="#4a2527", fg="#ffb4b4",
+            activebackground="#5e2e30", activeforeground="#fff", relief=tk.FLAT,
+            font=("Segoe UI", 8), padx=6, pady=2, cursor="hand2",
+            command=self.on_remove_reference_pin
+        )
+        self.btn_del_ref.pack(side=tk.LEFT, padx=4)
+
+        btn_copy_jsx_ref = tk.Button(
+            ref_top, text="📋 Copiar JSX", bg="#2a303d", fg="#b0b8c4",
+            activebackground="#3a4254", activeforeground="#fff", relief=tk.FLAT,
+            font=("Segoe UI", 8), padx=6, pady=2, cursor="hand2",
+            command=self.on_copy_reference_pin_jsx
+        )
+        btn_copy_jsx_ref.pack(side=tk.RIGHT)
+
+        ref_name_row = tk.Frame(ref_frame, bg="#1f232d")
+        ref_name_row.pack(fill=tk.X, pady=(0, 4))
+        tk.Label(ref_name_row, text="Nombre:", bg="#1f232d", fg=COLOR_MUTED, font=("Segoe UI", 8, "bold")).pack(side=tk.LEFT)
+        ent_ref_name = tk.Entry(
+            ref_name_row, textvariable=self.ref_name_var, bg="#171920", fg="#ffffff",
+            insertbackground="#ffffff", relief=tk.FLAT, font=("Segoe UI", 9)
+        )
+        ent_ref_name.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(6, 0))
+        ent_ref_name.bind("<KeyRelease>", self.on_ref_field_changed)
+
+        ref_coord_row = tk.Frame(ref_frame, bg="#1f232d")
+        ref_coord_row.pack(fill=tk.X)
+
+        tk.Label(ref_coord_row, text="X (%):", bg="#1f232d", fg="#e0e0e0", font=("Segoe UI", 8)).pack(side=tk.LEFT)
+        spin_ref_x = tk.Spinbox(
+            ref_coord_row, from_=0.0, to=100.0, increment=0.1, textvariable=self.ref_x_var,
+            width=6, bg="#272a34", fg="#fff", relief=tk.FLAT, command=self.on_ref_spin_changed
+        )
+        spin_ref_x.pack(side=tk.LEFT, padx=(4, 8))
+        spin_ref_x.bind("<KeyRelease>", self.on_ref_spin_changed)
+
+        tk.Label(ref_coord_row, text="Y (%):", bg="#1f232d", fg="#e0e0e0", font=("Segoe UI", 8)).pack(side=tk.LEFT)
+        spin_ref_y = tk.Spinbox(
+            ref_coord_row, from_=0.0, to=100.0, increment=0.1, textvariable=self.ref_y_var,
+            width=6, bg="#272a34", fg="#fff", relief=tk.FLAT, command=self.on_ref_spin_changed
+        )
+        spin_ref_y.pack(side=tk.LEFT, padx=(4, 8))
+        spin_ref_y.bind("<KeyRelease>", self.on_ref_spin_changed)
+
+        self.ref_status_lbl = tk.Label(ref_coord_row, text="", bg="#1f232d", fg=COLOR_GOLD, font=("Segoe UI", 8))
+        self.ref_status_lbl.pack(side=tk.LEFT)
+
+        lbl_side_title = ttk.Label(sidebar, text="Puntos de Interés (LOCATION_POINTS)", style="Header.TLabel")
         lbl_side_title.pack(anchor="w", pady=(0, 6))
 
         # Lista de pines
@@ -408,6 +559,9 @@ class MapPinEditorApp:
         # 2. Pin de referencia
         if parsed.get("ref_pin"):
             self.reference_pin = parsed["ref_pin"]
+            self.show_reference_pin.set(self.reference_pin.get("enabled", True))
+            self._sync_ref_vars()
+            self._update_ref_panel_visuals()
 
         # 3. Resolver imagen de MAP
         image_rel = parsed.get("image_rel") or FALLBACK_MAP_REL
@@ -427,8 +581,9 @@ class MapPinEditorApp:
                 self.status_var.set(f"No se encontró la imagen: {full_img_path}")
 
         jsx_name = os.path.basename(jsx_path)
-        self.source_indicator_var.set(f"📄 Origen: {jsx_name}  |  🗺️ MAP.image: '{image_rel}'  |  Puntos: {len(self.points)}")
-        self.status_var.set(f"Sincronizado con {jsx_name}: MAP.image = '{image_rel}' y {len(self.points)} pines.")
+        ref_status_str = f"Pin Principal: {self.reference_pin['name']}" if self.reference_pin.get("enabled") else "Sin Pin Principal"
+        self.source_indicator_var.set(f"📄 Origen: {jsx_name}  |  🗺️ MAP.image: '{image_rel}'  |  Puntos: {len(self.points)}  |  ⭐ {ref_status_str}")
+        self.status_var.set(f"Sincronizado con {jsx_name}: MAP.image = '{image_rel}', {len(self.points)} pines y {ref_status_str}.")
         self._update_all_views()
         return True
 
@@ -462,6 +617,7 @@ class MapPinEditorApp:
         try:
             self.pil_original_image = Image.open(path)
             self.map_image_path = path
+            self._cached_image_size = None
             self.redraw_canvas()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo cargar la imagen:\n{e}")
@@ -477,12 +633,32 @@ class MapPinEditorApp:
 
         confirm = messagebox.askyesno(
             "Guardar en JSX",
-            f"¿Deseas actualizar el array LOCATION_POINTS directamente en:\n{target_jsx}?"
+            f"¿Deseas actualizar el mapa y los pines directamente en:\n{target_jsx}?"
         )
         if not confirm:
             return
 
         try:
+            # Asegurar que la imagen por defecto exista siempre
+            ensure_default_point_image()
+            default_abs = os.path.normpath(os.path.join(PUBLIC_DIR, DEFAULT_NEW_POINT_IMG.replace("/", os.sep)))
+
+            # Verificar si algún punto hace referencia a una imagen inexistente y crearla
+            for p in self.points:
+                p_img = (p.get("img") or "").strip()
+                if p_img:
+                    p_img_abs = os.path.normpath(os.path.join(PUBLIC_DIR, p_img.replace("/", os.sep)))
+                    if not os.path.exists(p_img_abs):
+                        try:
+                            os.makedirs(os.path.dirname(p_img_abs), exist_ok=True)
+                            if os.path.exists(default_abs):
+                                import shutil
+                                shutil.copyfile(default_abs, p_img_abs)
+                            else:
+                                Image.new("RGB", (1200, 675), color=(30, 34, 42)).save(p_img_abs, "JPEG", quality=90)
+                        except Exception as ex:
+                            print(f"Aviso al crear imagen faltante {p_img_abs}: {ex}")
+
             with open(target_jsx, "r", encoding="utf-8") as f:
                 content = f.read()
 
@@ -494,23 +670,51 @@ class MapPinEditorApp:
                 return
 
             updated = re.sub(pattern, new_code, content, count=1)
+
+            ref_saved = False
+            if self.reference_pin.get("enabled"):
+                rx = self.reference_pin.get("x", 40.0)
+                ry = self.reference_pin.get("y", 68.1)
+                ref_pattern = r'((?:pin-inn|lb-[\w-]+-map__pin-(?:inn|project|main))[\s\S]*?style=\{\{\s*left:\s*[\'"])[0-9.]+(%[\'"],\s*top:\s*[\'"])[0-9.]+(%[\'"])'
+                if re.search(ref_pattern, updated):
+                    updated = re.sub(ref_pattern, rf"\g<1>{rx}\g<2>{ry}\g<3>", updated, count=1)
+                    ref_saved = True
+
             with open(target_jsx, "w", encoding="utf-8") as f:
                 f.write(updated)
 
-            self.status_var.set(f"✅ ¡{os.path.basename(target_jsx)} actualizado con éxito!")
-            messagebox.showinfo("Éxito", f"Se actualizó LOCATION_POINTS en {os.path.basename(target_jsx)} exitosamente.")
+            ref_msg = f" y Pin Principal ({self.reference_pin['x']}%, {self.reference_pin['y']}%)" if ref_saved else ""
+            self.status_var.set(f"✅ ¡{os.path.basename(target_jsx)} actualizado con éxito! (LOCATION_POINTS{ref_msg})")
+            messagebox.showinfo("Éxito", f"Se actualizó LOCATION_POINTS{ref_msg} en {os.path.basename(target_jsx)} exitosamente.")
         except Exception as e:
             messagebox.showerror("Error al guardar", f"Ocurrió un error:\n{e}")
 
     # -------------------------------------------------------------
     # Renderizado y Canvas
     # -------------------------------------------------------------
+    # -------------------------------------------------------------
+    # Renderizado y Canvas Optimizado (Cero Delay)
+    # -------------------------------------------------------------
     def on_canvas_resize(self, event=None):
         self.redraw_canvas()
 
+    def redraw_pins(self):
+        """Redibuja únicamente los pines y referencias sin tocar la imagen de fondo."""
+        self.canvas.delete("pin")
+
+        # Pin de referencia del proyecto
+        if self.show_reference_pin.get():
+            self._draw_reference_pin()
+
+        # Pines interactivos
+        for idx, point in enumerate(self.points):
+            self._draw_pin(idx, point, is_selected=(idx == self.selected_index))
+
     def redraw_canvas(self):
-        self.canvas.delete("all")
+        """Redibuja el lienzo completo, re-escalando la imagen solo si cambió de tamaño."""
         if not self.pil_original_image:
+            self.canvas.delete("all")
+            self._cached_image_size = None
             self.canvas.create_text(
                 self.canvas.winfo_width() / 2, self.canvas.winfo_height() / 2,
                 text="Haz clic en '🔄 Sincronizar Inn.jsx' o carga una imagen para comenzar",
@@ -532,29 +736,55 @@ class MapPinEditorApp:
         offset_y = (ch - new_h) // 2
         self.img_rect = (offset_x, offset_y, new_w, new_h)
 
-        resized = self.pil_original_image.resize((new_w, new_h), Image.Resampling.LANCZOS)
-        self.tk_image = ImageTk.PhotoImage(resized)
-        self.canvas.create_image(offset_x, offset_y, anchor=tk.NW, image=self.tk_image)
+        # Re-escalar y refrescar la imagen SOLO si cambiaron las dimensiones reales
+        if self._cached_image_size != (new_w, new_h) or not self.tk_image:
+            self.canvas.delete("all")
+            resized = self.pil_original_image.resize((new_w, new_h), Image.Resampling.BILINEAR)
+            self.tk_image = ImageTk.PhotoImage(resized)
+            self._cached_image_size = (new_w, new_h)
+            self.canvas.create_image(offset_x, offset_y, anchor=tk.NW, image=self.tk_image, tags="bg_map")
+            self.canvas.create_rectangle(offset_x, offset_y, offset_x + new_w, offset_y + new_h, outline="#2a2e39", width=1, tags="bg_map")
 
-        self.canvas.create_rectangle(offset_x, offset_y, offset_x + new_w, offset_y + new_h, outline="#2a2e39", width=1)
-
-        # Pin de referencia
-        if self.show_reference_pin.get():
-            self._draw_reference_pin()
-
-        # Pines interactivos
-        for idx, point in enumerate(self.points):
-            self._draw_pin(idx, point, is_selected=(idx == self.selected_index))
+        self.redraw_pins()
 
     def _draw_reference_pin(self):
-        ox, oy, w, h = self.img_rect
-        rx = ox + (self.reference_pin["x"] / 100.0) * w
-        ry = oy + (self.reference_pin["y"] / 100.0) * h
+        if not self.reference_pin.get("enabled", True) or not self.show_reference_pin.get():
+            return
 
-        self.canvas.create_oval(rx - 9, ry - 9, rx + 9, ry + 9, fill="#1c2128", outline=COLOR_GOLD, width=2)
-        self.canvas.create_oval(rx - 4, ry - 4, rx + 4, ry + 4, fill=COLOR_GOLD, outline="")
-        label_text = f"★ {self.reference_pin.get('name', 'PROYECTO')}"
-        self.canvas.create_text(rx, ry - 16, text=label_text, fill=COLOR_GOLD, font=("Segoe UI", 8, "bold"))
+        ox, oy, w, h = self.img_rect
+        rx = ox + (self.reference_pin.get("x", 40.0) / 100.0) * w
+        ry = oy + (self.reference_pin.get("y", 68.1) / 100.0) * h
+
+        is_sel = getattr(self, "is_ref_selected", False)
+        pin_name = self.reference_pin.get("name", "PROYECTO")
+        coords_text = f"({self.reference_pin.get('x', 0)}%, {self.reference_pin.get('y', 0)}%)"
+
+        if is_sel:
+            # Anillo exterior resplandeciente
+            self.canvas.create_oval(rx - 16, ry - 16, rx + 16, ry + 16, outline=COLOR_GOLD_HOVER, width=2, dash=(4, 2), tags=("ref_pin", "pin"))
+            self.canvas.create_oval(rx - 12, ry - 12, rx + 12, ry + 12, fill="#382e14", outline=COLOR_GOLD_HOVER, width=2, tags=("ref_pin", "pin"))
+            self.canvas.create_oval(rx - 6, ry - 6, rx + 6, ry + 6, fill=COLOR_GOLD_HOVER, outline="", tags=("ref_pin", "pin"))
+            self.canvas.create_text(rx, ry, text="★", fill="#000000", font=("Segoe UI", 9, "bold"), tags=("ref_pin", "pin"))
+        else:
+            self.canvas.create_oval(rx - 10, ry - 10, rx + 10, ry + 10, fill="#1c2128", outline=COLOR_GOLD, width=2, tags=("ref_pin", "pin"))
+            self.canvas.create_oval(rx - 5, ry - 5, rx + 5, ry + 5, fill=COLOR_GOLD, outline="", tags=("ref_pin", "pin"))
+            self.canvas.create_text(rx, ry, text="★", fill="#ffffff", font=("Segoe UI", 7, "bold"), tags=("ref_pin", "pin"))
+
+        # Badge superior distintivo
+        badge_text = f"★ {pin_name} {coords_text}"
+        char_w = 6.8
+        badge_w = max(55, len(badge_text) * char_w)
+        bx1 = rx - (badge_w / 2)
+        bx2 = rx + (badge_w / 2)
+        by1 = ry - 32
+        by2 = ry - 14
+
+        bg_color = "#332711" if is_sel else "#1c2128"
+        border_color = COLOR_GOLD_HOVER if is_sel else COLOR_GOLD
+        text_color = COLOR_GOLD_HOVER if is_sel else "#ffffff"
+
+        self.canvas.create_rectangle(bx1, by1, bx2, by2, fill=bg_color, outline=border_color, width=1.5 if is_sel else 1, tags=("ref_pin", "pin"))
+        self.canvas.create_text(rx, (by1 + by2) / 2, text=badge_text, fill=text_color, font=("Segoe UI", 8, "bold" if is_sel else "normal"), tags=("ref_pin", "pin"))
 
     def _draw_pin(self, idx, point, is_selected=False):
         ox, oy, w, h = self.img_rect
@@ -571,11 +801,11 @@ class MapPinEditorApp:
         if is_selected:
             self.canvas.create_oval(cx - (dot_radius + 4), cy - (dot_radius + 4),
                                     cx + (dot_radius + 4), cy + (dot_radius + 4),
-                                    outline=COLOR_GOLD_HOVER, width=2)
+                                    outline=COLOR_GOLD_HOVER, width=2, tags=(f"pin_{idx}", "pin"))
 
         self.canvas.create_oval(cx - dot_radius, cy - dot_radius, cx + dot_radius, cy + dot_radius,
                                 fill=dot_color, outline=glow_color, width=1.5, tags=(f"pin_{idx}", "pin"))
-        self.canvas.create_oval(cx - 2, cy - 2, cx + 2, cy + 2, fill="#ffffff", outline="")
+        self.canvas.create_oval(cx - 2, cy - 2, cx + 2, cy + 2, fill="#ffffff", outline="", tags=(f"pin_{idx}", "pin"))
 
         line_x1 = cx + dot_radius
         line_x2 = line_x1 + line_len
@@ -603,6 +833,29 @@ class MapPinEditorApp:
     # -------------------------------------------------------------
     # Mouse Events
     # -------------------------------------------------------------
+    def _is_ref_pin_at_coords(self, click_x, click_y):
+        if not self.reference_pin.get("enabled", True) or not self.show_reference_pin.get():
+            return False
+        ox, oy, w, h = self.img_rect
+        rx = ox + (self.reference_pin.get("x", 40.0) / 100.0) * w
+        ry = oy + (self.reference_pin.get("y", 68.1) / 100.0) * h
+
+        dist = ((click_x - rx) ** 2 + (click_y - ry) ** 2) ** 0.5
+        if dist <= 18:
+            return True
+
+        pin_name = self.reference_pin.get("name", "PROYECTO")
+        coords_text = f"({self.reference_pin.get('x', 0)}%, {self.reference_pin.get('y', 0)}%)"
+        badge_text = f"★ {pin_name} {coords_text}"
+        badge_w = max(55, len(badge_text) * 6.8)
+        bx1 = rx - (badge_w / 2)
+        bx2 = rx + (badge_w / 2)
+        by1 = ry - 34
+        by2 = ry - 12
+        if bx1 <= click_x <= bx2 and by1 <= click_y <= by2:
+            return True
+        return False
+
     def _find_pin_at_coords(self, click_x, click_y):
         ox, oy, w, h = self.img_rect
         for idx in reversed(range(len(self.points))):
@@ -624,20 +877,37 @@ class MapPinEditorApp:
         return -1
 
     def on_canvas_press(self, event):
+        # 1. Comprobar si se hizo clic en el Pin Principal del proyecto
+        if self._is_ref_pin_at_coords(event.x, event.y):
+            self.is_ref_selected = True
+            self.dragging_reference = True
+            self.selected_index = -1
+            self.dragging_index = -1
+            self.pins_listbox.selection_clear(0, tk.END)
+            self._update_ref_panel_visuals()
+            self.redraw_pins()
+            self.status_var.set(f"⭐ Pin Principal seleccionado: '{self.reference_pin.get('name')}' ({self.reference_pin.get('x')}%, {self.reference_pin.get('y')}%)")
+            return
+
+        # 2. Comprobar si se hizo clic en un pin normal
         idx = self._find_pin_at_coords(event.x, event.y)
         if idx != -1:
+            self.is_ref_selected = False
+            self.dragging_reference = False
             self.selected_index = idx
             self.dragging_index = idx
             self._select_in_listbox(idx)
             self._populate_form_from_selected()
-            self.redraw_canvas()
+            self._update_ref_panel_visuals()
+            self.redraw_pins()
         else:
             self.dragging_index = -1
+            self.dragging_reference = False
+            self.is_ref_selected = False
+            self._update_ref_panel_visuals()
+            self.redraw_pins()
 
     def on_canvas_drag(self, event):
-        if self.dragging_index == -1:
-            return
-
         ox, oy, w, h = self.img_rect
         if w <= 0 or h <= 0:
             return
@@ -645,21 +915,59 @@ class MapPinEditorApp:
         pct_x = max(0.0, min(100.0, ((event.x - ox) / float(w)) * 100.0))
         pct_y = max(0.0, min(100.0, ((event.y - oy) / float(h)) * 100.0))
 
+        if self.dragging_reference:
+            self.reference_pin["x"] = round(pct_x, 1)
+            self.reference_pin["y"] = round(pct_y, 1)
+            self.ref_x_var.set(self.reference_pin["x"])
+            self.ref_y_var.set(self.reference_pin["y"])
+            self.redraw_pins()
+            return
+
+        if self.dragging_index == -1:
+            return
+
         point = self.points[self.dragging_index]
         point["x"] = round(pct_x, 1)
         point["y"] = round(pct_y, 1)
 
         self.form_vars["x"].set(point["x"])
         self.form_vars["y"].set(point["y"])
-        self.status_var.set(f"Moviendo pin '{point.get('name')}': x={point['x']}%, y={point['y']}%")
-
-        self.redraw_canvas()
-        self._refresh_listbox_item(self.dragging_index)
+        self.redraw_pins()
 
     def on_canvas_release(self, event):
-        if self.dragging_index != -1:
-            self.dragging_index = -1
+        if self.dragging_reference:
+            self.dragging_reference = False
+            self._update_ref_panel_visuals()
             self._update_code_preview()
+            self.status_var.set(f"Pin Principal '{self.reference_pin.get('name')}': x={self.reference_pin['x']}%, y={self.reference_pin['y']}%")
+        if self.dragging_index != -1:
+            idx = self.dragging_index
+            self.dragging_index = -1
+            self._refresh_listbox_item(idx)
+            self._update_code_preview()
+            p = self.points[idx]
+            self.status_var.set(f"Pin '{p.get('name')}': x={p['x']}%, y={p['y']}%")
+
+    def _add_point_at(self, pct_x, pct_y):
+        ensure_default_point_image()
+        next_id = max([p.get("id", 0) for p in self.points], default=0) + 1
+        new_point = {
+            "id": next_id,
+            "name": f"Lugar {next_id}",
+            "label": f"LUGAR {next_id}",
+            "distance": "1.0 km",
+            "category": "Interés",
+            "time": "10 minutos",
+            "img": DEFAULT_NEW_POINT_IMG,
+            "x": pct_x,
+            "y": pct_y,
+        }
+        self.points.append(new_point)
+        self.selected_index = len(self.points) - 1
+        self.is_ref_selected = False
+        self._update_all_views()
+        self.redraw_canvas()
+        self.status_var.set(f"Nuevo pin #{next_id} agregado en x={pct_x}%, y={pct_y}%")
 
     def on_canvas_double_click(self, event):
         ox, oy, w, h = self.img_rect
@@ -669,36 +977,211 @@ class MapPinEditorApp:
         pct_x = round(((event.x - ox) / float(w)) * 100.0, 1)
         pct_y = round(((event.y - oy) / float(h)) * 100.0, 1)
 
-        next_id = max([p.get("id", 0) for p in self.points], default=0) + 1
-        new_point = {
-            "id": next_id,
-            "name": f"Lugar {next_id}",
-            "label": f"LUGAR {next_id}",
-            "distance": "1.0 km",
-            "category": "Interés",
-            "time": "10 minutos",
-            "img": "images/inn/ubicacion/nuevo.jpg",
-            "x": pct_x,
-            "y": pct_y,
-        }
-        self.points.append(new_point)
-        self.selected_index = len(self.points) - 1
-        self._update_all_views()
-        self.redraw_canvas()
-        self.status_var.set(f"Nuevo pin #{next_id} agregado en x={pct_x}%, y={pct_y}%")
+        # Si se mantiene Shift presionado, coloca el Pin Principal aquí
+        if event.state & 0x0001:
+            self.on_place_reference_pin_at(pct_x, pct_y)
+            return
+
+        self._add_point_at(pct_x, pct_y)
 
     def on_canvas_right_click(self, event):
+        ox, oy, w, h = self.img_rect
+        if w <= 0 or h <= 0:
+            return
+        pct_x = round(max(0.0, min(100.0, ((event.x - ox) / float(w)) * 100.0)), 1)
+        pct_y = round(max(0.0, min(100.0, ((event.y - oy) / float(h)) * 100.0)), 1)
+
+        menu = tk.Menu(self.root, tearoff=0, bg=COLOR_SIDEBAR, fg="#ffffff")
+
+        # Clic sobre Pin Principal
+        if self._is_ref_pin_at_coords(event.x, event.y):
+            self.is_ref_selected = True
+            self.selected_index = -1
+            self.pins_listbox.selection_clear(0, tk.END)
+            self._update_ref_panel_visuals()
+            self.redraw_canvas()
+
+            menu.add_command(label="🎯 Seleccionar Pin Principal", command=self.on_add_or_select_reference_pin)
+            menu.add_command(label="📋 Copiar JSX Pin Principal", command=self.on_copy_reference_pin_jsx)
+            menu.add_separator()
+            menu.add_command(label="🗑️ Quitar Pin Principal", command=self.on_remove_reference_pin)
+            menu.post(event.x_root, event.y_root)
+            return
+
+        # Clic sobre un pin normal
         idx = self._find_pin_at_coords(event.x, event.y)
         if idx != -1:
             self.selected_index = idx
+            self.is_ref_selected = False
             self._select_in_listbox(idx)
             self._populate_form_from_selected()
+            self._update_ref_panel_visuals()
             self.redraw_canvas()
 
-            menu = tk.Menu(self.root, tearoff=0, bg=COLOR_SIDEBAR, fg="#ffffff")
             menu.add_command(label="🗑️ Eliminar este Pin", command=self.on_delete_selected_pin)
             menu.add_command(label="📋 Duplicar Pin", command=self.on_duplicate_selected_pin)
             menu.post(event.x_root, event.y_root)
+            return
+
+        # Clic en espacio vacío del mapa
+        menu.add_command(
+            label=f"➕ Agregar Punto de Interés aquí ({pct_x}%, {pct_y}%)",
+            command=lambda: self._add_point_at(pct_x, pct_y)
+        )
+        menu.add_command(
+            label=f"⭐ Colocar Pin Principal aquí ({pct_x}%, {pct_y}%)",
+            command=lambda: self.on_place_reference_pin_at(pct_x, pct_y)
+        )
+        menu.add_separator()
+        bg_menu = tk.Menu(menu, tearoff=0, bg=COLOR_SIDEBAR, fg="#ffffff")
+        for name, hex_val in self.bg_presets.items():
+            bg_menu.add_command(label=f"{name} ({hex_val})", command=lambda h=hex_val: self.set_canvas_bg_color(h))
+        bg_menu.add_separator()
+        bg_menu.add_command(label="🖌️ Elegir Color...", command=self.on_choose_custom_bg_color)
+        menu.add_cascade(label="🎨 Cambiar Color de Fondo", menu=bg_menu)
+        menu.post(event.x_root, event.y_root)
+
+    # -------------------------------------------------------------
+    # Selector de Color de Fondo
+    # -------------------------------------------------------------
+    def set_canvas_bg_color(self, color_hex):
+        if not color_hex:
+            return
+        self.canvas_bg_color = color_hex
+        if hasattr(self, "canvas"):
+            self.canvas.configure(bg=color_hex)
+        if hasattr(self, "canvas_frame"):
+            self.canvas_frame.configure(bg=color_hex)
+        if hasattr(self, "btn_bg_swatch"):
+            self.btn_bg_swatch.configure(bg=color_hex, activebackground=color_hex)
+        matched = False
+        for name, hex_val in self.bg_presets.items():
+            if hex_val.lower() == color_hex.lower():
+                self.bg_combo_var.set(name)
+                matched = True
+                break
+        if not matched:
+            self.bg_combo_var.set("Personalizado...")
+        self.status_var.set(f"🎨 Color de fondo cambiado a {color_hex}")
+
+    def on_bg_preset_selected(self, event=None):
+        selected = self.bg_combo_var.get()
+        if selected == "Personalizado...":
+            self.on_choose_custom_bg_color()
+        elif selected in self.bg_presets:
+            self.set_canvas_bg_color(self.bg_presets[selected])
+
+    def on_choose_custom_bg_color(self):
+        color = colorchooser.askcolor(color=self.canvas_bg_color, title="Seleccionar Color de Fondo del Mapa")
+        if color and color[1]:
+            self.set_canvas_bg_color(color[1])
+
+    # -------------------------------------------------------------
+    # Métodos del Pin Principal del Proyecto
+    # -------------------------------------------------------------
+    def on_toggle_reference_pin(self):
+        enabled = self.show_reference_pin.get()
+        self.reference_pin["enabled"] = enabled
+        if not enabled:
+            self.is_ref_selected = False
+        self._update_ref_panel_visuals()
+        self.redraw_canvas()
+
+    def on_add_or_select_reference_pin(self):
+        if not self.reference_pin.get("enabled"):
+            self.reference_pin["enabled"] = True
+            if self.reference_pin.get("x", 0) == 0 and self.reference_pin.get("y", 0) == 0:
+                self.reference_pin["x"] = 50.0
+                self.reference_pin["y"] = 50.0
+            self.show_reference_pin.set(True)
+            self.status_var.set("⭐ Pin Principal del proyecto activado. Arrástralo a su ubicación en el mapa.")
+        else:
+            self.status_var.set("⭐ Pin Principal seleccionado. Puedes arrastrarlo en el mapa o editar sus coordenadas.")
+
+        self.is_ref_selected = True
+        self.selected_index = -1
+        self.pins_listbox.selection_clear(0, tk.END)
+        self._sync_ref_vars()
+        self._update_ref_panel_visuals()
+        self.redraw_canvas()
+
+    def on_remove_reference_pin(self):
+        self.reference_pin["enabled"] = False
+        self.show_reference_pin.set(False)
+        self.is_ref_selected = False
+        self._update_ref_panel_visuals()
+        self.redraw_canvas()
+        self.status_var.set("Pin Principal deshabilitado del mapa.")
+
+    def on_place_reference_pin_at(self, pct_x, pct_y):
+        self.reference_pin["enabled"] = True
+        self.reference_pin["x"] = round(pct_x, 1)
+        self.reference_pin["y"] = round(pct_y, 1)
+        self.show_reference_pin.set(True)
+        self.is_ref_selected = True
+        self.selected_index = -1
+        self.pins_listbox.selection_clear(0, tk.END)
+        self._sync_ref_vars()
+        self._update_ref_panel_visuals()
+        self.redraw_canvas()
+        self.status_var.set(f"⭐ Pin Principal ubicado en x={self.reference_pin['x']}%, y={self.reference_pin['y']}%")
+
+    def on_ref_field_changed(self, event=None):
+        self.reference_pin["name"] = self.ref_name_var.get()
+        self.redraw_canvas()
+
+    def on_ref_spin_changed(self, event=None):
+        try:
+            self.reference_pin["x"] = round(float(self.ref_x_var.get()), 1)
+            self.reference_pin["y"] = round(float(self.ref_y_var.get()), 1)
+        except ValueError:
+            return
+        self._update_ref_panel_visuals()
+        self.redraw_canvas()
+
+    def _sync_ref_vars(self):
+        self.ref_name_var.set(self.reference_pin.get("name", "PROYECTO INN"))
+        self.ref_x_var.set(self.reference_pin.get("x", 40.0))
+        self.ref_y_var.set(self.reference_pin.get("y", 68.1))
+
+    def _update_ref_panel_visuals(self):
+        enabled = self.reference_pin.get("enabled", True) and self.show_reference_pin.get()
+        if hasattr(self, "ref_status_lbl"):
+            if enabled:
+                rx = self.reference_pin.get("x", 0.0)
+                ry = self.reference_pin.get("y", 0.0)
+                self.ref_status_lbl.config(text=f"Activo: ({rx}%, {ry}%)", fg=COLOR_GOLD)
+                self.btn_add_ref.config(text="🎯 Seleccionar")
+            else:
+                self.ref_status_lbl.config(text="Inactivo / Sin agregar", fg=COLOR_MUTED)
+                self.btn_add_ref.config(text="➕ Agregar")
+
+    def _generate_ref_pin_jsx(self):
+        ref_name = self.reference_pin.get("name", "Proyecto INN")
+        ref_x = self.reference_pin.get("x", 40.0)
+        ref_y = self.reference_pin.get("y", 68.1)
+        code = (
+            f"{{/* Pin {ref_name} */}}\n"
+            f"<div\n"
+            f"  className=\"lb-inn-map__pin-inn position-absolute\"\n"
+            f"  style={{{{ left: '{ref_x}%', top: '{ref_y}%' }}}}\n"
+            f"  title=\"{ref_name}\"\n"
+            f">\n"
+            f"  <img\n"
+            f"    src={{`${{base}}images/inn/pin_logo.png`}}\n"
+            f"    alt=\"{ref_name}\"\n"
+            f"    className=\"lb-inn-map__pin-inn-img\"\n"
+            f"  />\n"
+            f"</div>"
+        )
+        return code
+
+    def on_copy_reference_pin_jsx(self):
+        code = self._generate_ref_pin_jsx()
+        self.root.clipboard_clear()
+        self.root.clipboard_append(code)
+        self.root.update()
+        self.status_var.set("✅ ¡Código JSX del Pin Principal copiado al portapapeles exitosamente!")
 
     # -------------------------------------------------------------
     # Sincronización Formulario y Lista
@@ -769,6 +1252,7 @@ class MapPinEditorApp:
             self.redraw_canvas()
 
     def on_add_new_pin(self):
+        ensure_default_point_image()
         next_id = max([p.get("id", 0) for p in self.points], default=0) + 1
         new_point = {
             "id": next_id,
@@ -777,7 +1261,7 @@ class MapPinEditorApp:
             "distance": "1.0 km",
             "category": "Interés",
             "time": "10 minutos",
-            "img": "images/inn/ubicacion/nuevo.jpg",
+            "img": DEFAULT_NEW_POINT_IMG,
             "x": 50.0,
             "y": 50.0,
         }

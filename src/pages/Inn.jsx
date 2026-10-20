@@ -100,12 +100,13 @@ const ESPACIOS_COMUNES_SLIDES = [
 ]
 
 const LOCATION_POINTS = [
-  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/ubicacion/Mesa_Tropera_AI.jpg', x: 10.7, y: 49.9 },
-  { id: 2, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/ubicacion/Supermercado_Jumbo_AI.jpg', x: 85.3, y: 66.4 },
-  { id: 3, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/ubicacion/Casino_Dreams_01_IA.jpg', x: 15.7, y: 54.7 },
-  { id: 4, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/ubicacion/Cassis_IA.jpg', x: 14.7, y: 51.3 },
-  { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 5.1, y: 52.6 },
-  { id: 6, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/ubicacion/La Olla_IA.jpg', x: 79.3, y: 81.1 },
+  { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/ubicacion/Mesa_Tropera_AI.jpg', x: 15.1, y: 33.2 },
+  { id: 2, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/ubicacion/Supermercado_Jumbo_AI.jpg', x: 66.9, y: 55.1 },
+  { id: 3, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/ubicacion/Casino_Dreams_01_IA.jpg', x: 15.9, y: 46.9 },
+  { id: 4, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/ubicacion/Cassis_IA.jpg', x: 14.9, y: 44.2 },
+  { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 9.3, y: 47.7 },
+  { id: 6, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/ubicacion/La Olla_IA.jpg', x: 63.4, y: 75.6 },
+  { id: 7, name: 'Costane', label: 'Costanera', distance: '1.0 km', category: 'Interés', time: '10 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 15.6, y: 40.1 },
 ]
 
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
@@ -185,7 +186,7 @@ const MAP = {
   // description: 'Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. Desde INN, basta cruzar la calle para recorrer la costanera, disfrutar un café de especialidad, salir a navegar o vivir nuevas aventuras junto al lago. Puerto Varas también invita a descubrir una reconocida propuesta gastronómica, recorrer sus calles y conectar con la naturaleza que define al sur de Chile. Y cuando quieras ir más allá, estás en un punto ideal para explorar destinos como Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para hacer del paisaje, la gastronomía, la aventura y la vida al aire libre parte de tu día a día.',
   descriptionHtml: `<p>Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. A un paso de INN, la costanera invita a caminar, disfrutar un café de especialidad, navegar o vivir nuevas aventuras.</p>
   <p>Puerto Varas ofrece también una reconocida gastronomía, calles con identidad y una conexión permanente con la naturaleza del sur de Chile. Desde aquí se abren rutas hacia Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para integrar paisaje, gastronomía, aventura y vida al aire libre día a día</p>`,
-  image: 'images/inn/Muestra-Mapa.jpg',
+  image: 'images/inn/Mapa_Ok_Sitio.png',
   logo: 'images/inn/E_titulo.png',
   btnText: 'Experiencias',
   address: 'Vicente Pérez Rosales 991, Puerto Varas',
@@ -256,13 +257,19 @@ const InnGalleryCarousel = memo(function InnGalleryCarousel({
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
-                        src={`${base}${loc.img}`}
+                        src={loc.img ? `${base}${loc.img}` : `${base}images/inn/ubicacion/nuevo.jpg`}
                         alt={loc.name}
                         className="d-block w-100 lb-inn-gallery__img"
                         loading="lazy"
+                        onError={(e) => {
+                          const fallback = `${base}images/inn/ubicacion/nuevo.jpg`
+                          if (e.currentTarget.src !== fallback) {
+                            e.currentTarget.src = fallback
+                          }
+                        }}
                       />
                       <a
-                        href={`${base}${loc.img}`}
+                        href={loc.img ? `${base}${loc.img}` : `${base}images/inn/ubicacion/nuevo.jpg`}
                         data-fancybox="inn-galeria"
                         className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
@@ -741,14 +748,15 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
                     />
 
                     {/* Pin INN */}
+                    {/* Pin PROYECTO INN */}
                     <div
                       className="lb-inn-map__pin-inn position-absolute"
-                      style={{ left: '40.0%', top: '68.1%' }}
-                      title="Proyecto INN - Vicente Pérez Rosales 991"
+                      style={{ left: '33.3%', top: '72.4%' }}
+                      title="PROYECTO INN"
                     >
                       <img
                         src={`${base}images/inn/pin_logo.png`}
-                        alt="Proyecto INN - Vicente Pérez Rosales 991"
+                        alt="PROYECTO INN"
                         className="lb-inn-map__pin-inn-img"
                       />
                     </div>

@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.154] - 2026-10-20
+
+### Added
+- `public/images/inn/ubicacion/nuevo.jpg`: Creada imagen de alta resolución (1200x675) de Puerto Varas (Costanera, Lago Llanquihue y Volcán Osorno) para servir como imagen por defecto y placeholder visual para nuevos puntos de interés.
+- `tools/map_pin_editor/main.py`:
+  - **Auto-generación de imagen por defecto:** Implementada función `ensure_default_point_image()` que garantiza la existencia física de `public/images/inn/ubicacion/nuevo.jpg`.
+  - **Sincronización en creación y guardado:** Al añadir nuevos puntos (`_add_point_at` y `on_add_new_pin`) o guardar directamente en JSX (`on_save_directly_to_jsx`), verifica y genera automáticamente cualquier imagen referenciada inexistente para prevenir errores 404 en la web.
+- `src/pages/Inn.jsx`:
+  - **Fallback visual en carrusel:** En `InnGalleryCarousel`, añadido manejo `onError` y fallback a `images/inn/ubicacion/nuevo.jpg` tanto en `<img />` como en el enlace Fancybox, asegurando que ningún punto muestre imágenes rotas.
+
+## [0.9.153] - 2026-10-20
+
+### Fixed
+- `tools/map_pin_editor/main.py`:
+  - **Eliminación del lag al arrastrar pines:** Se optimizó radicalmente el ciclo de renderizado durante eventos `<B1-Motion>`:
+    - Se separó el dibujo de los pines (`redraw_pins`) del redimensionamiento de la imagen de fondo (`redraw_canvas`), evitando ejecutar costosos remuestreos Lanczos de alta resolución en cada píxel de movimiento.
+    - Se incorporó caché dimensional `_cached_image_size` para la imagen base de Tkinter, redimensionándola únicamente al alterar el tamaño de la ventana o lienzo.
+    - Se pospusieron las actualizaciones pesadas de UI (`_refresh_listbox_item`, `_update_ref_panel_visuals`, `_update_code_preview`) para el evento `<ButtonRelease-1>`, logrando arrastre de pines fluido a 60+ FPS sin demora.
+
+## [0.9.152] - 2026-10-20
+
+### Added
+- `tools/map_pin_editor/main.py`:
+  - **Selector de color de fondo del lienzo:** Combobox con preajustes rápidos (Oscuro, Grafito, Gris, Claro, Blanco) y swatch de color interactivo que abre diálogo nativo `colorchooser.askcolor`.
+  - **Menú contextual dinámico:** Submenú en clic derecho sobre el mapa ("🎨 Cambiar Color de Fondo") para cambiar el fondo directamente sobre el lienzo.
+  - Sincronización visual inmediata del área de trabajo para facilitar contraste con planos transparentes, mapas oscuros o claros.
+- `tools/map_pin_editor/README.md`: Documentado el nuevo selector de color de fondo del lienzo.
+
+## [0.9.151] - 2026-10-20
+
+### Added
+- `tools/map_pin_editor/main.py`:
+  - **Pin Principal Interactivo:** Soporte completo para agregar, seleccionar, posicionar y reubicar interactivamente el pin principal del proyecto sobre el mapa.
+  - **Panel dedicado en Sidebar:** Bloque con estado ("⭐ Pin Principal del Proyecto"), botón de activación/selección, eliminación, edición de nombre, ajuste fino de coordenadas X% e Y% con spinboxes, y botón para copiar snippet JSX (`<div className="lb-inn-map__pin-inn ...">`).
+  - **Interacción en Canvas:** Selección visual diferenciada (anillo dorado resplandeciente con estrella central y badge de coordenadas), arrastre interactivo en tiempo real con recálculo continuo de coordenadas porcentuales.
+  - **Menú contextual (clic derecho):** Opciones para "⭐ Colocar Pin Principal aquí", "🎯 Seleccionar y Mover Pin Principal", "📋 Copiar JSX Pin Principal" y "🗑️ Quitar Pin Principal".
+  - **Sincronización bidireccional:** Al guardar directamente en `Inn.jsx`, sincroniza tanto el array `LOCATION_POINTS` como los estilos de posición `left/top` del pin principal.
+- `tools/map_pin_editor/README.md`: Documentadas las nuevas capacidades interactivas y atajos para gestionar el pin principal del proyecto.
+
 ## [0.9.150] - 2026-10-19
 
 ### Removed
