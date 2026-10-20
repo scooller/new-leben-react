@@ -93,7 +93,7 @@ const ESPACIOS_COMUNES_SLIDES = [
   { navId: 'hall', img: 'images/inn/eecc/EECC_Hall_Acceso_Edificio.jpg', link: 'images/inn/eecc/EECC_Hall_Acceso_Edificio.jpg', alt: 'Hall de acceso' },
   { navId: 'atrio', img: 'images/inn/eecc/EECC_03.jpg', link: 'images/inn/eecc/EECC_Atrio_2.png', alt: 'Atrio' },
   { navId: 'gourmet', img: 'images/inn/eecc/EECC_01.jpg', link: 'images/inn/eecc/EECC_Quincho_Gourmet.jpg', alt: 'Gourmet + Quincho equipado' },
-  { navId: 'training', img: 'images/inn/eecc/EECC_03.jpg', alt: 'Training Zone' },
+  { navId: 'training', img: 'images/inn/eecc/EECC_Training_Zone.jpg', alt: 'Training Zone' },
   { navId: 'jacuzzi', img: 'images/inn/eecc/EECC_Terraza_Jacuzzi.jpg', alt: 'Jacuzzi exterior', link: 'images/inn/eecc/EECC_Terraza_Jacuzzi_2.jpg' },
   { navId: 'piscina', img: 'images/inn/eecc/EECC_Piscina_Climatizada.jpg', alt: 'Piscina climatizada' },
   { navId: 'bodega', img: 'images/inn/eecc/EECC_02.jpg', link: 'images/inn/eecc/EECC_Bodega_Nautica.jpg', alt: 'Bodega náutica' },
@@ -110,7 +110,7 @@ const LOCATION_POINTS = [
   // Pin MALL con dirección hacia abajo ('down') para optimizar espacio y evitar solapamiento
   { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 9.3, y: 47.7, direction: 'down' },
   { id: 6, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/ubicacion/La Olla_IA.jpg', x: 63.4, y: 75.6 },
-  { id: 7, name: 'Costane', label: 'Costanera', distance: '1.0 km', category: 'Interés', time: '10 minutos', img: 'images/inn/ubicacion/nuevo.jpg', x: 15.6, y: 40.1 },
+  { id: 7, name: 'Costane', label: 'Costanera', distance: '1.0 km', category: 'Interés', time: '10 minutos', img: 'images/inn/ubicacion/Costanera_2_IA.jpg', x: 15.6, y: 40.1 },
 ]
 
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
