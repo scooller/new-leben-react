@@ -839,8 +839,14 @@ $inn-map-card-bg: #f6f1eb;
   &__pin {
     --dot-size: 1.25rem;
     --line-length: clamp(0.75rem, 1.2vw, 1.15rem);
+    --pin-tx: calc(-1 * var(--dot-size) / 2);
+    --pin-ty: -50%;
+    --pin-origin: calc(var(--dot-size) / 2) 50%;
+    --pin-scale: 1;
+
     position: absolute;
-    transform: translate(calc(-1 * var(--dot-size) / 2), -50%);
+    transform: translate(var(--pin-tx), var(--pin-ty)) scale(var(--pin-scale));
+    transform-origin: var(--pin-origin);
     display: inline-flex;
     align-items: center;
     background: transparent;
@@ -858,7 +864,7 @@ $inn-map-card-bg: #f6f1eb;
     &::before {
       content: '';
       position: absolute;
-      inset: -8px -12px -8px -8px;
+      inset: -10px;
       border-radius: $lb-radius-pill;
       pointer-events: auto;
     }
@@ -870,7 +876,7 @@ $inn-map-card-bg: #f6f1eb;
 
     &:hover,
     &:focus-visible {
-      transform: translate(calc(-1 * var(--dot-size) / 2), -50%) scale(1.08);
+      --pin-scale: 1.08;
       z-index: 50 !important;
 
       .lb-inn-map__pin-dot-wrap {
@@ -888,7 +894,7 @@ $inn-map-card-bg: #f6f1eb;
     }
 
     &.active {
-      transform: translate(calc(-1 * var(--dot-size) / 2), -50%) scale(1.1);
+      --pin-scale: 1.1;
       z-index: 40;
 
       .lb-inn-map__pin-dot-wrap {
@@ -910,6 +916,64 @@ $inn-map-card-bg: #f6f1eb;
         border-color: $inn-gold;
         font-weight: 700;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    // Modificadores de orientación: default / derecha
+    &--right,
+    &--derecha {
+      flex-direction: row;
+      --pin-tx: calc(-1 * var(--dot-size) / 2);
+      --pin-ty: -50%;
+      --pin-origin: calc(var(--dot-size) / 2) 50%;
+
+      .lb-inn-map__pin-line {
+        width: var(--line-length, 1.15rem);
+        height: 1.5px;
+      }
+    }
+
+    // Orientación izquierda
+    &--left,
+    &--izquierda {
+      flex-direction: row-reverse;
+      --pin-tx: calc(-100% + var(--dot-size) / 2);
+      --pin-ty: -50%;
+      --pin-origin: calc(100% - var(--dot-size) / 2) 50%;
+
+      .lb-inn-map__pin-line {
+        width: var(--line-length, 1.15rem);
+        height: 1.5px;
+      }
+    }
+
+    // Orientación arriba
+    &--top,
+    &--up,
+    &--arriba {
+      flex-direction: column-reverse;
+      --pin-tx: -50%;
+      --pin-ty: calc(-100% + var(--dot-size) / 2);
+      --pin-origin: 50% calc(100% - var(--dot-size) / 2);
+
+      .lb-inn-map__pin-line {
+        width: 1.5px;
+        height: var(--line-length, 1.15rem);
+      }
+    }
+
+    // Orientación abajo
+    &--bottom,
+    &--down,
+    &--abajo {
+      flex-direction: column;
+      --pin-tx: -50%;
+      --pin-ty: calc(-1 * var(--dot-size) / 2);
+      --pin-origin: 50% calc(var(--dot-size) / 2);
+
+      .lb-inn-map__pin-line {
+        width: 1.5px;
+        height: var(--line-length, 1.15rem);
       }
     }
   }
@@ -979,7 +1043,7 @@ $inn-map-card-bg: #f6f1eb;
   &__pin-inn {
     position: absolute;
     transform: translate(-50%, -100%);
-    width: 9%;
+    width: 6%;
     min-width: 65px;
     max-width: 95px;
     z-index: 25;

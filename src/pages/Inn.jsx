@@ -94,19 +94,23 @@ const ESPACIOS_COMUNES_SLIDES = [
   { navId: 'atrio', img: 'images/inn/eecc/EECC_03.jpg', link: 'images/inn/eecc/EECC_Atrio_2.png', alt: 'Atrio' },
   { navId: 'gourmet', img: 'images/inn/eecc/EECC_01.jpg', link: 'images/inn/eecc/EECC_Quincho_Gourmet.jpg', alt: 'Gourmet + Quincho equipado' },
   { navId: 'training', img: 'images/inn/eecc/EECC_03.jpg', alt: 'Training Zone' },
-  { navId: 'jacuzzi', img: 'images/inn/eecc/EECC_02.jpg', alt: 'Jacuzzi exterior' },
+  { navId: 'jacuzzi', img: 'images/inn/eecc/EECC_Terraza_Jacuzzi.jpg', alt: 'Jacuzzi exterior', link: 'images/inn/eecc/EECC_Terraza_Jacuzzi_2.jpg' },
   { navId: 'piscina', img: 'images/inn/eecc/EECC_Piscina_Climatizada.jpg', alt: 'Piscina climatizada' },
   { navId: 'bodega', img: 'images/inn/eecc/EECC_02.jpg', link: 'images/inn/eecc/EECC_Bodega_Nautica.jpg', alt: 'Bodega náutica' },
 ]
 
+// Puntos de interés del mapa interactivo.
+// Orientación por defecto: derecha ('right').
+// Para cambiar dirección: direction: 'right' | 'left' | 'top' | 'bottom' (o 'down' / 'arriba' / 'abajo' / 'izquierda')
 const LOCATION_POINTS = [
   { id: 1, name: 'Mesa Tropera', label: 'MESA TROPERA', distance: '1.2 km', category: 'Gastronomía', time: '12 minutos', img: 'images/inn/ubicacion/Mesa_Tropera_AI.jpg', x: 15.1, y: 33.2 },
   { id: 2, name: 'Jumbo', label: 'JUMBO', distance: '1.5 km', category: 'Supermercado', time: '15 minutos', img: 'images/inn/ubicacion/Supermercado_Jumbo_AI.jpg', x: 66.9, y: 55.1 },
   { id: 3, name: 'Casino Dreams', label: 'CASINO DREAMS', distance: '2.3 km', category: 'Entretenimiento', time: '22 minutos', img: 'images/inn/ubicacion/Casino_Dreams_01_IA.jpg', x: 15.9, y: 46.9 },
   { id: 4, name: 'Cassis', label: 'CASSIS', distance: '2.5 km', category: 'Cafetería', time: '25 minutos', img: 'images/inn/ubicacion/Cassis_IA.jpg', x: 14.9, y: 44.2 },
-  { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 9.3, y: 47.7 },
+  // Pin MALL con dirección hacia abajo ('down') para optimizar espacio y evitar solapamiento
+  { id: 5, name: 'Mall Paseo', label: 'MALL', distance: '3.1 km', category: 'Comercio', time: '30 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 9.3, y: 47.7, direction: 'down' },
   { id: 6, name: 'La Olla', label: 'LA OLLA', distance: '3.8 km', category: 'Gastronomía', time: '20 minutos', img: 'images/inn/ubicacion/La Olla_IA.jpg', x: 63.4, y: 75.6 },
-  { id: 7, name: 'Costane', label: 'Costanera', distance: '1.0 km', category: 'Interés', time: '10 minutos', img: 'images/inn/ubicacion/Paseo_Puerto_Varas_AI.jpg', x: 15.6, y: 40.1 },
+  { id: 7, name: 'Costane', label: 'Costanera', distance: '1.0 km', category: 'Interés', time: '10 minutos', img: 'images/inn/ubicacion/nuevo.jpg', x: 15.6, y: 40.1 },
 ]
 
 // Espacios para el modal "Conoce los espacios" con múltiples galerías (estructura de prueba)
@@ -764,6 +768,7 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
                     {/* Pines interactivos */}
                     {LOCATION_POINTS.map((point, index) => {
                       const isSelected = activeLocationIndex === index
+                      const dir = point.direction || point.dir || 'right'
                       return (
                         <button
                           key={point.id}
@@ -777,7 +782,7 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
                               handleSelectLocation(index)
                             }
                           }}
-                          className={`lb-inn-map__pin position-absolute ${isSelected ? 'active' : ''}`}
+                          className={`lb-inn-map__pin lb-inn-map__pin--${dir} position-absolute ${isSelected ? 'active' : ''}`}
                           style={{ left: `${point.x}%`, top: `${point.y}%` }}
                           aria-label={`${point.name} (${point.distance})`}
                         >

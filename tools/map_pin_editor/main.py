@@ -119,7 +119,7 @@ def parse_jsx_file(jsx_path):
         obj_matches = re.findall(r"\{([^}]+)\}", points_match.group(1))
         for obj_str in obj_matches:
             item = {}
-            for key in ["id", "name", "label", "distance", "category", "time", "img", "x", "y"]:
+            for key in ["id", "name", "label", "distance", "category", "time", "img", "x", "y", "direction", "dir"]:
                 m = re.search(rf"\b{key}\s*:\s*(?:'([^']*)'|\"([^\"]*)\"|([0-9.]+))", obj_str)
                 if m:
                     val = m.group(1) or m.group(2) or m.group(3)
@@ -133,8 +133,12 @@ def parse_jsx_file(jsx_path):
                             item[key] = round(float(val), 1)
                         except ValueError:
                             item[key] = 0.0
+                    elif key in ["direction", "dir"]:
+                        item["direction"] = val.lower().strip()
                     else:
                         item[key] = val
+            if "direction" not in item:
+                item["direction"] = "right"
             if "x" in item and "y" in item:
                 points.append(item)
 
@@ -463,6 +467,7 @@ class MapPinEditorApp:
             "id": tk.StringVar(),
             "name": tk.StringVar(),
             "label": tk.StringVar(),
+            "direction": tk.StringVar(value="right"),
             "category": tk.StringVar(),
             "distance": tk.StringVar(),
             "time": tk.StringVar(),
@@ -475,6 +480,7 @@ class MapPinEditorApp:
             ("ID:", "id", False),
             ("Nombre:", "name", True),
             ("Label (Pill):", "label", True),
+            ("Dirección:", "direction", True),
             ("Categoría:", "category", True),
             ("Distancia:", "distance", True),
             ("Tiempo:", "time", True),
@@ -484,12 +490,20 @@ class MapPinEditorApp:
         for row_idx, (label_text, var_name, editable) in enumerate(fields):
             lbl = tk.Label(form_frame, text=label_text, bg=COLOR_SIDEBAR, fg=COLOR_MUTED, font=("Segoe UI", 8, "bold"))
             lbl.grid(row=row_idx, column=0, sticky="w", pady=2)
-            ent = tk.Entry(form_frame, textvariable=self.form_vars[var_name], bg="#1c1e24", fg="#ffffff",
-                           insertbackground="#ffffff", relief=tk.FLAT, font=("Segoe UI", 9),
-                           state="normal" if editable else "readonly")
-            ent.grid(row=row_idx, column=1, sticky="ew", pady=2, padx=(6, 0))
-            if editable:
-                ent.bind("<KeyRelease>", self.on_form_field_changed)
+            if var_name == "direction":
+                cb = ttk.Combobox(
+                    form_frame, textvariable=self.form_vars[var_name],
+                    values=["right", "bottom", "left", "top"], state="readonly", font=("Segoe UI", 9)
+                )
+                cb.grid(row=row_idx, column=1, sticky="ew", pady=2, padx=(6, 0))
+                cb.bind("<<ComboboxSelected>>", self.on_form_field_changed)
+            else:
+                ent = tk.Entry(form_frame, textvariable=self.form_vars[var_name], bg="#1c1e24", fg="#ffffff",
+                               insertbackground="#ffffff", relief=tk.FLAT, font=("Segoe UI", 9),
+                               state="normal" if editable else "readonly")
+                ent.grid(row=row_idx, column=1, sticky="ew", pady=2, padx=(6, 0))
+                if editable:
+                    ent.bind("<KeyRelease>", self.on_form_field_changed)
 
         form_frame.columnconfigure(1, weight=1)
 
@@ -807,28 +821,67 @@ class MapPinEditorApp:
                                 fill=dot_color, outline=glow_color, width=1.5, tags=(f"pin_{idx}", "pin"))
         self.canvas.create_oval(cx - 2, cy - 2, cx + 2, cy + 2, fill="#ffffff", outline="", tags=(f"pin_{idx}", "pin"))
 
-        line_x1 = cx + dot_radius
-        line_x2 = line_x1 + line_len
-        line_color = COLOR_GOLD if is_selected else "#73777d"
-        self.canvas.create_line(line_x1, cy, line_x2, cy, fill=line_color, width=1.5, tags=(f"pin_{idx}", "pin"))
-
         font = ("Segoe UI", 8, "bold") if is_selected else ("Segoe UI", 8)
         pill_height = 18
         pad_x = 7
-
         char_w = 6.5
         text_w = max(35, len(badge_text) * char_w)
-        pill_x1 = line_x2
-        pill_x2 = pill_x1 + text_w + (pad_x * 2)
-        pill_y1 = cy - (pill_height / 2)
-        pill_y2 = cy + (pill_height / 2)
+        pill_w = text_w + (pad_x * 2)
+
+        line_color = COLOR_GOLD if is_selected else "#73777d"
+        dir_val = (point.get("direction") or point.get("dir") or "right").lower()
+
+        if dir_val in ("left", "izquierda"):
+            line_x1 = cx - dot_radius
+            line_x2 = line_x1 - line_len
+            self.canvas.create_line(line_x1, cy, line_x2, cy, fill=line_color, width=1.5, tags=(f"pin_{idx}", "pin"))
+            pill_x2 = line_x2
+            pill_x1 = pill_x2 - pill_w
+            pill_y1 = cy - (pill_height / 2)
+            pill_y2 = cy + (pill_height / 2)
+            text_x = pill_x1 + pad_x
+            text_y = cy
+            anchor = tk.W
+        elif dir_val in ("top", "arriba"):
+            line_y1 = cy - dot_radius
+            line_y2 = line_y1 - line_len
+            self.canvas.create_line(cx, line_y1, cx, line_y2, fill=line_color, width=1.5, tags=(f"pin_{idx}", "pin"))
+            pill_y2 = line_y2
+            pill_y1 = pill_y2 - pill_height
+            pill_x1 = cx - (pill_w / 2)
+            pill_x2 = cx + (pill_w / 2)
+            text_x = cx
+            text_y = (pill_y1 + pill_y2) / 2
+            anchor = tk.CENTER
+        elif dir_val in ("bottom", "abajo"):
+            line_y1 = cy + dot_radius
+            line_y2 = line_y1 + line_len
+            self.canvas.create_line(cx, line_y1, cx, line_y2, fill=line_color, width=1.5, tags=(f"pin_{idx}", "pin"))
+            pill_y1 = line_y2
+            pill_y2 = pill_y1 + pill_height
+            pill_x1 = cx - (pill_w / 2)
+            pill_x2 = cx + (pill_w / 2)
+            text_x = cx
+            text_y = (pill_y1 + pill_y2) / 2
+            anchor = tk.CENTER
+        else:  # right (default)
+            line_x1 = cx + dot_radius
+            line_x2 = line_x1 + line_len
+            self.canvas.create_line(line_x1, cy, line_x2, cy, fill=line_color, width=1.5, tags=(f"pin_{idx}", "pin"))
+            pill_x1 = line_x2
+            pill_x2 = pill_x1 + pill_w
+            pill_y1 = cy - (pill_height / 2)
+            pill_y2 = cy + (pill_height / 2)
+            text_x = pill_x1 + pad_x
+            text_y = cy
+            anchor = tk.W
 
         pill_bg = "#222630" if not is_selected else "#2c2616"
         pill_border = COLOR_GOLD if is_selected else "#545a67"
         text_color = COLOR_GOLD_HOVER if is_selected else "#ffffff"
 
         self.canvas.create_rectangle(pill_x1, pill_y1, pill_x2, pill_y2, fill=pill_bg, outline=pill_border, width=1, tags=(f"pin_{idx}", "pin"))
-        self.canvas.create_text(pill_x1 + pad_x, cy, anchor=tk.W, text=badge_text, fill=text_color, font=font, tags=(f"pin_{idx}", "pin"))
+        self.canvas.create_text(text_x, text_y, anchor=anchor, text=badge_text, fill=text_color, font=font, tags=(f"pin_{idx}", "pin"))
 
     # -------------------------------------------------------------
     # Mouse Events
@@ -864,15 +917,37 @@ class MapPinEditorApp:
             cy = oy + (p.get("y", 0) / 100.0) * h
 
             dist = ((click_x - cx) ** 2 + (click_y - cy) ** 2) ** 0.5
-            if dist <= 12:
+            if dist <= 14:
                 return idx
 
-            line_x1 = cx + 6
-            pill_x1 = line_x1 + 18
-            pill_x2 = pill_x1 + 120
-            pill_y1 = cy - 10
-            pill_y2 = cy + 10
-            if pill_x1 <= click_x <= pill_x2 and pill_y1 <= click_y <= pill_y2:
+            dir_val = (p.get("direction") or p.get("dir") or "right").lower()
+            badge_text = p.get("label") or p.get("name") or f"Pin #{p.get('id')}"
+            pill_w = max(35, len(badge_text) * 6.5) + 14
+            pill_h = 18
+            line_len = 18
+
+            if dir_val in ("left", "izquierda"):
+                px1 = (cx - 6 - line_len) - pill_w
+                px2 = cx - 6 - line_len
+                py1 = cy - 9
+                py2 = cy + 9
+            elif dir_val in ("top", "arriba"):
+                px1 = cx - pill_w / 2
+                px2 = cx + pill_w / 2
+                py1 = (cy - 6 - line_len) - pill_h
+                py2 = cy - 6 - line_len
+            elif dir_val in ("bottom", "abajo"):
+                px1 = cx - pill_w / 2
+                px2 = cx + pill_w / 2
+                py1 = cy + 6 + line_len
+                py2 = (cy + 6 + line_len) + pill_h
+            else:  # right
+                px1 = cx + 6 + line_len
+                px2 = px1 + pill_w
+                py1 = cy - 9
+                py2 = cy + 9
+
+            if (min(px1, px2) - 4) <= click_x <= (max(px1, px2) + 4) and (min(py1, py2) - 4) <= click_y <= (max(py1, py2) + 4):
                 return idx
         return -1
 
@@ -1225,15 +1300,21 @@ class MapPinEditorApp:
         if 0 <= self.selected_index < len(self.points):
             p = self.points[self.selected_index]
             for key, var in self.form_vars.items():
-                var.set(p.get(key, ""))
+                val = p.get(key, "")
+                if key == "direction" and not val:
+                    val = "right"
+                var.set(val)
         else:
-            for var in self.form_vars.values():
-                var.set("")
+            for key, var in self.form_vars.items():
+                if key == "direction":
+                    var.set("right")
+                else:
+                    var.set("")
 
     def on_form_field_changed(self, event=None):
         if 0 <= self.selected_index < len(self.points):
             p = self.points[self.selected_index]
-            for key in ["name", "label", "category", "distance", "time", "img"]:
+            for key in ["name", "label", "direction", "category", "distance", "time", "img"]:
                 p[key] = self.form_vars[key].get()
             self._refresh_listbox_item(self.selected_index)
             self._update_code_preview()
@@ -1258,6 +1339,7 @@ class MapPinEditorApp:
             "id": next_id,
             "name": f"Nuevo Lugar {next_id}",
             "label": f"LUGAR {next_id}",
+            "direction": "right",
             "distance": "1.0 km",
             "category": "Interés",
             "time": "10 minutos",
@@ -1298,11 +1380,13 @@ class MapPinEditorApp:
     def _generate_js_code(self):
         lines = ["const LOCATION_POINTS = ["]
         for p in self.points:
+            dir_val = p.get("direction") or p.get("dir")
+            dir_str = f", direction: '{dir_val}'" if dir_val and dir_val.lower() != "right" else ""
             line = (
                 f"  {{ id: {p.get('id', 1)}, name: '{p.get('name', '')}', "
                 f"label: '{p.get('label', '')}', distance: '{p.get('distance', '')}', "
                 f"category: '{p.get('category', '')}', time: '{p.get('time', '')}', "
-                f"img: '{p.get('img', '')}', x: {p.get('x', 0.0)}, y: {p.get('y', 0.0)} }},"
+                f"img: '{p.get('img', '')}', x: {p.get('x', 0.0)}, y: {p.get('y', 0.0)}{dir_str} }},"
             )
             lines.append(line)
         lines.append("]")

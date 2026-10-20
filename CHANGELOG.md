@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.157] - 2026-10-20
+
+### Added
+- `src/pages/Inn.jsx`:
+  - Añadido bloque de comentarios sobre la definición de `LOCATION_POINTS` detallando la orientación predeterminada (`right`) y opciones válidas (`direction: 'right' | 'left' | 'top' | 'bottom'`).
+
+## [0.9.156] - 2026-10-20
+
+### Changed
+- `src/pages/Inn.jsx`:
+  - Pin **MALL** (`Mall Paseo`) configurado con `direction: 'down'` y comentario explicativo para orientar su línea y etiqueta hacia abajo, evitando solapamientos visuales.
+- `src/styles/components/_inn.scss`:
+  - Agregados alias de clase `&--down` (equivalente a `--bottom`) y `&--up` (equivalente a `--top`) para soporte idiomático fluido.
+
+## [0.9.155] - 2026-10-20
+
+### Added
+- `src/styles/components/_inn.scss`:
+  - **Soporte multiorientación para pines del mapa:** Soporte para direcciones `right` (por defecto / derecha), `left` (izquierda), `top` (arriba) y `bottom` (abajo).
+  - Variables dinámicas de traslación (`--pin-tx`, `--pin-ty`), escala (`--pin-scale`) y punto de anclaje (`--pin-origin`) para que el punto central quede perfectamente fijado en las coordenadas exactas `(x%, y%)` sin desplazarse al hacer hover o selección activa.
+- `src/pages/Inn.jsx`:
+  - Enlace de clase `lb-inn-map__pin--${dir}` en cada pin según la propiedad `direction` o `dir` de cada elemento en `LOCATION_POINTS`, con valor por defecto `'right'`.
+- `tools/map_pin_editor/main.py`:
+  - **Selector de dirección en el editor:** Campo `Combobox` interactivo en el formulario ("Dirección:") con opciones `right`, `bottom`, `left`, `top`.
+  - **Previsualización visual y exportación:** Renderizado fiel en el lienzo Tkinter hacia cualquier orientación, detección de clics en el badge según la orientación activa, y exportación automática en la generación de código JS.
+
 ## [0.9.154] - 2026-10-20
 
 ### Added
