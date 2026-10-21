@@ -5,6 +5,9 @@
 @use '../variables' as *;
 @use 'bootstrap/scss/bootstrap' as bs;
 
+$table-width-desktop: 920px;
+$table-width-tablet: 900px;
+
 .lb-brokers {
   background: $lb-white;
   overflow-x: hidden;
@@ -74,6 +77,11 @@
       font-weight: $lb-heading-weight;
       line-height: 1.25;
       color: $lb-white;
+
+      .red,
+      .text-danger {
+        color: $lb-red;
+      }
     }
   }
 
@@ -94,6 +102,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      transform-origin: center;
       width: 37px;
       height: 37px;
       border-radius: 50%;
@@ -108,13 +117,16 @@
       cursor: pointer;
       transition: $lb-transition;
 
-      &:hover {
+      &:hover,
+      &:active,
+      &:focus,
+      &:focus-visible {
         background: darken($lb-red, 8%);
-        transform: translateY(-50%) scale(1.08);
+        transform: translateY(-50%) scale(1.08) !important;
       }
 
       &--prev {
-        left: -18px;
+        left: -3rem;
 
         @include bs.media-breakpoint-down(xl) {
           left: -10px;
@@ -122,7 +134,7 @@
       }
 
       &--next {
-        right: -18px;
+        right: -3rem;
 
         @include bs.media-breakpoint-down(xl) {
           right: -10px;
@@ -186,7 +198,11 @@
     &__header {
       display: grid;
       grid-template-columns: 550px repeat(3, 1fr);
-      min-width: 820px;
+      min-width: $table-width-desktop;
+
+      @include bs.media-breakpoint-down(lg) {
+        min-width: $table-width-tablet;
+      }
     }
 
     &__col-label {
@@ -256,7 +272,12 @@
       display: flex;
       flex-direction: row;
       min-height: 160px;
-      min-width: 820px;
+      min-width: $table-width-desktop;
+
+      @include bs.media-breakpoint-down(lg) {
+        min-width: $table-width-tablet;
+      }
+
       animation: fadeInTier 0.25s ease;
     }
 
@@ -281,11 +302,6 @@
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       white-space: nowrap;
-
-      @include bs.media-breakpoint-down(lg) {
-        writing-mode: horizontal-tb;
-        transform: none;
-      }
     }
 
     &__rows {

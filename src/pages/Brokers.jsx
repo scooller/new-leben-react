@@ -107,7 +107,10 @@ export default function Brokers() {
         >
           <div className="container">
             <ScrollAnim animation="fade-up" className="d-flex flex-column gap-4" style={{ maxWidth: '640px' }}>
-              <h1 className="lb-brokers-hero__title mb-0">{data.hero.title}</h1>
+              <h1
+                className="lb-brokers-hero__title mb-0"
+                dangerouslySetInnerHTML={{ __html: data.hero.title }}
+              />
               <p className="lead text-white text-opacity-90 mb-0">{data.hero.subtitle}</p>
               <div>
                 <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-pill shadow">
@@ -304,7 +307,7 @@ export default function Brokers() {
             <ScrollAnim animation="fade-up" className="card bg-black text-white border border-light border-opacity-10 rounded-4 p-4 p-md-5 mx-auto shadow-lg" style={{ maxWidth: '840px' }}>
               <div className="lb-brokers-section-heading text-center mb-3">
                 <p className="lb-eyebrow">{data.registration.eyebrow}</p>
-                <SplitTitle as="h2" text={data.registration.title} className="lb-brokers-registration__title" />
+                <SplitTitle as="h2" text={data.registration.title} className="lb-brokers-registration__title text-white" />
               </div>
               <p className="text-white text-opacity-75 text-center mb-4">{data.registration.description}</p>
               <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">

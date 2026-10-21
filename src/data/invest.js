@@ -8,7 +8,7 @@ export const investData = {
   // --- Hero Section ---
   hero: {
     eyebrow: 'LEBEN INVEST, INVIERTE INTELIGENTE',
-    title: 'Te ayudamos a tener tu nuevo depto de inversión SIN PIE*',
+    title: 'Te ayudamos a tener tu nuevo depto de inversión <b class="red">SIN PIE*</b>',
     subtitle:
       '*Compra sin pie es solo para créditos con 90% de aprobación. En Leben Invest tu inversión es segura.',
     ctaText: 'QUIERO INVERTIR',

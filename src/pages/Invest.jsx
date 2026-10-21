@@ -107,9 +107,10 @@ export default function Invest() {
               </ScrollAnim>
 
               <ScrollAnim animation="fade-up" delay={0.2}>
-                <h1 className="lb-invest-hero__title fw-semibold text-white mx-auto mb-3">
-                  {data.hero.title}
-                </h1>
+                <h1
+                  className="lb-invest-hero__title fw-semibold text-white mx-auto mb-3"
+                  dangerouslySetInnerHTML={{ __html: data.hero.title }}
+                />
               </ScrollAnim>
 
               <ScrollAnim animation="fade-up" delay={0.3}>

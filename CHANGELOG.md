@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.158] - 2026-10-21
+
+### Changed
+- `src/pages/Invest.jsx`:
+  - Renderizado de `data.hero.title` mediante `dangerouslySetInnerHTML` para permitir etiquetas HTML (`<b>`, `<span class="red">`, etc.).
+- `src/styles/components/_invest.scss`:
+  - Soporte de estilos para clases `.red` y `.text-danger` dentro de `.lb-invest-hero__title`.
+- `src/pages/Brokers.jsx` & `src/styles/components/_brokers.scss`:
+  - Soporte análogo de HTML y estilos de resalte para `data.hero.title` en la página de Brokers.
+
 ## [0.9.157] - 2026-10-20
 
 ### Added
