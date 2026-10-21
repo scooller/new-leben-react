@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.164] - 2026-10-21
+
+### Added
+- `src/lib/apiFetch.js`:
+  - **Caché en `sessionStorage`:** Las respuestas GET de la API se guardan en `sessionStorage` (`lb_api:<url>`) con TTL de 5 minutos, eliminando peticiones redundantes al navegar entre vistas o recargar en la misma sesión.
+  - **Deduplicación en vuelo (`inflight` Map):** Si múltiples componentes solicitan la misma URL simultáneamente (como `/api/v1/proyectos`), comparten la misma promesa y disparan una sola llamada de red.
+  - **Función de purga `clearApiCache()`:** Permite invalidar selectiva o totalmente el caché de sesión ante cambios explícitos.
+
 ## [0.9.163] - 2026-10-21
 
 ### Fixed
