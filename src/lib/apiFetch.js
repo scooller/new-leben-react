@@ -21,11 +21,9 @@ export async function apiFetch(url, options = {}) {
 
     const json = await r.json()
 
-    if (!json?.data) {
-      return { data: null, error: 'Respuesta sin data' }
-    }
+    const meta = json.meta || (json.last_page ? { total: json.total, last_page: json.last_page } : null)
 
-    return { data: json.data, error: null }
+    return { data: json.data, error: null, meta }
   } catch {
     return { data: null, error: 'Error de conexión' }
   }

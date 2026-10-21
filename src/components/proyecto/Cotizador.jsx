@@ -143,18 +143,48 @@ const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
 const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '' })
 const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
 
-/** Paginate through all available plantas from a base URL */
+// Module-level cache for plantas (keyed by baseUrl)
+const plantasCache = new Map()
+
+/** Paginate through all available plantas from a base URL with parallel fetching */
 async function fetchPages(baseUrl) {
-  const all = []
-  let page = 1
-  while (true) {
-    const { data, error } = await apiFetch(`${baseUrl}&perPage=100&page=${page}`)
-    if (error || !Array.isArray(data) || data.length === 0) break
-    all.push(...data)
-    if (data.length < 100) break
-    page++
+  if (plantasCache.has(baseUrl)) {
+    return plantasCache.get(baseUrl)
   }
-  return all.filter((p) => p.is_available)
+
+  const firstRes = await apiFetch(`${baseUrl}&perPage=100&page=1`)
+  if (firstRes.error || !Array.isArray(firstRes.data) || firstRes.data.length === 0) {
+    return []
+  }
+
+  const all = [...firstRes.data]
+  const lastPage = firstRes.meta?.last_page || (firstRes.data.length < 100 ? 1 : null)
+
+  if (lastPage && lastPage > 1) {
+    const pagePromises = []
+    for (let p = 2; p <= lastPage; p++) {
+      pagePromises.push(apiFetch(`${baseUrl}&perPage=100&page=${p}`))
+    }
+    const results = await Promise.all(pagePromises)
+    for (const r of results) {
+      if (Array.isArray(r.data)) {
+        all.push(...r.data)
+      }
+    }
+  } else if (!lastPage) {
+    let page = 2
+    while (true) {
+      const { data, error } = await apiFetch(`${baseUrl}&perPage=100&page=${page}`)
+      if (error || !Array.isArray(data) || data.length === 0) break
+      all.push(...data)
+      if (data.length < 100) break
+      page++
+    }
+  }
+
+  const available = all.filter((p) => p.is_available)
+  plantasCache.set(baseUrl, available)
+  return available
 }
 
 /** Dropdown filter component */
@@ -328,19 +358,34 @@ export default function Cotizador({
     if (!universal && !apiId) { setPlantas([]); return }
     const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion || selection?.filters)
     if (universal && !universalHasFilter) { setPlantas([]); return }
-    let cancelled = false
-    setLoading(true)
+
+    const universalUrl = '/api/v1/plantas?disponible=1'
+    const matchedProject = universal && filters.proyecto
+      ? (projects || []).find((p) => norm(p.name) === norm(filters.proyecto))
+      : null
 
     const url = universal
-      ? '/api/v1/plantas?disponible=1'
+      ? (plantasCache.has(universalUrl) || !matchedProject?.id
+          ? universalUrl
+          : `/api/v1/plantas?proyecto_id=${matchedProject.id}&disponible=1`)
       : `/api/v1/plantas?proyecto_id=${apiId}&disponible=1`
+
+    // Instant cache hit — no spinner flash
+    if (plantasCache.has(url)) {
+      setPlantas(plantasCache.get(url))
+      setLoading(false)
+      return
+    }
+
+    let cancelled = false
+    setLoading(true)
 
     fetchPages(url).then((all) => {
       if (!cancelled) setPlantas(all)
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters])
+  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters, projects])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {

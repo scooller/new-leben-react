@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.162] - 2026-10-21
+
+### Performance
+- `src/lib/apiFetch.js`:
+  - Retorno de metadatos de paginación (`last_page`, `total`) para permitir optimizaciones de carga.
+- `src/components/proyecto/Cotizador.jsx`:
+  - **Paginación paralela:** Páginas 2 a N se descargan en paralelo vía `Promise.all` en lugar de peticiones en serie secuenciales, reduciendo la espera de ~7s a ~1.8s.
+  - **Caché en memoria (`plantasCache`):** Reutilización de listas de plantas ya descargadas para que cualquier cambio subsiguiente de filtros responda en 0ms sin parpadeos de carga.
+  - **Consulta directa por `proyecto_id`:** En modo universal, cuando se selecciona un proyecto específico, se solicita únicamente dicho proyecto (`?proyecto_id=X`), acelerando la primera búsqueda a ~400ms.
+
 ## [0.9.161] - 2026-10-21
 
 ### Removed
