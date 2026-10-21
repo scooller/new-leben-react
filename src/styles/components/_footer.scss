@@ -129,6 +129,11 @@ a {
   &:focus-visible {
     color: $lb-red;
   }
+
+  &.active {
+    color: $lb-red;
+    font-weight: 600;
+  }
 }
 
 .lb-social-row {

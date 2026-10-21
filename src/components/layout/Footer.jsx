@@ -1,6 +1,7 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { footerContent } from '../../data/content.js'
+import { slugAliases } from '../../data/staticPages.js'
 import { hover } from '../icons/animated-icon.jsx'
 import { MapPinIcon } from '../icons/map-pin.jsx'
 import { ClockIcon } from '../icons/clock.jsx'
@@ -19,6 +20,25 @@ const socialIcons = {
 
 export default function Footer() {
   const { legal, address, schedule, phone, email, social, socialLinks, copyright } = footerContent
+
+  const location = useLocation()
+  const currentPath = location.pathname.replace(/\/$/, '') || '/'
+
+  const isLinkActive = (to) => {
+    if (!to) return false
+    const target = to.replace(/\/$/, '')
+    if (currentPath === target) return true
+
+    const cleanCurrent = currentPath.replace(/^\//, '')
+    const cleanTarget = target.replace(/^\//, '')
+    const resolvedCurrent = slugAliases[cleanCurrent] || cleanCurrent
+    const resolvedTarget = slugAliases[cleanTarget] || cleanTarget
+
+    if (resolvedCurrent && resolvedCurrent === resolvedTarget) return true
+    if ((target === '/cookies' || target === '/politica-de-cookies') && (currentPath === '/cookies' || currentPath === '/politica-de-cookies')) return true
+
+    return false
+  }
 
   const mapRef = useRef(null)
   const clockRef = useRef(null)
@@ -132,11 +152,27 @@ export default function Footer() {
         {/* Información Corporativa */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-corporate-strip text-center text-md-start">
           <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 ms-auto">
-            {corporateLinks.map((link) => (
-              <Link key={link.label} to={link.to} className="lb-footer-link">
-                {link.label}
-              </Link>
-            ))}
+            {corporateLinks.map((link) =>
+              link.to ? (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className={`lb-footer-link ${isLinkActive(link.to) ? 'active' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lb-footer-link"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </div>
         </div>
 
@@ -144,11 +180,27 @@ export default function Footer() {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-copyright-strip text-center text-md-start">
           <span className="lb-copyright">{copyright}</span>
           <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-3">
-            {copyrightLinks.map((link) => (
-              <Link key={link.label} to={link.to} className="lb-footer-link">
-                {link.label}
-              </Link>
-            ))}
+            {copyrightLinks.map((link) =>
+              link.to ? (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className={`lb-footer-link ${isLinkActive(link.to) ? 'active' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lb-footer-link"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </div>
         </div>
       </div>

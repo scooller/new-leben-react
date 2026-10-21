@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.175] - 2026-10-21
+
+### Added
+- `src/components/layout/Footer.jsx`:
+  - Agregado estado activo (`active`) dinámico a los enlaces del pie de página (`corporateLinks` y `copyrightLinks`), resolviendo la ruta actual (`location.pathname`) y soportando alias de páginas estáticas (`slugAliases`).
+- `src/styles/components/_footer.scss`:
+  - Agregada regla de estilo para `.lb-footer-link.active` con color rojo corporativo (`$lb-red`) y tipografía destacada (`font-weight: 600`).
+- `src/pages/StaticPage.jsx`:
+  - Habilitado renderizado de HTML en párrafos (`dangerouslySetInnerHTML`) para permitir enlaces e hipervínculos internos/externos en el cuerpo de las páginas estáticas.
+- `src/data/staticPages.js`:
+  - Agregado hipervínculo mailto al correo `seleccion@ileben.cl` en la sección "Trabaja con nosotros".
+
+## [0.9.174] - 2026-10-21
+
+### Fixed
+- `src/components/layout/Footer.jsx`:
+  - Corregido renderizado condicional de enlaces en el pie de página: se utiliza `<Link to={...}>` cuando el enlace contiene una ruta interna `to`, y `<a href={...}>` con `target="_blank"` y `rel="noopener noreferrer"` cuando contiene una URL externa `href`.
+
 ## [0.9.173] - 2026-10-21
 
 ### Changed

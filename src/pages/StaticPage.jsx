@@ -58,9 +58,7 @@ export default function StaticPage({ slug: propSlug }) {
               {page.paragraphs && page.paragraphs.length > 0 && (
                 <div className="mb-5">
                   {page.paragraphs.map((p, idx) => (
-                    <p key={idx} className="fs-5 lh-lg text-secondary mb-3">
-                      {p}
-                    </p>
+                    <p key={idx} className="fs-5 lh-lg text-secondary mb-3" dangerouslySetInnerHTML={{ __html: p }}></p>
                   ))}
                 </div>
               )}
