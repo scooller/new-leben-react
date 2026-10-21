@@ -18,7 +18,7 @@ const socialIcons = {
 }
 
 export default function Footer() {
-  const { legal, address, schedule, phone, email, social, socialLinks, copyright, copyrightLinks } = footerContent
+  const { legal, address, schedule, phone, email, social, socialLinks, copyright } = footerContent
 
   const mapRef = useRef(null)
   const clockRef = useRef(null)
@@ -35,6 +35,11 @@ export default function Footer() {
     { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
     { label: 'Bases legales', to: '/bases-legales' },
     { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
+  ]
+  const copyrightLinks = [
+    { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
+    { label: 'Política de cookies', to: '/cookies' },
+    { label: 'Canal de Denuncias y Consultas', href: 'https://denuncias.ileben.cl/' }
   ]
 
   return (
@@ -139,21 +144,11 @@ export default function Footer() {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-copyright-strip text-center text-md-start">
           <span className="lb-copyright">{copyright}</span>
           <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-3">
-            {copyrightLinks.map((link) => {
-              const routeMap = {
-                'Bases legales': '/bases-legales',
-                'Información de la empresa': '/informacion-de-la-empresa',
-                'Términos': '/bases-legales',
-                'Política de cookies': '/cookies',
-                'Cookies': '/cookies',
-              }
-              const targetRoute = routeMap[link]
-              return targetRoute ? (
-                <Link key={link} to={targetRoute} className="lb-footer-link">{link}</Link>
-              ) : (
-                <a key={link} href="#" className="lb-footer-link">{link}</a>
-              )
-            })}
+            {copyrightLinks.map((link) => (
+              <Link key={link.label} to={link.to} className="lb-footer-link">
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

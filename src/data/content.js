@@ -168,7 +168,6 @@ export const footerContent = {
     linkedin: 'https://www.linkedin.com/company/ileben/posts/?feedView=all',
   },
   copyright: '© 2024 Leben. Todos los derechos reservados.',
-  copyrightLinks: ['Bases legales', 'Información de la empresa', 'Privacidad', 'Política de cookies'],
 }
 
 // ============================================================

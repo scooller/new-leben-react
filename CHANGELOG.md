@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.173] - 2026-10-21
+
+### Changed
+- `src/data/staticPages.js`:
+  - Asignada nueva imagen hero corporativa personalizada (`/images/home/hero-informacion-empresa.jpg`) para la página `informacion-de-la-empresa`, reemplazando la imagen duplicada de reclutamiento.
+
 ## [0.9.172] - 2026-10-21
 
 ### Added

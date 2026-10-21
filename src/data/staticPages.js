@@ -147,7 +147,7 @@ export const staticPages = {
     title: 'INFORMACIÓN DE LA EMPRESA',
     subtitle: 'Transparencia corporativa y seguridad de datos',
     badge: 'Corporativo',
-    heroImage: '/images/home/Trabaja-con-nosotros1.png',
+    heroImage: '/images/home/hero-informacion-empresa.jpg',
     companyDetails: {
       razonSocial: 'Inmobiliaria Cenit Limitada',
       rut: '76.065.957-6',
