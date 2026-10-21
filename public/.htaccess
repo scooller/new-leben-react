@@ -1,6 +1,12 @@
 # Redirect all requests to index.html for React Router
 # This allows direct access to routes like /proyectos without 404
 
+<IfModule mod_headers.c>
+  # Permitir politica goog#html de Google Analytics / GTM en Content-Security-Policy
+  Header always edit Content-Security-Policy "trusted-types ([^;]+)" "trusted-types $1 goog#html 'allow-duplicates'"
+  Header edit Content-Security-Policy "trusted-types ([^;]+)" "trusted-types $1 goog#html 'allow-duplicates'"
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /

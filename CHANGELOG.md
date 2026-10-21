@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.177] - 2026-10-21
+
+### Added
+- `public/.htaccess`:
+  - Agregada regla con `mod_headers` para permitir la política `goog#html` de Google Analytics / GTM en la cabecera `Content-Security-Policy: trusted-types`.
+
 ## [0.9.176] - 2026-10-21
 
 ### Changed
