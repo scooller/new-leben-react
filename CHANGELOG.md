@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.172] - 2026-10-21
+
+### Added
+- `src/lib/chileUtils.js`:
+  - Creadas utilidades nativas y reutilizables para formularios chilenos: formateo y validación de RUT con algoritmo Módulo 11 (`formatRut`, `validateRut`), normalización de teléfonos a 9 dígitos (`formatPhone`, `validatePhone`), lista oficial de 16 regiones de Chile (`CHILE_REGIONS`), validación de email y formateo/validación de URLs de LinkedIn.
+- `src/components/common/Turnstile.jsx`:
+  - Creado componente Cloudflare Turnstile nativo y reutilizable, con carga asíncrona de API, verificación de tokens, reseteo automático y modo de contingencia tolerante a fallos en entorno local.
+
+### Changed
+- `src/components/TrabajaForm.jsx`:
+  - Integrado Turnstile antispam.
+  - Reemplazado input de región por selector desplegable con las 16 regiones de Chile.
+  - Agregado prefijo fijo `+56` para teléfono con normalización a 9 dígitos.
+  - Agregada máscara interactiva de RUT con cálculo de dígito verificador y feedback de error en tiempo real.
+  - Agregada validación y normalización de enlace de LinkedIn.
+- `src/pages/Invest.jsx`:
+  - Incorporado Turnstile antispam en el formulario de leads.
+  - Agregado prefijo fijo `+56` en el campo telefónico y máscara/validación de RUT chileno.
+- `src/pages/Brokers.jsx`:
+  - Incorporado Turnstile antispam en el formulario de registro.
+  - Agregado prefijo fijo `+56` en el campo de WhatsApp/teléfono y validación de 9 dígitos.
+
 ## [0.9.171] - 2026-10-21
 
 ### Added

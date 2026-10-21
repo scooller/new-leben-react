@@ -8,6 +8,17 @@ import {
   AlertCircle,
   Briefcase,
 } from 'lucide-react'
+import Turnstile from './common/Turnstile.jsx'
+import {
+  CHILE_REGIONS,
+  formatRut,
+  validateRut,
+  formatPhone,
+  validatePhone,
+  validateEmail,
+  formatLinkedInUrl,
+  validateLinkedInUrl,
+} from '../lib/chileUtils.js'
 
 export default function TrabajaForm() {
   const [formData, setFormData] = useState({
@@ -26,6 +37,8 @@ export default function TrabajaForm() {
     brevesintesisdetuexperiencialaboral: '',
   })
 
+  const [fieldErrors, setFieldErrors] = useState({})
+  const [turnstileToken, setTurnstileToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -33,12 +46,64 @@ export default function TrabajaForm() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }))
+    }
+  }
+
+  // RUT formatting as user types
+  const handleRutChange = (e) => {
+    const formatted = formatRut(e.target.value)
+    setFormData((prev) => ({ ...prev, rut: formatted }))
+    if (fieldErrors.rut) {
+      setFieldErrors((prev) => ({ ...prev, rut: '' }))
+    }
+  }
+
+  // RUT validation on blur
+  const handleRutBlur = () => {
+    if (formData.rut && !validateRut(formData.rut)) {
+      setFieldErrors((prev) => ({ ...prev, rut: 'RUT inválido. Verifica número y dígito verificador.' }))
+    }
+  }
+
+  // Phone formatting
+  const handlePhoneChange = (e) => {
+    const formatted = formatPhone(e.target.value)
+    setFormData((prev) => ({ ...prev, telefono: formatted }))
+    if (fieldErrors.telefono) {
+      setFieldErrors((prev) => ({ ...prev, telefono: '' }))
+    }
+  }
+
+  // Phone validation on blur
+  const handlePhoneBlur = () => {
+    if (formData.telefono && !validatePhone(formData.telefono)) {
+      setFieldErrors((prev) => ({ ...prev, telefono: 'Ingresa un teléfono chileno válido (9 dígitos).' }))
+    }
+  }
+
+  // Email validation on blur
+  const handleEmailBlur = () => {
+    if (formData.email && !validateEmail(formData.email)) {
+      setFieldErrors((prev) => ({ ...prev, email: 'Ingresa un correo electrónico válido.' }))
+    }
+  }
+
+  // LinkedIn formatting and validation on blur
+  const handleLinkedInBlur = () => {
+    if (formData.linkedin) {
+      const normalized = formatLinkedInUrl(formData.linkedin)
+      setFormData((prev) => ({ ...prev, linkedin: normalized }))
+      if (!validateLinkedInUrl(normalized)) {
+        setFieldErrors((prev) => ({ ...prev, linkedin: 'Formato de perfil de LinkedIn no válido.' }))
+      }
+    }
   }
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0] || null
     if (file) {
-      // 10MB limit check
       if (file.size > 10 * 1024 * 1024) {
         setErrorMessage('El archivo no debe superar los 10MB.')
         return
@@ -66,15 +131,44 @@ export default function TrabajaForm() {
       'brevesintesisdetuexperiencialaboral',
     ]
 
+    const errors = {}
+
     for (const field of required) {
       if (!String(formData[field] || '').trim()) {
-        setErrorMessage('Por favor, completa todos los campos obligatorios (*).')
-        return
+        errors[field] = 'Este campo es requerido.'
       }
+    }
+
+    if (formData.rut && !validateRut(formData.rut)) {
+      errors.rut = 'RUT inválido. Verifica número y dígito verificador.'
+    }
+
+    if (formData.telefono && !validatePhone(formData.telefono)) {
+      errors.telefono = 'Ingresa un teléfono chileno válido (9 dígitos).'
+    }
+
+    if (formData.email && !validateEmail(formData.email)) {
+      errors.email = 'Ingresa un correo electrónico válido.'
+    }
+
+    if (formData.linkedin && !validateLinkedInUrl(formData.linkedin)) {
+      errors.linkedin = 'Formato de perfil de LinkedIn no válido.'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setErrorMessage('Por favor, revisa los campos marcados en rojo antes de continuar.')
+      return
     }
 
     if (!formData.cargarcv) {
       setErrorMessage('Por favor, adjunta tu CV en formato PDF, Word o TXT.')
+      return
+    }
+
+    // Turnstile check
+    if (!turnstileToken) {
+      setErrorMessage('Por favor, completa la verificación de seguridad Turnstile.')
       return
     }
 
@@ -104,6 +198,8 @@ export default function TrabajaForm() {
       cargarcv: null,
       brevesintesisdetuexperiencialaboral: '',
     })
+    setFieldErrors({})
+    setTurnstileToken(null)
     setIsSubmitted(false)
     setErrorMessage('')
   }
@@ -156,12 +252,13 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="nombre"
-              className="form-control"
+              className={`form-control ${fieldErrors.nombre ? 'is-invalid' : ''}`}
               placeholder="Tu nombre"
               value={formData.nombre}
               onChange={handleChange}
               required
             />
+            {fieldErrors.nombre && <div className="invalid-feedback small">{fieldErrors.nombre}</div>}
           </div>
 
           <div className="col-12 col-md-6">
@@ -171,15 +268,16 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="apellido"
-              className="form-control"
+              className={`form-control ${fieldErrors.apellido ? 'is-invalid' : ''}`}
               placeholder="Tu apellido"
               value={formData.apellido}
               onChange={handleChange}
               required
             />
+            {fieldErrors.apellido && <div className="invalid-feedback small">{fieldErrors.apellido}</div>}
           </div>
 
-          {/* RUT y Telefono */}
+          {/* RUT y Telefono (+56) */}
           <div className="col-12 col-md-6">
             <label className="form-label small fw-semibold text-secondary">
               RUT <span className="text-danger">*</span>
@@ -187,30 +285,39 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="rut"
-              className="form-control"
+              maxLength={12}
+              className={`form-control ${fieldErrors.rut ? 'is-invalid' : ''}`}
               placeholder="Ej: 12.345.678-9"
               value={formData.rut}
-              onChange={handleChange}
+              onChange={handleRutChange}
+              onBlur={handleRutBlur}
               required
             />
+            {fieldErrors.rut && <div className="invalid-feedback small">{fieldErrors.rut}</div>}
           </div>
 
           <div className="col-12 col-md-6">
             <label className="form-label small fw-semibold text-secondary">
               Teléfono <span className="text-danger">*</span>
             </label>
-            <input
-              type="tel"
-              name="telefono"
-              className="form-control"
-              placeholder="+56 9 1234 5678"
-              value={formData.telefono}
-              onChange={handleChange}
-              required
-            />
+            <div className="input-group has-validation">
+              <span className="input-group-text bg-light text-secondary fw-semibold">+56</span>
+              <input
+                type="tel"
+                name="telefono"
+                maxLength={9}
+                className={`form-control ${fieldErrors.telefono ? 'is-invalid' : ''}`}
+                placeholder="9 1234 5678"
+                value={formData.telefono}
+                onChange={handlePhoneChange}
+                onBlur={handlePhoneBlur}
+                required
+              />
+              {fieldErrors.telefono && <div className="invalid-feedback small">{fieldErrors.telefono}</div>}
+            </div>
           </div>
 
-          {/* Email y Region */}
+          {/* Email y Region Selector */}
           <div className="col-12 col-md-6">
             <label className="form-label small fw-semibold text-secondary">
               Email <span className="text-danger">*</span>
@@ -218,27 +325,35 @@ export default function TrabajaForm() {
             <input
               type="email"
               name="email"
-              className="form-control"
+              className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
               placeholder="nombre@correo.cl"
               value={formData.email}
               onChange={handleChange}
+              onBlur={handleEmailBlur}
               required
             />
+            {fieldErrors.email && <div className="invalid-feedback small">{fieldErrors.email}</div>}
           </div>
 
           <div className="col-12 col-md-6">
             <label className="form-label small fw-semibold text-secondary">
               Región de domicilio <span className="text-danger">*</span>
             </label>
-            <input
-              type="text"
+            <select
               name="regiondedomicilio"
-              className="form-control"
-              placeholder="Ej: Región Metropolitana"
+              className={`form-select ${fieldErrors.regiondedomicilio ? 'is-invalid' : ''}`}
               value={formData.regiondedomicilio}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">—Selecciona tu región—</option>
+              {CHILE_REGIONS.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
+            </select>
+            {fieldErrors.regiondedomicilio && <div className="invalid-feedback small">{fieldErrors.regiondedomicilio}</div>}
           </div>
 
           {/* Titulo y Experiencia (anos) */}
@@ -249,12 +364,13 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="tituloprofesionaltecnico"
-              className="form-control"
+              className={`form-control ${fieldErrors.tituloprofesionaltecnico ? 'is-invalid' : ''}`}
               placeholder="Ej: Ingeniero Constructor / Arquitecto"
               value={formData.tituloprofesionaltecnico}
               onChange={handleChange}
               required
             />
+            {fieldErrors.tituloprofesionaltecnico && <div className="invalid-feedback small">{fieldErrors.tituloprofesionaltecnico}</div>}
           </div>
 
           <div className="col-12 col-md-6">
@@ -266,12 +382,13 @@ export default function TrabajaForm() {
               min="0"
               max="50"
               name="experiencia"
-              className="form-control"
+              className={`form-control ${fieldErrors.experiencia ? 'is-invalid' : ''}`}
               placeholder="Ej: 5"
               value={formData.experiencia}
               onChange={handleChange}
               required
             />
+            {fieldErrors.experiencia && <div className="invalid-feedback small">{fieldErrors.experiencia}</div>}
           </div>
 
           {/* Ultimo cargo y Ultima empresa */}
@@ -282,12 +399,13 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="ultimocargodesempenado"
-              className="form-control"
+              className={`form-control ${fieldErrors.ultimocargodesempenado ? 'is-invalid' : ''}`}
               placeholder="Ej: Jefe de Proyectos"
               value={formData.ultimocargodesempenado}
               onChange={handleChange}
               required
             />
+            {fieldErrors.ultimocargodesempenado && <div className="invalid-feedback small">{fieldErrors.ultimocargodesempenado}</div>}
           </div>
 
           <div className="col-12 col-md-6">
@@ -297,15 +415,16 @@ export default function TrabajaForm() {
             <input
               type="text"
               name="ultimaempresa"
-              className="form-control"
+              className={`form-control ${fieldErrors.ultimaempresa ? 'is-invalid' : ''}`}
               placeholder="Nombre de la empresa"
               value={formData.ultimaempresa}
               onChange={handleChange}
               required
             />
+            {fieldErrors.ultimaempresa && <div className="invalid-feedback small">{fieldErrors.ultimaempresa}</div>}
           </div>
 
-          {/* Campo nuevo: LinkedIn (opcional) */}
+          {/* LinkedIn (opcional con mascara/normalizacion) */}
           <div className="col-12">
             <label className="form-label small fw-semibold text-secondary d-flex align-items-center gap-1">
               <Linkedin size={15} className="text-primary" />
@@ -315,11 +434,19 @@ export default function TrabajaForm() {
             <input
               type="url"
               name="linkedin"
-              className="form-control"
-              placeholder="https://www.linkedin.com/in/tu-perfil"
+              className={`form-control ${fieldErrors.linkedin ? 'is-invalid' : ''}`}
+              placeholder="https://www.linkedin.com/in/tu-perfil o tu usuario"
               value={formData.linkedin}
               onChange={handleChange}
+              onBlur={handleLinkedInBlur}
             />
+            {fieldErrors.linkedin ? (
+              <div className="invalid-feedback small">{fieldErrors.linkedin}</div>
+            ) : (
+              <div className="form-text small text-muted">
+                Puedes ingresar tu URL completa o simplemente tu usuario de LinkedIn.
+              </div>
+            )}
           </div>
 
           {/* Cargar CV */}
@@ -357,15 +484,29 @@ export default function TrabajaForm() {
             <textarea
               name="brevesintesisdetuexperiencialaboral"
               rows={4}
-              className="form-control"
+              className={`form-control ${fieldErrors.brevesintesisdetuexperiencialaboral ? 'is-invalid' : ''}`}
               placeholder="Cuéntanos brevemente sobre tus principales logros, áreas de especialización e interés profesional..."
               value={formData.brevesintesisdetuexperiencialaboral}
               onChange={handleChange}
               required
             />
+            {fieldErrors.brevesintesisdetuexperiencialaboral && (
+              <div className="invalid-feedback small">{fieldErrors.brevesintesisdetuexperiencialaboral}</div>
+            )}
           </div>
 
-          <div className="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 pt-3">
+          {/* Turnstile Antispam Widget */}
+          <div className="col-12 pt-2">
+            <Turnstile
+              onVerify={(token) => {
+                setTurnstileToken(token)
+                setErrorMessage('')
+              }}
+              onExpire={() => setTurnstileToken(null)}
+            />
+          </div>
+
+          <div className="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 pt-2">
             <small className="text-muted">* Campos obligatorios</small>
             <button
               type="submit"
@@ -380,7 +521,7 @@ export default function TrabajaForm() {
               ) : (
                 <>
                   <Send size={18} />
-                  <span>ENVIAR</span>
+                  <span>ENVIAR POSTULACIÓN</span>
                 </>
               )}
             </button>

@@ -143,7 +143,7 @@ export const staticPages = {
     },
   },
   'informacion-de-la-empresa': {
-    mockup: false,
+    mockup: true,
     title: 'INFORMACIÓN DE LA EMPRESA',
     subtitle: 'Transparencia corporativa y seguridad de datos',
     badge: 'Corporativo',

@@ -12,6 +12,8 @@ import HeroShell from '../components/sections/HeroShell.jsx'
 
 // Icons
 import { Check, Mail, ChevronRight, ChevronLeft } from 'lucide-react'
+import Turnstile from '../components/common/Turnstile.jsx'
+import { formatPhone, validatePhone, validateEmail } from '../lib/chileUtils.js'
 import { BadgePercentIcon } from '../components/icons/badge-percent.jsx'
 import { HomeIcon } from '../components/icons/home.jsx'
 import { BellIcon } from '../components/icons/bell.jsx'
@@ -82,12 +84,33 @@ export default function Brokers() {
     return () => ctx.revert()
   }, [])
 
+  const [turnstileToken, setTurnstileToken] = useState(null)
+  const [formError, setFormError] = useState('')
+
   const handleFieldChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
+    if (formError) setFormError('')
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (formData.whatsapp && !validatePhone(formData.whatsapp)) {
+      setFormError('Ingresa un teléfono o WhatsApp chileno válido (9 dígitos).')
+      return
+    }
+
+    if (formData.email && !validateEmail(formData.email)) {
+      setFormError('Ingresa un correo electrónico válido.')
+      return
+    }
+
+    if (!turnstileToken) {
+      setFormError('Por favor, completa la verificación de seguridad Turnstile.')
+      return
+    }
+
+    setFormError('')
     const msg = Object.entries(formData)
       .map(([k, v]) => `${k}: ${v}`)
       .join('\n')
@@ -310,22 +333,51 @@ export default function Brokers() {
                 <SplitTitle as="h2" text={data.registration.title} className="lb-brokers-registration__title text-white" />
               </div>
               <p className="text-white text-opacity-75 text-center mb-4">{data.registration.description}</p>
+              {formError && (
+                <div className="alert alert-danger d-flex align-items-center gap-2 mb-3 py-2 px-3 small" role="alert">
+                  <span>{formError}</span>
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
                 <div className="row g-3">
                   {data.registration.fields.map((field) => (
                     <div key={field.name} className={field.col === 2 ? 'col-md-6' : 'col-12'}>
                       <label className="form-label text-light text-opacity-75 small fw-semibold mb-1">{field.label}</label>
-                      <input
-                        type={field.type}
-                        name={field.name}
-                        className="form-control bg-white text-dark rounded-2 py-2 px-3"
-                        placeholder={field.placeholder}
-                        value={formData[field.name] || ''}
-                        onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                        required={field.name !== 'empresa'}
-                      />
+                      {field.name === 'whatsapp' ? (
+                        <div className="input-group">
+                          <span className="input-group-text bg-white text-secondary fw-semibold border-end-0 rounded-start-2">+56</span>
+                          <input
+                            type="tel"
+                            maxLength={9}
+                            name={field.name}
+                            className="form-control bg-white text-dark rounded-end-2 py-2 px-3"
+                            placeholder="9 1234 5678"
+                            value={formData[field.name] || ''}
+                            onChange={(e) => handleFieldChange(field.name, formatPhone(e.target.value))}
+                            required
+                          />
+                        </div>
+                      ) : (
+                        <input
+                          type={field.type}
+                          name={field.name}
+                          className="form-control bg-white text-dark rounded-2 py-2 px-3"
+                          placeholder={field.placeholder}
+                          value={formData[field.name] || ''}
+                          onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                          required={field.name !== 'empresa'}
+                        />
+                      )}
                     </div>
                   ))}
+                  {/* Turnstile Antispam */}
+                  <div className="col-12 d-flex justify-content-center pt-2">
+                    <Turnstile
+                      theme="dark"
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onExpire={() => setTurnstileToken(null)}
+                    />
+                  </div>
                 </div>
                 <div className="d-flex flex-column align-items-center gap-3 mt-4">
                   <button type="submit" className="btn btn-danger fw-bold w-100 py-3 rounded-pill shadow">

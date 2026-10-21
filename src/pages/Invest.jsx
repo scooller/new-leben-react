@@ -10,7 +10,9 @@ import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
+import Turnstile from '../components/common/Turnstile.jsx'
 import { investData as data } from '../data/invest.js'
+import { formatRut, validateRut, formatPhone, validatePhone, validateEmail } from '../lib/chileUtils.js'
 
 import {
   Check,
@@ -42,6 +44,8 @@ export default function Invest() {
     proyecto: '',
   })
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState(null)
+  const [formError, setFormError] = useState('')
 
   const heroBgRef = useRef(null)
 
@@ -69,10 +73,33 @@ export default function Invest() {
 
   const handleFieldChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
+    if (formError) setFormError('')
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (!validateRut(formData.rut)) {
+      setFormError('RUT inválido. Por favor, verifica el número y dígito verificador.')
+      return
+    }
+
+    if (!validateEmail(formData.email)) {
+      setFormError('Correo electrónico no válido.')
+      return
+    }
+
+    if (!validatePhone(formData.telefono)) {
+      setFormError('Teléfono no válido. Debe tener 9 dígitos chilenos.')
+      return
+    }
+
+    if (!turnstileToken) {
+      setFormError('Por favor, completa la verificación de seguridad Turnstile.')
+      return
+    }
+
+    setFormError('')
     setFormSubmitted(true)
     setTimeout(() => setFormSubmitted(false), 5000)
   }
@@ -188,6 +215,12 @@ export default function Invest() {
                 </div>
               )}
 
+              {formError && (
+                <div className="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+                  <span>{formError}</span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
                   {/* Row 1 */}
@@ -217,10 +250,11 @@ export default function Invest() {
                     <label className="form-label text-light text-opacity-75 small fw-medium mb-1">RUT*</label>
                     <input
                       type="text"
+                      maxLength={12}
                       className="form-control rounded-2 bg-white text-dark"
-                      placeholder="12345678-0"
+                      placeholder="12.345.678-9"
                       value={formData.rut}
-                      onChange={(e) => handleFieldChange('rut', e.target.value)}
+                      onChange={(e) => handleFieldChange('rut', formatRut(e.target.value))}
                       required
                     />
                   </div>
@@ -239,13 +273,18 @@ export default function Invest() {
 
                   <div className="col-md-4">
                     <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Teléfono*</label>
-                    <input
-                      type="tel"
-                      className="form-control rounded-2 bg-white text-dark"
-                      value={formData.telefono}
-                      onChange={(e) => handleFieldChange('telefono', e.target.value)}
-                      required
-                    />
+                    <div className="input-group">
+                      <span className="input-group-text bg-white text-secondary fw-semibold border-end-0">+56</span>
+                      <input
+                        type="tel"
+                        maxLength={9}
+                        className="form-control rounded-2 bg-white text-dark"
+                        placeholder="9 1234 5678"
+                        value={formData.telefono}
+                        onChange={(e) => handleFieldChange('telefono', formatPhone(e.target.value))}
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="col-md-4">
@@ -300,6 +339,15 @@ export default function Invest() {
                         </option>
                       ))}
                     </select>
+                  </div>
+
+                  {/* Turnstile Antispam */}
+                  <div className="col-md-8 pt-2">
+                    <Turnstile
+                      theme="dark"
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onExpire={() => setTurnstileToken(null)}
+                    />
                   </div>
 
                   <div className="col-md-4 d-flex align-items-end">
