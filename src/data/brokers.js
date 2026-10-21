@@ -18,7 +18,7 @@ export const brokersData = {
   // --- Beneficios Intro ---
   benefits: {
     eyebrow: 'Círculo Leben',
-    title: 'Beneficios del círculo de ',
+    title: 'Beneficios del círculo de <span class="text-danger">Brokers Leben</span>',
     titleAccent: 'Brokers Leben',
     managerPhoto: img('brokers-manager.jpg'),
     items: [

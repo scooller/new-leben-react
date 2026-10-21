@@ -113,7 +113,7 @@ export default function Brokers() {
               />
               <p className="lead text-white text-opacity-90 mb-0">{data.hero.subtitle}</p>
               <div>
-                <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-pill shadow">
+                <a href={data.hero.ctaHref} className="btn btn-danger fw-bold px-4 py-2 rounded-3 shadow">
                   {data.hero.ctaText}
                 </a>
               </div>

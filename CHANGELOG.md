@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.160] - 2026-10-21
+
+### Removed
+- `src/styles/components/_invest.scss`:
+  - Eliminadas clases y reglas `clamp()` redundantes (`.lb-invest-hero__title`, `.lb-invest-value__title`, `.lb-invest-advisory__title`, `.lb-invest-process__title`, `.lb-invest-smart__title`).
+
+### Changed
+- `src/pages/Invest.jsx`:
+  - Reemplazadas clases custom de títulos por utilidades fluidas nativas de Bootstrap (`display-4`, `h2`, `display-6`).
+
 ## [0.9.159] - 2026-10-21
 
 ### Added

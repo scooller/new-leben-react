@@ -108,7 +108,8 @@ export default function Invest() {
 
               <ScrollAnim animation="fade-up" delay={0.2}>
                 <h1
-                  className="lb-invest-hero__title fw-semibold text-white mx-auto mb-3"
+                  className="display-4 fw-semibold text-white mx-auto mb-3"
+                  style={{ maxWidth: '1044px' }}
                   dangerouslySetInnerHTML={{ __html: data.hero.title }}
                 />
               </ScrollAnim>
@@ -137,7 +138,7 @@ export default function Invest() {
               <div className="col-lg-6">
                 <ScrollAnim animation="fade-up">
                   <p className="lb-invest-eyebrow">{data.valueProp.eyebrow}</p>
-                  <h2 className="lb-invest-value__title mb-3" dangerouslySetInnerHTML={{ __html: data.valueProp.title }}></h2>
+                  <h2 className="h2 fw-semibold text-dark mb-3" dangerouslySetInnerHTML={{ __html: data.valueProp.title }}></h2>
                   <p className="text-secondary mb-3">{data.valueProp.description}</p>
                   <p className="fw-semibold text-dark mb-4">{data.valueProp.prompt}</p>
 
@@ -325,7 +326,7 @@ export default function Invest() {
               <div className="col-lg-6">
                 <ScrollAnim animation="fade-up" delay={0.15}>
                   <p className="lb-invest-eyebrow">{data.advisory.eyebrow}</p>
-                  <h2 className="lb-invest-advisory__title mb-3">{data.advisory.title}</h2>
+                  <h2 className="h2 fw-semibold text-dark mb-3">{data.advisory.title}</h2>
                   <p className="text-secondary mb-4">{data.advisory.description}</p>
 
                   <div className="d-flex flex-column gap-3">
@@ -416,7 +417,7 @@ export default function Invest() {
         <section className="py-5" style={{ backgroundColor: '#eef2f6' }}>
           <div className="container py-lg-4">
             <ScrollAnim animation="fade-up" className="text-center mb-5">
-              <h2 className="lb-invest-process__title mb-2">{data.process.title}</h2>
+              <h2 className="h2 fw-bold text-dark mb-2">{data.process.title}</h2>
               <p className="text-secondary mx-auto mb-0" style={{ maxWidth: '680px' }}>{data.process.subtitle}</p>
             </ScrollAnim>
 
@@ -467,7 +468,7 @@ export default function Invest() {
               <div className="col-lg-7">
                 <div className="p-4 p-md-5 d-flex flex-column justify-content-center">
                   <p className="lb-invest-eyebrow">{data.smartBanner.eyebrow}</p>
-                  <h2 className="lb-invest-smart__title mb-3" dangerouslySetInnerHTML={{ __html: data.smartBanner.title }}></h2>
+                  <h2 className="display-6 fw-bold text-white mb-3" dangerouslySetInnerHTML={{ __html: data.smartBanner.title }}></h2>
                   <p className="xs-small fw-bold text-white text-opacity-75 mb-2">{data.smartBanner.disclaimer}</p>
                   <p className="text-white text-opacity-90 mb-4">{data.smartBanner.description}</p>
                   <div>
