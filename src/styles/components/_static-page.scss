@@ -1,0 +1,105 @@
+// ============================================================
+// Static Page & Proyectos Anteriores Section Styles
+// ============================================================
+
+.lb-static-page {
+  &.lb-is-mockup {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1040;
+      background-image: url('/images/watermark-mockup.svg');
+      background-repeat: repeat;
+      background-size: 680px 420px;
+      opacity: 0.95;
+    }
+  }
+
+  .lb-anteriores-section {
+    .lb-anteriores-item {
+      padding: 0.5rem 0;
+    }
+
+    .lb-anteriores-info {
+      .lb-anteriores-building {
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #1a1a1a;
+        margin-bottom: 0.35rem;
+      }
+
+      .lb-anteriores-addr {
+        font-size: 0.9rem;
+        color: #6c757d;
+        line-height: 1.45;
+        margin-bottom: 0;
+      }
+    }
+
+    .lb-anteriores-media-col {
+      position: relative;
+      height: 225px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.7rem;
+      cursor: pointer;
+
+      &:hover .lb-anteriores-fondo {
+        width: 95%;
+        transition: all 0.5s ease-in;
+      }
+    }
+
+    .lb-anteriores-logo {
+      height: 135px;
+      width: 135px;
+      border: solid 4px #ffffff;
+      z-index: 2;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+      flex-shrink: 0;
+      position: relative;
+
+      @media (min-width: 768px) {
+        margin-left: -62px;
+      }
+
+      @media (max-width: 767.98px) {
+        margin-left: 12px;
+      }
+    }
+
+    .lb-anteriores-fondo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 225px;
+      width: 90%;
+      z-index: 1;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: all 0.5s ease-out;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+      @media (max-width: 767.98px) {
+        width: 100%;
+      }
+    }
+  }
+}

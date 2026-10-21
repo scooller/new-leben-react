@@ -15,10 +15,12 @@ export default function StaticPage({ slug: propSlug }) {
     return <NotFound />
   }
 
+  const isMockup = Boolean(page.mockup ?? page.isMockup)
+
   return (
     <>
       <Navbar />
-      <main className="lb-static-page">
+      <main className={`lb-static-page ${isMockup ? 'lb-is-mockup' : ''}`}>
         {/* Hero Section */}
         <section
           className="position-relative text-white py-5 d-flex align-items-center"
@@ -155,18 +157,51 @@ export default function StaticPage({ slug: propSlug }) {
 
               {/* Highlight Section (Proyectos anteriores) */}
               {page.highlightSection && (
-                <div className="mt-5 pt-4 border-top">
-                  <h2 className="h4 fw-bold mb-4 text-dark">{page.highlightSection.title}</h2>
-                  <div className="row g-3">
+                <div className="mt-5 pt-4 border-top lb-anteriores-section" id="anteriores">
+                  <h2 className="h4 fw-bold mb-4 text-dark text-uppercase">{page.highlightSection.title}</h2>
+                  <div className="row g-4">
                     {page.highlightSection.items.map((item, idx) => (
-                      <div key={idx} className="col-12 col-md-6 col-lg-4">
-                        <div className="p-3 bg-light rounded-3 border-0 h-100 d-flex align-items-center gap-2">
-                          <MapPin size={16} className="text-danger flex-shrink-0" />
-                          <div>
-                            <div className="small fw-semibold text-dark">{item.name}</div>
-                            <small className="text-muted">{item.comuna}</small>
+                      <div key={idx} className="col-12 lb-anteriores-item">
+                        {item.fondo || item.logo ? (
+                          <div className="row align-items-center gy-3">
+                            <div className="col-12 col-md-5 lb-anteriores-info">
+                              <h4 className="lb-anteriores-building text-uppercase">
+                                <strong>{item.building || item.name}</strong>
+                              </h4>
+                              <p className="lb-anteriores-addr">
+                                {item.building ? item.name : ''}
+                                {item.building && item.comuna ? <br /> : ''}
+                                {item.comuna}
+                              </p>
+                            </div>
+                            <div className="col-12 col-md-7 lb-anteriores-media-col">
+                              {item.logo && (
+                                <div
+                                  className="lb-anteriores-logo"
+                                  style={{ backgroundImage: `url(${item.logo})` }}
+                                  role="img"
+                                  aria-label={item.building || item.name}
+                                />
+                              )}
+                              {item.fondo && (
+                                <div
+                                  className="lb-anteriores-fondo"
+                                  style={{ backgroundImage: `url(${item.fondo})` }}
+                                  role="img"
+                                  aria-label={`Perspectiva ${item.building || item.name}`}
+                                />
+                              )}
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="p-3 bg-light rounded-3 border-0 d-flex align-items-center gap-2">
+                            <MapPin size={16} className="text-danger flex-shrink-0" />
+                            <div>
+                              <div className="small fw-semibold text-dark">{item.name}</div>
+                              <small className="text-muted">{item.comuna}</small>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

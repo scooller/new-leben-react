@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.170] - 2026-10-21
+
+### Changed
+- `public/images/watermark-mockup.svg`:
+  - Aumentada la separación y el relleno entre marcas de agua: expandido el lienzo a 680x420, agregada caja contenedora con borde punteado suave, mayor espaciado entre repeticiones y disposición escalonada tipo ladrillo para mayor aire y legibilidad.
+- `src/styles/components/_static-page.scss`:
+  - Ajustado `background-size` a `680px 420px` para corresponder con el nuevo patrón espaciado.
+
+## [0.9.169] - 2026-10-21
+
+### Added
+- `public/images/watermark-mockup.svg`:
+  - Creado asset vectorial ligero con patrón repetible y rotación diagonal (-24°) de marca de agua con la leyenda `"TEMPORAL — EN CONSTRUCCIÓN"`.
+- `src/styles/components/_static-page.scss`:
+  - Agregado modificador `.lb-is-mockup` con pseudo-elemento overlay en `position: fixed`, `pointer-events: none` y repetición en mosaico para cubrir toda la pantalla sin obstaculizar la navegación ni los clicks.
+
+### Changed
+- `src/data/staticPages.js`:
+  - Agregado soporte de atributo booleano `mockup` (`false` por defecto) a todas las definiciones de páginas estáticas.
+- `src/pages/StaticPage.jsx`:
+  - Condicionada la clase `.lb-is-mockup` sobre el contenedor `<main>` cuando `page.mockup` o `page.isMockup` es `true`.
+
+## [0.9.168] - 2026-10-21
+
+### Added
+- `src/data/staticPages.js`:
+  - Incorporadas imágenes de logotipo (`logo`) e imágenes de perspectiva arquitectónica (`fondo`), junto a los nombres de los 18 edificios en la sección `PROYECTOS ANTERIORES` de la página de historia (`/nosotros`), extraídas fielmente desde el sitio original `https://ileben.cl/nosotros/`.
+- `src/styles/components/_static-page.scss`:
+  - Creados estilos SCSS para la sección de proyectos anteriores (`.lb-anteriores-section`), incluyendo el logotipo flotante, la perspectiva de fondo con efecto hover interactivo de expansión y comportamiento responsive para dispositivos móviles y de escritorio.
+
+### Changed
+- `src/pages/StaticPage.jsx`:
+  - Actualizado el renderizado de la sección de proyectos anteriores para estructurar cada proyecto con su información (nombre de edificio, dirección y comuna) y su columna multimedia compuesta por el logotipo y la perspectiva de fondo.
+- `src/styles/main.scss`:
+  - Importado `components/static-page`.
+
 ## [0.9.167] - 2026-10-21
 
 ### Removed

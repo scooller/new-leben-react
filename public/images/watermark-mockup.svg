@@ -1,0 +1,56 @@
+<svg width="680" height="420" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .watermark-box {
+        display: inline-block;
+      }
+      .watermark-text {
+        font-family: 'Lato', 'Segoe UI', Roboto, -apple-system, sans-serif;
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        fill: #d44040;
+        fill-opacity: 0.14;
+      }
+      .watermark-badge {
+        font-family: 'Lato', 'Segoe UI', Roboto, -apple-system, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        fill: #666666;
+        fill-opacity: 0.12;
+      }
+      .watermark-border {
+        stroke: #d44040;
+        stroke-opacity: 0.12;
+        stroke-width: 1.5;
+        stroke-dasharray: 6 6;
+        fill: none;
+        rx: 8;
+      }
+    </style>
+  </defs>
+
+  <!-- Watermark Block 1 (Top Center) -->
+  <g transform="rotate(-22 340 105)">
+    <rect x="140" y="65" width="400" height="70" class="watermark-border" />
+    <text x="340" y="100" text-anchor="middle" class="watermark-text">TEMPORAL — EN CONSTRUCCIÓN</text>
+    <text x="340" y="122" text-anchor="middle" class="watermark-badge">VISTA PREVIA MOCKUP</text>
+  </g>
+
+  <!-- Watermark Block 2 (Bottom Left Half) -->
+  <g transform="rotate(-22 0 315)">
+    <rect x="-200" y="275" width="400" height="70" class="watermark-border" />
+    <text x="0" y="310" text-anchor="middle" class="watermark-text">TEMPORAL — EN CONSTRUCCIÓN</text>
+    <text x="0" y="332" text-anchor="middle" class="watermark-badge">VISTA PREVIA MOCKUP</text>
+  </g>
+
+  <!-- Watermark Block 3 (Bottom Right Half) -->
+  <g transform="rotate(-22 680 315)">
+    <rect x="480" y="275" width="400" height="70" class="watermark-border" />
+    <text x="680" y="310" text-anchor="middle" class="watermark-text">TEMPORAL — EN CONSTRUCCIÓN</text>
+    <text x="680" y="332" text-anchor="middle" class="watermark-badge">VISTA PREVIA MOCKUP</text>
+  </g>
+</svg>
