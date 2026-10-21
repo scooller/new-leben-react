@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.166] - 2026-10-21
+
+### Fixed
+- `src/App.jsx`:
+  - **Reinicio forzado del scroll en navegación:** Desactivada la restauración automática de scroll del navegador (`history.scrollRestoration = 'manual'`), purgada la memoria de scroll de GSAP (`ScrollTrigger.clearScrollMemory()`) y aplicado reseteo instantáneo a `(0, 0)` tanto síncrono como en el siguiente frame de renderizado.
+  - **Soporte robusto de anclas:** Si la URL incluye ancla hash (`#id`), preserva el scroll hacia el elemento destino reintentando hasta que el componente lazy/asíncrono termine de montar en el DOM.
+
 ## [0.9.165] - 2026-10-21
 
 ### Fixed

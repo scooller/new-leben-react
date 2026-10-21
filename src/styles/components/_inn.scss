@@ -430,10 +430,6 @@ $inn-map-card-bg: #f6f1eb;
   padding-left: 0;
   padding-right: 0;
 
-  @include bs.media-breakpoint-up(lg) {
-    padding-top: 4.5rem;
-  }
-
   .container.lb-shadow-box {
     margin-bottom: 2.5rem;
     background-image: var(--lb-inn-proyecto-bg, url(/images/inn/bg-montain.svg));

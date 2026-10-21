@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
 import { useTrackingConsent } from './hooks/useTrackingConsent.js'
@@ -62,15 +63,44 @@ export default function App() {
 
   const location = useLocation()
 
+  // Prevent browser from restoring old scroll positions across route changes
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
+
   useEffect(() => {
     if (!location.hash) {
-      window.scrollTo(0, 0)
-      return
+      ScrollTrigger.clearScrollMemory?.()
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+
+      // Re-assert on next animation frame to guarantee zero offset after DOM/Suspense commit
+      const raf = requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+      })
+      return () => cancelAnimationFrame(raf)
     }
-    const id = location.hash.slice(1)
-    const timer = setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 150)
+
+    const id = decodeURIComponent(location.hash.slice(1))
+    let attempts = 0
+    let timer
+
+    const tryScrollToAnchor = () => {
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      } else if (attempts < 8) {
+        attempts++
+        timer = setTimeout(tryScrollToAnchor, 100)
+      }
+    }
+
+    tryScrollToAnchor()
     return () => clearTimeout(timer)
   }, [location.pathname, location.hash])
 

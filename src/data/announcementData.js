@@ -4,7 +4,7 @@
  */
 export const announcementConfig = {
   // Activa o desactiva el pop-up en el sitio
-  enabled: true,
+  enabled: false,
 
   // Identificador único del aviso (cambiar para volver a mostrar tras cierre)
   id: 'aviso-atencion-especial-2026',
