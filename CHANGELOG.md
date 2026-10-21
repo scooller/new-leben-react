@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.176] - 2026-10-21
+
+### Changed
+- `src/components/common/Turnstile.jsx`:
+  - Implementada tolerancia a fallos y fallback automático cuando Cloudflare rechaza el dominio (ej. subdominios de staging/test como `test.ileben.cl` o `dev.ileben.cl`), generando token de pruebas para no bloquear envíos en ambientes no registrados en Cloudflare.
+  - Agregado mecanismo de contingencia para producción con reintento y confirmación manual en caso de bloqueos por adblockers o fallas de red.
+
 ## [0.9.175] - 2026-10-21
 
 ### Added
