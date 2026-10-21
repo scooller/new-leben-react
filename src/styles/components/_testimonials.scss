@@ -7,13 +7,13 @@
   padding: 3rem clamp(1.25rem, 7vw, 6.5rem) 4.0625rem;
   position: relative;
   z-index: 3;
+
   @include bs.media-breakpoint-down(md) {
     margin-top: 0;
   }
 }
 
 .lb-testimonials-title {
-  font-size: $lb-heading-3;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
   line-height: 1.25;
@@ -84,8 +84,13 @@
   padding: 1.5rem;
 }
 
-.lb-reviewer-name { font-size: $lb-fs-base; }
-.lb-reviewer-role { font-size: $lb-fs-sm; }
+.lb-reviewer-name {
+  font-size: $lb-fs-base;
+}
+
+.lb-reviewer-role {
+  font-size: $lb-fs-sm;
+}
 
 .lb-review-text {
   font-size: $lb-fs-md;

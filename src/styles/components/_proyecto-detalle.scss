@@ -8,7 +8,6 @@
 // --- Shared ---
 .lb-proj-det-section-title {
   font-family: $font-title;
-  font-size: $lb-heading-1;
   line-height: 1.25;
   color: $lb-heading-color;
 }
@@ -126,7 +125,6 @@
 }
 
 .lb-proj-det-stat-value {
-  font-size: $lb-heading-2;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -215,7 +213,6 @@
 
   .lb-proj-det-vista360-title {
     font-family: $font-title;
-    font-size: $lb-heading-2;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     line-height: 1.25;
@@ -271,7 +268,6 @@
 }
 
 .lb-proj-det-cot-title {
-  font-size: $lb-heading-2;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -549,7 +545,6 @@
 }
 
 .lb-proj-det-cot-price {
-  font-size: $lb-heading-1;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
   line-height: 1;
@@ -626,7 +621,6 @@
 }
 
 .lb-proj-det-alt-name {
-  font-size: $lb-heading-4;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
   margin-bottom: 0.5rem;

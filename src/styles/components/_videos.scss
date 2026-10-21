@@ -1,7 +1,10 @@
 @use '../variables' as *;
 @use 'bootstrap/scss/bootstrap' as bs;
 
-.lb-videos-spacer { height: 0; width: 100%; }
+.lb-videos-spacer {
+  height: 0;
+  width: 100%;
+}
 
 .lb-videos {
   background: $lb-cream;
@@ -19,7 +22,6 @@
 
 .lb-month-label {
   letter-spacing: 0.125rem;
-  font-size: $lb-heading-4;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -100,5 +102,3 @@
     height: 16rem;
   }
 }
-
-

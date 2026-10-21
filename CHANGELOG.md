@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.161] - 2026-10-21
+
+### Removed
+- `src/styles/variables.scss`:
+  - Eliminadas variables de escala custom `$lb-heading-1`, `$lb-heading-2`, `$lb-heading-3` y `$lb-heading-4`.
+- `src/styles/components/` (`_brokers.scss`, `_cotizador-general.scss`, `_diferenciadores.scss`, `_hero.scss`, `_inn.scss`, `_inn-team-agents.scss`, `_perfil.scss`, `_proyecto-detalle.scss`, `_proyectos.scss`, `_testimonials.scss`, `_videos.scss`):
+  - Eliminadas todas las sobrescrituras explícitas de `font-size` con `$lb-heading-*` en títulos y subtítulos, delegando el tamaño fluido a la escala y RFS nativos de Bootstrap.
+
 ## [0.9.160] - 2026-10-21
 
 ### Removed

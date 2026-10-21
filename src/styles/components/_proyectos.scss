@@ -119,10 +119,6 @@
     padding: 0 1.5rem 2.5rem;
   }
 
-  .lb-proj-hero-title {
-    font-size: $lb-heading-1;
-  }
-
   .lb-proj-hero-logo {
     left: 1.5rem;
     width: 5rem;
@@ -141,7 +137,6 @@
 }
 
 .lb-group-zone {
-  font-size: $lb-heading-1;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -230,7 +225,6 @@
 }
 
 .lb-proj-name {
-  font-size: $lb-heading-3;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -285,7 +279,6 @@
 }
 
 .lb-vprops-title {
-  font-size: $lb-heading-2;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
   max-width: 71.5rem;
@@ -299,13 +292,11 @@
 }
 
 .lb-vprop-num {
-  font-size: $lb-heading-1;
   font-weight: 400;
   color: $lb-bronze;
 }
 
 .lb-vprop-card-title {
-  font-size: $lb-heading-3;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
 }
@@ -338,7 +329,6 @@
 }
 
 .lb-proj-cta-title {
-  font-size: $lb-heading-1;
   font-weight: $lb-heading-weight;
   color: $lb-white;
 }
@@ -387,29 +377,13 @@
 // Mobile responsive
 // ============================================================
 @include bs.media-breakpoint-down(md) {
-  .lb-group-zone {
-    font-size: $lb-heading-2;
-  }
-
-  .lb-proj-name {
-    font-size: $lb-heading-4;
-  }
-
   .lb-vprops {
     padding-block: $lb-section-pad-sm;
-  }
-
-  .lb-vprops-title {
-    font-size: $lb-heading-3;
   }
 
   .lb-vprop-card {
     padding: 1.25rem;
     height: auto;
-  }
-
-  .lb-vprop-num {
-    font-size: $lb-heading-3;
   }
 
   .lb-vprop-card-title {
@@ -418,10 +392,6 @@
 
   .lb-proj-cta {
     padding-block: $lb-section-pad-sm + 0.75rem;
-  }
-
-  .lb-proj-cta-title {
-    font-size: $lb-heading-2;
   }
 
   .lb-proj-cta-subtitle {

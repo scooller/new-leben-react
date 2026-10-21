@@ -51,7 +51,6 @@
 
   &__title {
     font-family: $font-secondary;
-    font-size: $lb-heading-3;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin-bottom: 0.25rem;
@@ -107,7 +106,9 @@
       display: inline-flex;
       color: #999;
 
-      &:hover { color: $lb-green; }
+      &:hover {
+        color: $lb-green;
+      }
     }
   }
 
@@ -259,6 +260,7 @@
     &--broker {
       color: #c8a85a;
     }
+
     &--comprador {
       color: lighten($lb-green, 15%);
     }
@@ -299,6 +301,7 @@
 
     &--logout {
       color: rgba($lb-red-light, 0.8);
+
       &:hover {
         color: $lb-red-light;
         background: rgba($lb-red, 0.1);
@@ -342,7 +345,6 @@
   }
 
   &__topbar-title {
-    font-size: $lb-heading-4;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin: 0;
@@ -482,7 +484,6 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: $lb-heading-4;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin: 0 0 1.25rem 0;
@@ -496,7 +497,6 @@
     margin-bottom: 1.5rem;
 
     h3 {
-      font-size: $lb-heading-4;
       font-weight: $lb-heading-weight;
       margin: 0;
       color: $lb-heading-color;
@@ -604,14 +604,17 @@
       background: rgba($lb-green, 0.12);
       color: $lb-green;
     }
+
     &--yellow {
       background: rgba(#c8a85a, 0.15);
       color: #8a7530;
     }
+
     &--red {
       background: rgba($lb-red, 0.12);
       color: $lb-red;
     }
+
     &--outline {
       background: none;
       border: 1px solid #ddd;
@@ -656,7 +659,6 @@
   }
 
   &__progress-value {
-    font-size: $lb-heading-3;
     font-weight: $lb-heading-weight;
     color: $lb-green;
   }
@@ -700,6 +702,7 @@
     &--done::before {
       background: $lb-green;
     }
+
     &--current::before {
       background: $lb-red;
       box-shadow: 0 0 0 4px rgba($lb-red, 0.2);
@@ -818,7 +821,6 @@
   }
 
   &__news-title {
-    font-size: $lb-heading-4;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin: 0 0 0.5rem;
@@ -943,12 +945,16 @@
   }
 
   &__stat-value {
-    font-size: $lb-heading-3;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
 
-    &--green { color: $lb-green; }
-    &--yellow { color: #c8a85a; }
+    &--green {
+      color: $lb-green;
+    }
+
+    &--yellow {
+      color: #c8a85a;
+    }
   }
 
   &__stat-label {
@@ -981,7 +987,6 @@
   }
 
   &__tier-name {
-    font-size: $lb-heading-3;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin: 0;
@@ -1014,12 +1019,17 @@
       color: #fff;
       font-weight: 600;
 
-      svg { color: #fff; }
+      svg {
+        color: #fff;
+      }
     }
 
     &.passed {
       color: $lb-green;
-      svg { color: $lb-green; }
+
+      svg {
+        color: $lb-green;
+      }
     }
   }
 
@@ -1093,7 +1103,6 @@
 
   &__event-day {
     display: block;
-    font-size: $lb-heading-3;
     font-weight: $lb-heading-weight;
     color: $lb-green;
     line-height: 1;
@@ -1111,7 +1120,6 @@
   }
 
   &__event-title {
-    font-size: $lb-heading-4;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     margin: 0 0 0.375rem;
@@ -1135,7 +1143,6 @@
   }
 
   &__rank-num {
-    font-size: $lb-heading-2;
     font-weight: $lb-heading-weight;
     color: $lb-heading-color;
     line-height: 1;

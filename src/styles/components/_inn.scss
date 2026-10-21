@@ -466,7 +466,6 @@ $inn-map-card-bg: #f6f1eb;
   }
 
   &__eyebrow {
-    font-size: $lb-heading-4;
     font-weight: 700;
     display: block;
     margin-bottom: 1.5rem;
@@ -677,7 +676,6 @@ $inn-map-card-bg: #f6f1eb;
     gap: 0.4rem;
     margin-bottom: 1rem;
     font-family: $font-title;
-    font-size: $lb-heading-3;
     color: $lb-dark;
 
     img {
@@ -1845,7 +1843,6 @@ $inn-map-card-bg: #f6f1eb;
     width: 100%;
     margin-bottom: auto;
     font-family: $font-title;
-    font-size: $lb-heading-3;
     color: $inn-gold;
     font-weight: 400;
     pointer-events: none;
