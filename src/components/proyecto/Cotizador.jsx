@@ -345,12 +345,11 @@ export default function Cotizador({
       ),
     [plantas, projectEtapaByName])
 
-  // Sync when parent swaps data
+  // Sync when parent swaps data (e.g. project detail page navigation)
   useEffect(() => {
-    setActiveData(data || DEFAULT_COTIZADOR_DATA); setSelected(0)
-    setFilters(filtersFromSelection(selection) || EMPTY_FILTERS)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, selection, universal])
+    setActiveData(data || DEFAULT_COTIZADOR_DATA)
+    setSelected(0)
+  }, [data])
 
   // Fetch plantas from API — universal paginates through ALL available, otherwise per-project
   // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
@@ -359,15 +358,8 @@ export default function Cotizador({
     const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion || selection?.filters)
     if (universal && !universalHasFilter) { setPlantas([]); return }
 
-    const universalUrl = '/api/v1/plantas?disponible=1'
-    const matchedProject = universal && filters.proyecto
-      ? (projects || []).find((p) => norm(p.name) === norm(filters.proyecto))
-      : null
-
     const url = universal
-      ? (plantasCache.has(universalUrl) || !matchedProject?.id
-          ? universalUrl
-          : `/api/v1/plantas?proyecto_id=${matchedProject.id}&disponible=1`)
+      ? '/api/v1/plantas?disponible=1'
       : `/api/v1/plantas?proyecto_id=${apiId}&disponible=1`
 
     // Instant cache hit — no spinner flash
@@ -385,7 +377,7 @@ export default function Cotizador({
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters, projects])
+  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
@@ -594,10 +586,15 @@ export default function Cotizador({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, filteredPlantas, activeProject])
 
+  const lastAppliedSelectionRef = useRef(selection)
+
   // External selection ({ planta?, project? }) — apply filters, scroll into view when planta-driven
   useEffect(() => {
+    if (!universal || !selection) return
+    if (selection === lastAppliedSelectionRef.current) return
+    lastAppliedSelectionRef.current = selection
     const next = filtersFromSelection(selection)
-    if (!universal || !next) return
+    if (!next) return
     setFiltering(true)
     setFilters(next)
     if (selection.planta) {

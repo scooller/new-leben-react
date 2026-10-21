@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.163] - 2026-10-21
+
+### Fixed
+- `src/pages/CotizadorGeneral.jsx`:
+  - Memoizada propiedad `selectionProp` para prevenir re-instanciación de objetos literales `{ filters }` en cada render.
+  - Salvaguardado `handleProjectChange` para evitar actualizaciones de estado cíclicas cuando el proyecto activo no cambia (`prev?.id === p?.id`).
+- `src/components/proyecto/Cotizador.jsx`:
+  - Eliminado reseteo destructivo de filtros en el efecto de sincronización de `data`.
+  - Salvaguardada sincronización de selección externa con `lastAppliedSelectionRef`, evitando que al seleccionar comuna o proyecto en los dropdowns locales se sobreescriban los filtros con la búsqueda previa.
+
 ## [0.9.162] - 2026-10-21
 
 ### Performance

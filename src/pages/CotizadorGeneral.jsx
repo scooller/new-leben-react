@@ -99,8 +99,16 @@ export default function CotizadorGeneral() {
     }
   }, [location.hash])
 
-  const handleProjectChange = useCallback((p) => setActiveProject(p), [])
+  const handleProjectChange = useCallback((p) => {
+    setActiveProject((prev) => (prev?.id === p?.id && prev?.slug === p?.slug ? prev : p))
+  }, [])
   const handleCotizarPlanta = useCallback((planta) => setExternalPlanta(planta), [])
+
+  const selectionProp = useMemo(() => {
+    if (externalPlanta) return { planta: externalPlanta }
+    if (searchFilters) return { filters: searchFilters }
+    return undefined
+  }, [externalPlanta, searchFilters])
 
   return (
     <>
@@ -140,13 +148,7 @@ export default function CotizadorGeneral() {
             universal
             projects={rawProjects}
             onProjectChange={handleProjectChange}
-            selection={
-              externalPlanta
-                ? { planta: externalPlanta }
-                : searchFilters
-                  ? { filters: searchFilters }
-                  : undefined
-            }
+            selection={selectionProp}
             onReset={handleReset}
             onModifySearch={handleModifySearch}
           />
