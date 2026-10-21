@@ -102,4 +102,21 @@
       }
     }
   }
+
+  .lb-trabaja-card {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    .form-control {
+      border-radius: 4px;
+      padding: 0.65rem 0.85rem;
+      border-color: #dee2e6;
+      font-size: 0.95rem;
+
+      &:focus {
+        border-color: #d44040;
+        box-shadow: 0 0 0 0.2rem rgba(212, 64, 64, 0.15);
+      }
+    }
+  }
 }
+

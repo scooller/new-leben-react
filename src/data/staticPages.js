@@ -205,6 +205,7 @@ export const staticPages = {
     subtitle: 'Súmate a nuestro equipo de talentos',
     badge: 'Equipo Leben',
     heroImage: '/images/home/Trabaja-con-nosotros1.png',
+    hasJobForm: true,
     paragraphs: [
       'En Leben Grupo Inmobiliario creemos en el talento, la innovación y el compromiso de las personas para transformar la calidad de vida en cada uno de nuestros proyectos.',
       'Si quieres formar parte de una empresa en constante crecimiento con un ambiente de trabajo dinámico, colaborativo y de excelencia, envíanos tus antecedentes a seleccion@ileben.cl.',

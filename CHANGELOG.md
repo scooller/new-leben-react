@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.171] - 2026-10-21
+
+### Added
+- `src/components/TrabajaForm.jsx`:
+  - Creado formulario completo de postulación laboral con todos los campos del sitio de producción (`nombre`, `apellido`, `rut`, `telefono`, `email`, `regiondedomicilio`, `tituloprofesionaltecnico`, `ultimocargodesempenado`, `ultimaempresa`, `experiencia`, `cargarcv`, `brevesintesisdetuexperiencialaboral`) y el nuevo campo solicitado `linkedin` (opcional). Incluye validaciones, carga de archivos y feedback visual de éxito.
+- `src/styles/components/_static-page.scss`:
+  - Agregados estilos para `.lb-trabaja-card` y estados de foco de inputs acorde al diseño de Leben.
+
+### Changed
+- `src/data/staticPages.js`:
+  - Añadido flag `hasJobForm: true` en la página `'trabaja-en-leben'`.
+- `src/pages/StaticPage.jsx`:
+  - Importado y renderizado `TrabajaForm` en la página estática de Trabaja con Nosotros.
+
 ## [0.9.170] - 2026-10-21
 
 ### Changed

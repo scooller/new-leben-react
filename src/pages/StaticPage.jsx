@@ -3,6 +3,7 @@ import { FileText, Download, Building2, ShieldCheck, CheckCircle2, MapPin } from
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import NotFound from './NotFound.jsx'
+import TrabajaForm from '../components/TrabajaForm.jsx'
 import { staticPages, slugAliases } from '../data/staticPages.js'
 
 export default function StaticPage({ slug: propSlug }) {
@@ -205,6 +206,13 @@ export default function StaticPage({ slug: propSlug }) {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Formulario Trabaja con Nosotros */}
+              {(page.hasJobForm || resolvedSlug === 'trabaja-en-leben') && (
+                <div className="mt-5 pt-3">
+                  <TrabajaForm />
                 </div>
               )}
             </div>
