@@ -25,7 +25,7 @@ export const investData = {
   // --- Value Prop Section ---
   valueProp: {
     eyebrow: 'Oportunidad Única',
-    title: 'Es el último momento de aprovechar las mejores promociones para hacer la inversión de tu vida',
+    title: 'Es el último momento de aprovechar las <span class="red">mejores promociones</span> para hacer la inversión de tu vida',
     description:
       'Leben Invest es el área de Inversiones de Leben, con condiciones y beneficios exclusivos para inversionistas como tú.',
     prompt: '¿Por qué invertir con Leben Invest?',
@@ -210,7 +210,7 @@ export const investData = {
   // --- Smart Section (Dark CTA Callout) ---
   smartBanner: {
     eyebrow: 'Tranquilidad Total',
-    title: 'Tu nuevo depto con SIN PIE y ARRIENDO GARANTIZADO*',
+    title: 'Tu nuevo depto con<br /><span class="red">SIN PIE y ARRIENDO<br />GARANTIZADO*</span>',
     disclaimer:
       '* COMPRA SIN PIE ES SOLO PARA CRÉDITOS CON 90% DE APROBACIÓN. EXCLUSIVO PARA PROYECTOS EN LA REGIÓN METROPOLITANA.',
     description:

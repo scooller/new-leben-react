@@ -121,7 +121,7 @@ export default function Invest() {
 
               <ScrollAnim animation="fade-up" delay={0.4}>
                 <div className="d-flex justify-content-center">
-                  <a href={data.hero.ctaHref} className="btn btn-danger fw-bold text-uppercase px-4 py-3 rounded-2 shadow">
+                  <a href={data.hero.ctaHref} className="btn btn-danger fw-bold text-uppercase px-4 py-3 rounded-3 shadow">
                     {data.hero.ctaText}
                   </a>
                 </div>
@@ -137,7 +137,7 @@ export default function Invest() {
               <div className="col-lg-6">
                 <ScrollAnim animation="fade-up">
                   <p className="lb-invest-eyebrow">{data.valueProp.eyebrow}</p>
-                  <h2 className="lb-invest-value__title mb-3">{data.valueProp.title}</h2>
+                  <h2 className="lb-invest-value__title mb-3" dangerouslySetInnerHTML={{ __html: data.valueProp.title }}></h2>
                   <p className="text-secondary mb-3">{data.valueProp.description}</p>
                   <p className="fw-semibold text-dark mb-4">{data.valueProp.prompt}</p>
 
@@ -350,7 +350,7 @@ export default function Invest() {
         {/* ======================= PROJECTS SECTION ======================= */}
         <section className="py-5" style={{ backgroundColor: '#faf9f6' }} id="proyectos">
           <div className="container py-lg-4">
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+            <div className="d-flex flex-column align-items-center flex-wrap gap-3 mb-4">
               <h2 className="h3 fw-bold text-dark mb-0">{data.projects.title}</h2>
 
               <div className="d-flex align-items-center gap-2">
@@ -467,11 +467,11 @@ export default function Invest() {
               <div className="col-lg-7">
                 <div className="p-4 p-md-5 d-flex flex-column justify-content-center">
                   <p className="lb-invest-eyebrow">{data.smartBanner.eyebrow}</p>
-                  <h2 className="lb-invest-smart__title mb-3">{data.smartBanner.title}</h2>
-                  <p className="small fw-bold text-white text-opacity-75 mb-2">{data.smartBanner.disclaimer}</p>
+                  <h2 className="lb-invest-smart__title mb-3" dangerouslySetInnerHTML={{ __html: data.smartBanner.title }}></h2>
+                  <p className="xs-small fw-bold text-white text-opacity-75 mb-2">{data.smartBanner.disclaimer}</p>
                   <p className="text-white text-opacity-90 mb-4">{data.smartBanner.description}</p>
                   <div>
-                    <a href={data.smartBanner.ctaHref} className="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
+                    <a href={data.smartBanner.ctaHref} className="btn btn-danger rounded-pill px-4 py-2 fw-semibold w-100">
                       {data.smartBanner.ctaText}
                     </a>
                   </div>
@@ -550,7 +550,7 @@ export default function Invest() {
             {/* Bottom FAQ CTA */}
             <div className="mt-5 text-center">
               <h3 className="h5 fw-normal text-dark mb-3">{data.faq.bottomCta.text}</h3>
-              <a href={data.faq.bottomCta.href} className="btn btn-danger rounded-2 px-4 py-3 fw-semibold text-white">
+              <a href={data.faq.bottomCta.href} className="btn btn-danger rounded-3 px-4 py-3 fw-semibold text-white">
                 {data.faq.bottomCta.btnText}
               </a>
             </div>

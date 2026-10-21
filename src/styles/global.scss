@@ -59,6 +59,7 @@ body {
 
 // --- Modals — Transición cinemática (Scale + Float + Backdrop Blur) ---
 .modal {
+
   &.d-block,
   &.show {
     background-color: rgba(0, 0, 0, 0.78);
@@ -83,6 +84,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -93,6 +95,7 @@ body {
     opacity: 0;
     transform: scale(0.92) translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -104,6 +107,7 @@ body {
     opacity: 0;
     transform: scale(0.96) translateY(12px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -111,6 +115,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .modal.show .modal-dialog,
   .modal.show .modal-dialog.modal-fullscreen,
   .modal.d-block,
@@ -351,6 +356,30 @@ $lb-top-steps: (
         padding-top: $value !important;
       }
     }
+  }
+}
+
+// ============================================================
+// Micro Small text
+// ============================================================
+.xs-small {
+  font-size: 0.6em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  .xs-small {
+    font-size: 0.6em;
   }
 }
 

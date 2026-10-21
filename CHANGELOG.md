@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.159] - 2026-10-21
+
+### Added
+- `src/styles/global.scss`:
+  - Nueva utilidad `.xs-small` (`0.6em`) para micro-textos, notas y aclaraciones legales (con soporte contextual en encabezados `h1`-`h6`).
+
+### Changed
+- `src/pages/Invest.jsx` & `src/data/invest.js`:
+  - Renderizado HTML en títulos de `valueProp` y `smartBanner` (`dangerouslySetInnerHTML`).
+  - Uso de `.xs-small` en disclaimer de banner inteligente y ajustes de layout en selector de proyectos.
+- `src/styles/components/_invest.scss`:
+  - Borde blanco en `.rounded-circle.bg-danger`.
+
 ## [0.9.158] - 2026-10-21
 
 ### Changed
