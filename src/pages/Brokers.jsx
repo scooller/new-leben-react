@@ -148,7 +148,7 @@ export default function Brokers() {
                         onMouseLeave={() => benefitRefs.current[i]?.stopAnimation()}
                       >
                         <span
-                          className="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm"
+                          className="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm lh-1"
                           style={{ width: '32px', height: '32px' }}
                         >
                           <Icon size={16} ref={(el) => { benefitRefs.current[i] = el }} />

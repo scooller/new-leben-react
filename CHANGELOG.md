@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.165] - 2026-10-21
+
+### Fixed
+- `src/components/icons/animated-icon.jsx`:
+  - Corregido wrapper de iconos animados aplicando `display: inline-flex`, `width: size`, `height: size` y `lineHeight: 0`, eliminando el espacio inferior del baseline de texto que desplazaba los iconos hacia arriba ~2.6px dentro de insignias circulares y botones.
+- `src/pages/Brokers.jsx`:
+  - Agregada clase `lh-1` en las insignias circulares de la lista de beneficios para asegurar un centrado geométrico perfecto.
+
 ## [0.9.164] - 2026-10-21
 
 ### Added

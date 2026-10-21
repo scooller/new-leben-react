@@ -23,8 +23,21 @@ export const createAnimatedIcon = (render) =>
         controls.start('normal')
       },
     }))
+    const { style, ...rest } = props
     return (
-      <div className={className} {...props}>
+      <div
+        className={className}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: size,
+          height: size,
+          lineHeight: 0,
+          ...style,
+        }}
+        {...rest}
+      >
         {render(controls, size)}
       </div>
     )
