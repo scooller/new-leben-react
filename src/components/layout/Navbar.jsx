@@ -114,7 +114,7 @@ const menuGroups = [
     title: 'Personas',
     items: [
       { label: 'Canal de denuncias y consultas', href: 'https://denuncias.ileben.cl/' },
-      { label: 'Acceso Colaboradores', href: 'https://ileben.cl/organigrama/' },
+      { label: 'Acceso Colaboradores', href: 'https://leben.buk.cl' },
     ],
   },
 ]

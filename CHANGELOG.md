@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.167] - 2026-10-21
+
+### Removed
+- `src/components/TerrainErosionCarve.jsx`:
+  - Eliminado el efecto interactivo de tallado topográfico al hacer click y arrastrar con el mouse en el fondo de la página de inicio, preservando únicamente la animación ambiental sutil de curvas de nivel e inclinación.
+
 ## [0.9.166] - 2026-10-21
 
 ### Fixed

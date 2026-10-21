@@ -130,7 +130,7 @@ const SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Cubierta.jpg', alt: 'Cubierta ultracompacta terminación travertino' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Refrigerador.jpg', alt: 'Refrigerador panelado Franke' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Lavavajillas.jpg', alt: 'Lavavajillas panelado Franke' },
-      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera vitrocerámica Franke' },
+      { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera de inducción Franke' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Microondas_Horno_Franke.jpg', alt: 'Microondas y horno empotrados Franke' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini' },
     ]

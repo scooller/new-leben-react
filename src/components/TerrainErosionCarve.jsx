@@ -95,10 +95,6 @@ export default function TerrainErosionCarve({
       life: Math.random() * 100,
     }));
 
-    // Mouse / Pointer carve tracking
-    let isCarving = false;
-    let lastGridPos = null;
-
     function resize() {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -112,84 +108,6 @@ export default function TerrainErosionCarve({
     const resizeObserver = new ResizeObserver(() => resize());
     resizeObserver.observe(canvas);
     resize();
-
-    function getGridCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      const px = e.clientX - rect.x;
-      const py = e.clientY - rect.y;
-      return {
-        gx: (px / rect.width) * gridCols,
-        gy: (py / rect.height) * gridRows,
-      };
-    }
-
-    function carveAt(gx, gy) {
-      const r = carveRadius;
-      const r2 = r * r;
-      const minX = Math.max(0, Math.floor(gx - r));
-      const maxX = Math.min(gridCols - 1, Math.ceil(gx + r));
-      const minY = Math.max(0, Math.floor(gy - r));
-      const maxY = Math.min(gridRows - 1, Math.ceil(gy + r));
-
-      for (let j = minY; j <= maxY; j++) {
-        for (let i = minX; i <= maxX; i++) {
-          const dx = i - gx;
-          const dy = j - gy;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < r2) {
-            const factor = Math.cos((Math.sqrt(distSq) / r) * (Math.PI / 2));
-            const idx = j * gridCols + i;
-            carveIntensity[idx] = Math.min(1.2, carveIntensity[idx] + factor * carveDepth);
-            liveHeight[idx] = Math.max(0, liveHeight[idx] - factor * carveDepth * 0.5);
-          }
-        }
-      }
-    }
-
-    function interpolateCarve(p1, p2) {
-      if (!p1 || !p2) return;
-      const dist = Math.hypot(p2.gx - p1.gx, p2.gy - p1.gy);
-      const steps = Math.max(1, Math.ceil(dist * 2));
-      for (let s = 0; s <= steps; s++) {
-        const t = s / steps;
-        carveAt(p1.gx + (p2.gx - p1.gx) * t, p1.gy + (p2.gy - p1.gy) * t);
-      }
-    }
-
-    function onPointerDown(e) {
-      if (e.pointerType === "touch") return;
-      if (e.button !== undefined && e.button !== 0) return;
-      if (
-        e.target &&
-        e.target.closest &&
-        e.target.closest("a, button, input, select, textarea, [role='button'], .btn, .card, .lb-cert, .lb-search-card, .lb-search-pill, .modal")
-      ) {
-        return;
-      }
-      isCarving = true;
-      const pos = getGridCoords(e);
-      carveAt(pos.gx, pos.gy);
-      lastGridPos = pos;
-    }
-
-    function onPointerMove(e) {
-      if (!isCarving) return;
-      const pos = getGridCoords(e);
-      interpolateCarve(lastGridPos, pos);
-      lastGridPos = pos;
-    }
-
-    function onPointerUp() {
-      isCarving = false;
-      lastGridPos = null;
-    }
-
-    window.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-    window.addEventListener("pointercancel", onPointerUp);
-
-    // Marching squares isoline interpolation
     function getIsoPoint(v1, v2, p1, p2, iso) {
       if (Math.abs(v2 - v1) < 0.0001) return (p1 + p2) * 0.5;
       const t = (iso - v1) / (v2 - v1);
@@ -380,10 +298,6 @@ export default function TerrainErosionCarve({
     return () => {
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
-      window.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerUp);
     };
   }, [
     gridCols,
@@ -407,7 +321,6 @@ export default function TerrainErosionCarve({
         display: "block",
         width: "100%",
         height: "100%",
-        touchAction: "none",
         userSelect: "none",
         ...style,
       }}
