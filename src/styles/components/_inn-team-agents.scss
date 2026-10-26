@@ -5,12 +5,12 @@
 @use '../variables' as *;
 @use 'bootstrap/scss/bootstrap' as bs;
 
-$inn-gold: #c5a869;
-$inn-gold-dark: #422c15;
+$inn-gold: var(--lb-project-accent, #c5a869);
+$inn-gold-dark: var(--lb-project-accent-dark, #422c15);
 $inn-gris: #2d3748;
-$inn-gold-bg: #faf6ee;
-$inn-border: #e1ceaa;
-$inn-wa: #d1b578;
+$inn-gold-bg: var(--lb-project-accent-bg, #faf6ee);
+$inn-border: var(--lb-project-border, #e1ceaa);
+$inn-wa: var(--lb-project-accent, #d1b578);
 
 .lb-inn-team-agents {
   background-color: $inn-gold-bg;

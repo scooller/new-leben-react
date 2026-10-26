@@ -2,28 +2,34 @@
 @use '../variables' as *;
 @use 'bootstrap/scss/bootstrap' as bs;
 
-$inn-gold: #d8b35cff;
-$inn-gold-dark: #422c15;
-$inn-gold-light: #f9f2e7f3;
+// Paleta por defecto (Edificio INN - Gold). Personalizable por proyecto vía CSS Custom Properties.
+$inn-gold: var(--lb-project-accent, #d8b35c);
+$inn-gold-dark: var(--lb-project-accent-dark, #422c15);
+$inn-gold-light: var(--lb-project-accent-light, #f9f2e7);
 $inn-gris: #808080;
 $inn-gris-dark: #101010;
 $inn-celeste: rgb(226, 237, 249);
-$inn-gold-bg: #faf4e8;
+$inn-gold-bg: var(--lb-project-accent-bg, #faf4e8);
 $inn-map-card-bg: #f6f1eb;
 
 // Import team agents styles (namespace evita conflicto de variables $inn-*)
 @use './inn-team-agents';
 
-.lb-inn {
+.lb-inn,
+.lb-project-detail {
   color: $inn-gris-dark;
 }
 
-// Botón homologado INN (reemplaza btn-gold):
-// Basado en .nav-link.nav-link__border.active pero al revés:
-// Normal: estilo activo (fondo degradado dorado, texto blanco, borde dorado)
-// Hover: sin fondo dorado y con borde solamente (fondo transparente, texto oscuro, borde dorado)
+// Botón homologado proyecto (reemplaza btn-gold):
+// Normal: estilo activo (fondo degradado o acento, texto blanco, borde acento)
+// Hover: sin fondo y con borde solamente (fondo transparente, texto oscuro, borde acento)
 .lb-inn-btn,
-.lb-inn .btn-gold {
+.lb-project-btn,
+.lb-inn .btn-gold,
+.lb-project-detail .btn-gold {
+  background: var(--lb-project-gradient, #{$lb-gradient-gold});
+  border: 1px solid var(--lb-project-accent, #d8b35c);
+  box-shadow: 0 4px 14px var(--lb-project-btn-shadow, rgba(158, 122, 76, 0.25));
   display: inline-flex;
   align-items: center;
   justify-content: center;

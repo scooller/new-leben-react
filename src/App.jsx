@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { setLoaded } from './store/slices/uiSlice.js'
@@ -32,7 +32,6 @@ const Invest = lazy(() => import('./pages/Invest.jsx'))
 const Login = lazy(() => import('./pages/Login.jsx'))
 const Perfil = lazy(() => import('./pages/Perfil.jsx'))
 const CotizadorGeneral = lazy(() => import('./pages/CotizadorGeneral.jsx'))
-const Inn = lazy(() => import('./pages/Inn.jsx'))
 const StaticPage = lazy(() => import('./pages/StaticPage.jsx'))
 const CookiesPage = lazy(() => import('./pages/CookiesPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
@@ -122,7 +121,7 @@ export default function App() {
               </>
             }
           />
-          <Route path="/inn-test" element={<Inn />} />
+          <Route path="/inn-test" element={<Navigate to="/proyectos/inn" replace />} />
           <Route path="/proyectos/:slug" element={<ProyectoDetalle />} />
           <Route path="/proyectos/:slug/planta/:plantaId" element={<ProyectoDetalle />} />
           <Route path="/brokers" element={<Brokers />} />

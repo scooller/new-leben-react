@@ -158,12 +158,13 @@ function getPageLinks(pathname) {
   // Detalle de proyecto: /proyectos/:slug
   if (pathname.startsWith('/proyectos/')) {
     return [
-      { label: 'Resumen', href: '#resumen' },
-      { label: 'Planos', href: '#planos' },
-      { label: 'Vista 360°', href: '#vista360' },
-      { label: 'Cotizador', href: '#cotizador' },
-      { label: 'Galería', href: '#galeria' },
+      { label: 'Proyecto', href: '#proyecto' },
+      { label: 'Equipamiento', href: '#departamentos' },
+      { label: 'Cotizador', href: '#cotizador', featured: true, active: true },
+      { label: 'Espacios', href: '#espacios' },
       { label: 'Ubicación', href: '#ubicacion' },
+      { label: 'Interiorismo', href: '#interiorismo' },
+      { label: 'Contacto', href: '#contacto' },
     ]
   }
   return []

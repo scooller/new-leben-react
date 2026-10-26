@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.179] - 2026-10-26
+
+### Added
+- `src/components/proyecto/ProjectTeamAgents.jsx`: Componente genérico estandarizado de asesores de contacto y agendamiento adaptado desde `InnTeamAgents.jsx`, integrando asesores vía API (`include_asesores=1`).
+- `src/components/proyecto/ProjectPanoramasModal.jsx`: Modal genérico de experiencias y panoramas parametrizable por proyecto adaptado desde `InnPanoramasModal.jsx`.
+
+### Changed
+- `src/pages/ProyectoDetalle.jsx`: Adoptada la arquitectura completa de Edificio INN como estándar canónico para `/proyectos/:slug` y `/proyectos/:slug/planta/:plantaId`, con soporte de tematización dinámica por CSS Custom Properties (`--lb-project-accent`, `--lb-project-gradient`, `--lb-project-btn-shadow`), y tarjeta informativa de integración backend para proyectos sin contenido editorial disponible.
+- `src/styles/components/_inn.scss` y `_inn-team-agents.scss`: Agregado soporte de variables CSS personalizables por proyecto, manteniendo el estándar Gold de INN como valor predeterminado y clases `.lb-project-detail`, `.lb-project-btn`.
+- `src/App.jsx`: Redirigida la ruta de prueba `/inn-test` a `/proyectos/inn` mediante `<Navigate replace />` y removido el import redundante de `Inn.jsx`.
+- `src/components/layout/Navbar.jsx`: Actualizadas las anclas de subnavegación para rutas `/proyectos/:slug` con los tabs del nuevo estándar canónico (`#proyecto`, `#departamentos`, `#cotizador`, `#espacios`, `#ubicacion`, `#interiorismo`, `#contacto`).
+- `src/data/content.js` y `src/components/sections/VideosSection.jsx`: Actualizados botones de llamada a la acción hacia `/proyectos/inn`.
+
+### Fixed
+- `src/pages/ProyectoDetalle.jsx`: Restaurado enlace `data` al Cotizador (`getProjectBySlug('inn')?.cotizador`) y binding dinámico de Fancybox para la galería interactiva (`#innGalleryCarousel`).
+- `src/styles/components/_proyecto-detalle.scss`: Preservada la hoja de estilos compartida requerida por `Cotizador.jsx`, `RelatedProjects.jsx` y `Alternatives.jsx`.
+
+### Removed
+- Eliminados 9 subcomponentes estáticos obsoletos de la versión anterior: `ProjectHero.jsx`, `ProjectTabs.jsx`, `ProjectOverview.jsx`, `FloorPlans.jsx`, `Vista360.jsx`, `SpacesGallery.jsx`, `LocationSection.jsx`, `BottomGallery.jsx`, `TeamAgents.jsx`.
+- Eliminado `src/pages/Inn.jsx`, consolidado en `src/pages/ProyectoDetalle.jsx`.
+
 ## [0.9.178] - 2026-10-26
 
 ### Added

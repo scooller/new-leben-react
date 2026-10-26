@@ -157,14 +157,20 @@ function CarFrontIcon({ size = 16, className = '' }) {
   )
 }
 
-export default function InnPanoramasModal({ show, onClose }) {
+export default function ProjectPanoramasModal({
+  show,
+  onClose,
+  categories = PANORAMAS_CATEGORIES,
+  projectName = 'INN',
+}) {
   const [activeCatIndex, setActiveCatIndex] = useState(0)
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const carouselRef = useRef(null)
   const carouselInstance = useRef(null)
 
-  const currentCategory = PANORAMAS_CATEGORIES[activeCatIndex] || PANORAMAS_CATEGORIES[0]
-  const rawCards = (currentCategory.slides || []).flat()
+  const activeCategories = Array.isArray(categories) && categories.length > 0 ? categories : PANORAMAS_CATEGORIES
+  const currentCategory = activeCategories[activeCatIndex] || activeCategories[0]
+  const rawCards = (currentCategory?.slides || []).flat()
   const slides = useMemo(() => chunkIntoPairs(rawCards), [rawCards])
   const totalSlides = slides.length
 
@@ -235,7 +241,7 @@ export default function InnPanoramasModal({ show, onClose }) {
   return (
     <div
       className={`modal fade ${show ? 'show d-block' : ''}`}
-      id="innPanoramasModal"
+      id="projectPanoramasModal"
       tabIndex={-1}
       role="dialog"
       aria-modal="true"
@@ -254,7 +260,7 @@ export default function InnPanoramasModal({ show, onClose }) {
             backgroundImage: `url('${base}images/inn/panoramas/bg-forest.jpg')`,
           }}
         >
-          {/* Overlay oscuro para legibilidad sobre fondo de bosque */}
+          {/* Overlay oscuro para legibilidad sobre fondo */}
           <div className="lb-inn-panoramas-modal__backdrop-filter" />
 
           {/* Botón cerrar nativo Bootstrap */}
@@ -278,13 +284,13 @@ export default function InnPanoramasModal({ show, onClose }) {
                   EL SUR, A TU MANERA
                 </h2>
                 <p className="lb-inn-panoramas-modal__desc">
-                  Desde INN, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.
+                  Desde {projectName}, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.
                 </p>
               </div>
 
               {/* Categorías / Tabs */}
               <div className="lb-inn-panoramas-modal__tabs-nav">
-                {PANORAMAS_CATEGORIES.map((cat, idx) => {
+                {activeCategories.map((cat, idx) => {
                   const isActive = activeCatIndex === idx
                   return (
                     <React.Fragment key={cat.id}>
@@ -308,7 +314,7 @@ export default function InnPanoramasModal({ show, onClose }) {
               <div
                 key={activeCatIndex}
                 ref={carouselRef}
-                id="innPanoramasCarousel"
+                id="projectPanoramasCarousel"
                 className="carousel slide mb-4"
                 data-bs-interval="false"
               >
@@ -324,8 +330,8 @@ export default function InnPanoramasModal({ show, onClose }) {
                             <div className="card lb-inn-panoramas-modal__card h-100 border-0 rounded-1 overflow-hidden">
                               <a
                                 href={`${base}${card.image}`}
-                                data-fancybox={`panoramas-${currentCategory.id}`}
-                                data-caption={`${card.title} · a ${card.distance} de INN`}
+                                data-fancybox={`panoramas-${currentCategory?.id || 'cat'}`}
+                                data-caption={`${card.title} · a ${card.distance} de ${projectName}`}
                                 className="d-block ratio ratio-16x9 text-decoration-none"
                                 style={{ cursor: 'pointer' }}
                               >
@@ -340,7 +346,7 @@ export default function InnPanoramasModal({ show, onClose }) {
                                 <h3 className="lb-inn-panoramas-modal__card-title m-0">{card.title}</h3>
                                 <div className="d-flex align-items-center text-secondary small">
                                   <CarFrontIcon size={16} className="me-2" />
-                                  <span>a {card.distance} de INN</span>
+                                  <span>a {card.distance} de {projectName}</span>
                                 </div>
                               </div>
                             </div>
@@ -355,7 +361,7 @@ export default function InnPanoramasModal({ show, onClose }) {
               {/* Barra de navegación inferior */}
               <div className="d-flex align-items-center justify-content-between pt-2">
                 <div className="lb-inn-panoramas-modal__counter">
-                  {currentCategory.name} [{activeSlideIndex + 1}/{totalSlides}]
+                  {currentCategory?.name} [{activeSlideIndex + 1}/{totalSlides}]
                 </div>
 
                 <div className="d-flex align-items-center gap-2">
