@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.178] - 2026-10-26
+
+### Added
+- `PROJECT-BACKEND-INTEGRATION.md`:
+  - Generado documento técnico maestro de arquitectura e integración entre el backend Laravel + Filament y el frontend React, con inventario completo de contenidos hardcodeados, mapa de endpoints existentes y propuestos, modelo de datos relacional ERD y plan de implementación en 6 fases.
+  - Ajustada delimitación geográfica oficial de proyectos en el sur de Chile exclusivamente a Puerto Varas, Valdivia y Puerto Montt.
+  - Documentada la adopción de `src/pages/Inn.jsx` como estándar canónico obligatorio para todas las fichas de proyectos del catálogo, desechando la arquitectura previa de `ProyectoDetalle.jsx`.
+  - Añadida sección de roadmap futuro (Fase 7 Post-MVP) para la gestión integral de cuentas de usuario/cliente (compradores) y brokers en Laravel + Filament.
+
 ## [0.9.177] - 2026-10-21
 
 ### Added
