@@ -459,23 +459,33 @@ export default function ProyectoDetalle() {
     const projectName = currentProject?.name || slug?.toUpperCase() || 'Proyecto'
     return (
       <>
-        <Navbar />
-        <main className="container text-center py-5 my-5">
-          <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mx-auto" style={{ maxWidth: '680px' }}>
-            <span className="badge bg-light text-muted border px-3 py-2 rounded-pill mx-auto mb-3 text-uppercase">
-              Estándar Canónico · Integración Backend
-            </span>
-            <h1 className="h3 fw-bold mb-3">{projectName}</h1>
-            <p className="text-secondary mb-4 leading-relaxed">
-              El contenido editorial enriquecido de este proyecto se encuentra en preparación para ser gestionado desde el nuevo panel administrativo (Laravel 11 + Filament v3), siguiendo el estándar visual y funcional de <strong>Edificio INN</strong>.
-            </p>
-            <div className="d-flex flex-wrap justify-content-center gap-3">
-              <Link to="/proyectos/inn" className="btn btn-primary rounded-pill px-4">
-                Ver Edificio INN (Estándar Canónico)
-              </Link>
-              <Link to="/cotizador#proyectos" className="btn btn-outline-secondary rounded-pill px-4">
-                Explorar Catálogo General
-              </Link>
+        <Navbar className="bg-dark" />
+        <main
+          className="lb-is-mockup d-flex align-items-center justify-content-center py-5 position-relative"
+          style={{
+            minHeight: 'calc(100vh - 280px)',
+            backgroundImage: 'linear-gradient(rgba(245, 242, 237, 0.92), rgba(245, 242, 237, 0.92)), url(/images/home/hero-institucional.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="container text-center py-5 position-relative" style={{ zIndex: 1 }}>
+            <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mx-auto bg-white" style={{ maxWidth: '680px' }}>
+              <span className="badge bg-light text-muted border px-3 py-2 rounded-pill mx-auto mb-3 text-uppercase">
+                Estándar Canónico · Integración Backend
+              </span>
+              <h1 className="h3 fw-bold mb-3">{projectName}</h1>
+              <p className="text-secondary mb-4 leading-relaxed">
+                El contenido editorial enriquecido de este proyecto se encuentra en preparación para ser gestionado desde el nuevo panel administrativo (Laravel 11 + Filament v3), siguiendo el estándar visual y funcional de <strong>Edificio INN</strong>.
+              </p>
+              <div className="d-flex flex-wrap justify-content-center gap-3">
+                <Link to="/proyectos/inn" className="btn btn-primary rounded-pill px-4">
+                  Ver Edificio INN (Estándar Canónico)
+                </Link>
+                <Link to="/cotizador#proyectos" className="btn btn-outline-secondary rounded-pill px-4">
+                  Explorar Catálogo General
+                </Link>
+              </div>
             </div>
           </div>
         </main>

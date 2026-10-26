@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.181] - 2026-10-26
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`: Agregada la marca de agua de vista temporal (`watermark-mockup.svg` - "TEMPORAL — EN CONSTRUCCIÓN") y fondo hero institucional para proyectos que aún no cuentan con contenido editorial en backend. Inyectada la clase `bg-dark` al `Navbar` exclusivamente en proyectos sin data para garantizar alto contraste con los logos y enlaces.
+- `src/components/layout/Navbar.jsx`: Soporte para prop `className` opcional en la etiqueta `<nav>` raíz y ajuste de enlaces dinámicos de anclas limitado a rutas de proyectos con contenido canónico activo (`/proyectos/inn`).
+- `src/styles/components/_static-page.scss`: Habilitada la clase `.lb-is-mockup` como selector independiente para su uso transversal en vistas en integración.
+
 ## [0.9.180] - 2026-10-26
 
 ### Changed

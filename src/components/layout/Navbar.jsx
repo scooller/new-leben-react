@@ -155,8 +155,8 @@ const pageLinksMap = {
 function getPageLinks(pathname) {
   // Rutas estáticas exactas
   if (pageLinksMap[pathname]) return pageLinksMap[pathname]
-  // Detalle de proyecto: /proyectos/:slug
-  if (pathname.startsWith('/proyectos/')) {
+  // Detalle de proyecto: /proyectos/inn
+  if (pathname.startsWith('/proyectos/inn')) {
     return [
       { label: 'Proyecto', href: '#proyecto' },
       { label: 'Equipamiento', href: '#departamentos' },
@@ -170,7 +170,7 @@ function getPageLinks(pathname) {
   return []
 }
 
-export default function Navbar() {
+export default function Navbar({ className = '' }) {
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
   const pageLinks = getPageLinks(location.pathname)
@@ -183,7 +183,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}`} style={{ zIndex: 90 }}>
+    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}${className ? ` ${className}` : ''}`} style={{ zIndex: 90 }}>
       <div className="container d-flex align-items-center justify-content-between g-5">
         {/* Logo group */}
         <Link className="lb-navbar__logo d-flex align-items-center gap-2 text-decoration-none" to="/">

@@ -2,27 +2,29 @@
 // Static Page & Proyectos Anteriores Section Styles
 // ============================================================
 
-.lb-static-page {
-  &.lb-is-mockup {
-    position: relative;
+.lb-is-mockup,
+.lb-static-page.lb-is-mockup {
+  position: relative;
 
-    &::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1040;
-      background-image: url('/images/watermark-mockup.svg');
-      background-repeat: repeat;
-      background-size: 680px 420px;
-      opacity: 0.95;
-    }
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1040;
+    background-image: url('/images/watermark-mockup.svg');
+    background-repeat: repeat;
+    background-size: 680px 420px;
+    opacity: 0.95;
   }
+}
+
+.lb-static-page {
 
   .lb-anteriores-section {
     .lb-anteriores-item {
