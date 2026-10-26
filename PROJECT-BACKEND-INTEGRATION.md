@@ -1,7 +1,8 @@
 # PROJECT-BACKEND-INTEGRATION.md
+
 > **Documento de Arquitectura e Integración Backend Laravel + Filament para Frontend React**  
 > **Proyecto:** Inmobiliaria Leben (`new-leben-react` / `Leben-site`)  
-> **Versión del Documento:** 1.1.0  
+> **Versión del Documento:** 1.1.1  
 > **Fecha:** 2026-10-26  
 > **Estado:** Fase Frontend Completada (`new-leben-react` v0.9.179) — Backend Laravel/Filament en Especificación  
 > **Destinatario:** Ingeniero / IA de Backend (Laravel 11+ / Filament v3 / REST API)
@@ -11,14 +12,18 @@
 ## 1. Resumen ejecutivo
 
 ### 1.1. Contexto del Proyecto
+
 Inmobiliaria Leben es una compañía inmobiliaria chilena de alta gama con proyectos en Santiago y en el sur de Chile (específicamente en Puerto Varas, Valdivia y Puerto Montt solamente). El ecosistema digital está compuesto por dos proyectos estrechamente acoplados:
-1. **Frontend Público (`new-leben-react`):** Una aplicación Single Page Application (SPA) desarrollada en React 19 y empaquetada con Vite 6, estilizada con SCSS y Bootstrap 5.3, animada mediante GSAP (ScrollTrigger) y Motion, y gestionada en su estado global con Redux Toolkit.
+
+1. **Frontend Público (`new-leben-react` / `test.ileben.cl`):** Una aplicación Single Page Application (SPA) desarrollada en React 19 y empaquetada con Vite 6, estilizada con SCSS y Bootstrap 5.3, animada mediante GSAP (ScrollTrigger) y Motion, y gestionada en su estado global con Redux Toolkit.
 2. **Backend Administrativo y API (`dev.ileben.cl` / `admin.ileben.cl` - `Leben-site`):** Una plataforma monolítica en Laravel (PHP 8.2+) con panel administrativo impulsado por Filament PHP v3, que expone una API REST versionada en `/api/v1` protegida mediante Laravel Sanctum y validación de origen (`token.origin`).
 
 ### 1.2. Problema que Resuelve esta Integración
+
 Actualmente, el frontend React ya se comunica exitosamente con el backend Laravel para consultar el catálogo general de proyectos (`/api/v1/proyectos`), asesores comerciales por proyecto (`/api/v1/proyectos/{id}?include_asesores=1`) y el listado de unidades departamentales y tipologías para el cotizador interactivo (`/api/v1/plantas`).
 
 Sin embargo, **un gran volumen de información crítica se encuentra hardcodeado en archivos JavaScript del frontend (`src/data/*.js`) y en constantes dentro de componentes JSX**:
+
 - Textos de landing principal, títulos, subtítulos y llamados a la acción (CTA).
 - Testimonios de clientes, sellos de certificación (Best Place to Live, CChC, Calificación Energética) y métricas comerciales.
 - El detalle editorial de proyectos individuales: históricamente, sólo "Edificio INN" contaba con contenido completo hardcodeado en `src/data/projects.js` y `src/pages/Inn.jsx`, lo que impedía que cualquier otro proyecto del catálogo contase con ficha rica y personalizable.
@@ -30,22 +35,25 @@ Sin embargo, **un gran volumen de información crítica se encuentra hardcodeado
 - El orden visual de los proyectos (`PROJECT_DISPLAY_ORDER`), forzado manualmente en frontend por carecer de ordenamiento administrable desde el backend.
 
 ### 1.3. Resultado Esperado
+
 Transformar el backend Laravel + Filament en la **única fuente de verdad (Single Source of Truth - SSOT)** de la plataforma:
+
 - Los administradores y equipos de marketing podrán editar textos, banners, imágenes, testimonios, FAQs, páginas institucionales, menús y fichas de proyectos desde Filament sin requerir despliegues ni cambios en el código de React.
 - El frontend React consumirá endpoints REST estructurados, con tipado predecible, URLs absolutas para medios y soporte de caché HTTP / sessionStorage, eliminando archivos estáticos de datos (`src/data/*.js`).
 - El backend procesará de forma nativa los formularios de prospección (`Brokers` e `Invest`) vinculándolos al canal correspondiente de leads (`contact_submissions`).
 
 ### 1.4. Decisión Arquitectónica Clave: Adopción de `Inn.jsx` como Estándar Canónico (COMPLETADO EN FRONTEND v0.9.179)
+
 Se estableció de manera taxativa que la arquitectura visual y funcional desarrollada en `src/pages/Inn.jsx` constituye el **estándar oficial (plantilla canónica)** para la presentación de TODOS los proyectos de Inmobiliaria Leben.
 
 **Hito ejecutado en Frontend (`new-leben-react` v0.9.179):**
+
 - **Reemplazo y Purga Definitiva:** Se eliminó la estructura antigua de `ProyectoDetalle.jsx`, el archivo duplicado `src/pages/Inn.jsx` y 10 componentes obsoletos (`ProjectHero.jsx`, `ProjectTabs.jsx`, `ProjectOverview.jsx`, `FloorPlans.jsx`, `Vista360.jsx`, `SpacesGallery.jsx`, `LocationSection.jsx`, `BottomGallery.jsx`, `TeamAgents.jsx`, `AgentCard.jsx`).
 - **Plantilla Canónica Unificada:** `src/pages/ProyectoDetalle.jsx` ahora centraliza la maqueta completa de alta gama: Hero de alta gama con video/logo y barra técnica `INFO`, tabs sticky con scroll spy, slider principal de fotos, bloque de marcas asociadas, slider de terminaciones principales, amenidades con íconos animados `pqoqubbw`, cotizador interactivo integrado, recorridos 360 multicanal (YouTube, Matterport, La Nube 360), sección de interiorismo, mapa con pines porcentuales interactivos (X/Y), modales de panoramas y espacios, y equipo de asesores comerciales.
 - **Componentes Genéricos Reutilizables:** Se modularizaron `src/components/proyecto/ProjectTeamAgents.jsx` y `src/components/proyecto/ProjectPanoramasModal.jsx`.
 - **Theming por Proyecto (CSS Custom Properties):** Cada proyecto soporta su propia paleta de acento mediante variables CSS inyectadas dinámicamente (`--lb-project-accent`, `--lb-project-accent-dark`, `--lb-project-accent-light`, `--lb-project-accent-bg`, `--lb-project-gradient`, `--lb-project-btn-shadow`). Ejemplo: Edificio INN utiliza su característico dorado (`#d9bc70`), mientras que futuros proyectos adoptarán sus colores corporativos desde el backend sin necesidad de duplicar código SCSS.
 - **Política de No Programación Doble:** Para proyectos cuyo contenido aún no existe en el backend (`slug !== 'inn'`), el frontend no inventa datos mockeados; despliega un aviso informativo limpio de integración en curso y un botón para contactar o regresar al catálogo, garantizando una transición ordenada hacia la API.
 - **Unificación de Rutas:** La ruta `/inn-test` redirige permanentemente a `/proyectos/inn`.
-
 
 ---
 
@@ -54,6 +62,7 @@ Se estableció de manera taxativa que la arquitectura visual y funcional desarro
 ### 2.1. Stack Tecnológico Detectado
 
 #### Frontend (`new-leben-react`)
+
 - **Runtime & Build:** Node.js, Vite 6.0.0, `@vitejs/plugin-react` 4.3.4.
 - **Librería UI:** React 19.0.0, `react-dom` 19.0.0.
 - **Enrutamiento:** `react-router-dom` 7.18.2 (rutas SPA, hash scrolling sincronizado).
@@ -65,6 +74,7 @@ Se estableció de manera taxativa que la arquitectura visual y funcional desarro
 - **Cumplimiento Legal:** Ley N° 21.719 de Chile sobre Protección de Datos Personales (Google Consent Mode v2 sin cookies por defecto, bloqueo de Meta Pixel).
 
 #### Backend (`dev.ileben.cl` / `admin.ileben.cl` - Repositorio `Leben-site`)
+
 - **Framework Core:** Laravel 11.x (PHP 8.2+).
 - **Panel Administrativo:** Filament PHP v3 (gestión de recursos mediante Livewire 3).
 - **Seguridad & API:** Laravel Sanctum (Personal Access Tokens) + Middleware personalizado `token.origin`.
@@ -74,7 +84,7 @@ Se estableció de manera taxativa que la arquitectura visual y funcional desarro
 
 ### 2.2. Estructura de Carpetas Relevante
 
-```
+```text
 c:\laragon\app\new-leben-react/
 ├── public/
 │   ├── api-proxy.php              # Proxy cURL de producción para Apache/cPanel
@@ -103,7 +113,8 @@ c:\laragon\app\new-leben-react/
 ```
 
 Estructura esperada en el backend Laravel (`scooller/Leben-site`):
-```
+
+```text
 Leben-site/
 ├── app/
 │   ├── Filament/Resources/        # Recursos del panel Filament
@@ -141,35 +152,37 @@ Leben-site/
 
 ```mermaid
 flowchart LR
-  subgraph Frontend [Frontend React (Vite 6 / SPA)]
-    ReactUI[Componentes UI / Vistas] --> LibFetch[lib/apiFetch.js]
-    LibFetch -->|Deduplicación & Cache| CacheStorage[(sessionStorage)]
-  end
+    subgraph Frontend["Frontend React - Vite 6 SPA"]
+        ReactUI["Componentes UI y Vistas"]
+        LibFetch["lib/apiFetch.js"]
+        Cache["Cache Storage sessionStorage"]
+        ReactUI --> LibFetch
+        LibFetch --> Cache
+    end
 
-  subgraph Gateway [Proxy de Conexión]
-    DevProxy[Vite Dev Proxy: /api/*]
-    ProdProxy[public/api-proxy.php]
-  end
+    subgraph Gateway["Proxy de Conexión"]
+        DevProxy["Vite Dev Proxy"]
+        ProdProxy["public/api-proxy.php"]
+    end
 
-  subgraph Backend [Backend Laravel + Filament (dev.ileben.cl)]
-    Sanctum[Middleware Sanctum + token.origin]
-    Controllers[Controladores Api/V1/*]
-    Resources[Eloquent API Resources]
-    Models[Modelos Eloquent]
-    DB[(Base de Datos MySQL)]
-    FilamentPanel[Panel Admin Filament v3]
-  end
+    subgraph Backend["Backend Laravel Filament - dev.ileben.cl"]
+        Sanctum["Sanctum + token.origin"]
+        Controllers["Controladores ApiV1"]
+        Resources["Eloquent API Resources"]
+        Models["Modelos Eloquent"]
+        DB["Base de Datos MySQL"]
+        FilamentPanel["Panel Admin Filament v3"]
+        Sanctum --> Controllers
+        Controllers --> Resources
+        Resources --> Models
+        Models --> DB
+        FilamentPanel --> Models
+    end
 
-  ReactUI -.->|Modo Dev| DevProxy
-  ReactUI -.->|Modo Prod| ProdProxy
-  DevProxy -->|HTTPS + Bearer + Origin| Sanctum
-  ProdProxy -->|HTTPS + Bearer + Origin| Sanctum
-
-  Sanctum --> Controllers
-  Controllers --> Resources
-  Resources --> Models
-  Models <--> DB
-  FilamentPanel <--> Models
+    ReactUI -. "Modo Dev" .-> DevProxy
+    ReactUI -. "Modo Producción" .-> ProdProxy
+    DevProxy -- "HTTPS + Bearer + Origin" --> Sanctum
+    ProdProxy -- "HTTPS + Bearer + Origin" --> Sanctum
 ```
 
 ---
@@ -179,7 +192,7 @@ flowchart LR
 A continuación se detalla todo el contenido estático identificado en el frontend React que debe migrarse hacia Laravel y administrarse desde Filament:
 
 | Área / Página | Ubicación exacta en React | Tipo de contenido | Ejemplo detectado | Debe administrarse desde | Endpoint sugerido | Prioridad |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | **Home: Hero** | `src/data/content.js:43-45`, `Hero.jsx:17` | Título principal y video de fondo | *"Creando espacios donde lo cotidiano se vuelve extraordinario"*, video `Banner-Hero-Desktop.mp4` | Filament: Ajustes de Landing / Página Home | `GET /api/v1/pages/home` | Alta |
 | **Home: Diferenciadores** | `src/data/content.js:47-58`, `Diferenciadores.jsx` | Títulos, badges, textos con negritas e íconos | *"Certificados 6 años consecutivos..."*, *"Top-4 Chile y Top-9 Latinoamérica 2025..."* | Filament: Bloques de Diferenciadores / Ventajas | `GET /api/v1/pages/home` | Alta |
 | **Home: Testimonios** | `src/data/content.js:91-126`, `Testimonials.jsx` | Métricas de certificación, rating y reseñas de clientes | *"Rating Best Place to Live 4.5"*, testimonios de Herman Oettinger, Fernando Cid, John Von Achon con avatares | Filament: Recurso `Testimonials` | `GET /api/v1/testimonials` o integrado en `pages/home` | Media |
@@ -212,10 +225,10 @@ A continuación se detalla todo el contenido estático identificado en el fronte
 Estado de los endpoints de la API en `https://dev.ileben.cl/api/v1`:
 
 | Método | Endpoint | Controlador sugerido en Laravel | Respuesta actual | Uso en React | Estado | Observaciones |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | `GET` | `/api/v1` | `ApiDiscoveryController@index` | Esquema OpenAPI 3.0 en JSON | Herramientas de desarrollo / documentación | Existente | Permite descubrir tags y esquemas de seguridad. |
 | `GET` | `/api/v1/site-config` | `SiteSettingController@forFrontend` | Objeto de configuración general | No consumido activamente en React actualmente | Parcial | Debe extenderse para retornar datos de pie de página, avisos pop-up y metadatos globales. |
-| `GET` | `/api/v1/proyectos` | `ProjectController@index` | Array de proyectos con ID, nombre, comuna, etapa, tipologías y precio desde | `ProyectoDetalle.jsx`, `CotizadorGeneral.jsx`, `VideosSection.jsx`, `Inn.jsx` | Parcial | No devuelve el contenido editorial profundo (amenidades, galerías, 360, entorno) ni soporta ordenamiento visual personalizado. |
+| `GET` | `/api/v1/proyectos` | `ProjectController@index` | Array de proyectos con ID, nombre, comuna, etapa, tipologías y precio | `ProyectoDetalle.jsx`, `CotizadorGeneral.jsx`, `VideosSection.jsx`, `Inn.jsx` | Parcial | No devuelve el contenido editorial profundo (amenidades, galerías, 360, entorno) ni soporta ordenamiento visual personalizado. |
 | `GET` | `/api/v1/proyectos/{id}` | `ProjectController@show` | Objeto individual de proyecto | `TeamAgents.jsx`, `InnTeamAgents.jsx` (con `?include_asesores=1`) | Parcial | Si se invoca con `include_asesores=1`, retorna el array `asesores`. No entrega la estructura completa de páginas de detalle. |
 | `GET` | `/api/v1/plantas` | `PlantController@index` | Listado paginado de unidades filtrables por proyecto, precio, piso, etc. | `Cotizador.jsx`, `RelatedProjects.jsx` | Existente | Totalmente operativo para cotizaciones en tiempo real. |
 | `GET` | `/api/v1/plantas/{id}` | `PlantController@show` | Detalle específico de planta/unidad | Navegación directa en cotizador | Existente | Correcto. |
@@ -235,6 +248,7 @@ Estado de los endpoints de la API en `https://dev.ileben.cl/api/v1`:
 ## 5. Modelo de datos propuesto
 
 Para satisfacer los requerimientos sin caer en sobreingeniería (siguiendo el principio YAGNI y buenas prácticas de Laravel), se propone una arquitectura híbrida:
+
 - Tablas tipadas para entidades con relaciones fuertes y filtros estructurados (Páginas, Secciones, Contenidos de Proyecto, Testimonios y Menús).
 - Almacenamiento JSON para cargas configurables específicas de cada bloque visual (`payload`), permitiendo extrema flexibilidad en Filament mediante componentes `Builder` o `Repeater`.
 
@@ -248,11 +262,13 @@ erDiagram
     PROJECT_DETAILS ||--o{ PROJECT_POIS : "has many"
     MENUS ||--o{ MENU_ITEMS : "has many"
     MENU_ITEMS ||--o{ MENU_ITEMS : "children"
+
     SITE_SETTINGS {
         string key PK
         string group
         json value
     }
+
     TESTIMONIALS {
         bigint id PK
         string name
@@ -266,6 +282,7 @@ erDiagram
 ```
 
 ### 5.1. Entidad: `SiteSettings` (Ajustes Globales)
+
 Aprovechar o extender la tabla existente utilizada por `SiteSetting::forFrontend`.
 
 - **Tabla:** `site_settings`
@@ -279,9 +296,11 @@ Aprovechar o extender la tabla existente utilizada por `SiteSetting::forFrontend
 - **Validaciones Filament:** Formularios tipo pestaña (Tabs) organizados por grupo en un `SettingsPage` o recurso individual.
 
 ### 5.2. Entidad: `Pages` y `PageSections` (Páginas Institucionales y Landings)
+
 Permite gestionar la Home, INN Landing, Nosotros, Quiénes Somos, Bases Legales, Brokers e Invest desde una estructura uniforme.
 
 #### Tabla `pages`
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `slug` (string 100, not null, unique, index): ej. `home`, `nosotros`, `brokers`, `invest`, `bases-legales`
@@ -298,6 +317,7 @@ Permite gestionar la Home, INN Landing, Nosotros, Quiénes Somos, Bases Legales,
 - **Relaciones:** `hasMany(PageSection::class)->orderBy('sort_order')`
 
 #### Tabla `page_sections`
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `page_id` (bigint, unsigned, foreign key -> `pages.id`, onDelete cascade, index)
@@ -312,9 +332,11 @@ Permite gestionar la Home, INN Landing, Nosotros, Quiénes Somos, Bases Legales,
   - `created_at`, `updated_at` (timestamps)
 
 ### 5.3. Entidad: `ProjectDetails` (Contenido Enriquecido — Estándar Canónico `Inn.jsx`)
+
 Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla maestra de proyectos sincronizada con Salesforce) y proporciona la totalidad de la estructura requerida por la plantilla canónica `Inn.jsx` para cualquier proyecto del catálogo.
 
 #### Tabla `project_details`
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `project_id` (bigint, unsigned, unique, foreign key -> `projects.id`, onDelete cascade, index)
@@ -324,10 +346,10 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `hero_video_url` (string 500, nullable): video de fondo del banner hero
   - `hero_logo_url` (string 500, nullable): isotipo/logo particular del proyecto
   - `theme_colors` (json, nullable): paleta de color para tokens CSS (`accent`, `accent_dark`, `accent_light`, `accent_bg`, `gradient`, `btn_shadow`). Inyectada dinámicamente en `--lb-project-*`
-  - `technical_info` (json, nullable): array de especificaciones para barra sticky `INFO` (`[{ id: 'direccion', label: 'Dirección', value: '...' }, { id: 'tipologias', ... }]`)
-  - `project_slides` (json, nullable): array de diapositivas principales de proyecto (`[{ img: '...', alt: '...' }]`)
-  - `equipment_brands` (json, nullable): logos de marcas aliadas/equipamiento (`[{ src: '...', alt: 'Franke' }]`)
-  - `equipment_slides` (json, nullable): diapositivas del slider de equipamiento principal (`[{ img: '...', alt: '...' }]`)
+  - `technical_info` (json, nullable): array de especificaciones para barra sticky `INFO`
+  - `project_slides` (json, nullable): array de diapositivas principales de proyecto
+  - `equipment_brands` (json, nullable): logos de marcas aliadas/equipamiento
+  - `equipment_slides` (json, nullable): diapositivas del slider de equipamiento principal
   - `overview_title` (string 255, nullable)
   - `overview_description` (text, nullable)
   - `overview_images` (json, nullable): array de URLs para el collage (left, rightTop, rightBottom)
@@ -339,8 +361,8 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `virtual_tour_360_url` (string 500, nullable): enlace visor 360 (ej. La Nube 360)
   - `virtual_tour_video_url` (string 500, nullable): enlace video de recorrido (YouTube o archivo)
   - `brochure_pdf_url` (string 500, nullable)
-  - `designers` (json, nullable): array de interioristas y directores de arte (`[{ "name": "Sofía Iturralde", "role": "Interiorista", "image": "...", "alt": "...", "color": "#d9bc70" }]`)
-  - `panoramas` (json, nullable): actividades turísticas y panoramas de la zona para el modal de panoramas (`[{ "category": "...", "title": "...", "image": "...", "description": "..." }]`)
+  - `designers` (json, nullable): array de interioristas y directores de arte
+  - `panoramas` (json, nullable): actividades turísticas y panoramas de la zona para el modal de panoramas
   - `entorno_description` (text, nullable)
   - `entorno_map_image_url` (string 500, nullable): imagen base del mapa para pines interactivos
   - `created_at`, `updated_at` (timestamps)
@@ -351,6 +373,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `hasMany(ProjectPoi::class)`
 
 #### Tabla `project_amenities` (Espacios Comunes)
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `project_detail_id` (bigint, unsigned, foreign key -> `project_details.id`, onDelete cascade, index)
@@ -362,6 +385,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `created_at`, `updated_at` (timestamps)
 
 #### Tabla `project_pois` (Puntos de Interés del Entorno / Mapa)
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `project_detail_id` (bigint, unsigned, foreign key -> `project_details.id`, onDelete cascade, index)
@@ -377,6 +401,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `created_at`, `updated_at` (timestamps)
 
 #### Tabla `project_galleries` (Galerías de Espacios y Fotos Finales)
+
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
   - `project_detail_id` (bigint, unsigned, foreign key -> `project_details.id`, onDelete cascade, index)
@@ -389,6 +414,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `created_at`, `updated_at` (timestamps)
 
 ### 5.4. Entidad: `Testimonials` (Reseñas de Clientes)
+
 - **Tabla:** `testimonials`
 - **Campos:**
   - `id` (bigint, unsigned, primary key)
@@ -403,6 +429,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `created_at`, `updated_at` (timestamps)
 
 ### 5.5. Entidad: `Menus` y `MenuItems` (Navegación Dinámica)
+
 - **Tabla `menus`:**
   - `id` (bigint, unsigned, primary key)
   - `location` (string 50, unique, index): `header_main`, `header_dropdown`, `footer_corporate`, `footer_legal`
@@ -426,6 +453,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
 ## 6. Diseño de la API propuesta
 
 Todos los endpoints respetan las siguientes convenciones arquitectónicas:
+
 1. **Versionamiento:** Ruta base `/api/v1/`.
 2. **Seguridad:** Middleware `token.origin` (Bearer Sanctum + cabecera `Origin` autorizada).
 3. **Formato:** Transformación estricta mediante Laravel API Resources (`JsonResource`).
@@ -435,15 +463,18 @@ Todos los endpoints respetan las siguientes convenciones arquitectónicas:
 ---
 
 ### Endpoint 1: Obtener Página Dinámica con Secciones
+
 ```http
 GET /api/v1/pages/{slug}
 ```
+
 - **Propósito:** Retorna metadatos, contenido hero y todas las secciones configuradas para una página específica (`home`, `nosotros`, `brokers`, `invest`, etc.).
 - **Controlador:** `App\Http\Controllers\Api\V1\PageController@show`
 - **Resource:** `App\Http\Resources\Api\V1\PageResource`
 - **Caché:** 5 minutos (Redis / Tagged Cache `pages`).
 
 #### Respuesta Exitosa (200 OK)
+
 ```json
 {
   "data": {
@@ -453,13 +484,13 @@ GET /api/v1/pages/{slug}
     "badge": null,
     "hero": {
       "title": "Creando espacios donde lo cotidiano se vuelve extraordinario",
-      "video_url": "https://dev.ileben.cl/storage/video/Banner-Hero-Desktop.mp4",
+      "video_url": "[https://dev.ileben.cl/storage/video/Banner-Hero-Desktop.mp4](https://dev.ileben.cl/storage/video/Banner-Hero-Desktop.mp4)",
       "image_url": null
     },
     "seo": {
       "title": "Inmobiliaria Leben | Espacios que Transforman",
       "description": "Proyectos inmobiliarios de alto estándar en Santiago y el Sur de Chile.",
-      "og_image": "https://dev.ileben.cl/storage/brand/og-image.jpg"
+      "og_image": "[https://dev.ileben.cl/storage/brand/og-image.jpg](https://dev.ileben.cl/storage/brand/og-image.jpg)"
     },
     "sections": [
       {
@@ -470,11 +501,11 @@ GET /api/v1/pages/{slug}
         "data": {
           "items": [
             {
-              "badge_image": "https://dev.ileben.cl/storage/brand/sello-5.svg",
+              "badge_image": "[https://dev.ileben.cl/storage/brand/sello-5.svg](https://dev.ileben.cl/storage/brand/sello-5.svg)",
               "text": "Certificados <b>6 años consecutivos</b> como una de las mejores inmobiliarias para vivir."
             },
             {
-              "badge_image": "https://dev.ileben.cl/storage/brand/sello4.png",
+              "badge_image": "[https://dev.ileben.cl/storage/brand/sello4.png](https://dev.ileben.cl/storage/brand/sello4.png)",
               "text": "<b>Top-4 Chile y Top-9 Latinoamérica</b> 2025 en satisfacción y acompañamiento al cliente."
             }
           ]
@@ -487,8 +518,8 @@ GET /api/v1/pages/{slug}
         "sort_order": 2,
         "data": {
           "description": "La creadora de contenido y conductora María Gracia Subercaseaux visitó...",
-          "photo_url": "https://dev.ileben.cl/storage/inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg",
-          "video_url": "https://dev.ileben.cl/storage/video/maria-gracia.mp4",
+          "photo_url": "[https://dev.ileben.cl/storage/inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg](https://dev.ileben.cl/storage/inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg)",
+          "video_url": "[https://dev.ileben.cl/storage/video/maria-gracia.mp4](https://dev.ileben.cl/storage/video/maria-gracia.mp4)",
           "cta": {
             "label": "Ver proyecto INN",
             "url": "/inn-test"
@@ -501,6 +532,7 @@ GET /api/v1/pages/{slug}
 ```
 
 #### Respuesta de Error (404 Not Found)
+
 ```json
 {
   "error": "Página no encontrada",
@@ -511,14 +543,17 @@ GET /api/v1/pages/{slug}
 ---
 
 ### Endpoint 2: Contenido Editorial y Ficha Completa de Proyecto (Estándar Canónico `Inn.jsx`)
+
 ```http
 GET /api/v1/proyectos/{slug_or_id}/content
 ```
+
 - **Propósito:** Retorna la información visual completa y estructurada bajo el estándar canónico `Inn.jsx` para cualquier proyecto del catálogo (`/proyectos/{slug}`). Reemplaza definitivamente la estructura antigua de `ProyectoDetalle.jsx`.
 - **Controlador:** `App\Http\Controllers\Api\V1\ProjectDetailController@show`
 - **Resource:** `App\Http\Resources\Api\V1\ProjectDetailResource`
 
 #### Respuesta Exitosa (200 OK)
+
 ```json
 {
   "data": {
@@ -537,8 +572,8 @@ GET /api/v1/proyectos/{slug_or_id}/content
       "title": "El Sur se vive frente al lago",
       "subtitle": "Conexión Urbana & Paisajismo Interior",
       "location": "Puerto Varas",
-      "video_url": "https://dev.ileben.cl/storage/video/hero-inn.mp4",
-      "logo_url": "https://dev.ileben.cl/storage/inn/inn-logo.png"
+      "video_url": "[https://dev.ileben.cl/storage/video/hero-inn.mp4](https://dev.ileben.cl/storage/video/hero-inn.mp4)",
+      "logo_url": "[https://dev.ileben.cl/storage/inn/inn-logo.png](https://dev.ileben.cl/storage/inn/inn-logo.png)"
     },
     "technical_info": [
       { "id": "direccion", "label": "Dirección", "value": "Vicente Pérez Rosales 991,<br /> Puerto Varas" },
@@ -548,16 +583,16 @@ GET /api/v1/proyectos/{slug_or_id}/content
       { "id": "estado", "label": "Estado del proyecto", "value": "Venta en Verde" }
     ],
     "project_slides": [
-      { "img": "https://dev.ileben.cl/storage/inn/proyecto/Proyecto_01_Acceso.jpg", "alt": "Acceso" },
-      { "img": "https://dev.ileben.cl/storage/inn/proyecto/Proyecto_02_Cocina.jpg", "alt": "Cocina" }
+      { "img": "[https://dev.ileben.cl/storage/inn/proyecto/Proyecto_01_Acceso.jpg](https://dev.ileben.cl/storage/inn/proyecto/Proyecto_01_Acceso.jpg)", "alt": "Acceso" },
+      { "img": "[https://dev.ileben.cl/storage/inn/proyecto/Proyecto_02_Cocina.jpg](https://dev.ileben.cl/storage/inn/proyecto/Proyecto_02_Cocina.jpg)", "alt": "Cocina" }
     ],
     "equipment": {
       "brands": [
-        { "src": "https://dev.ileben.cl/storage/logos/franke.png", "alt": "Franke" },
-        { "src": "https://dev.ileben.cl/storage/logos/mk.png", "alt": "MK" }
+        { "src": "[https://dev.ileben.cl/storage/logos/franke.png](https://dev.ileben.cl/storage/logos/franke.png)", "alt": "Franke" },
+        { "src": "[https://dev.ileben.cl/storage/logos/mk.png](https://dev.ileben.cl/storage/logos/mk.png)", "alt": "MK" }
       ],
       "slides": [
-        { "img": "https://dev.ileben.cl/storage/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg", "alt": "Hall de acceso" }
+        { "img": "[https://dev.ileben.cl/storage/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg](https://dev.ileben.cl/storage/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg)", "alt": "Hall de acceso" }
       ]
     },
     "overview": {
@@ -565,12 +600,12 @@ GET /api/v1/proyectos/{slug_or_id}/content
       "title": "El Sur se vive frente al lago",
       "description": "Descubre el privilegio de vivir en primera línea frente al Lago Llanquihue...",
       "collage": {
-        "left": "https://dev.ileben.cl/storage/inn/inn-overview-1.jpg",
-        "right_top": "https://dev.ileben.cl/storage/inn/inn-overview-2.jpg",
-        "right_bottom": "https://dev.ileben.cl/storage/inn/inn-overview-3.jpg"
+        "left": "[https://dev.ileben.cl/storage/inn/inn-overview-1.jpg](https://dev.ileben.cl/storage/inn/inn-overview-1.jpg)",
+        "right_top": "[https://dev.ileben.cl/storage/inn/inn-overview-2.jpg](https://dev.ileben.cl/storage/inn/inn-overview-2.jpg)",
+        "right_bottom": "[https://dev.ileben.cl/storage/inn/inn-overview-3.jpg](https://dev.ileben.cl/storage/inn/inn-overview-3.jpg)"
       },
       "stats": [
-        { "value": "2 • 3 • 4", "label": "Dormitorios" },
+        { "value": "2 -  3 -  4", "label": "Dormitorios" },
         { "value": "Desde 85 m²", "label": "Superficie útil" },
         { "value": "Franke", "label": "Equipamiento en cocina" }
       ]
@@ -580,24 +615,24 @@ GET /api/v1/proyectos/{slug_or_id}/content
       "title": "Terminaciones",
       "description": "Equipamiento premium marca Franke: horno, microondas...",
       "items": [
-        { "label": "Horno Franke", "icon": "flame", "image_url": "https://dev.ileben.cl/storage/inn/terminaciones/horno.jpg" }
+        { "label": "Horno Franke", "icon": "flame", "image_url": "[https://dev.ileben.cl/storage/inn/terminaciones/horno.jpg](https://dev.ileben.cl/storage/inn/terminaciones/horno.jpg)" }
       ]
     },
     "virtual_tours": {
-      "matterport_url": "https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0",
-      "panoramic_360_url": "https://www.lanube360.com/ileben1/",
+      "matterport_url": "[https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0](https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0)",
+      "panoramic_360_url": "[https://www.lanube360.com/ileben1/](https://www.lanube360.com/ileben1/)",
       "video_url": null
     },
     "designers": [
       {
         "name": "Sofía Iturralde<br/><small>Interiorista</small>",
-        "image": "https://dev.ileben.cl/storage/inn/Foto_Iturralde.jpg",
+        "image": "[https://dev.ileben.cl/storage/inn/Foto_Iturralde.jpg](https://dev.ileben.cl/storage/inn/Foto_Iturralde.jpg)",
         "alt": "Diseño de Sofía Iturralde",
         "color": "#d9bc70"
       },
       {
         "name": "Rafael Rivera<br/><small>Iluminador</small>",
-        "image": "https://dev.ileben.cl/storage/inn/Foto_Rivera.jpg",
+        "image": "[https://dev.ileben.cl/storage/inn/Foto_Rivera.jpg](https://dev.ileben.cl/storage/inn/Foto_Rivera.jpg)",
         "alt": "Diseño de Rafael Rivera",
         "color": "#b78d56"
       }
@@ -606,7 +641,7 @@ GET /api/v1/proyectos/{slug_or_id}/content
       {
         "category": "Naturaleza",
         "title": "Lago Llanquihue y Volcanes",
-        "image": "https://dev.ileben.cl/storage/inn/panoramas/lago.jpg",
+        "image": "[https://dev.ileben.cl/storage/inn/panoramas/lago.jpg](https://dev.ileben.cl/storage/inn/panoramas/lago.jpg)",
         "description": "Vistas despejadas y navegación náutica de primer nivel."
       }
     ],
@@ -615,13 +650,13 @@ GET /api/v1/proyectos/{slug_or_id}/content
         "id": 1,
         "name": "Hall de acceso",
         "icon_key": "bell",
-        "image_url": "https://dev.ileben.cl/storage/inn/eecc/EECC_Hall_Acceso_Edificio.jpg"
+        "image_url": "[https://dev.ileben.cl/storage/inn/eecc/EECC_Hall_Acceso_Edificio.jpg](https://dev.ileben.cl/storage/inn/eecc/EECC_Hall_Acceso_Edificio.jpg)"
       },
       {
         "id": 2,
         "name": "Bodega náutica",
         "icon_key": "kayak",
-        "image_url": "https://dev.ileben.cl/storage/inn/eecc/EECC_Bodega_Nautica.jpg"
+        "image_url": "[https://dev.ileben.cl/storage/inn/eecc/EECC_Bodega_Nautica.jpg](https://dev.ileben.cl/storage/inn/eecc/EECC_Bodega_Nautica.jpg)"
       }
     ],
     "pois": [
@@ -634,12 +669,12 @@ GET /api/v1/proyectos/{slug_or_id}/content
         "coordinate_x": 15.1,
         "coordinate_y": 33.2,
         "pin_direction": "right",
-        "image_url": "https://dev.ileben.cl/storage/inn/ubicacion/Mesa_Tropera_AI.jpg"
+        "image_url": "[https://dev.ileben.cl/storage/inn/ubicacion/Mesa_Tropera_AI.jpg](https://dev.ileben.cl/storage/inn/ubicacion/Mesa_Tropera_AI.jpg)"
       }
     ],
     "bottom_gallery": [
       {
-        "url": "https://dev.ileben.cl/storage/inn/galeria1.jpg",
+        "url": "[https://dev.ileben.cl/storage/inn/galeria1.jpg](https://dev.ileben.cl/storage/inn/galeria1.jpg)",
         "alt": "Vista fachada lago"
       }
     ]
@@ -650,12 +685,15 @@ GET /api/v1/proyectos/{slug_or_id}/content
 ---
 
 ### Endpoint 3: Configuración Global del Sitio
+
 ```http
 GET /api/v1/site-config
 ```
+
 - **Propósito:** Entrega información institucional de pie de página, redes sociales, horarios de atención y el aviso emergente (`announcement`).
 
 #### Respuesta Exitosa (200 OK)
+
 ```json
 {
   "data": {
@@ -676,9 +714,9 @@ GET /api/v1/site-config
       "email": "info@ileben.cl"
     },
     "social_links": {
-      "facebook": "https://www.facebook.com/inmobiliarialeben",
-      "instagram": "https://www.instagram.com/inmobiliarialeben",
-      "linkedin": "https://www.linkedin.com/company/ileben/posts/?feedView=all"
+      "facebook": "[https://www.facebook.com/inmobiliarialeben](https://www.facebook.com/inmobiliarialeben)",
+      "instagram": "[https://www.instagram.com/inmobiliarialeben](https://www.instagram.com/inmobiliarialeben)",
+      "linkedin": "[https://www.linkedin.com/company/ileben/posts/?feedView=all](https://www.linkedin.com/company/ileben/posts/?feedView=all)"
     },
     "legal": {
       "disclaimer": "La promoción se encuentra adscrita en las Bases de promoción protocolizadas...",
@@ -698,11 +736,14 @@ GET /api/v1/site-config
 ---
 
 ### Endpoint 4: Listado de Menús de Navegación
+
 ```http
 GET /api/v1/menus/{location}
 ```
+
 - **Parámetros:** `location` (`header_main`, `header_dropdown`, `footer_corporate`, `footer_legal`).
 - **Respuesta:**
+
 ```json
 {
   "data": {
@@ -720,12 +761,15 @@ GET /api/v1/menus/{location}
 ---
 
 ### Endpoint 5: Envío de Formularios de Contacto (General, Brokers e Invest)
+
 ```http
 POST /api/v1/contact-submissions
 ```
+
 - **Propósito:** Recepciona leads desde la web y los clasifica según el canal (`sale`, `broker`, `investor`, `job`).
 - **Cabeceras Requeridas:** `Content-Type: application/json`, `Accept: application/json`.
 - **Cuerpo Requerido:**
+
 ```json
 {
   "channel": "broker",
@@ -743,6 +787,7 @@ POST /api/v1/contact-submissions
 ```
 
 #### Respuesta Exitosa (201 Created)
+
 ```json
 {
   "success": true,
@@ -758,6 +803,7 @@ POST /api/v1/contact-submissions
 ## 7. Plan de implementación en Laravel + Filament
 
 ### Fase 1 — Arquitectura de Base de Datos y Modelos Eloquent
+
 - **Objetivo:** Crear el esquema relacional que soportará páginas dinámicas, secciones, detalles editoriales de proyecto, testimonios, menús y ajustes globales.
 - **Migraciones a Generar:**
   1. `create_site_settings_table.php` (si no existe o requiere ampliación para valores JSON).
@@ -779,6 +825,7 @@ POST /api/v1/contact-submissions
 ---
 
 ### Fase 2 — Implementación de Recursos y Formularios en Filament v3
+
 - **Objetivo:** Dotar a los administradores de una interfaz visual atractiva y usable para cargar y modificar todo el contenido.
 - **Recursos Filament a Crear:**
   1. `PageResource` (`app/Filament/Resources/PageResource.php`):
@@ -802,6 +849,7 @@ POST /api/v1/contact-submissions
 ---
 
 ### Fase 3 — Desarrollo de la API REST Pública y Serialización
+
 - **Objetivo:** Exponer endpoints REST en `/api/v1/` con alto rendimiento, respuestas optimizadas y compatibilidad estricta con el cliente React.
 - **Controladores y Resources:**
   1. `app/Http/Controllers/Api/V1/PageController.php` + `PageResource.php`.
@@ -822,6 +870,7 @@ POST /api/v1/contact-submissions
 ---
 
 ### Fase 4 — Seeders de Migración de Contenido Hardcodeado
+
 - **Objetivo:** Poblar la base de datos de Laravel con todo el contenido actual de `src/data/*.js` para que el pase a producción sea completamente transparente y sin pérdida de información.
 - **Seeders a Crear:**
   1. `InitialPagesSeeder.php`: Poblar `home`, `nosotros`, `informacion-de-la-empresa`, `proceso-reserva-en-linea`, `bases-legales`, `trabaja-en-leben`, `brokers`, `invest`, `cookies`.
@@ -836,6 +885,7 @@ POST /api/v1/contact-submissions
 ---
 
 ### Fase 5 — Adaptación en Frontend React (`new-leben-react`)
+
 - **Objetivo:** Actualizar el consumo de datos en React para leer los nuevos endpoints sin reescribir componentes ni alterar estilos o animaciones.
 - **Estado Actual:** **Refactorización de Ficha Canónica Completada en v0.9.179.** Conexión de endpoints pendiente de despliegue de Fase 3 en backend.
 - **Ajustes Realizados y Pendientes:**
@@ -864,6 +914,7 @@ POST /api/v1/contact-submissions
 ---
 
 ### Fase 6 — Auditoría de Calidad y Criterios de Aceptación Final
+
 - **Auditoría de API:**
   - Latencia promedio de endpoints de contenido < 80ms gracias a caché HTTP / Redis.
   - Respuestas JSON con cabeceras CORS y Content-Type adecuadas.
@@ -917,22 +968,29 @@ POST /api/v1/contact-submissions
 
 La IA que reciba la tarea de programar los cambios descritos en esta especificación **debe cumplir rigurosamente las siguientes directivas de ejecución**:
 
-1. **Principio de Mínima Intervención (Ponytail Directive):**  
+1. **Principio de Mínima Intervención:**  
    No reescribas el proyecto Laravel ni el proyecto React. Aplica cambios quirúrgicos. Reutiliza componentes de Filament y utilidades ya existentes en el código base.
+
 2. **Respeto a las Versiones Instaladas:**  
    - Laravel 11.x, PHP 8.2+, Filament v3 (Livewire 3). No uses sintaxis ni métodos deprecados o de versiones anteriores.
    - React 19.x, Vite 6.x, Redux Toolkit 2.x, Bootstrap 5.3.
+
 3. **No Invención de Datos:**  
    No inventes endpoints, parámetros ni nombres de campos no especificados en este documento. Si algún detalle no puede verificarse en los repositorios, márcalo como `PENDIENTE DE VERIFICACIÓN`.
+
 4. **Seguridad y Compatibilidad hacia Atrás:**  
    - No modifiques los contratos de endpoints existentes (`/api/v1/proyectos`, `/api/v1/plantas`) de modo que rompan consumidores actuales.
    - Todo nuevo endpoint debe respetar el middleware `token.origin`.
+
 5. **Completitud de Código:**  
    No entregues código con comentarios del tipo `// resto del código aquí` ni métodos vacíos. Todo FormRequest debe incluir reglas de validación y todo Resource debe mapear con exactitud los atributos.
+
 6. **Gestión de Medios:**  
    Toda imagen o archivo multimedia servido por la API debe tener una URL absoluta y accesible por el navegador cliente, con texto alternativo (`alt`) para SEO y accesibilidad.
+
 7. **Control de Versiones y Changelog:**  
    Tras implementar cambios de código, incrementa la versión en `package.json` (o `composer.json` en backend) y documenta las adiciones en `CHANGELOG.md` siguiendo el estándar *Keep a Changelog*.
+
 8. **Estandarización Canónica Obligatoria de Proyectos (`Inn.jsx`):**  
    El diseño, estructura y componentes de `src/pages/Inn.jsx` constituyen el **único estándar válido y obligatorio** para todas las fichas de proyectos. La IA no debe mantener ni parchar la estructura antigua de `ProyectoDetalle.jsx`; debe implementar los modelos, migraciones, recursos Filament y endpoints necesarios para que cualquier proyecto de Inmobiliaria Leben se administre y despliegue con la experiencia completa de `Inn.jsx`.
 
