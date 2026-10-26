@@ -708,8 +708,8 @@ vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
           <div className="container">
             <div className="row g-0">
               <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
-                <div className="mb-4 mb-md-5 lb-inn-map__header">
-                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3 mb-md-5">{MAP.eyebrow}</ScrollAnim>
+                <div className="mb-4 mb-md-5 mt-3 lb-inn-map__header">
+                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3">{MAP.eyebrow}</ScrollAnim>
                   <div className="d-flex align-items-center gap-3 gap-md-4">
                     <ScrollAnim as="span" animation="fade-left">
                       <img
