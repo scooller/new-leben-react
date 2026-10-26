@@ -1,8 +1,9 @@
 # PROJECT-BACKEND-INTEGRATION.md
 > **Documento de Arquitectura e Integración Backend Laravel + Filament para Frontend React**  
 > **Proyecto:** Inmobiliaria Leben (`new-leben-react` / `Leben-site`)  
-> **Versión del Documento:** 1.0.0  
+> **Versión del Documento:** 1.1.0  
 > **Fecha:** 2026-10-26  
+> **Estado:** Fase Frontend Completada (`new-leben-react` v0.9.179) — Backend Laravel/Filament en Especificación  
 > **Destinatario:** Ingeniero / IA de Backend (Laravel 11+ / Filament v3 / REST API)
 
 ---
@@ -20,7 +21,7 @@ Actualmente, el frontend React ya se comunica exitosamente con el backend Larave
 Sin embargo, **un gran volumen de información crítica se encuentra hardcodeado en archivos JavaScript del frontend (`src/data/*.js`) y en constantes dentro de componentes JSX**:
 - Textos de landing principal, títulos, subtítulos y llamados a la acción (CTA).
 - Testimonios de clientes, sellos de certificación (Best Place to Live, CChC, Calificación Energética) y métricas comerciales.
-- El detalle editorial de proyectos individuales: únicamente el proyecto "Edificio INN" cuenta con contenido completo hardcodeado en `src/data/projects.js` y `src/pages/Inn.jsx`, lo que impide que cualquier otro proyecto del catálogo cuente con ficha detallada editable.
+- El detalle editorial de proyectos individuales: históricamente, sólo "Edificio INN" contaba con contenido completo hardcodeado en `src/data/projects.js` y `src/pages/Inn.jsx`, lo que impedía que cualquier otro proyecto del catálogo contase con ficha rica y personalizable.
 - Páginas institucionales estáticas (Nosotros, Quiénes Somos, Información de la Empresa, Proceso de Reserva en Línea, Bases Legales, Trabaja en Leben).
 - Secciones comerciales completas como **Brokers** y **Leben Invest** (planes de inversión sin pie, preguntas frecuentes, categorías de comisiones).
 - Opciones de formularios que simulan envíos en local mediante `setTimeout` en lugar de persistirse en la base de datos de leads de Laravel.
@@ -34,13 +35,16 @@ Transformar el backend Laravel + Filament en la **única fuente de verdad (Singl
 - El frontend React consumirá endpoints REST estructurados, con tipado predecible, URLs absolutas para medios y soporte de caché HTTP / sessionStorage, eliminando archivos estáticos de datos (`src/data/*.js`).
 - El backend procesará de forma nativa los formularios de prospección (`Brokers` e `Invest`) vinculándolos al canal correspondiente de leads (`contact_submissions`).
 
-### 1.4. Decisión Arquitectónica Clave: Adopción de `Inn.jsx` como Estándar Canónico para Todos los Proyectos
-Se establece de manera taxativa que la arquitectura visual y funcional desarrollada en `src/pages/Inn.jsx` constituye el **estándar oficial (plantilla canónica)** para la presentación de TODOS los proyectos de Inmobiliaria Leben.
+### 1.4. Decisión Arquitectónica Clave: Adopción de `Inn.jsx` como Estándar Canónico (COMPLETADO EN FRONTEND v0.9.179)
+Se estableció de manera taxativa que la arquitectura visual y funcional desarrollada en `src/pages/Inn.jsx` constituye el **estándar oficial (plantilla canónica)** para la presentación de TODOS los proyectos de Inmobiliaria Leben.
 
-En consecuencia:
-- Se **desecha y reemplaza** la estructura anterior de proyectos (`src/pages/ProyectoDetalle.jsx` y su consumo estático de `src/data/projects.js`).
-- El formato completo de `Inn.jsx` (Hero de alta gama con video/logo y barra técnica `INFO`, tabs sticky con scroll spy, slider principal de proyecto, bloque de marcas asociadas con logos, slider de terminaciones principales, amenidades interactivas con íconos animados `pqoqubbw`, cotizador interactivo integrado, recorridos 360 en tabs [YouTube, Matterport, La Nube 360], sección de interioristas con galería y modal, mapa con pines porcentuales interactivos [X/Y], modales de espacios y panoramas, y equipo de asesores `InnTeamAgents`) pasará a ser una plantilla dinámica parametrizada.
-- El backend Laravel + Filament deberá modelar y persistir cada una de estas secciones de manera que cualquier proyecto del catálogo pueda completarse y administrarse bajo este estándar visual superior.
+**Hito ejecutado en Frontend (`new-leben-react` v0.9.179):**
+- **Reemplazo y Purga Definitiva:** Se eliminó la estructura antigua de `ProyectoDetalle.jsx`, el archivo duplicado `src/pages/Inn.jsx` y 10 componentes obsoletos (`ProjectHero.jsx`, `ProjectTabs.jsx`, `ProjectOverview.jsx`, `FloorPlans.jsx`, `Vista360.jsx`, `SpacesGallery.jsx`, `LocationSection.jsx`, `BottomGallery.jsx`, `TeamAgents.jsx`, `AgentCard.jsx`).
+- **Plantilla Canónica Unificada:** `src/pages/ProyectoDetalle.jsx` ahora centraliza la maqueta completa de alta gama: Hero de alta gama con video/logo y barra técnica `INFO`, tabs sticky con scroll spy, slider principal de fotos, bloque de marcas asociadas, slider de terminaciones principales, amenidades con íconos animados `pqoqubbw`, cotizador interactivo integrado, recorridos 360 multicanal (YouTube, Matterport, La Nube 360), sección de interiorismo, mapa con pines porcentuales interactivos (X/Y), modales de panoramas y espacios, y equipo de asesores comerciales.
+- **Componentes Genéricos Reutilizables:** Se modularizaron `src/components/proyecto/ProjectTeamAgents.jsx` y `src/components/proyecto/ProjectPanoramasModal.jsx`.
+- **Theming por Proyecto (CSS Custom Properties):** Cada proyecto soporta su propia paleta de acento mediante variables CSS inyectadas dinámicamente (`--lb-project-accent`, `--lb-project-accent-dark`, `--lb-project-accent-light`, `--lb-project-accent-bg`, `--lb-project-gradient`, `--lb-project-btn-shadow`). Ejemplo: Edificio INN utiliza su característico dorado (`#d9bc70`), mientras que futuros proyectos adoptarán sus colores corporativos desde el backend sin necesidad de duplicar código SCSS.
+- **Política de No Programación Doble:** Para proyectos cuyo contenido aún no existe en el backend (`slug !== 'inn'`), el frontend no inventa datos mockeados; despliega un aviso informativo limpio de integración en curso y un botón para contactar o regresar al catálogo, garantizando una transición ordenada hacia la API.
+- **Unificación de Rutas:** La ruta `/inn-test` redirige permanentemente a `/proyectos/inn`.
 
 
 ---
@@ -77,16 +81,16 @@ c:\laragon\app\new-leben-react/
 │   ├── .htaccess                  # Reglas mod_rewrite para SPA y /api/* -> api-proxy.php
 │   └── images/                    # Activos estáticos, marcas, renders y planos
 ├── src/
-│   ├── App.jsx                    # Definición de rutas principales y modales globales
+│   ├── App.jsx                    # Definición de rutas principales (/proyectos/:slug unificada, modales globales)
 │   ├── components/
 │   │   ├── layout/                # Navbar.jsx, Footer.jsx (menús hardcodeados)
-│   │   ├── sections/              # Secciones de Home e INN (Hero, Diferenciadores, Videos, etc.)
-│   │   ├── proyecto/              # Componentes de ficha de proyecto (Cotizador, Planos, etc.)
+│   │   ├── sections/              # Secciones de Home (Hero, Diferenciadores, Videos, etc.)
+│   │   ├── proyecto/              # Componentes canónicos: Cotizador.jsx, ProjectTeamAgents.jsx, ProjectPanoramasModal.jsx, RelatedProjects.jsx, Alternatives.jsx (10 obsoletos purgados)
 │   │   ├── announcement/          # Modal emergente de anuncios
 │   │   └── cookies/               # Modales y banner de cookies Ley 21.719
 │   ├── data/                      # ⚠️ REPOSITORIO DE DATOS HARDCODEADOS
 │   │   ├── content.js             # Textos y assets de Home y footer
-│   │   ├── projects.js            # Detalle exhaustivo hardcodeado de proyecto INN
+│   │   ├── projects.js            # Detalle hardcodeado temporal de proyecto INN (a migrar)
 │   │   ├── staticPages.js         # Contenido de páginas institucionales
 │   │   ├── brokers.js             # Textos y tablas de la sección Brokers
 │   │   ├── invest.js              # Datos, preguntas frecuentes y planes de Invest
@@ -95,7 +99,7 @@ c:\laragon\app\new-leben-react/
 │   ├── lib/
 │   │   ├── apiFetch.js            # Cliente HTTP centralizado con caché sessionStorage
 │   │   └── projectUtils.js        # Mapeadores, etiquetas y orden hardcodeado de proyectos
-│   └── pages/                     # Vistas lazy (Inn.jsx, Invest.jsx, Brokers.jsx, etc.)
+│   └── pages/                     # Vistas lazy (ProyectoDetalle.jsx [plantilla canónica única], Invest.jsx, Brokers.jsx, etc.)
 ```
 
 Estructura esperada en el backend Laravel (`scooller/Leben-site`):
@@ -184,7 +188,7 @@ A continuación se detalla todo el contenido estático identificado en el fronte
 | **Home: Banner CTA** | `src/data/content.js:24`, `CTASection.jsx` | Imagen de banner inferior | `home/Mesa de trabajo.jpg` | Filament: Banner CTA en página Home | `GET /api/v1/pages/home` | Baja |
 | **Proyectos: Landing Catálogo** | `src/data/content.js:177-200` | Encabezados de catálogo, sellos de respaldo y formulario CTA | Eyebrow *"EXCLUSIVIDAD & DISEÑO"*, *"6 años certificados"*, *"4tos en Chile por calidad"* | Filament: Configuración de Catálogo / Página Proyectos | `GET /api/v1/pages/proyectos` | Media |
 | **Orden de Proyectos** | `src/lib/projectUtils.js:62-76` | Ordenamiento preferencial de proyectos | Lista `PROJECT_DISPLAY_ORDER` (`baum`, `mood`, `livingtown`, `argomedo`, `santo`, `indi`...) | Filament: Campo `sort_order` / `display_order` en `ProjectResource` | `GET /api/v1/proyectos` (ordenado por `sort_order`) | Alta |
-| **Ficha de Proyectos: Estándar Canónico (Modelo Inn.jsx)** | `src/pages/Inn.jsx:31-150`, `src/pages/ProyectoDetalle.jsx` | Slides de proyecto, marcas asociadas con logos, amenidades con íconos animados, mapa interactivo (pines X/Y), galerías por ambiente, recorridos 360, interioristas y cotizador integrado | Formato completo de **Edificio INN** que se adopta como ESTÁNDAR ÚNICO para todos los proyectos del catálogo; la estructura antigua de `ProyectoDetalle.jsx` se desecha | Filament: Módulo integral de Proyecto (`ProjectDetail`, `ProjectAmenity`, `ProjectGallery`, `ProjectPoi`, `ProjectBrand`, `ProjectDesigner`) | `GET /api/v1/proyectos/{slug_or_id}/content` | **Crítica** |
+| **Ficha de Proyectos: Estándar Canónico Unificado** | `src/pages/ProyectoDetalle.jsx`, `src/data/projects.js` | Slides de proyecto, marcas asociadas con logos, amenidades con íconos animados, mapa interactivo (pines X/Y), galerías por ambiente, recorridos 360, interioristas, cotizador integrado y paleta CSS por proyecto | Formato completo de **Edificio INN** estandarizado en `ProyectoDetalle.jsx` (v0.9.179); soporta variables CSS dinámicas de color por proyecto. Backend debe proveer contenido para el resto de proyectos | Filament: Módulo integral de Proyecto (`ProjectDetail`, `ProjectAmenity`, `ProjectGallery`, `ProjectPoi`, `ProjectBrand`, `ProjectDesigner`, campo `theme_colors`) | `GET /api/v1/proyectos/{slug_or_id}/content` | **Crítica (Frontend listo, Backend pendiente)** |
 | **Institucional: Nosotros** | `src/data/staticPages.js:2-144`, `StaticPage.jsx` | Historia, párrafos corporativos y lista histórica de 18 proyectos entregados con logos y fotos | Edificios MOOD, OWN, SUECIA, INDI, OKINAWA, ARGOMEDO, INDIGO, etc. | Filament: Recurso `Pages` (slug `nosotros`) + Proyectos Históricos | `GET /api/v1/pages/nosotros` | Media |
 | **Institucional: Empresa** | `src/data/staticPages.js:145-162`, `StaticPage.jsx` | Razón social, RUT, representante legal, dirección y encargado de privacidad | Inmobiliaria Cenit Limitada, RUT 76.065.957-6, Rep. Legal Juan Ignacio Pinto | Filament: `SiteSettings` (categoría Legal/Empresa) | `GET /api/v1/pages/informacion-de-la-empresa` o `/site-config` | Media |
 | **Institucional: Proceso de Reserva** | `src/data/staticPages.js:163-184`, `StaticPage.jsx` | Etapas del proceso de reserva online y cláusula de retracto | Pasos 1 a 8, explicación de plazos de 10 días hábiles y derecho a retracto | Filament: Recurso `Pages` (slug `proceso-reserva-en-linea`) | `GET /api/v1/pages/proceso-reserva-en-linea` | Media |
@@ -319,6 +323,7 @@ Se vincula 1 a 1 con el modelo existente `Project` (evitando alterar la tabla ma
   - `hero_subtitle` (string 255, nullable)
   - `hero_video_url` (string 500, nullable): video de fondo del banner hero
   - `hero_logo_url` (string 500, nullable): isotipo/logo particular del proyecto
+  - `theme_colors` (json, nullable): paleta de color para tokens CSS (`accent`, `accent_dark`, `accent_light`, `accent_bg`, `gradient`, `btn_shadow`). Inyectada dinámicamente en `--lb-project-*`
   - `technical_info` (json, nullable): array de especificaciones para barra sticky `INFO` (`[{ id: 'direccion', label: 'Dirección', value: '...' }, { id: 'tipologias', ... }]`)
   - `project_slides` (json, nullable): array de diapositivas principales de proyecto (`[{ img: '...', alt: '...' }]`)
   - `equipment_brands` (json, nullable): logos de marcas aliadas/equipamiento (`[{ src: '...', alt: 'Franke' }]`)
@@ -520,6 +525,14 @@ GET /api/v1/proyectos/{slug_or_id}/content
     "project_id": 9,
     "slug": "inn",
     "name": "Edificio INN",
+    "theme": {
+      "accent": "#d9bc70",
+      "accent_dark": "#c4a355",
+      "accent_light": "#e2ca8d",
+      "accent_bg": "rgba(217, 188, 112, 0.12)",
+      "gradient": "linear-gradient(135deg, #d9bc70 0%, #b89345 100%)",
+      "btn_shadow": "0 8px 24px rgba(217, 188, 112, 0.35)"
+    },
     "hero": {
       "title": "El Sur se vive frente al lago",
       "subtitle": "Conexión Urbana & Paisajismo Interior",
@@ -822,17 +835,20 @@ POST /api/v1/contact-submissions
 
 ---
 
-### Fase 5 — Adaptación Quirúrgica en Frontend React (`new-leben-react`)
+### Fase 5 — Adaptación en Frontend React (`new-leben-react`)
 - **Objetivo:** Actualizar el consumo de datos en React para leer los nuevos endpoints sin reescribir componentes ni alterar estilos o animaciones.
-- **Ajustes Específicos:**
+- **Estado Actual:** **Refactorización de Ficha Canónica Completada en v0.9.179.** Conexión de endpoints pendiente de despliegue de Fase 3 en backend.
+- **Ajustes Realizados y Pendientes:**
   1. `src/pages/StaticPage.jsx`:
      - Sustituir la lectura estática de `staticPages[slug]` por una llamada `apiFetch('/api/v1/pages/' + slug)`.
      - Mantener el objeto `staticPages` como fallback en caso de error de red.
-  2. `src/pages/ProyectoDetalle.jsx` (Adopción del Estándar Canónico `Inn.jsx`):
-     - **Reemplazo total de la estructura anterior:** Se desecha la maqueta antigua de `ProyectoDetalle.jsx` y su dependencia de `src/data/projects.js`.
-     - El componente se reconstruye adoptando de forma íntegra la arquitectura visual de `src/pages/Inn.jsx`: Hero con video de fondo, barra técnica `INFO`, tabs sticky con scroll spy, slider principal de fotos, logos de marcas asociadas, slider de equipamiento, amenidades con íconos animados `pqoqubbw`, cotizador integrado, visor de recorridos 360 multicanal, sección de interiorismo con diseñadores, mapa interactivo con pines en porcentajes X/Y, modales de espacios/panoramas y bloque de asesores `InnTeamAgents`.
-     - Realizar llamada dinámica a `apiFetch('/api/v1/proyectos/' + slug + '/content')` para alimentar toda la vista.
-     - La ruta de prueba `/inn-test` se unifica con la ruta estándar `/proyectos/inn`.
+  2. `src/pages/ProyectoDetalle.jsx` (Adopción del Estándar Canónico Unificado — **COMPLETADO EN FRONTEND**):
+     - **Reemplazo total de la estructura anterior:** Se eliminó la maqueta antigua de `ProyectoDetalle.jsx`, el duplicado `Inn.jsx` y 10 componentes obsoletos de `src/components/proyecto/`.
+     - **Plantilla unificada operativa:** `ProyectoDetalle.jsx` centraliza la maqueta completa: Hero con video y barra técnica `INFO`, tabs sticky con scroll spy, slider principal de fotos con Fancybox, logos de marcas asociadas, slider de equipamiento, amenidades con íconos animados `pqoqubbw`, cotizador integrado (`<Cotizador>`), visor de recorridos 360 multicanal (YouTube, Matterport, La Nube 360), interiorismo con diseñadores, mapa interactivo con pines en porcentajes X/Y, modales de espacios/panoramas (`ProjectPanoramasModal.jsx`) y bloque de asesores (`ProjectTeamAgents.jsx`).
+     - **Theming dinámico implementado:** Inyección de CSS Custom Properties (`--lb-project-accent`, `--lb-project-gradient`, etc.) en el contenedor raíz para adaptar la identidad cromática de cualquier proyecto.
+     - **Política de No Programación Doble:** Si `slug !== 'inn'`, se presenta un aviso elegante de integración en curso hacia el backend, evitando crear mocks transitorios.
+     - **Conexión a Endpoint (Pendiente de Backend Fase 3):** Reemplazar la lectura local de `getProjectBySlug(slug)` por `apiFetch('/api/v1/proyectos/' + slug + '/content')`.
+     - **Ruta unificada:** `/inn-test` redirige permanentemente a `/proyectos/inn`.
   3. `src/components/layout/Navbar.jsx` y `Footer.jsx`:
      - Consumir `/api/v1/menus/header_main` y `/api/v1/site-config`.
   4. `src/components/announcement/AnnouncementModal.jsx`:
@@ -842,8 +858,8 @@ POST /api/v1/contact-submissions
   6. `src/lib/projectUtils.js`:
      - Eliminar la dependencia estricta de `PROJECT_DISPLAY_ORDER` cuando los proyectos vengan ordenados por `sort_order` desde la API.
 - **Criterios de Aceptación de Fase 5:**
-  - Build de producción `npm run build:all` exitoso (cero advertencias ESLint y bundle optimizado).
-  - La navegación se mantiene fluida y visualmente idéntica.
+  - Build de producción `npm run build:all` exitoso (cero advertencias ESLint y bundle optimizado). ✅ *Verificado en v0.9.179.*
+  - La navegación se mantiene fluida y visualmente idéntica. ✅ *Verificado en v0.9.179.*
 
 ---
 

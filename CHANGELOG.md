@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.180] - 2026-10-26
+
+### Changed
+- `PROJECT-BACKEND-INTEGRATION.md`: Actualizada la especificación arquitectónica a la versión 1.1.0 documentando la culminación del estándar canónico de proyectos en frontend (`ProyectoDetalle.jsx`), eliminación de archivos obsoletos, modularización de componentes genéricos, adición del campo `theme_colors` en la entidad `project_details` / Endpoint 2 para tokens CSS y estado de progreso de la Fase 5.
+
 ## [0.9.179] - 2026-10-26
 
 ### Added
