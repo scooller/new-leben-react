@@ -470,7 +470,7 @@ export default function ProyectoDetalle() {
     text: 'Descubre todo lo que INN tiene para ofrecer',
     video_url: 'video/exterior.mp4',
   }
-  const video3 = videoInterstitials[2] || {
+  const video3 = projectContent?.espacios?.video || videoInterstitials[2] || {
     eyebrow: '',
     title: '',
     text: 'Despierta tu espíritu aventurero en la Región de Los Lagos',

@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.185] - 2026-10-28
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`: Soporte prioritario para `projectContent?.espacios?.video` en el tercer banner intersticial posterior a Espacios Comunes, con fallback a `videoInterstitials[2]`.
+
 ## [0.9.184] - 2026-10-28
 
 ### Added
