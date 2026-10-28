@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.186] - 2026-10-28
+
+### Added
+- `src/components/proyecto/ProjectPanoramasModal.jsx`: Soporte para prop `backgroundImage` dinámica configurada desde el backend, reemplazando la imagen de fondo estática del modal de panoramas.
+- `src/pages/ProyectoDetalle.jsx`: Pasado `projectContent?.panoramas?.bg_image_url` al modal de panoramas.
+
 ## [0.9.185] - 2026-10-28
 
 ### Added

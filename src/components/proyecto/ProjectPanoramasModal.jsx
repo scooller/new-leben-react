@@ -162,11 +162,21 @@ export default function ProjectPanoramasModal({
   onClose,
   categories = PANORAMAS_CATEGORIES,
   projectName = 'INN',
+  backgroundImage,
 }) {
   const [activeCatIndex, setActiveCatIndex] = useState(0)
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const carouselRef = useRef(null)
   const carouselInstance = useRef(null)
+  const base = import.meta.env.BASE_URL
+
+  const modalBg = useMemo(() => {
+    if (!backgroundImage) return `${base}images/inn/panoramas/bg-forest.jpg`
+    if (backgroundImage.startsWith('http') || backgroundImage.startsWith('/') || backgroundImage.startsWith('data:')) {
+      return backgroundImage
+    }
+    return `${base}${backgroundImage}`
+  }, [base, backgroundImage])
 
   const activeCategories = Array.isArray(categories) && categories.length > 0 ? categories : PANORAMAS_CATEGORIES
   const currentCategory = activeCategories[activeCatIndex] || activeCategories[0]
@@ -257,7 +267,7 @@ export default function ProjectPanoramasModal({
           className="modal-content lb-inn-panoramas-modal border-0 rounded-4 overflow-hidden position-relative"
           data-bs-theme="dark"
           style={{
-            backgroundImage: `url('${base}images/inn/panoramas/bg-forest.jpg')`,
+            backgroundImage: `url('${modalBg}')`,
           }}
         >
           {/* Overlay oscuro para legibilidad sobre fondo */}

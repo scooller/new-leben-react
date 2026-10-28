@@ -1021,6 +1021,7 @@ export default function ProyectoDetalle() {
         onClose={() => setShowPanoramasModal(false)}
         projectName={currentProject?.name || 'INN'}
         categories={panoramasCategories}
+        backgroundImage={projectContent?.panoramas?.bg_image_url}
       />
 
       {/* SECCIÓN CONTACTO — ASESORES + MAPA */}
