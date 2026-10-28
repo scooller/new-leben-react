@@ -819,7 +819,7 @@ export default function Cotizador({
               <div className="col-md">
                 <span className="lb-proj-det-cot-price-label">{displayData.pricing?.label || 'Precio'}</span>
                 <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
-                  <span className="lb-proj-det-cot-price">{displayData.pricing?.price || 'UF -'}</span>
+                  <h2 className="lb-proj-det-cot-price">{displayData.pricing?.price || 'UF -'}</h2>
                 </div>
               </div>
               <div className="col-md">

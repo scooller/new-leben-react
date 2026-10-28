@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.182] - 2026-10-28
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`: Integración 100% dinámica con el endpoint `GET /api/v1/proyectos/{slug}/content` de Laravel.
+- Soporte para renderizado dinámico de todas las secciones: Hero (video, logo, SplitTitle), Barra Técnica, Sección Proyecto (slides, oferta destacada), 3 banners de video intermedios, Equipamiento (marcas aliadas, slides y modal de ambientes), Recorridos 360 / Masterplan, Espacios comunes (con íconos mapeados y carrusel sincronizado), Mapa interactivo (coordenadas de pin y puntos de interés POIs), Interiorismo (diseñadores de autor), Modal Panoramas por categorías y Asesores de contacto / Waze.
+- Fallback seguro a los datos canónicos predeterminados para evitar pantallas en blanco en proyectos nuevos o con campos editoriales vacíos.
+
+### Changed
+- `src/pages/ProyectoDetalle.jsx`: Removida la restricción `!isInnProject` permitiendo que cualquier proyecto de la base de datos despliegue su ficha enriquecida de forma inmediata.
+
 ## [0.9.181] - 2026-10-26
 
 ### Added

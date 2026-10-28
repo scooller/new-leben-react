@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback, memo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import Navbar from '../components/layout/Navbar.jsx'
@@ -17,7 +17,7 @@ import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import Alternatives from '../components/proyecto/Alternatives.jsx'
 import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
 import ProjectTeamAgents from '../components/proyecto/ProjectTeamAgents.jsx'
-import ProjectPanoramasModal from '../components/proyecto/ProjectPanoramasModal.jsx'
+import ProjectPanoramasModal, { PANORAMAS_CATEGORIES } from '../components/proyecto/ProjectPanoramasModal.jsx'
 import { ConciergeBellIcon } from '../components/icons/concierge-bell.jsx'
 import { TableIcon } from '../components/icons/table.jsx'
 import { ChefHatIcon } from '../components/icons/chef-hat.jsx'
@@ -33,7 +33,46 @@ const base = import.meta.env.BASE_URL
 // Parallax estándar para secciones de ficha
 const PARALLAX_STRENGTH = -12
 
-// --- DATOS CANÓNICOS: EDIFICIO INN (ESTÁNDAR BASE) ---
+// Helper para resolver rutas relativas locales y URLs absolutas/Curator
+const resolveUrl = (path, fallback = '') => {
+  if (!path) {
+    if (!fallback) return ''
+    return fallback.startsWith('http://') || fallback.startsWith('https://') || fallback.startsWith('data:')
+      ? fallback
+      : `${base}${fallback.replace(/^\/+/, '')}`
+  }
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    return path
+  }
+  return `${base}${path.replace(/^\/+/, '')}`
+}
+
+// Helper para formatear títulos multilínea con saltos de línea (\n)
+const formatMultiline = (text) => {
+  if (!text) return null
+  if (typeof text !== 'string') return text
+  const lines = text.split('\n')
+  if (lines.length <= 1) return text
+  return lines.map((line, idx) => (
+    <span key={idx}>
+      {line}
+      {idx < lines.length - 1 && <br />}
+    </span>
+  ))
+}
+
+// Mapa de íconos para navegación de amenidades / espacios
+const ICON_MAP = {
+  bell: ConciergeBellIcon,
+  table: TableIcon,
+  'chef-hat': ChefHatIcon,
+  dumbbell: DumbbellIcon,
+  'hot-tub': HotTubIcon,
+  'waves-ladder': WavesLadderIcon,
+  kayak: KayakIcon,
+}
+
+// --- DATOS CANÓNICOS (FALLBACK DE ALTA GAMA) ---
 const INN_THEME = {
   accent: '#d8b35c',
   accentDark: '#422c15',
@@ -123,7 +162,7 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg', alt: 'Hall de acceso', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Hall_Acceso.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Cerradura_Digital.jpg', alt: 'Puerta de acceso con cerradura digital', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Cerradura_Digital.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Piso_SPC.jpg', alt: 'Piso vinilico SCP', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Acceso_Piso_SPC.jpg' },
-    ]
+    ],
   },
   {
     label: 'Cocina',
@@ -135,7 +174,7 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Encimera.jpg', alt: 'Encimera de inducción Franke' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Microondas_Horno_Franke.jpg', alt: 'Microondas y horno empotrados Franke' },
       { img: 'images/inn/equipamiento/cocina/Equipamiento_Detalle_Cocina_Griferia_Paini.jpg', alt: 'Grifería italiana Paini' },
-    ]
+    ],
   },
   {
     label: 'Living Comedor',
@@ -143,7 +182,7 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Living-Comedor.jpg', alt: 'Living comedor', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Living-Comedor.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Puertas_Interiores.jpg', alt: 'Puertas enchapadas en madera de encina', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Puertas_Interiores.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Iluminación_Ventanales.jpg', alt: 'Iluminación incluida ventanas de termopanel de PVC', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Liv-Com_Iluminación_Ventanales.jpg' },
-    ]
+    ],
   },
   {
     label: 'Terraza',
@@ -151,7 +190,7 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Principal_Terraza.jpg', alt: 'Terraza', thumb: 'images/inn/equipamiento/Equipamiento_Principal_Terraza.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Pavimento.jpg', alt: 'Terraza con pavimento Gres', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Pavimento.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Tejuelas.jpg', alt: 'Muros exteriores con revestimiento de tejuelas en madera nativa', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Terraza_Tejuelas.jpg' },
-    ]
+    ],
   },
   {
     label: 'Dormitorios',
@@ -160,7 +199,7 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Wallkincloset.jpg', alt: 'Walk in closet', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Wallkincloset.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_2.jpg', alt: 'Dormitorio 2', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_2.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_3.jpg', alt: 'Dormitorio 3', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Dormitorios_Dorm_3.jpg' },
-    ]
+    ],
   },
   {
     label: 'Baños',
@@ -170,24 +209,13 @@ const INN_SPACES_MODAL_GALLERIES = [
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg', alt: 'Grifería Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Grifería_Hansgrohe.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg', alt: 'Columna de ducha Hansgrohe en baño principal', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Ducha_Hansgrohe.jpg' },
       { img: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg', alt: 'Accesorios marca MK', thumb: 'images/inn/equipamiento/Equipamiento_Detalle_Baño_Accesorios_MK.jpg' },
-    ]
+    ],
   },
 ]
 
-const INN_GALLERY_SLIDES = INN_LOCATION_POINTS.map((_, i) =>
-  [-1, 0, 1].map((offset) => {
-    const locIndex = (i + offset + INN_LOCATION_POINTS.length) % INN_LOCATION_POINTS.length
-    return {
-      ...INN_LOCATION_POINTS[locIndex],
-      itemIndex: locIndex,
-      isCenter: offset === 0,
-    }
-  })
-)
-
 const INN_MAP = {
-  eyebrow: <>Ubicación</>,
-  title: <>ntorno<br />INNigualable</>,
+  eyebrow: 'Ubicación',
+  title: 'Entorno INNigualable',
   descriptionHtml: `<p>Despertar con el lago Llanquihue y los volcanes enmarcando el paisaje es solo el comienzo. A un paso de INN, la costanera invita a caminar, disfrutar un café de especialidad, navegar o vivir nuevas aventuras.</p>
   <p>Puerto Varas ofrece también una reconocida gastronomía, calles con identidad y una conexión permanente con la naturaleza del sur de Chile. Desde aquí se abren rutas hacia Ensenada, Frutillar, Chiloé y algunas de las postales más inolvidables de la Región de Los Lagos. Una ubicación excepcional para integrar paisaje, gastronomía, aventura y vida al aire libre día a día</p>`,
   image: 'images/inn/Mapa_Ok_Sitio.png',
@@ -224,6 +252,20 @@ function WalkIcon({ size = 14, className = '' }) {
   )
 }
 
+function generateGallerySlides(points) {
+  if (!points || !points.length) return []
+  return points.map((_, i) =>
+    [-1, 0, 1].map((offset) => {
+      const locIndex = (i + offset + points.length) % points.length
+      return {
+        ...points[locIndex],
+        itemIndex: locIndex,
+        isCenter: offset === 0,
+      }
+    })
+  )
+}
+
 const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
   slides,
   galleryRef,
@@ -255,19 +297,19 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
-                        src={loc.img ? `${base}${loc.img}` : `${base}images/inn/ubicacion/nuevo.jpg`}
+                        src={resolveUrl(loc.img, 'images/inn/ubicacion/nuevo.jpg')}
                         alt={loc.name}
                         className="d-block w-100 lb-inn-gallery__img"
                         loading="lazy"
                         onError={(e) => {
-                          const fallback = `${base}images/inn/ubicacion/nuevo.jpg`
+                          const fallback = resolveUrl('images/inn/ubicacion/nuevo.jpg')
                           if (e.currentTarget.src !== fallback) {
                             e.currentTarget.src = fallback
                           }
                         }}
                       />
                       <a
-                        href={loc.img ? `${base}${loc.img}` : `${base}images/inn/ubicacion/nuevo.jpg`}
+                        href={resolveUrl(loc.img, 'images/inn/ubicacion/nuevo.jpg')}
                         data-fancybox="inn-galeria"
                         className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
@@ -305,7 +347,6 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
 export default function ProyectoDetalle() {
   const { slug } = useParams()
   const cleanSlug = (slug || 'inn').toLowerCase().replace(/edificio\s+/i, '').replace(/edificio-/i, '').trim()
-  const isInnProject = cleanSlug === 'inn'
 
   const [activeTab, setActiveTab] = useState('proyecto')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -333,7 +374,9 @@ export default function ProyectoDetalle() {
   const [apiProjects, setApiProjects] = useState(null)
   const [currentProject, setCurrentProject] = useState(null)
   const [selectedPlanta, setSelectedPlanta] = useState(null)
+  const [projectContent, setProjectContent] = useState(null)
 
+  // Cargar catálogo de proyectos
   useEffect(() => {
     let cancelled = false
     apiFetch('/api/v1/proyectos').then(({ data }) => {
@@ -346,6 +389,16 @@ export default function ProyectoDetalle() {
         })
         if (found) setCurrentProject(found)
       }
+    }).catch(() => { })
+    return () => { cancelled = true }
+  }, [cleanSlug])
+
+  // Cargar contenido editorial 100% dinámico desde el backend
+  useEffect(() => {
+    let cancelled = false
+    apiFetch(`/api/v1/proyectos/${cleanSlug}/content`).then(({ data, error }) => {
+      if (cancelled || error || !data) return
+      setProjectContent(data)
     }).catch(() => { })
     return () => { cancelled = true }
   }, [cleanSlug])
@@ -363,15 +416,129 @@ export default function ProyectoDetalle() {
     }
   }
 
+  // --- DERIVACIÓN DINÁMICA DE SECCIONES CON FALLBACK ---
+
+  // Paleta de colores
+  const theme = projectContent?.theme || INN_THEME
+  const themeStyles = useMemo(() => ({
+    '--lb-project-accent': theme.accent || INN_THEME.accent,
+    '--lb-project-accent-dark': theme.accent_dark || INN_THEME.accentDark,
+    '--lb-project-accent-light': theme.accent_light || INN_THEME.accentLight,
+    '--lb-project-accent-bg': theme.accent_bg || INN_THEME.accentBg,
+    '--lb-project-gradient': theme.gradient || INN_THEME.gradient,
+    '--lb-project-btn-shadow': theme.btn_shadow || INN_THEME.shadow,
+  }), [theme])
+
+  // Hero
+  const heroVideo = resolveUrl(projectContent?.hero?.video_url, 'video/inn-new.mp4')
+  const heroLogo = resolveUrl(projectContent?.hero?.logo_url, 'images/inn/Logo_INN_Header.png')
+  const heroTitle = formatMultiline(projectContent?.hero?.title || 'VIVE EL LUJO\nEN PUERTO VARAS')
+
+  // Barra de especificaciones técnicas (INFO)
+  const infoList = useMemo(() => {
+    const raw = projectContent?.technical_info?.length ? projectContent.technical_info : INN_INFO
+    const precio = currentProject?.precio_desde
+      ? `UF ${Math.round(currentProject.precio_desde).toLocaleString('es-CL')}`
+      : null
+    if (!precio) return raw
+    return raw.map((item) => (item.id === 'precio' ? { ...item, value: precio } : item))
+  }, [projectContent, currentProject])
+
+  // 1. Proyecto
   const [activeSlide, setActiveSlide] = useState(0)
+  const projectEyebrow = projectContent?.project_section?.eyebrow || 'Proyecto'
+  const projectTitle = formatMultiline(projectContent?.project_section?.title || 'LOS MEJORES DEPARTAMENTOS\nDE PUERTO VARAS')
+  const projectDescHtml = projectContent?.project_section?.description || `<p>INN propone una nueva forma de vivir Puerto Varas, con espacios amplios y luminosos, terminaciones de alto estándar y distribuciones pensadas para disfrutar todo el año.</p>
+  <p>Departamentos tradicionales, unidades con patio privado y exclusivos dúplex con vista al lago Llanquihue se complementan con una experiencia Home & Wellness que invita a relajarse, desconectarse y disfrutar el sur con la esencia de un hotel boutique</p>`
+  const projectHighlightOffer = projectContent?.project_section?.highlight_offer ?? 'paga el pie en <b>60</b> cuotas'
+  const projectSlides = useMemo(() => {
+    const s = projectContent?.project_section?.slides || projectContent?.project_slides
+    return (s && s.length) ? s : INN_SLIDES
+  }, [projectContent])
+
+  // Videos intermedios
+  const videoInterstitials = projectContent?.video_interstitials || []
+  const video1 = videoInterstitials[0] || {
+    text: 'Un estilo de vida único frente al lago y los volcanes',
+    video_url: 'video/video_reconfortante_a.mp4',
+  }
+  const video2 = videoInterstitials[1] || {
+    text: 'Descubre todo lo que INN tiene para ofrecer',
+    video_url: 'video/exterior.mp4',
+  }
+  const video3 = videoInterstitials[2] || {
+    text: 'Despierta tu espíritu aventurero en la Región de Los Lagos',
+    video_url: 'video/lipsum.mp4',
+  }
+
+  // 2. Equipamiento
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
+  const equipmentEyebrow = projectContent?.equipment?.eyebrow || 'Equipamiento'
+  const equipmentTitle = formatMultiline(projectContent?.equipment?.title || 'SOFISTICACIÓN\nEN CADA DETALLE')
+  const equipmentDescHtml = projectContent?.equipment?.description || `<p>Equipamiento y terminaciones de alto estándar: cocina Franke con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras.</p>
+  <p>Las terrazas incorporan revestimiento parcial de tejas, mientras cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural.</p>`
+  const equipmentBg = resolveUrl(projectContent?.equipment?.bg_image_url, 'images/inn/Perspectiva.svg')
+  const equipmentBrands = projectContent?.equipment?.brands?.length ? projectContent.equipment.brands : INN_EQUIPMENT_LOGOS
+  const equipmentSlides = projectContent?.equipment?.slides?.length ? projectContent.equipment.slides : INN_EQUIPMENT_SLIDES
+  const equipmentSpacesModal = projectContent?.equipment?.spaces_modal?.length ? projectContent.equipment.spaces_modal : INN_SPACES_MODAL_GALLERIES
+
+  // Recorridos 360
+  const virtualTours = projectContent?.virtual_tours?.tours?.length ? projectContent.virtual_tours.tours : undefined
+
+  // 3. Espacios Comunes
   const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
+  const espaciosEyebrow = projectContent?.espacios?.eyebrow || 'Espacios'
+  const espaciosTitle = formatMultiline(projectContent?.espacios?.title || 'ESPACIOS DE\nOTRO NIVEL')
+  const espaciosDescHtml = projectContent?.espacios?.description || `<p>Los espacios están concebidos como una extensión natural de tu departamento, donde la sensación hotelera se integra con la serenidad del entorno.</p><p>Cada ambiente ha sido cuidadosamente diseñado para enriquecer tu rutina diaria, ofreciendo espacios de encuentro, trabajo y descanso que combinan la calidez sureña, una delicada propuesta de interiorismo y vistas privilegiadas para disfrutar Puerto Varas al máximo</p>`
+  const espaciosBg = resolveUrl(projectContent?.espacios?.bg_image_url, 'images/inn/Climbing.svg')
+
+  const { espaciosNavItems, espaciosSlides } = useMemo(() => {
+    const rawItems = projectContent?.espacios?.items
+    if (!rawItems || !rawItems.length) {
+      return { espaciosNavItems: INN_ESPACIOS_NAV_ITEMS, espaciosSlides: INN_ESPACIOS_SLIDES }
+    }
+    const navItems = rawItems.map((item) => ({
+      id: item.id || item.navId,
+      label: item.label || item.name,
+      icon: ICON_MAP[item.icon_key] || ConciergeBellIcon,
+    }))
+    const slides = rawItems.map((item) => ({
+      navId: item.id || item.navId,
+      img: item.img || item.image_url,
+      link: item.link || item.img || item.image_url,
+      alt: item.alt || item.label || item.name,
+    }))
+    return { espaciosNavItems: navItems, espaciosSlides: slides }
+  }, [projectContent])
 
   const espaciosSlideIndex = useMemo(() => {
-    const targetNavId = INN_ESPACIOS_NAV_ITEMS[activeEspacioSlide]?.id
-    const idx = INN_ESPACIOS_SLIDES.findIndex((s) => s.navId === targetNavId)
+    const targetNavId = espaciosNavItems[activeEspacioSlide]?.id
+    const idx = espaciosSlides.findIndex((s) => s.navId === targetNavId)
     return idx !== -1 ? idx : activeEspacioSlide
-  }, [activeEspacioSlide])
+  }, [activeEspacioSlide, espaciosNavItems, espaciosSlides])
+
+  // 4. Mapa & Ubicación
+  const mapData = useMemo(() => ({
+    eyebrow: projectContent?.map?.eyebrow || INN_MAP.eyebrow,
+    title: formatMultiline(projectContent?.map?.title || INN_MAP.title),
+    descriptionHtml: projectContent?.map?.description || INN_MAP.descriptionHtml,
+    image: resolveUrl(projectContent?.map?.image_url, INN_MAP.image),
+    logo: resolveUrl(projectContent?.map?.logo_url, INN_MAP.logo),
+    btnText: projectContent?.map?.btn_text || INN_MAP.btnText,
+    address: projectContent?.map?.address || INN_MAP.address,
+    pin: {
+      x: projectContent?.map?.pin?.x ?? 33.3,
+      y: projectContent?.map?.pin?.y ?? 72.4,
+      logo: resolveUrl(projectContent?.map?.pin?.logo_url, 'images/inn/pin_logo.png'),
+    },
+  }), [projectContent])
+
+  const locationPoints = useMemo(() => {
+    const p = projectContent?.map?.pois
+    return (p && p.length) ? p : INN_LOCATION_POINTS
+  }, [projectContent])
+
+  const gallerySlides = useMemo(() => generateGallerySlides(locationPoints), [locationPoints])
 
   const galleryRef = useRef(null)
   const galleryCarouselInstance = useRef(null)
@@ -433,68 +600,26 @@ export default function ProyectoDetalle() {
     return () => observer.disconnect()
   }, [])
 
-  // Actualizar precio dinámico en barra info si la API lo entrega
-  const infoList = useMemo(() => {
-    if (!currentProject) return INN_INFO
-    const precio = currentProject.precio_desde
-      ? `UF ${Math.round(currentProject.precio_desde).toLocaleString('es-CL')}`
-      : null
-    if (!precio) return INN_INFO
-    return INN_INFO.map((item) => (item.id === 'precio' ? { ...item, value: precio } : item))
-  }, [currentProject])
+  // 5. Interiorismo
+  const interiorismoEyebrow = projectContent?.interiorismo?.eyebrow || 'Interiorismo'
+  const interiorismoTitle = formatMultiline(projectContent?.interiorismo?.title || 'MAESTRÍA EN\nCADA DETALLE')
+  const interiorismoDesc = projectContent?.interiorismo?.description || `<p>El interiorismo de <b>Sofía Iturralde</b> y la iluminación de <b>Rafael Rivera</b> se unen en INN para crear una experiencia integral de diseño. Sofía aporta cerca de 20 años de trayectoria en proyectos inmobiliarios, corporativos y residenciales en Chile y Argentina. Rafael, especializado en iluminación en el Istituto Europeo di Design de Milán, desarrolla proyectos lumínicos desde 2003.</p>
+  <p>En <b>INN</b>, ambas disciplinas dialogan para que materiales, texturas, volúmenes y distintas escenas de luz construyan ambientes cálidos y sofisticados, conectados con la identidad del sur. Una propuesta que realza cada espacio y refuerza el carácter exclusivo de un proyecto pensado para vivir Puerto Varas desde el diseño, el confort y el bienestar</p>`
+  const interiorismoBg = resolveUrl(projectContent?.interiorismo?.bg_image_url, 'images/inn/Interiorismo.svg')
+  const designers = projectContent?.interiorismo?.designers?.length ? projectContent.interiorismo.designers : undefined
 
-  // Variables de color del proyecto (Gold para INN, personalizable)
-  const themeStyles = useMemo(() => ({
-    '--lb-project-accent': INN_THEME.accent,
-    '--lb-project-accent-dark': INN_THEME.accentDark,
-    '--lb-project-accent-light': INN_THEME.accentLight,
-    '--lb-project-accent-bg': INN_THEME.accentBg,
-    '--lb-project-gradient': INN_THEME.gradient,
-    '--lb-project-btn-shadow': INN_THEME.shadow,
-  }), [])
+  // Modal Panoramas
+  const panoramasCategories = projectContent?.panoramas?.categories?.length ? projectContent.panoramas.categories : PANORAMAS_CATEGORIES
 
-  // --- NOTA DE INTEGRACIÓN PENDIENTE PARA PROYECTOS SIN CONTENIDO EDITORIAL ---
-  // Directiva: No simular datos falsos para no programar doble. Esperar endpoint GET /api/v1/proyectos/{slug}/content
-  if (!isInnProject) {
-    const projectName = currentProject?.name || slug?.toUpperCase() || 'Proyecto'
-    return (
-      <>
-        <Navbar className="bg-dark" />
-        <main
-          className="lb-is-mockup d-flex align-items-center justify-content-center py-5 position-relative"
-          style={{
-            minHeight: 'calc(100vh - 280px)',
-            backgroundImage: 'linear-gradient(rgba(245, 242, 237, 0.92), rgba(245, 242, 237, 0.92)), url(/images/home/hero-institucional.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          <div className="container text-center py-5 position-relative" style={{ zIndex: 1 }}>
-            <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mx-auto bg-white" style={{ maxWidth: '680px' }}>
-              <span className="badge bg-light text-muted border px-3 py-2 rounded-pill mx-auto mb-3 text-uppercase">
-                Estándar Canónico · Integración Backend
-              </span>
-              <h1 className="h3 fw-bold mb-3">{projectName}</h1>
-              <p className="text-secondary mb-4 leading-relaxed">
-                El contenido editorial enriquecido de este proyecto se encuentra en preparación para ser gestionado desde el nuevo panel administrativo (Laravel 11 + Filament v3), siguiendo el estándar visual y funcional de <strong>Edificio INN</strong>.
-              </p>
-              <div className="d-flex flex-wrap justify-content-center gap-3">
-                <Link to="/proyectos/inn" className="btn btn-primary rounded-pill px-4">
-                  Ver Edificio INN (Estándar Canónico)
-                </Link>
-                <Link to="/cotizador#proyectos" className="btn btn-outline-secondary rounded-pill px-4">
-                  Explorar Catálogo General
-                </Link>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </>
-    )
-  }
+  // 6. Contacto
+  const contactData = useMemo(() => ({
+    eyebrow: projectContent?.contact?.eyebrow || INN_TEAM.eyebrow,
+    title: projectContent?.contact?.title || INN_TEAM.title,
+    subtitle: projectContent?.contact?.subtitle || INN_TEAM.subtitle,
+    wazeMap: projectContent?.contact?.waze_url || INN_TEAM.wazeMap,
+    agents: projectContent?.contact?.agents?.length ? projectContent.contact.agents : INN_TEAM.agents,
+  }), [projectContent])
 
-  // --- RENDER DEL ESTÁNDAR CANÓNICO (EDIFICIO INN) ---
   return (
     <>
       <Navbar />
@@ -503,16 +628,16 @@ export default function ProyectoDetalle() {
         <HeroShell
           id="inicio"
           className="lb-inn-hero justify-content-center position-relative"
-          video={`${base}video/inn-new.mp4`}
+          video={heroVideo}
           bgWrapClassName="lb-inn-hero__bg-wrap"
           overlayClassName="lb-inn-hero__overlay"
         >
           <div className="position-absolute d-flex align-items-start flex-column align-self-center container h-100 mx-auto">
             <ScrollAnim as='span' animation='zoom-in' className='mt-auto'>
-              <img src={`${base}images/inn/Logo_INN_Header.png`} className="lb-inn-hero__logo" alt="Logo INN" />
+              <img src={heroLogo} className="lb-inn-hero__logo" alt="Logo Proyecto" />
             </ScrollAnim>
             <SplitTitle as='h1' delay={0.2} stagger={0.05} className="lb-inn-hero__title p-0">
-              VIVE EL LUJO<br /> EN PUERTO VARAS
+              {heroTitle}
             </SplitTitle>
           </div>
         </HeroShell>
@@ -636,12 +761,11 @@ export default function ProyectoDetalle() {
 
         {/* 1. SECCIÓN PROYECTO */}
         <ProjectFeatureSection
-          eyebrow={<>Proyecto</>}
-          title={<>LOS MEJORES DEPARTAMENTOS<br />DE PUERTO VARAS</>}
-          descriptionHtml={`<p>INN propone una nueva forma de vivir Puerto Varas, con espacios amplios y luminosos, terminaciones de alto estándar y distribuciones pensadas para disfrutar todo el año.</p>
-          <p>Departamentos tradicionales, unidades con patio privado y exclusivos dúplex con vista al lago Llanquihue se complementan con una experiencia Home & Wellness que invita a relajarse, desconectarse y disfrutar el sur con la esencia de un hotel boutique</p>`}
-          highlightOffer="paga el pie en <b>60</b> cuotas"
-          slides={INN_SLIDES}
+          eyebrow={projectEyebrow}
+          title={projectTitle}
+          descriptionHtml={projectDescHtml}
+          highlightOffer={projectHighlightOffer}
+          slides={projectSlides}
           carouselId="projectCarousel"
           parallaxStrength={10}
           activeSlide={activeSlide}
@@ -652,21 +776,20 @@ export default function ProyectoDetalle() {
         />
 
         <VideoTextSection
-          text="Un estilo de vida único frente al lago y los volcanes"
-          videoSrc="video/video_reconfortante_a.mp4"
+          text={video1.text}
+          videoSrc={resolveUrl(video1.video_url, 'video/video_reconfortante_a.mp4')}
         />
 
         {/* 2. SECCIÓN EQUIPAMIENTO */}
         <ProjectFeatureSection
-          eyebrow={<>Equipamiento</>}
-          title={<>SOFISTICACIÓN<br />EN CADA DETALLE</>}
-          descriptionHtml={`<p>Equipamiento y terminaciones de alto estándar: cocina Franke con refrigerador y lavavajillas panelables, cubiertas ultracompactas en terminación travertino, griferías Paini y Hansgrohe, puertas enchapadas en encina, piso vinílico SPC y ventanas termopanel PVC negras.</p>
-          <p>Las terrazas incorporan revestimiento parcial de tejas, mientras cada departamento cuenta con calefacción por radiadores y caldera individual a gas natural.</p>`}
-          highlightLogos={INN_EQUIPMENT_LOGOS}
-          slides={INN_EQUIPMENT_SLIDES}
+          eyebrow={equipmentEyebrow}
+          title={equipmentTitle}
+          descriptionHtml={equipmentDescHtml}
+          highlightLogos={equipmentBrands}
+          slides={equipmentSlides}
           carouselId="projectEquipmentCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
-          backgroundImage="images/inn/Perspectiva.svg"
+          backgroundImage={equipmentBg}
           id="departamentos"
           className='pb-2 mb-2'
           ariaLabel="Departamentos"
@@ -675,16 +798,16 @@ export default function ProyectoDetalle() {
           onSlideChange={setActiveEquipmentSlide}
           spacesModal={{
             buttonLabel: 'Ver Detalles',
-            galleries: INN_SPACES_MODAL_GALLERIES,
+            galleries: equipmentSpacesModal,
           }}
         />
 
-        <Recorridos360 />
+        <Recorridos360 tours={virtualTours} />
 
         {/* COTIZADOR */}
         <Cotizador
           className="lb-inn-cot"
-          data={getProjectBySlug('inn')?.cotizador}
+          data={getProjectBySlug(cleanSlug)?.cotizador || getProjectBySlug('inn')?.cotizador}
           universal
           projects={apiProjects}
           selection={selection}
@@ -693,8 +816,8 @@ export default function ProyectoDetalle() {
         {/* PROYECTOS RELACIONADOS */}
         <RelatedProjects
           data={{
-            eyebrow: 'Alternativas a Edificio INN',
-            highlight: 'Puerto Varas',
+            eyebrow: `Alternativas a ${currentProject?.name || 'Edificio INN'}`,
+            highlight: currentProject?.comuna || 'Puerto Varas',
             apiId: currentProject?.id || 9,
             projectName: currentProject?.name || 'Edificio INN',
           }}
@@ -710,19 +833,19 @@ export default function ProyectoDetalle() {
         />
 
         <VideoTextSection
-          text="Descubre todo lo que INN tiene para ofrecer"
-          videoSrc="video/exterior.mp4"
+          text={video2.text}
+          videoSrc={resolveUrl(video2.video_url, 'video/exterior.mp4')}
         />
 
         {/* 3. SECCIÓN ESPACIOS COMUNES */}
         <ProjectFeatureSection
-          title={<>ESPACIOS DE<br />OTRO NIVEL</>}
-          eyebrow={<>Espacios</>}
-          descriptionHtml="<p>Los espacios están concebidos como una extensión natural de tu departamento, donde la sensación hotelera se integra con la serenidad del entorno.</p><p>Cada ambiente ha sido cuidadosamente diseñado para enriquecer tu rutina diaria, ofreciendo espacios de encuentro, trabajo y descanso que combinan la calidez sureña, una delicada propuesta de interiorismo y vistas privilegiadas para disfrutar Puerto Varas al máximo</p>"
-          slides={INN_ESPACIOS_SLIDES}
+          title={espaciosTitle}
+          eyebrow={espaciosEyebrow}
+          descriptionHtml={espaciosDescHtml}
+          slides={espaciosSlides}
           carouselId="projectEspaciosCarousel"
           parallaxStrength={PARALLAX_STRENGTH}
-          backgroundImage="images/inn/Climbing.svg"
+          backgroundImage={espaciosBg}
           id="espacios"
           className='pb-2 mb-2'
           ariaLabel="Espacios"
@@ -731,15 +854,15 @@ export default function ProyectoDetalle() {
         />
 
         <CarouselNav
-          items={INN_ESPACIOS_NAV_ITEMS}
+          items={espaciosNavItems}
           variant="stacked"
           activeIndex={activeEspacioSlide}
           onSelect={setActiveEspacioSlide}
         />
 
         <VideoTextSection
-          text="Despierta tu espíritu aventurero en la Región de Los Lagos"
-          videoSrc="video/lipsum.mp4"
+          text={video3.text}
+          videoSrc={resolveUrl(video3.video_url, 'video/lipsum.mp4')}
         />
 
         {/* 4. SECCIÓN MAPA Y UBICACIÓN */}
@@ -748,30 +871,32 @@ export default function ProyectoDetalle() {
             <div className="row g-0">
               <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
                 <div className="mb-4 mb-md-5 mt-3 lb-inn-map__header">
-                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3">{INN_MAP.eyebrow}</ScrollAnim>
+                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3">{mapData.eyebrow}</ScrollAnim>
                   <div className="d-flex align-items-center gap-3 gap-md-4">
-                    <ScrollAnim as="span" animation="fade-left">
-                      <img
-                        src={`${base}${INN_MAP.logo}`}
-                        alt="Logo INN"
-                        className="lb-inn-map__header-logo"
-                      />
-                    </ScrollAnim>
+                    {mapData.logo && (
+                      <ScrollAnim as="span" animation="fade-left">
+                        <img
+                          src={mapData.logo}
+                          alt="Logo Proyecto"
+                          className="lb-inn-map__header-logo"
+                        />
+                      </ScrollAnim>
+                    )}
                     <div className='lb-inn-map__titulos-right'>
-                      <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={INN_MAP.title} stagger={0.06} />
+                      <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={mapData.title} stagger={0.06} />
                     </div>
                   </div>
                 </div>
                 <div className="lb-inn-map__text text-start">
                   <ScrollAnim animation="fade-up" className="lb-inn-proyecto__text lh-lg mb-4 mb-md-5 w-md-80">
-                    <span dangerouslySetInnerHTML={{ __html: INN_MAP.descriptionHtml }} />
+                    <span dangerouslySetInnerHTML={{ __html: mapData.descriptionHtml }} />
                   </ScrollAnim>
                   <button
                     type="button"
                     className="btn lb-inn-btn lb-project-btn"
                     onClick={() => setShowPanoramasModal(true)}
                   >
-                    <span>{(INN_MAP.btnText || '').toUpperCase()}</span>
+                    <span>{(mapData.btnText || 'Experiencias').toUpperCase()}</span>
                   </button>
                 </div>
               </div>
@@ -779,7 +904,7 @@ export default function ProyectoDetalle() {
                 <ScrollAnim animation="fade-right">
                   <div className="lb-inn-map__interactive-wrap position-relative w-100">
                     <img
-                      src={`${base}${INN_MAP.image}`}
+                      src={mapData.image}
                       alt="Mapa interactivo de ubicación"
                       className="img-fluid w-100 h-100 object-fit-contain d-block"
                       loading="lazy"
@@ -788,23 +913,23 @@ export default function ProyectoDetalle() {
                     {/* Pin PROYECTO */}
                     <div
                       className="lb-inn-map__pin-inn position-absolute"
-                      style={{ left: '33.3%', top: '72.4%' }}
-                      title="PROYECTO INN"
+                      style={{ left: `${mapData.pin.x}%`, top: `${mapData.pin.y}%` }}
+                      title={currentProject?.name || 'PROYECTO'}
                     >
                       <img
-                        src={`${base}images/inn/pin_logo.png`}
-                        alt="PROYECTO INN"
+                        src={mapData.pin.logo}
+                        alt={currentProject?.name || 'PROYECTO'}
                         className="lb-inn-map__pin-inn-img"
                       />
                     </div>
 
                     {/* Pines interactivos */}
-                    {INN_LOCATION_POINTS.map((point, index) => {
+                    {locationPoints.map((point, index) => {
                       const isSelected = activeLocationIndex === index
                       const dir = point.direction || point.dir || 'right'
                       return (
                         <button
-                          key={point.id}
+                          key={point.id || index}
                           type="button"
                           onClick={(e) => {
                             e.preventDefault()
@@ -832,10 +957,12 @@ export default function ProyectoDetalle() {
                   </div>
 
                   {/* Dirección bajo el mapa */}
-                  <div className="lb-inn-map__address d-flex align-items-center justify-content-center gap-2 mb-3 mb-md-4">
-                    <MapPin size={22} className="lb-inn-map__address-icon" />
-                    <span className="lb-inn-map__address-text">{INN_MAP.address}</span>
-                  </div>
+                  {mapData.address && (
+                    <div className="lb-inn-map__address d-flex align-items-center justify-content-center gap-2 mb-3 mb-md-4">
+                      <MapPin size={22} className="lb-inn-map__address-icon" />
+                      <span className="lb-inn-map__address-text">{mapData.address}</span>
+                    </div>
+                  )}
                 </ScrollAnim>
               </div>
             </div>
@@ -843,25 +970,26 @@ export default function ProyectoDetalle() {
         </section>
 
         {/* Carousel de imágenes con interacción sincronizada */}
-        <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
-          <ScrollAnim className='container' animation="fade-up">
-            <ProjectGalleryCarousel
-              slides={INN_GALLERY_SLIDES}
-              galleryRef={galleryRef}
-              onSelectLocation={handleSelectLocation}
-            />
-          </ScrollAnim>
-        </section>
+        {gallerySlides.length > 0 && (
+          <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
+            <ScrollAnim className='container' animation="fade-up">
+              <ProjectGalleryCarousel
+                slides={gallerySlides}
+                galleryRef={galleryRef}
+                onSelectLocation={handleSelectLocation}
+              />
+            </ScrollAnim>
+          </section>
+        )}
 
         {/* 5. INTERIORISMO */}
         <InteriorismoSection
-          eyebrow={<>Interiorismo</>}
-          title={<>MAESTRÍA EN<br />CADA DETALLE</>}
+          eyebrow={interiorismoEyebrow}
+          title={interiorismoTitle}
           parallaxStrength={PARALLAX_STRENGTH}
-          description="
-          <p>El interiorismo de <b>Sofía Iturralde</b> y la iluminación de <b>Rafael Rivera</b> se unen en INN para crear una experiencia integral de diseño. Sofía aporta cerca de 20 años de trayectoria en proyectos inmobiliarios, corporativos y residenciales en Chile y Argentina. Rafael, especializado en iluminación en el Istituto Europeo di Design de Milán, desarrolla proyectos lumínicos desde 2003.</p>
-          <p>En <b>INN</b>, ambas disciplinas dialogan para que materiales, texturas, volúmenes y distintas escenas de luz construyan ambientes cálidos y sofisticados, conectados con la identidad del sur. Una propuesta que realza cada espacio y refuerza el carácter exclusivo de un proyecto pensado para vivir Puerto Varas desde el diseño, el confort y el bienestar</p>"
-          backgroundImage="images/inn/Interiorismo.svg"
+          description={interiorismoDesc}
+          backgroundImage={interiorismoBg}
+          designers={designers}
           id="interiorismo"
           ariaLabel="Interiorismo"
         />
@@ -871,11 +999,12 @@ export default function ProyectoDetalle() {
       <ProjectPanoramasModal
         show={showPanoramasModal}
         onClose={() => setShowPanoramasModal(false)}
-        projectName="INN"
+        projectName={currentProject?.name || 'INN'}
+        categories={panoramasCategories}
       />
 
       {/* SECCIÓN CONTACTO — ASESORES + MAPA */}
-      <ProjectTeamAgents data={INN_TEAM} apiId={currentProject?.id || 9} />
+      <ProjectTeamAgents data={contactData} apiId={currentProject?.id || 9} />
 
       <Footer />
     </>
