@@ -526,21 +526,28 @@ export default function ProyectoDetalle() {
     return idx !== -1 ? idx : activeEspacioSlide
   }, [activeEspacioSlide, espaciosNavItems, espaciosSlides])
 
-  // 4. Mapa & Ubicación
-  const mapData = useMemo(() => ({
-    eyebrow: projectContent?.map?.eyebrow || INN_MAP.eyebrow,
-    title: formatMultiline(projectContent?.map?.title || INN_MAP.title),
-    descriptionHtml: projectContent?.map?.description || INN_MAP.descriptionHtml,
-    image: resolveUrl(projectContent?.map?.image_url, INN_MAP.image),
-    logo: resolveUrl(projectContent?.map?.logo_url, INN_MAP.logo),
-    btnText: projectContent?.map?.btn_text || INN_MAP.btnText,
-    address: projectContent?.map?.address || INN_MAP.address,
-    pin: {
-      x: projectContent?.map?.pin?.x ?? 33.3,
-      y: projectContent?.map?.pin?.y ?? 72.4,
-      logo: resolveUrl(projectContent?.map?.pin?.logo_url, 'images/inn/pin_logo.png'),
-    },
-  }), [projectContent])
+  // 4. Mapa & Ubicación (si no tiene imagen de mapa, no se renderiza)
+  const mapData = useMemo(() => {
+    const rawImage = projectContent?.map?.image_url
+    const isExplicitlyEmpty = rawImage === '' || rawImage === null
+    const resolvedImage = isExplicitlyEmpty ? null : resolveUrl(rawImage, INN_MAP.image)
+
+    return {
+      hasMap: Boolean(resolvedImage),
+      eyebrow: projectContent?.map?.eyebrow || INN_MAP.eyebrow,
+      title: formatMultiline(projectContent?.map?.title || INN_MAP.title),
+      descriptionHtml: projectContent?.map?.description || INN_MAP.descriptionHtml,
+      image: resolvedImage,
+      logo: resolveUrl(projectContent?.map?.logo_url, INN_MAP.logo),
+      btnText: projectContent?.map?.btn_text || INN_MAP.btnText,
+      address: projectContent?.map?.address || INN_MAP.address,
+      pin: {
+        x: projectContent?.map?.pin?.x ?? 33.3,
+        y: projectContent?.map?.pin?.y ?? 72.4,
+        logo: resolveUrl(projectContent?.map?.pin?.logo_url, 'images/inn/pin_logo.png'),
+      },
+    }
+  }, [projectContent])
 
   const locationPoints = useMemo(() => {
     const p = projectContent?.map?.pois
@@ -886,111 +893,113 @@ export default function ProyectoDetalle() {
         />
 
         {/* 4. SECCIÓN MAPA Y UBICACIÓN */}
-        <section className="container-fluid lb-inn-map" id="ubicacion">
-          <div className="container">
-            <div className="row g-0">
-              <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
-                <div className="mb-4 mb-md-5 mt-3 lb-inn-map__header">
-                  <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3">{mapData.eyebrow}</ScrollAnim>
-                  <div className="d-flex align-items-center gap-3 gap-md-4">
-                    {mapData.logo && (
-                      <ScrollAnim as="span" animation="fade-left">
-                        <img
-                          src={mapData.logo}
-                          alt="Logo Proyecto"
-                          className="lb-inn-map__header-logo"
-                        />
-                      </ScrollAnim>
-                    )}
-                    <div className='lb-inn-map__titulos-right'>
-                      <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={mapData.title} stagger={0.06} />
+        {mapData.hasMap && (
+          <section className="container-fluid lb-inn-map" id="ubicacion">
+            <div className="container">
+              <div className="row g-0">
+                <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
+                  <div className="mb-4 mb-md-5 mt-3 lb-inn-map__header">
+                    <ScrollAnim as="span" animation="flip-x" className="lb-inn-proyecto__eyebrow d-block mb-3">{mapData.eyebrow}</ScrollAnim>
+                    <div className="d-flex align-items-center gap-3 gap-md-4">
+                      {mapData.logo && (
+                        <ScrollAnim as="span" animation="fade-left">
+                          <img
+                            src={mapData.logo}
+                            alt="Logo Proyecto"
+                            className="lb-inn-map__header-logo"
+                          />
+                        </ScrollAnim>
+                      )}
+                      <div className='lb-inn-map__titulos-right'>
+                        <SplitTitle as="h2" className="lb-inn-proyecto__title mb-0" text={mapData.title} stagger={0.06} />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="lb-inn-map__text text-start">
-                  <ScrollAnim animation="fade-up" className="lb-inn-proyecto__text lh-lg mb-4 mb-md-5 w-md-80">
-                    <span dangerouslySetInnerHTML={{ __html: mapData.descriptionHtml }} />
-                  </ScrollAnim>
-                  <button
-                    type="button"
-                    className="btn lb-inn-btn lb-project-btn"
-                    onClick={() => setShowPanoramasModal(true)}
-                  >
-                    <span>{(mapData.btnText || 'Experiencias').toUpperCase()}</span>
-                  </button>
-                </div>
-              </div>
-              <div className="col-12 col-lg-7">
-                <ScrollAnim animation="fade-right">
-                  <div className="lb-inn-map__interactive-wrap position-relative w-100">
-                    <img
-                      src={mapData.image}
-                      alt="Mapa interactivo de ubicación"
-                      className="img-fluid w-100 h-100 object-fit-contain d-block"
-                      loading="lazy"
-                    />
-
-                    {/* Pin PROYECTO */}
-                    <div
-                      className="lb-inn-map__pin-inn position-absolute"
-                      style={{ left: `${mapData.pin.x}%`, top: `${mapData.pin.y}%` }}
-                      title={currentProject?.name || 'PROYECTO'}
+                  <div className="lb-inn-map__text text-start">
+                    <ScrollAnim animation="fade-up" className="lb-inn-proyecto__text lh-lg mb-4 mb-md-5 w-md-80">
+                      <span dangerouslySetInnerHTML={{ __html: mapData.descriptionHtml }} />
+                    </ScrollAnim>
+                    <button
+                      type="button"
+                      className="btn lb-inn-btn lb-project-btn"
+                      onClick={() => setShowPanoramasModal(true)}
                     >
-                      <img
-                        src={mapData.pin.logo}
-                        alt={currentProject?.name || 'PROYECTO'}
-                        className="lb-inn-map__pin-inn-img"
-                      />
-                    </div>
-
-                    {/* Pines interactivos */}
-                    {locationPoints.map((point, index) => {
-                      const isSelected = activeLocationIndex === index
-                      const dir = point.direction || point.dir || 'right'
-                      return (
-                        <button
-                          key={point.id || index}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            handleSelectLocation(index)
-                          }}
-                          onPointerDown={(e) => {
-                            if (e.button === 0) {
-                              handleSelectLocation(index)
-                            }
-                          }}
-                          className={`lb-inn-map__pin lb-inn-map__pin--${dir} position-absolute ${isSelected ? 'active' : ''}`}
-                          style={{ left: `${point.x}%`, top: `${point.y}%` }}
-                          aria-label={`${point.name} (${point.distance})`}
-                        >
-                          <span className={`lb-inn-map__pin-dot-wrap ${isSelected ? 'dot-highlight' : ''}`}>
-                            <span className="lb-inn-map__pin-dot" />
-                          </span>
-                          <span className="lb-inn-map__pin-line" />
-                          <span className="lb-inn-map__pin-pill">
-                            <strong>{point.label || point.name}</strong>
-                          </span>
-                        </button>
-                      )
-                    })}
+                      <span>{(mapData.btnText || 'Experiencias').toUpperCase()}</span>
+                    </button>
                   </div>
+                </div>
+                <div className="col-12 col-lg-7">
+                  <ScrollAnim animation="fade-right">
+                    <div className="lb-inn-map__interactive-wrap position-relative w-100">
+                      <img
+                        src={mapData.image}
+                        alt="Mapa interactivo de ubicación"
+                        className="img-fluid w-100 h-100 object-fit-contain d-block"
+                        loading="lazy"
+                      />
 
-                  {/* Dirección bajo el mapa */}
-                  {mapData.address && (
-                    <div className="lb-inn-map__address d-flex align-items-center justify-content-center gap-2 mb-3 mb-md-4">
-                      <MapPin size={22} className="lb-inn-map__address-icon" />
-                      <span className="lb-inn-map__address-text">{mapData.address}</span>
+                      {/* Pin PROYECTO */}
+                      <div
+                        className="lb-inn-map__pin-inn position-absolute"
+                        style={{ left: `${mapData.pin.x}%`, top: `${mapData.pin.y}%` }}
+                        title={currentProject?.name || 'PROYECTO'}
+                      >
+                        <img
+                          src={mapData.pin.logo}
+                          alt={currentProject?.name || 'PROYECTO'}
+                          className="lb-inn-map__pin-inn-img"
+                        />
+                      </div>
+
+                      {/* Pines interactivos */}
+                      {locationPoints.map((point, index) => {
+                        const isSelected = activeLocationIndex === index
+                        const dir = point.direction || point.dir || 'right'
+                        return (
+                          <button
+                            key={point.id || index}
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              handleSelectLocation(index)
+                            }}
+                            onPointerDown={(e) => {
+                              if (e.button === 0) {
+                                handleSelectLocation(index)
+                              }
+                            }}
+                            className={`lb-inn-map__pin lb-inn-map__pin--${dir} position-absolute ${isSelected ? 'active' : ''}`}
+                            style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                            aria-label={`${point.name} (${point.distance})`}
+                          >
+                            <span className={`lb-inn-map__pin-dot-wrap ${isSelected ? 'dot-highlight' : ''}`}>
+                              <span className="lb-inn-map__pin-dot" />
+                            </span>
+                            <span className="lb-inn-map__pin-line" />
+                            <span className="lb-inn-map__pin-pill">
+                              <strong>{point.label || point.name}</strong>
+                            </span>
+                          </button>
+                        )
+                      })}
                     </div>
-                  )}
-                </ScrollAnim>
+
+                    {/* Dirección bajo el mapa */}
+                    {mapData.address && (
+                      <div className="lb-inn-map__address d-flex align-items-center justify-content-center gap-2 mb-3 mb-md-4">
+                        <MapPin size={22} className="lb-inn-map__address-icon" />
+                        <span className="lb-inn-map__address-text">{mapData.address}</span>
+                      </div>
+                    )}
+                  </ScrollAnim>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Carousel de imágenes con interacción sincronizada */}
-        {gallerySlides.length > 0 && (
+        {mapData.hasMap && gallerySlides.length > 0 && (
           <section className="lb-inn-gallery py-2 py-md-3" id="galeria">
             <ScrollAnim className='container' animation="fade-up">
               <ProjectGalleryCarousel
