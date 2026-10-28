@@ -30,7 +30,13 @@ const TOURS = [
   },
 ]
 
-export default function Recorridos360({ tours = TOURS, className = '' }) {
+export default function Recorridos360({
+  tours = TOURS,
+  title,
+  eyebrow,
+  brochureUrl,
+  className = '',
+}) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [activeSubIndex, setActiveSubIndex] = useState(0)
   const activeTour = tours[activeIndex]
@@ -51,7 +57,9 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
 
   if (!activeTour) return null
 
-  const subImages = activeTour.images || []
+  const subImages = (activeTour.interiores && activeTour.interiores.length > 0)
+    ? activeTour.interiores
+    : (activeTour.images || [])
   const hasSubImages = subImages.length > 1
   const currentItem = hasSubImages ? subImages[activeSubIndex] : (subImages[0] || activeTour)
   const currentSrc = currentItem?.src || activeTour.src
@@ -60,19 +68,19 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
   return (
     <section className={`lb-inn-360 container-fluid ${className}`.trim()} id="recorridos-360" aria-labelledby="recorridos-360-title">
       <div className="container">
-        <SplitTitle className='lb-inn-proyecto__title' id="recorridos-360-title" as='h2' text="Descubre INN" />
+        {eyebrow && (
+          <span className="lb-inn-section__eyebrow d-block mb-1 text-center" style={{ letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '0.85rem' }}>
+            {eyebrow}
+          </span>
+        )}
+        <SplitTitle className='lb-inn-proyecto__title' id="recorridos-360-title" as='h2' text={title || "Descubre el Proyecto"} />
 
         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
-          {/* <ScrollAnim as='h3' animation='fade-up' className="lb-inn-360__title mb-0">
-            <img src={`${base}images/icons/360.svg`} alt="" aria-hidden="true" />
-            <span>{currentTitle}</span>
-          </ScrollAnim> */}
-
           {hasSubImages && (
-            <div className="d-inline-flex gap-1 p-1 lb-inn-360__subtabs" role="tablist" aria-label="Subvistas de Masterplan">
+            <div className="d-inline-flex gap-1 p-1 lb-inn-360__subtabs" role="tablist" aria-label="Subvistas de Recorrido">
               {subImages.map((item, idx) => (
                 <button
-                  key={item.src}
+                  key={item.src || idx}
                   type="button"
                   className={`btn btn-sm px-3 py-1 ${idx === activeSubIndex ? 'active' : ''}`}
                   role="tab"
@@ -107,16 +115,27 @@ export default function Recorridos360({ tours = TOURS, className = '' }) {
               key={currentSrc}
               src={currentSrc}
               title={currentTitle}
-              allow={`${activeTour.allow}; fullscreen`}
+              allow={`${activeTour.allow || 'fullscreen; autoplay'}; fullscreen`}
               allowFullScreen
               loading="eager"
               referrerPolicy="strict-origin-when-cross-origin"
             />
           )}
         </ScrollAnim>
-        <div className="text-end mt-2">
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-2">
+          {brochureUrl ? (
+            <a
+              href={brochureUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="small text-decoration-none d-inline-flex align-items-center gap-1 fw-semibold"
+              style={{ color: 'var(--lb-project-accent, #d9bc70)' }}
+            >
+              <span>Descargar Folleto (PDF)</span>
+            </a>
+          ) : <span />}
           <a href={currentSrc} target="_blank" rel="noreferrer" className="small text-muted">
-            Abrir {isImage(currentSrc) ? 'imagen' : 'recorrido'} en una nueva ventana
+            Abrir {isImage(currentSrc) ? 'imagen' : 'recorrido 360'} en una nueva ventana ↗
           </a>
         </div>
 

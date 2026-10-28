@@ -459,14 +459,20 @@ export default function ProyectoDetalle() {
   // Videos intermedios
   const videoInterstitials = projectContent?.video_interstitials || []
   const video1 = videoInterstitials[0] || {
+    eyebrow: '',
+    title: '',
     text: 'Un estilo de vida único frente al lago y los volcanes',
     video_url: 'video/video_reconfortante_a.mp4',
   }
   const video2 = videoInterstitials[1] || {
+    eyebrow: '',
+    title: '',
     text: 'Descubre todo lo que INN tiene para ofrecer',
     video_url: 'video/exterior.mp4',
   }
   const video3 = videoInterstitials[2] || {
+    eyebrow: '',
+    title: '',
     text: 'Despierta tu espíritu aventurero en la Región de Los Lagos',
     video_url: 'video/lipsum.mp4',
   }
@@ -484,6 +490,9 @@ export default function ProyectoDetalle() {
 
   // Recorridos 360
   const virtualTours = projectContent?.virtual_tours?.tours?.length ? projectContent.virtual_tours.tours : undefined
+  const virtualToursTitle = projectContent?.virtual_tours?.title || `Descubre ${projectContent?.name || currentProject?.name || 'el Proyecto'}`
+  const virtualToursEyebrow = projectContent?.virtual_tours?.eyebrow || 'Recorridos Virtuales'
+  const virtualToursBrochure = projectContent?.virtual_tours?.brochure_url || projectContent?.brochure_pdf_url
 
   // 3. Espacios Comunes
   const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
@@ -776,6 +785,8 @@ export default function ProyectoDetalle() {
         />
 
         <VideoTextSection
+          eyebrow={video1.eyebrow}
+          title={video1.title}
           text={video1.text}
           videoSrc={resolveUrl(video1.video_url, 'video/video_reconfortante_a.mp4')}
         />
@@ -802,7 +813,12 @@ export default function ProyectoDetalle() {
           }}
         />
 
-        <Recorridos360 tours={virtualTours} />
+        <Recorridos360
+          tours={virtualTours}
+          title={virtualToursTitle}
+          eyebrow={virtualToursEyebrow}
+          brochureUrl={virtualToursBrochure}
+        />
 
         {/* COTIZADOR */}
         <Cotizador
@@ -833,6 +849,8 @@ export default function ProyectoDetalle() {
         />
 
         <VideoTextSection
+          eyebrow={video2.eyebrow}
+          title={video2.title}
           text={video2.text}
           videoSrc={resolveUrl(video2.video_url, 'video/exterior.mp4')}
         />
@@ -861,6 +879,8 @@ export default function ProyectoDetalle() {
         />
 
         <VideoTextSection
+          eyebrow={video3.eyebrow}
+          title={video3.title}
           text={video3.text}
           videoSrc={resolveUrl(video3.video_url, 'video/lipsum.mp4')}
         />
