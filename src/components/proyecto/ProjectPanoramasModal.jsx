@@ -3,8 +3,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 
-const base = import.meta.env.BASE_URL
-
 export const PANORAMAS_CATEGORIES = [
   {
     id: 'ruta-del-lago',

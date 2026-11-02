@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.188] - 2026-11-02
+
+### Changed
+- `ProyectoDetalle.jsx`: Los proyectos (incluyendo INN) se consumen 100% desde los endpoints de backend (`/api/v1/proyectos` y `/api/v1/proyectos/:slug/content`) como única fuente de verdad.
+- `ProyectoDetalle.jsx`: Eliminados todos los fallbacks estáticos de INN (`INN_TABS`, `INN_THEME`, `INN_SLIDES`, etc.). Barra de navegación desktop/mobile (`projectTabs`) y renderizado de secciones generados dinámicamente según contenido retornado por la API.
+- `src/data/projects.js`: Marcado como deprecated, eliminados datos mock comentados y dependencias huérfanas.
+- `src/components/proyecto/ProjectPanoramasModal.jsx`: Eliminada variable redundante `base` a nivel de módulo para cumplir con ESLint.
+
 ## [0.9.187] - 2026-10-28
 
 ### Changed
