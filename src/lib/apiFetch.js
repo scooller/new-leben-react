@@ -56,7 +56,7 @@ export function clearApiCache(pattern) {
  */
 export async function apiFetch(url, options = {}) {
   const isGet = !options.method || options.method.toUpperCase() === 'GET'
-  const useCache = isGet && options.cache !== false
+  const useCache = isGet && options.cache !== false && !import.meta.env.DEV
   const ttl = options.ttl ?? DEFAULT_TTL
 
   if (useCache) {
@@ -99,4 +99,8 @@ export async function apiFetch(url, options = {}) {
   }
 
   return promise
+}
+
+if (typeof window !== "undefined") {
+  window.clearApiCache = clearApiCache
 }

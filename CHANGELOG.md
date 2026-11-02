@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.189] - 2026-11-02
+
+### Fixed
+- Deshabilitado el caché de `sessionStorage` en `apiFetch` durante desarrollo (`!import.meta.env.DEV`), permitiendo ver actualizaciones del backend en tiempo real sin esperar 5 minutos de TTL.
+- Expuesta función global `window.clearApiCache()` en consola para purga instantánea manual del caché de sesión si existieran entradas previas.
+
 ## [0.9.188] - 2026-11-02
 
 ### Changed
