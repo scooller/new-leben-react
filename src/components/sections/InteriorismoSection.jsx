@@ -99,7 +99,7 @@ export default function InteriorismoSection({
     <section ref={sectionRef} className="lb-inn-proyecto lb-inn-interiorismo pb-5 mb-5" id={id} aria-label={ariaLabel}>
       <div
         className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
-        style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
+        style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${/^(https?:)?\/\//.test(backgroundImage) || backgroundImage.startsWith('data:') ? backgroundImage : `${base}${backgroundImage.replace(/^\/+/, '')}`}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
           <div className="col-lg-6 align-self-stretch position-relative lb-inn-proyecto__text-column">
@@ -155,7 +155,7 @@ export default function InteriorismoSection({
                       aria-hidden="true"
                       delay={0.1 * index}
                       style={designer.image ? {
-                        backgroundImage: `url("${base}${designer.image}")`,
+                        backgroundImage: `url("${/^(https?:)?\/\//.test(designer.image) || designer.image.startsWith('data:') ? designer.image : `${base}${designer.image.replace(/^\/+/, '')}`}")`,
                       } : undefined}
                     />
                     <SplitTitle

@@ -128,7 +128,7 @@ export default function ProjectFeatureSection({
     <section ref={sectionRef} className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
       <div
         className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
-        style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
+        style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${/^(https?:)?\/\//.test(backgroundImage) || backgroundImage.startsWith('data:') ? backgroundImage : `${base}${backgroundImage.replace(/^\/+/, '')}`}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
           <div className="col-lg-5 align-self-stretch position-relative lb-inn-proyecto__text-column">
@@ -216,7 +216,7 @@ export default function ProjectFeatureSection({
             <ScrollAnim className="col-lg-7 d-flex">
               <div className="lb-inn-proyecto__frame w-100">
                 <video
-                  src={`${base}${mediaVideoSrc}`}
+                  src={/^(https?:)?\/\//.test(mediaVideoSrc) || mediaVideoSrc.startsWith('data:') ? mediaVideoSrc : `${base}${mediaVideoSrc.replace(/^\/+/, '')}`}
                   className="d-block w-100 h-100 object-fit-cover"
                   autoPlay
                   muted
@@ -232,7 +232,7 @@ export default function ProjectFeatureSection({
                   {slides.map((slide, index) => {
                     const rawTarget = (slide.link && typeof slide.link === 'string' && slide.link.trim()) || slide.img || slide.src
                     const fancyboxHref = /^(https?:)?\/\//.test(rawTarget) ? rawTarget : `${base}${rawTarget.replace(/^\//, '')}`
-                    const imgSrc = `${base}${slide.img || slide.src}`
+                    const imgSrc = /^(https?:)?\/\//.test(slide.img || slide.src) ? (slide.img || slide.src) : `${base}${slide.img || slide.src}`
 
                     return (
                       <div

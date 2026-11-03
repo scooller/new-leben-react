@@ -17,6 +17,14 @@ export default function VideoTextSection({
   const sectionRef = useRef(null)
   const videoWrapRef = useRef(null)
 
+  const resolvedVideoSrc = !videoSrc
+    ? ''
+    : /^(https?:)?\/\//.test(videoSrc) || videoSrc.startsWith('data:') || videoSrc.startsWith('blob:')
+      ? videoSrc
+      : videoSrc.startsWith(base)
+        ? videoSrc
+        : `${base}${videoSrc.replace(/^\/+/, '')}`
+
   useEffect(() => {
     const section = sectionRef.current
     const videoWrap = videoWrapRef.current
@@ -44,7 +52,7 @@ export default function VideoTextSection({
   return (
     <section ref={sectionRef} className={`lb-inn-video-banner container-fluid ${className}`.trim()} aria-label={title || 'Sección con video y texto'}>
       <div ref={videoWrapRef} className="lb-inn-video-banner__video-wrap">
-        <video src={`${base}${videoSrc}`} autoPlay muted loop playsInline />
+        <video src={resolvedVideoSrc} autoPlay muted loop playsInline />
         <div className="lb-inn-video-banner__overlay" />
       </div>
 
