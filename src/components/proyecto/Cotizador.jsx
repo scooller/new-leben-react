@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
-import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
@@ -765,7 +765,7 @@ export default function Cotizador({
           {showSkeleton ? (
             <div className="lb-skeleton lb-proj-det-cot-skeleton w-100" />
           ) : (
-            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
+            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'zoom-in' : 'default' }} role="button" tabIndex={0}>
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
                 src={mainImage || PLACEHOLDER_FLOORPLAN}
@@ -775,6 +775,11 @@ export default function Cotizador({
                 loading="lazy"
                 decoding="async"
               />
+              {mainImage && (
+                <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                  <ZoomIn size={16} />
+                </span>
+              )}
             </div>
           )}
           {filteredPlantas.length > 1 && (<>

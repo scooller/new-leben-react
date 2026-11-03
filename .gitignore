@@ -8,6 +8,8 @@ dist-ssr
 .env.*
 !.env.example
 /.agents
+/.gemini
+/.claude
 /.github
 /graphify-out
 /public/images/

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.190] - 2026-11-03
+
+### Added
+- Badge indicador de zoom visual estilo Apple HIG (`.lb-img-zoom-badge`) fijo en la esquina superior derecha de imágenes ampliables (planta en cotizador y tarjetas de galería).
+- Indicador con icono `ZoomIn` y material translúcido con desenfoque (`backdrop-filter`) visible estáticamente para comunicar affordance de clic/zoom antes de interactuar.
+- Cursor interactivo `zoom-in` nativo en los contenedores de imagen ampliables (`.lb-img-trigger`).
+
 ## [0.9.189] - 2026-11-02
 
 ### Fixed

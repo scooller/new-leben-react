@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import Navbar from '../components/layout/Navbar.jsx'
-import { ChevronLeft, ChevronRight, ChevronDown, Maximize2, MapPin } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronDown, MapPin, ZoomIn } from 'lucide-react'
 import Footer from '../components/layout/Footer.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import SplitTitle from '../components/SplitTitle.jsx'
@@ -146,13 +146,13 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                       <a
                         href={resolveUrl(loc.img, 'images/inn/ubicacion/nuevo.jpg')}
                         data-fancybox="inn-galeria"
-                        className="lb-inn-gallery__zoom position-absolute top-0 end-0 m-2 rounded-circle"
+                        className="lb-inn-gallery__zoom lb-img-zoom-badge position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
                         title="Ver foto ampliada"
                         aria-label="Ver foto ampliada"
                         tabIndex={0}
                       >
-                        <Maximize2 size={13} />
+                        <ZoomIn size={15} />
                       </a>
                       <div className="lb-inn-gallery__overlay">
                         <h4 className="lb-inn-gallery__title">{loc.label || loc.name}</h4>
