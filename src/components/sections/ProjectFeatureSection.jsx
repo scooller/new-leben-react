@@ -3,7 +3,7 @@ import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { X, ChevronLeft, ChevronRight, Image } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Image, ZoomIn } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
@@ -246,8 +246,14 @@ export default function ProjectFeatureSection({
                             data-fancybox={slide.fancyboxGroup || 'project-gallery'}
                             data-caption={slide.alt || ''}
                             tabIndex={0}
+                            className="d-block w-100 h-100 position-relative lb-img-trigger"
+                            aria-label="Ampliar imagen"
+                            style={{ cursor: 'zoom-in' }}
                           >
                             <img src={imgSrc} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
+                            <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                              <ZoomIn size={16} />
+                            </span>
                           </a>
                         </div>
                       </div>
@@ -318,13 +324,17 @@ export default function ProjectFeatureSection({
                         data-fancybox="inn-espacios"
                         data-caption={activeImageObj.alt || ''}
                         aria-label={`Ampliar imagen`}
-                        className="w-100 h-100 position-relative d-block"
+                        className="w-100 h-100 position-relative d-block lb-img-trigger"
+                        style={{ cursor: 'zoom-in' }}
                       >
                         <img
                           src={`${base}${activeImageObj.img}`}
                           alt={activeImageObj.alt || ''}
                           className="w-100 h-100 object-fit-contain rounded-3"
                         />
+                        <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                          <ZoomIn size={16} />
+                        </span>
                         {activeImageObj.alt && (
                           <span className="lb-inn-spaces-modal__caption mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
                         )}

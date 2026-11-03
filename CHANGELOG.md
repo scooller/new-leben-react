@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.191] - 2026-11-03
+
+### Added
+- Badge de zoom visual (`.lb-img-zoom-badge` con `ZoomIn`) y cursor interactivo `zoom-in` en todas las instancias de Fancybox restantes:
+  - Sección de Espacios Comunes y Equipamiento (`ProjectFeatureSection.jsx`): tanto en las diapositivas del carrusel como en la vista principal del modal de espacios (`inn-espacios`).
+  - Modal de panoramas del entorno (`ProjectPanoramasModal.jsx`): en las tarjetas de panoramas por categoría (`panoramas-*`).
+  - Visor de recorridos virtuales (`Recorridos360.jsx`): en las vistas de planos y vistas maestras cuando son imágenes (`recorridos-360`).
+
 ## [0.9.190] - 2026-11-03
 
 ### Added

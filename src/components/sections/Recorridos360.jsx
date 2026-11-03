@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Fancybox } from '@fancyapps/ui'
+import { ZoomIn } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim'
 import SplitTitle from '../SplitTitle'
 
@@ -100,7 +101,8 @@ export default function Recorridos360({
               href={currentSrc}
               data-fancybox="recorridos-360"
               data-caption={currentTitle}
-              className="d-block w-100 h-100"
+              className="d-block w-100 h-100 position-relative lb-img-trigger"
+              style={{ cursor: 'zoom-in' }}
               aria-label={`Ampliar ${currentTitle}`}
             >
               <img
@@ -109,6 +111,9 @@ export default function Recorridos360({
                 alt={currentTitle}
                 className="w-100 h-100 object-fit-contain bg-white"
               />
+              <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                <ZoomIn size={16} />
+              </span>
             </a>
           ) : (
             <iframe
