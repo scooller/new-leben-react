@@ -15,6 +15,7 @@ const initialState = {
   tipologia: [],
   orientacion: '',
   precio: '',
+  categoria: 'todos',
   hasSubmitted: false,
 }
 
@@ -37,6 +38,11 @@ const filterSlice = createSlice({
       }
       if (p.orientacion !== undefined) state.orientacion = p.orientacion
       if (p.precio !== undefined) state.precio = p.precio
+      if (p.categoria !== undefined) {
+        state.categoria = p.categoria
+      } else if (p.tab !== undefined) {
+        state.categoria = p.tab
+      }
       if (p.hasSubmitted !== undefined) state.hasSubmitted = p.hasSubmitted
     },
     setFilterField(state, action) {

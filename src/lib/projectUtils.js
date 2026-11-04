@@ -210,3 +210,22 @@ export function matchPrecio(precioValue, filter) {
   }
   return true
 }
+
+
+/** Filter raw projects by category / intent (vivir, invertir, entrega_inmediata, construccion) */
+export function filterProjectsByCategory(projects = [], category = 'todos') {
+  if (!category || category === 'todos') return projects
+  if (category === 'entrega_inmediata') {
+    return projects.filter((p) => p.entrega_inmediata || /entrega\s*inmediata|venta|recepcion/i.test(p.etapa || ''))
+  }
+  if (category === 'construccion') {
+    return projects.filter((p) => /obra|construccion|inicio/i.test(p.etapa || ''))
+  }
+  if (category === 'invertir') {
+    return projects.filter((p) => (p.tipologias || []).some((t) => /studio|1\s*d|2\s*d/i.test(t.programa || '')))
+  }
+  if (category === 'vivir') {
+    return projects.filter((p) => (p.tipologias || []).some((t) => /[2-9]\s*d/i.test(t.programa || '')))
+  }
+  return projects
+}

@@ -4,7 +4,7 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import ProjectCard from '../ProjectCard.jsx'
 import ProjectCardSkeleton from '../ProjectCardSkeleton.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna } from '../../lib/projectUtils.js'
+import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, filterProjectsByCategory } from '../../lib/projectUtils.js'
 import SplitTitle from '../SplitTitle.jsx'
 
 /** Fetch raw projects from API when not supplied by parent */
@@ -54,13 +54,20 @@ function useDynamicFilters(rawProjects) {
 }
 
 /** Filter raw projects by searchParams and optionally group by comuna/zone */
-function useFilteredProjects(searchParams, rawProjects, groupByZone) {
+function useFilteredProjects(searchParams, rawProjects, groupByZone, category = 'todos') {
   return useMemo(() => {
     const ubicacion = searchParams.get('ubicacion') || searchParams.get('comuna')
     const tipo = searchParams.get('tipo') || searchParams.get('tipologia')
     const precio = searchParams.get('precio')
+    const urlCat = searchParams.get('categoria') || searchParams.get('tab')
+    const effectiveCat = category && category !== 'todos' ? category : (urlCat || 'todos')
 
-    const filtered = (rawProjects || []).filter((p) => {
+    let baseProjects = rawProjects || []
+    if (effectiveCat && effectiveCat !== 'todos') {
+      baseProjects = filterProjectsByCategory(baseProjects, effectiveCat)
+    }
+
+    const filtered = baseProjects.filter((p) => {
       if (ubicacion && !matchComuna(p.comuna, ubicacion)) return false
       if (tipo && !(p.tipologias || []).some((t) => matchTipologia(t.programa, tipo))) return false
       if (precio && !matchPrecio(p.precio_desde, precio)) return false
@@ -78,7 +85,7 @@ function useFilteredProjects(searchParams, rawProjects, groupByZone) {
     const flat = sortProjectsByCustomOrder(filtered.map(mapApiProject))
 
     return { groups: [], flat, count: flat.length }
-  }, [searchParams, rawProjects, groupByZone])
+  }, [searchParams, rawProjects, groupByZone, category])
 }
 
 export default function ProjectsCatalog({
@@ -86,6 +93,7 @@ export default function ProjectsCatalog({
   loading: externalLoading,
   error: externalError,
   groupByZone = true,
+  category = 'todos',
   id = 'proyectos',
   className = '',
 }) {
@@ -100,9 +108,10 @@ export default function ProjectsCatalog({
   const { groups: filteredGroups, flat: filteredFlat, count: filteredCount } = useFilteredProjects(
     searchParams,
     rawProjects,
-    groupByZone
+    groupByZone,
+    category
   )
-  const hasFilters = [...searchParams.keys()].length > 0
+  const hasFilters = [...searchParams.keys()].length > 0 || (category && category !== 'todos')
 
   return (
     <section className={`lb-featured container-fluid pb-4 pt-1 pb-md-5 ${className}`.trim()} id={id}>

@@ -52,15 +52,17 @@ export default function CotizadorGeneral() {
     const urlProyecto = searchParams.get('proyecto') || ''
     const urlPrecio = searchParams.get('precio') || ''
     const urlOrientacion = searchParams.get('orientacion') || ''
+    const urlCategoria = searchParams.get('categoria') || searchParams.get('tab') || ''
 
-    if (urlComuna || urlTipo || urlProyecto || urlPrecio || urlOrientacion) {
+    if (urlComuna || urlTipo || urlProyecto || urlPrecio || urlOrientacion || urlCategoria) {
       dispatch(setFilters({
         comuna: urlComuna,
         tipologia: urlTipo,
         proyecto: urlProyecto,
         precio: urlPrecio,
         orientacion: urlOrientacion,
-        hasSubmitted: true,
+        categoria: urlCategoria || 'todos',
+        hasSubmitted: !!(urlComuna || urlTipo || urlProyecto || urlPrecio || urlOrientacion),
       }))
     }
   }, [searchParams, dispatch])
@@ -193,6 +195,7 @@ export default function CotizadorGeneral() {
                 <BuscadorDepartamentos
                   projects={rawProjects || []}
                   onSearch={handleSearch}
+                  onCategoryChange={(cat) => dispatch(setFilterField({ field: 'categoria', value: cat }))}
                   initialFilters={effectiveFilters || reduxFilters || {}}
                 />
               </ScrollAnim>
@@ -233,6 +236,7 @@ export default function CotizadorGeneral() {
           projects={rawProjects}
           loading={projectsLoading}
           error={projectsError}
+          category={reduxFilters.categoria || 'todos'}
           groupByZone={false}
         />
       </main>

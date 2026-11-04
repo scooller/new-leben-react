@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.197] - 2026-11-04
+
+### Added
+- Sincronización del filtro de categoría/intención ("Para vivir", "Para inversión", "Entrega inmediata", "En construcción") entre `BuscadorDepartamentos` y el catálogo inferior `ProjectsCatalog` en la página del cotizador (`CotizadorGeneral.jsx`).
+- Función utilitaria `filterProjectsByCategory` en `projectUtils.js` para filtrar proyectos según intención (etapas de entrega inmediata/construcción o tipologías orientadas a inversión/vivienda).
+- Parámetro `category` soportado en `ProjectsCatalog.jsx` para filtrar el listado visual de proyectos por pestaña seleccionada.
+
 ## [0.9.196] - 2026-11-04
 
 ### Added
