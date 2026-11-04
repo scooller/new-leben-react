@@ -126,6 +126,16 @@ export function toArray(val) {
   return [val]
 }
 
+/** Format comuna into title case (e.g. "LA FLORIDA" -> "La Florida") */
+export function formatComuna(str) {
+  if (!str) return ""
+  return String(str)
+    .toLowerCase()
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ")
+}
+
 /** Match project comuna against single or multi-select filter */
 export function matchComuna(projectComuna, filterComuna) {
   const selected = toArray(filterComuna)

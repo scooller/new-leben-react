@@ -8,7 +8,7 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { setFilterField, setFilters, toggleFilterItem, clearFilterField } from '../../store/slices/filterSlice.js'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { toArray } from '../../lib/projectUtils.js'
+import { toArray, formatComuna } from '../../lib/projectUtils.js'
 
 function MultiselectPill({ label, options = [], selected = [], onToggle, onClear }) {
   const [open, setOpen] = useState(false)
@@ -127,13 +127,7 @@ export default function Diferenciadores() {
         // Dynamic comunas
         const rawComunas = [...new Set(data.map((p) => (p.comuna || '').trim()).filter(Boolean))]
         if (rawComunas.length) {
-          const formatted = rawComunas.map((c) => {
-            return c
-              .toLowerCase()
-              .split(' ')
-              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ')
-          }).sort((a, b) => a.localeCompare(b, 'es'))
+          const formatted = rawComunas.map(formatComuna).sort((a, b) => a.localeCompare(b, 'es'))
           setComunaOptions(formatted)
         }
 

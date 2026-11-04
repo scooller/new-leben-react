@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.196] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: Soporte multiselect interactivo con checkboxes en `FilterDropdown` para los dropdowns de Comuna y Tipología, permitiendo marcar/desmarcar opciones sin cerrar el menú.
+- Botón "Limpiar" y contador de opciones elegidas dentro de cada menú desplegable multiselect en el cotizador.
+- `formatComuna` exportada desde `projectUtils.js` para estandarizar comunas en Title Case tanto en Home como en Cotizador.
+- Opciones de tipología en `Cotizador.jsx` agrupadas consistentemente con el Home (`Studio`, `1 Dorm`, `2 Dorm`, `3 Dorm`, `4+ Dorm`).
+
 ## [0.9.195] - 2026-11-04
 
 ### Fixed

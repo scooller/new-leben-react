@@ -8,7 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, formatComuna, toArray } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -188,7 +188,7 @@ async function fetchPages(baseUrl) {
 }
 
 /** Dropdown filter component */
-function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
+function FilterDropdown({ label, placeholder, options = [], selected, isMulti = false, onSelect }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -199,10 +199,18 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   }, [])
 
   const defaultText = placeholder || label
-  const selectedText = Array.isArray(selected)
-    ? (selected.length === 0 ? '' : selected.length === 1 ? selected[0] : `${selected.length} seleccionadas`)
+  const selectedList = toArray(selected)
+  const selectedText = isMulti
+    ? (selectedList.length === 0
+      ? ''
+      : selectedList.length === 1
+        ? selectedList[0]
+        : selectedList.length === 2 && selectedList.join(', ').length <= 22
+          ? selectedList.join(', ')
+          : `${selectedList.length} seleccionad${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}`)
     : (selected || '')
-  const isSelected = (opt) => Array.isArray(selected) ? selected.includes(opt) : selected === opt
+
+  const isChecked = (opt) => selectedList.some((s) => s.toLowerCase().trim() === opt.toLowerCase().trim())
 
   return (
     <div className="lb-proj-det-filter-group" ref={ref}>
@@ -212,10 +220,59 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
           type="button"
           className="btn btn-outline-dark btn-sm dropdown-toggle lb-proj-det-filter-btn"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
         >
           {selectedText || defaultText}
         </button>
-        {open && (
+
+        {open && isMulti && (
+          <div
+            className="dropdown-menu show lb-proj-det-filter-menu p-2 shadow-sm"
+            style={{ maxHeight: '280px', overflowY: 'auto', minWidth: '190px', zIndex: 1050 }}
+          >
+            {selectedList.length > 0 && (
+              <div className="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom px-2">
+                <span className="small text-muted">{selectedList.length} elegid${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}</span>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm text-danger text-decoration-none p-0 small"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onSelect([])
+                  }}
+                >
+                  Limpiar
+                </button>
+              </div>
+            )}
+            {options.map((opt) => {
+              const checked = isChecked(opt)
+              return (
+                <label
+                  key={opt}
+                  className={`d-flex align-items-center gap-2 px-2 py-1 rounded cursor-pointer ${checked ? 'bg-light text-danger fw-semibold' : 'text-dark'}`}
+                  style={{ cursor: 'pointer', fontSize: '0.875rem' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="checkbox"
+                    className="form-check-input mt-0"
+                    checked={checked}
+                    onChange={() => {
+                      const next = checked
+                        ? selectedList.filter((s) => s.toLowerCase().trim() !== opt.toLowerCase().trim())
+                        : [...selectedList, opt]
+                      onSelect(next)
+                    }}
+                  />
+                  <span>{opt}</span>
+                </label>
+              )
+            })}
+          </div>
+        )}
+
+        {open && !isMulti && (
           <ul className="dropdown-menu show lb-proj-det-filter-menu">
             <li>
               <button className="dropdown-item" onClick={() => { onSelect(''); setOpen(false) }}>
@@ -225,7 +282,7 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
             {options.map((opt) => (
               <li key={opt}>
                 <button
-                  className={`dropdown-item ${isSelected(opt) ? 'active' : ''}`}
+                  className={`dropdown-item ${selected === opt ? 'active' : ''}`}
                   onClick={() => { onSelect(opt); setOpen(false) }}
                 >
                   {opt}
@@ -397,8 +454,8 @@ export default function Cotizador({
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
     if (universal) {
-      // Step 1: all comunas from projects (not just plantas — some projects have no available plantas)
-      const comuna = [...new Set((projects || []).map((p) => (p.comuna || '').trim()).filter(Boolean))].sort()
+      // Step 1: all comunas from projects (formatted in Title Case)
+      const comuna = [...new Set((projects || []).map((p) => formatComuna((p.comuna || '').trim())).filter(Boolean))].sort()
 
       const hasComunaFilter = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna)
       const afterComunaProjects = hasComunaFilter
@@ -412,7 +469,16 @@ export default function Cotizador({
         : (hasComunaFilter
           ? enrichedPlantas.filter((p) => matchComuna(p.proyecto?.comuna, filters.comuna))
           : enrichedPlantas)
-      const tipologia = [...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort()
+      const progs = afterProyecto.flatMap((p) => [p.programa, p.programa_detalle]).filter(Boolean).map((s) => s.toUpperCase())
+      const tipologia = []
+      if (progs.some((p) => p.includes('STUDIO') || p.includes('ESTUDIO'))) tipologia.push('Studio')
+      if (progs.some((p) => /^1\s*D/i.test(p))) tipologia.push('1 Dorm')
+      if (progs.some((p) => /^2\s*D/i.test(p))) tipologia.push('2 Dorm')
+      if (progs.some((p) => /^3\s*D/i.test(p))) tipologia.push('3 Dorm')
+      if (progs.some((p) => /^[4-9]\s*D/i.test(p))) tipologia.push('4+ Dorm')
+      if (tipologia.length === 0) {
+        tipologia.push(...[...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort())
+      }
       const orientacion = [...new Set(
         afterProyecto.map((p) => p.orientacion).filter(Boolean)
           .map((code) => ORIENTACION_LABELS[code] || code)
@@ -680,7 +746,8 @@ export default function Cotizador({
                       placeholder="Todas las comunas"
                       options={filterOptions.comuna}
                       selected={filters.comuna}
-                      onSelect={(v) => selectFilter({ comuna: v, proyecto: '', tipologia: '', orientacion: '' })}
+                      isMulti
+                      onSelect={(v) => selectFilter((f) => ({ ...f, comuna: v, proyecto: '' }))}
                     />
                     <FilterDropdown
                       label="Proyecto"
@@ -694,6 +761,7 @@ export default function Cotizador({
                       placeholder="Todas las tipologías"
                       options={filterOptions.tipologia}
                       selected={filters.tipologia}
+                      isMulti
                       onSelect={(v) => selectFilter((f) => ({ ...f, tipologia: v }))}
                     />
                     <FilterDropdown
