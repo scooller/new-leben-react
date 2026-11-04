@@ -113,7 +113,8 @@ const DEFAULT_EMPTY_DETAILS = [
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
-  const floorPlanImage = p.cover_image_url || p.imageUrl || p.interior_image_url || null
+  // Prioridad: interior_image_url; cover_image_url SOLO si no existe interior
+  const floorPlanImage = p.interior_image_url || p.cover_image_url || p.imageUrl || null
   return {
     details: [
       { icon: 'layers', label: 'Planta', value: p.name || '—' },
@@ -696,21 +697,14 @@ export default function Cotizador({
   const galleryItems = useMemo(() => {
     const items = []
     if (activePlanta) {
-      const planSrc = activePlanta.cover_image_url || activePlanta.imageUrl || activePlanta.interior_image_url
+      // Prioridad: imagen interior; portada SOLO si no existe interior
+      const planSrc = activePlanta.interior_image_url || activePlanta.cover_image_url || activePlanta.imageUrl || null
       if (planSrc) {
         items.push({
           src: planSrc,
           thumb: planSrc,
           alt: `Planta ${activePlanta.name || ''}`.trim(),
           title: `Planta ${activePlanta.name || ''}`.trim(),
-        })
-      }
-      if (activePlanta.interior_image_url && activePlanta.interior_image_url !== planSrc) {
-        items.push({
-          src: activePlanta.interior_image_url,
-          thumb: activePlanta.interior_image_url,
-          alt: `Interior ${activePlanta.name || ''}`.trim(),
-          title: `Interior ${activePlanta.name || ''}`.trim(),
         })
       }
     }

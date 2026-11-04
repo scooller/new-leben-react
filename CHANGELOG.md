@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.203] - 2026-11-04
+
+### Changed
+- `Cotizador.jsx`: ajustada prioridad de imagen de planta en el cotizador para mostrar exclusivamente la imagen interior (`interior_image_url`), utilizando la portada (`cover_image_url` / `imageUrl`) únicamente como fallback si no existe imagen interior.
+
 ## [0.9.202] - 2026-11-04
 
 ### Added
