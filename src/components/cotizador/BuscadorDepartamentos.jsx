@@ -28,6 +28,16 @@ const ORIENTACIONES = [
   ...Object.entries(ORIENTACION_LABELS).map(([k, label]) => ({ value: label, label, code: k })),
 ]
 
+function normalizeDormValue(val) {
+  if (!val) return ''
+  const m = String(val).match(/^(\d+)\s*d/i) || String(val).match(/^(\d+)/)
+  if (m) {
+    const d = m[1]
+    if (['1', '2', '3', '4'].includes(d)) return `${d}D`
+  }
+  return val
+}
+
 export default function BuscadorDepartamentos({
   projects = [],
   onSearch,
@@ -36,13 +46,21 @@ export default function BuscadorDepartamentos({
 }) {
   const [activeCategory, setActiveCategory] = useState('todos')
   const [intentPill, setIntentPill] = useState('todos')
-  const [comuna, setComuna] = useState(initialFilters.comuna || '')
+  const resolveFirst = (val) => Array.isArray(val) ? (val[0] || '') : (val || '')
+  const [comuna, setComuna] = useState(() => resolveFirst(initialFilters.comuna))
   const [proyecto, setProyecto] = useState(initialFilters.proyecto || '')
-  const [dormitorios, setDormitorios] = useState(initialFilters.tipologia || '')
+  const [dormitorios, setDormitorios] = useState(() => normalizeDormValue(resolveFirst(initialFilters.tipologia)) || '')
   const [orientacion, setOrientacion] = useState(initialFilters.orientacion || '')
 
   const [openDropdown, setOpenDropdown] = useState(null)
   const formRef = useRef(null)
+
+  useEffect(() => {
+    if (initialFilters.comuna !== undefined) setComuna(resolveFirst(initialFilters.comuna))
+    if (initialFilters.proyecto !== undefined) setProyecto(initialFilters.proyecto || '')
+    if (initialFilters.tipologia !== undefined) setDormitorios(normalizeDormValue(resolveFirst(initialFilters.tipologia)) || '')
+    if (initialFilters.orientacion !== undefined) setOrientacion(initialFilters.orientacion || '')
+  }, [initialFilters.comuna, initialFilters.proyecto, initialFilters.tipologia, initialFilters.orientacion])
 
   useEffect(() => {
     const handleOutside = (e) => {

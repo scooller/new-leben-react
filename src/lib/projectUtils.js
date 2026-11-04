@@ -114,3 +114,89 @@ export function sortProjectsByCustomOrder(projects = [], orderList = PROJECT_DIS
   })
 }
 
+
+
+/** Normalize a value into an array of non-empty strings */
+export function toArray(val) {
+  if (!val) return []
+  if (Array.isArray(val)) return val.filter(Boolean)
+  if (typeof val === 'string') {
+    return val.split(',').map((s) => s.trim()).filter(Boolean)
+  }
+  return [val]
+}
+
+/** Match project comuna against single or multi-select filter */
+export function matchComuna(projectComuna, filterComuna) {
+  const selected = toArray(filterComuna)
+  if (selected.length === 0) return true
+  const normProject = String(projectComuna || '').trim().toLowerCase()
+  return selected.some((c) => {
+    const normC = String(c).trim().toLowerCase()
+    return normProject === normC || normProject.includes(normC) || normC.includes(normProject)
+  })
+}
+
+/** Match planta or tipologia programa against single or multi-select filter value */
+export function matchTipologia(programa, filter) {
+  const selected = toArray(filter)
+  if (selected.length === 0 || !programa) return selected.length === 0
+  const normProg = String(programa).trim().toLowerCase()
+
+  return selected.some((filt) => {
+    const normFilt = String(filt).trim().toLowerCase()
+    if (normProg === normFilt) return true
+
+    // Studio check: matches 'STUDIO', 'ESTUDIO', etc.
+    if (normFilt.includes('studio') || normFilt.includes('estudio')) {
+      return normProg.includes('studio') || normProg.includes('estudio') || normProg === 'st'
+    }
+
+    // Match e.g. '1D', '2D', '3D', '4D' or '1 Dorm' against '1D - 1B', '1D+1B'
+    const dormMatch = normFilt.match(/^(\d+)\s*d/i) || normFilt.match(/^(\d+)\s*dorm/i)
+    if (dormMatch) {
+      const d = dormMatch[1]
+      return normProg.startsWith(`${d}d`) || normProg.startsWith(`${d} d`) || new RegExp(`\\b${d}\\s*d`, 'i').test(normProg)
+    }
+
+    // Match ranges like '1-2 Dorms' or '2-3 Dorms'
+    const rangeMatch = normFilt.match(/^(\d+)\s*-\s*(\d+)/)
+    if (rangeMatch) {
+      const min = parseInt(rangeMatch[1], 10)
+      const max = parseInt(rangeMatch[2], 10)
+      const progDorm = normProg.match(/^(\d+)\s*d/i)
+      if (progDorm) {
+        const d = parseInt(progDorm[1], 10)
+        return d >= min && d <= max
+      }
+    }
+
+    return normProg.includes(normFilt)
+  })
+}
+
+/** Match price against range filter ('Hasta 3.000 UF', '3.000-6.000 UF', '6.000+ UF') */
+export function matchPrecio(precioValue, filter) {
+  if (!filter) return true
+  const uf = parseFloat(precioValue) || 0
+  if (!uf) return true
+
+  const lower = String(filter).toLowerCase().trim()
+  if (lower.startsWith('hasta')) {
+    const max = parseInt(lower.replace(/[^\d]/g, ''), 10)
+    return uf <= max
+  }
+  if (lower.includes('+')) {
+    const min = parseInt(lower.replace(/[^\d]/g, ''), 10)
+    return uf >= min
+  }
+  const parts = lower.replace(/[^\d-]/g, '').split('-')
+  if (parts.length === 2) {
+    const lo = parseInt(parts[0], 10)
+    const hi = parseInt(parts[1], 10)
+    if (!isNaN(lo) && !isNaN(hi)) {
+      return uf >= lo && uf <= hi
+    }
+  }
+  return true
+}

@@ -4,7 +4,7 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import ProjectCard from '../ProjectCard.jsx'
 import ProjectCardSkeleton from '../ProjectCardSkeleton.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { groupByComuna, mapApiProject, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
+import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna } from '../../lib/projectUtils.js'
 import SplitTitle from '../SplitTitle.jsx'
 
 /** Fetch raw projects from API when not supplied by parent */
@@ -56,23 +56,14 @@ function useDynamicFilters(rawProjects) {
 /** Filter raw projects by searchParams and optionally group by comuna/zone */
 function useFilteredProjects(searchParams, rawProjects, groupByZone) {
   return useMemo(() => {
-    const ubicacion = searchParams.get('ubicacion')
-    const tipo = searchParams.get('tipo')
+    const ubicacion = searchParams.get('ubicacion') || searchParams.get('comuna')
+    const tipo = searchParams.get('tipo') || searchParams.get('tipologia')
     const precio = searchParams.get('precio')
 
     const filtered = (rawProjects || []).filter((p) => {
-      if (ubicacion && !(p.comuna || 'Otros').trim().toLowerCase().includes(ubicacion.toLowerCase())) return false
-      if (tipo && !(p.tipologias || []).some((t) => t.programa === tipo)) return false
-      if (precio) {
-        const uf = p.precio_desde || 0
-        if (precio.endsWith('+ UF')) {
-          const min = parseInt(precio.replace(/[^\d]/g, ''), 10)
-          if (uf < min) return false
-        } else {
-          const [lo, hi] = precio.replace(' UF', '').split('-').map((s) => parseInt(s.replace(/\./g, ''), 10))
-          if (uf < lo || uf >= hi) return false
-        }
-      }
+      if (ubicacion && !matchComuna(p.comuna, ubicacion)) return false
+      if (tipo && !(p.tipologias || []).some((t) => matchTipologia(t.programa, tipo))) return false
+      if (precio && !matchPrecio(p.precio_desde, precio)) return false
       return true
     })
 

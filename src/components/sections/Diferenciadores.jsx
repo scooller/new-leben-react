@@ -1,16 +1,155 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { ChevronDown } from 'lucide-react'
 import { gsap } from 'gsap'
 import { diferenciadores, diferenciadoresTitle, searchFilters, images } from '../../data/content.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
+import { setFilterField, setFilters, toggleFilterItem, clearFilterField } from '../../store/slices/filterSlice.js'
+import { apiFetch } from '../../lib/apiFetch.js'
+import { toArray } from '../../lib/projectUtils.js'
+
+function MultiselectPill({ label, options = [], selected = [], onToggle, onClear }) {
+  const [open, setOpen] = useState(false)
+  const pillRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (pillRef.current && !pillRef.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const selectedCount = selected.length
+  const displayText = selectedCount === 0
+    ? label
+    : selectedCount === 1
+      ? selected[0]
+      : selectedCount === 2 && selected.join(', ').length <= 22
+        ? selected.join(', ')
+        : `${selectedCount} seleccionados`
+
+  return (
+    <div className="position-relative d-inline-block" ref={pillRef}>
+      <div className={`lb-search-pill d-inline-flex align-items-center bg-white rounded-pill ${open ? 'border-danger shadow-sm' : ''}`}>
+        <button
+          type="button"
+          className="btn btn-sm border-0 bg-transparent lb-search-select d-flex align-items-center gap-2 text-start"
+          onClick={() => setOpen((prev) => !prev)}
+          aria-expanded={open}
+        >
+          <span className={selectedCount > 0 ? 'text-dark fw-semibold' : 'text-muted'}>
+            {displayText}
+          </span>
+          <ChevronDown size={14} className="text-muted" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
+        </button>
+      </div>
+
+      {open && (
+        <div
+          className="position-absolute start-0 top-100 mt-1 bg-white rounded-3 shadow border p-2 lb-multiselect-menu"
+          style={{ minWidth: '190px', maxHeight: '250px', overflowY: 'auto', zIndex: 1050 }}
+        >
+          {selectedCount > 0 && (
+            <div className="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom px-2">
+              <span className="small text-muted">{selectedCount} elegid{selectedCount > 1 ? 'os' : 'o'}</span>
+              <button
+                type="button"
+                className="btn btn-link btn-sm text-danger text-decoration-none p-0 small"
+                onClick={onClear}
+              >
+                Limpiar
+              </button>
+            </div>
+          )}
+          {options.map((opt) => {
+            const isChecked = selected.includes(opt)
+            return (
+              <label
+                key={opt}
+                className="d-flex align-items-center gap-2 px-2 py-1 rounded cursor-pointer lb-multiselect-item"
+                style={{ cursor: 'pointer', fontSize: '0.875rem' }}
+              >
+                <input
+                  type="checkbox"
+                  className="form-check-input mt-0"
+                  checked={isChecked}
+                  onChange={() => onToggle(opt)}
+                />
+                <span className={isChecked ? 'fw-semibold text-danger' : 'text-dark'}>
+                  {opt}
+                </span>
+              </label>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Diferenciadores() {
   const navigate = useNavigate()
-  const [values, setValues] = useState({})
-  const sectionRef = useRef(null)
+  const dispatch = useDispatch()
+  const reduxFilters = useSelector((s) => s.filters)
   const isLoaded = useSelector((s) => s.ui.isLoaded)
+
+  const [comunaOptions, setComunaOptions] = useState([
+    'Independencia',
+    'La Florida',
+    'Providencia',
+    'Puerto Montt',
+    'Puerto Varas',
+    'Santiago',
+    'Valdivia',
+    'Ñuñoa',
+  ])
+
+  const [tipoOptions, setTipoOptions] = useState([
+    'Studio',
+    '1 Dorm',
+    '2 Dorm',
+    '3 Dorm',
+    '4+ Dorm',
+  ])
+
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    let cancelled = false
+    apiFetch('/api/v1/proyectos').then(({ data }) => {
+      if (cancelled) return
+      if (Array.isArray(data) && data.length > 0) {
+        // Dynamic comunas
+        const rawComunas = [...new Set(data.map((p) => (p.comuna || '').trim()).filter(Boolean))]
+        if (rawComunas.length) {
+          const formatted = rawComunas.map((c) => {
+            return c
+              .toLowerCase()
+              .split(' ')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ')
+          }).sort((a, b) => a.localeCompare(b, 'es'))
+          setComunaOptions(formatted)
+        }
+
+        // Dynamic tipos from actual tipologias in projects
+        const progs = data.flatMap((p) => (p.tipologias || []).map((t) => (t.programa || '').toUpperCase()))
+        const types = []
+        if (progs.some((p) => p.includes('STUDIO') || p.includes('ESTUDIO'))) types.push('Studio')
+        if (progs.some((p) => /^1\s*D/i.test(p))) types.push('1 Dorm')
+        if (progs.some((p) => /^2\s*D/i.test(p))) types.push('2 Dorm')
+        if (progs.some((p) => /^3\s*D/i.test(p))) types.push('3 Dorm')
+        if (progs.some((p) => /^[4-9]\s*D/i.test(p))) types.push('4+ Dorm')
+        if (types.length) setTipoOptions(types)
+      }
+    })
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     if (!isLoaded) return
@@ -27,15 +166,17 @@ export default function Diferenciadores() {
     return () => ctx.revert()
   }, [isLoaded])
 
-  const handleChange = (id, val) => setValues((p) => ({ ...p, [id]: val }))
+  const selectedComunas = toArray(reduxFilters.comuna)
+  const selectedTipos = toArray(reduxFilters.tipologia)
 
   const handleSearch = () => {
+    dispatch(setFilters({ hasSubmitted: true }))
     const params = new URLSearchParams()
-    searchFilters.filters.forEach((f) => {
-      if (values[f.id]) params.set(f.id, values[f.id])
-    })
+    if (selectedComunas.length) params.set('comuna', selectedComunas.join(','))
+    if (selectedTipos.length) params.set('tipologia', selectedTipos.join(','))
+    if (reduxFilters.precio) params.set('precio', reduxFilters.precio)
     const query = params.toString()
-    navigate(query ? `/cotizador?${query}#proyectos` : '/cotizador#proyectos')
+    navigate(query ? `/cotizador?${query}` : '/cotizador')
   }
 
   return (
@@ -47,20 +188,38 @@ export default function Diferenciadores() {
           <span className="text-danger">{searchFilters.title2}</span>
         </p>
         <div className="d-flex gap-2 align-items-center justify-content-center flex-wrap">
-          {searchFilters.filters.map((f) => (
-            <div className="lb-search-pill d-inline-flex align-items-center gap-1 bg-white rounded-pill" key={f.id}>
-              <select
-                className="form-select border-0 bg-transparent lb-search-select"
-                value={values[f.id] || ''}
-                onChange={(e) => handleChange(f.id, e.target.value)}
-              >
-                <option value="">{f.label}</option>
-                {f.options.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-          ))}
+          {/* Multiselect Ubicación */}
+          <MultiselectPill
+            label="Ubicación"
+            options={comunaOptions}
+            selected={selectedComunas}
+            onToggle={(item) => dispatch(toggleFilterItem({ field: 'comuna', item }))}
+            onClear={() => dispatch(clearFilterField('comuna'))}
+          />
+
+          {/* Multiselect Tipo */}
+          <MultiselectPill
+            label="Tipo"
+            options={tipoOptions}
+            selected={selectedTipos}
+            onToggle={(item) => dispatch(toggleFilterItem({ field: 'tipologia', item }))}
+            onClear={() => dispatch(clearFilterField('tipologia'))}
+          />
+
+          {/* Select Precio */}
+          <div className="lb-search-pill d-inline-flex align-items-center gap-1 bg-white rounded-pill">
+            <select
+              className="form-select border-0 bg-transparent lb-search-select"
+              value={reduxFilters.precio || ''}
+              onChange={(e) => dispatch(setFilterField({ field: 'precio', value: e.target.value }))}
+            >
+              <option value="">Precio UF</option>
+              <option value="Hasta 3.000 UF">Hasta 3.000 UF</option>
+              <option value="3.000-6.000 UF">3.000-6.000 UF</option>
+              <option value="6.000+ UF">6.000+ UF</option>
+            </select>
+          </div>
+
           <button className="btn btn-danger btn-sm fw-semibold rounded-pill px-3" onClick={handleSearch}>
             Buscar
           </button>

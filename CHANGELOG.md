@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.194] - 2026-11-04
+
+### Added
+- Filtros multiselect de Ubicación y Tipo en el Home (`Diferenciadores.jsx`) con componente flotante `MultiselectPill`, checkboxes individuales, conteo dinámico y botón de limpieza.
+- Opciones dinámicas de tipos sincronizadas con el backend (`Studio`, `1 Dorm`, `2 Dorm`, `3 Dorm`, `4+ Dorm`) y comunas dinámicas en Title Case derivadas de `/api/v1/proyectos`.
+- Soporte para arrays y múltiples valores en `matchComuna`, `matchTipologia` y `toArray` en `projectUtils.js`.
+- Acciones `toggleFilterItem` y `clearFilterField` en `filterSlice.js` para manejo multiselección.
+
+### Changed
+- `CotizadorGeneral.jsx`, `Cotizador.jsx` y `ProjectsCatalog.jsx`: adaptados para evaluar filtros múltiples (arrays o listas separadas por coma en URL) en tipologías y comunas.
+- `BuscadorDepartamentos.jsx`: extracción del primer valor cuando recibe filtros en formato array.
+
+## [0.9.193] - 2026-11-04
+
+### Added
+- Sincronización global del filtro de búsqueda entre la página de inicio (`Diferenciadores.jsx`) y el cotizador (`CotizadorGeneral.jsx`, `BuscadorDepartamentos.jsx`, `Cotizador.jsx`) mediante nuevo slice de Redux Toolkit (`filterSlice.js`).
+- Funciones utilitarias `matchTipologia` y `matchPrecio` en `projectUtils.js` para matching flexible de tipologías (rangos, distribución "1D", "2D") y rangos de precio UF ("Hasta 3.000 UF", "3.000-6.000 UF", "6.000+ UF").
+
+### Changed
+- `Diferenciadores.jsx`: Opciones de ubicación cargadas dinámicamente desde API (`/api/v1/proyectos`), valores vinculados a Redux y navegación directa al cotizador (`/cotizador?...`) sin saltar al catálogo inferior.
+- `CotizadorGeneral.jsx`: Detección automática de filtros desde Redux y query params de URL, activación directa del Cotizador con departamentos filtrados sin requerir filtrar nuevamente, y preservación de criterios en `BuscadorDepartamentos` al modificar búsqueda.
+- `Cotizador.jsx`: Integración de filtros por tipología y precio con `matchTipologia` y `matchPrecio`, y notificación de cambios de filtro (`onFilterChange`) para mantener sincronía bidireccional.
+
 ## [0.9.192] - 2026-11-03
 
 ### Fixed

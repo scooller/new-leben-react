@@ -8,7 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -140,7 +140,7 @@ const ETAPA_RANK = {
 }
 const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
 
-const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '' })
+const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '', precio: '' })
 const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
 
 // Module-level cache for plantas (keyed by baseUrl)
@@ -246,10 +246,11 @@ function filtersFromSelection(selection) {
       proyecto: p.proyecto?.name || '',
       tipologia: p.programa || '',
       orientacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion || '',
+      precio: '',
     }
   }
   if (selection.project) {
-    return { comuna: selection.project.comuna || '', proyecto: selection.project.name || '', tipologia: '', orientacion: '' }
+    return { comuna: selection.project.comuna || '', proyecto: selection.project.name || '', tipologia: '', orientacion: '', precio: '' }
   }
   return null
 }
@@ -264,6 +265,7 @@ export default function Cotizador({
   onProjectChange,
   onReset,
   onModifySearch,
+  onFilterChange,
   className = '',
 }) {
   const [activeData, setActiveData] = useState(() => data || DEFAULT_COTIZADOR_DATA)
@@ -317,7 +319,13 @@ export default function Cotizador({
 
   const selectFilter = (updater) => {
     setFiltering(true)
-    setFilters(updater)
+    setFilters((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (universal && onFilterChange) {
+        onFilterChange(next)
+      }
+      return next
+    })
   }
 
   // Lookup project etapa by name for smart ordering
@@ -417,16 +425,17 @@ export default function Cotizador({
     if (universal) {
       return enrichedPlantas
         .filter((p) =>
-          (!filters.comuna || p._comunaNorm === norm(filters.comuna)) &&
+          (!filters.comuna || matchComuna(p.proyecto?.comuna, filters.comuna)) &&
           (!filters.proyecto || norm(p.proyecto?.name) === norm(filters.proyecto)) &&
-          (!filters.tipologia || p.programa === filters.tipologia) &&
-          (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion)
+          (!filters.tipologia || matchTipologia(p.programa, filters.tipologia)) &&
+          (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion) &&
+          (!filters.precio || matchPrecio(p.precio_lista, filters.precio))
         )
         .sort((a, b) => (parseFloat(a.precio_lista) || Infinity) - (parseFloat(b.precio_lista) || Infinity))
     }
     return plantas
       .filter((p) =>
-        (!filters.tipologia || p.programa === filters.tipologia) &&
+        (!filters.tipologia || matchTipologia(p.programa, filters.tipologia)) &&
         (!filters.producto || p.tipo_producto === filters.producto) &&
         (!filters.piso || String(p.piso) === String(filters.piso)) &&
         (!filters.planta || p.name?.charAt(0) === filters.planta)
@@ -439,7 +448,7 @@ export default function Cotizador({
 
   // Whether any filter is currently applied
   const hasFilters = universal
-    ? !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion)
+    ? !!((Array.isArray(filters.comuna) ? filters.comuna.length : filters.comuna) || filters.proyecto || (Array.isArray(filters.tipologia) ? filters.tipologia.length : filters.tipologia) || filters.orientacion || filters.precio)
     : !!(filters.tipologia || filters.producto || filters.piso || filters.planta)
 
   // Universal mode: notify parent when the active project changes

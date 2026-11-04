@@ -1,15 +1,16 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Cotizador from '../components/proyecto/Cotizador.jsx'
 import BuscadorDepartamentos from '../components/cotizador/BuscadorDepartamentos.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
-// import Alternatives from '../components/proyecto/Alternatives.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectsCatalog from '../components/sections/ProjectsCatalog.jsx'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { apiFetch } from '../lib/apiFetch.js'
+import { setFilters, setFilterField, resetFilters } from '../store/slices/filterSlice.js'
 
 /** Fetch projects from API */
 function useApiProjects() {
@@ -39,14 +40,61 @@ export default function CotizadorGeneral() {
   const [externalPlanta, setExternalPlanta] = useState(null)
   const [searchFilters, setSearchFilters] = useState(null)
   const location = useLocation()
+  const [searchParams] = useSearchParams()
+
+  const dispatch = useDispatch()
+  const reduxFilters = useSelector((s) => s.filters)
+
+  // Sync incoming URL search params to Redux filters
+  useEffect(() => {
+    const urlComuna = searchParams.get('comuna') || searchParams.get('ubicacion') || ''
+    const urlTipo = searchParams.get('tipologia') || searchParams.get('tipo') || ''
+    const urlProyecto = searchParams.get('proyecto') || ''
+    const urlPrecio = searchParams.get('precio') || ''
+    const urlOrientacion = searchParams.get('orientacion') || ''
+
+    if (urlComuna || urlTipo || urlProyecto || urlPrecio || urlOrientacion) {
+      dispatch(setFilters({
+        comuna: urlComuna,
+        tipologia: urlTipo,
+        proyecto: urlProyecto,
+        precio: urlPrecio,
+        orientacion: urlOrientacion,
+        hasSubmitted: true,
+      }))
+    }
+  }, [searchParams, dispatch])
+
+  const hasActiveFilters = Boolean(
+    (Array.isArray(reduxFilters.comuna) ? reduxFilters.comuna.length : reduxFilters.comuna) ||
+    reduxFilters.proyecto ||
+    (Array.isArray(reduxFilters.tipologia) ? reduxFilters.tipologia.length : reduxFilters.tipologia) ||
+    reduxFilters.orientacion ||
+    reduxFilters.precio
+  )
 
   const hasUrlTarget = useMemo(() => {
     return !!location.pathname.match(/\/cotizador\/proyecto\/[^/]+/)
   }, [location.pathname])
 
-  const hasSelection = !!(externalPlanta || searchFilters || hasUrlTarget)
+  const hasSelection = !!(externalPlanta || searchFilters || (hasActiveFilters && reduxFilters.hasSubmitted) || hasUrlTarget)
+
+  const effectiveFilters = useMemo(() => {
+    if (searchFilters) return searchFilters
+    if (hasActiveFilters && reduxFilters.hasSubmitted) {
+      return {
+        comuna: reduxFilters.comuna || '',
+        proyecto: reduxFilters.proyecto || '',
+        tipologia: reduxFilters.tipologia || '',
+        orientacion: reduxFilters.orientacion || '',
+        precio: reduxFilters.precio || '',
+      }
+    }
+    return null
+  }, [searchFilters, hasActiveFilters, reduxFilters])
 
   const handleSearch = useCallback((filters) => {
+    dispatch(setFilters({ ...filters, hasSubmitted: true }))
     setSearchFilters(filters)
     if (filters.proyecto && rawProjects) {
       const match = rawProjects.find(
@@ -59,20 +107,27 @@ export default function CotizadorGeneral() {
       const el = document.getElementById('detalle-cot') || document.getElementById('cotizador-gral')
       el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 100)
-  }, [rawProjects])
+  }, [dispatch, rawProjects])
 
   const handleModifySearch = useCallback(() => {
+    dispatch(setFilterField({ field: 'hasSubmitted', value: false }))
     setExternalPlanta(null)
     setSearchFilters(null)
     setActiveProject(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
+  }, [dispatch])
 
   const handleReset = useCallback(() => {
+    dispatch(resetFilters())
     setExternalPlanta(null)
     setSearchFilters(null)
     setActiveProject(null)
-  }, [])
+  }, [dispatch])
+
+  const handleCotizadorFilterChange = useCallback((newFilters) => {
+    dispatch(setFilters({ ...newFilters, hasSubmitted: true }))
+    setSearchFilters((prev) => ({ ...prev, ...newFilters }))
+  }, [dispatch])
 
   useEffect(() => {
     if (!location.hash) return
@@ -106,9 +161,9 @@ export default function CotizadorGeneral() {
 
   const selectionProp = useMemo(() => {
     if (externalPlanta) return { planta: externalPlanta }
-    if (searchFilters) return { filters: searchFilters }
+    if (effectiveFilters) return { filters: effectiveFilters }
     return undefined
-  }, [externalPlanta, searchFilters])
+  }, [externalPlanta, effectiveFilters])
 
   return (
     <>
@@ -138,7 +193,7 @@ export default function CotizadorGeneral() {
                 <BuscadorDepartamentos
                   projects={rawProjects || []}
                   onSearch={handleSearch}
-                  initialFilters={searchFilters || {}}
+                  initialFilters={effectiveFilters || reduxFilters || {}}
                 />
               </ScrollAnim>
             </div>
@@ -151,6 +206,7 @@ export default function CotizadorGeneral() {
             selection={selectionProp}
             onReset={handleReset}
             onModifySearch={handleModifySearch}
+            onFilterChange={handleCotizadorFilterChange}
           />
         )}
 
@@ -167,7 +223,6 @@ export default function CotizadorGeneral() {
               }}
               onCotizar={handleCotizarPlanta}
             />
-            {/* <Alternatives data={{ excludeName: activeProject.name }} /> */}
           </>
         )}
 
@@ -185,4 +240,3 @@ export default function CotizadorGeneral() {
     </>
   )
 }
-
