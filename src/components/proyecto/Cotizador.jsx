@@ -199,6 +199,10 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   }, [])
 
   const defaultText = placeholder || label
+  const selectedText = Array.isArray(selected)
+    ? (selected.length === 0 ? '' : selected.length === 1 ? selected[0] : `${selected.length} seleccionadas`)
+    : (selected || '')
+  const isSelected = (opt) => Array.isArray(selected) ? selected.includes(opt) : selected === opt
 
   return (
     <div className="lb-proj-det-filter-group" ref={ref}>
@@ -209,7 +213,7 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
           className="btn btn-outline-dark btn-sm dropdown-toggle lb-proj-det-filter-btn"
           onClick={() => setOpen(!open)}
         >
-          {selected || defaultText}
+          {selectedText || defaultText}
         </button>
         {open && (
           <ul className="dropdown-menu show lb-proj-det-filter-menu">
@@ -221,7 +225,7 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
             {options.map((opt) => (
               <li key={opt}>
                 <button
-                  className={`dropdown-item ${selected === opt ? 'active' : ''}`}
+                  className={`dropdown-item ${isSelected(opt) ? 'active' : ''}`}
                   onClick={() => { onSelect(opt); setOpen(false) }}
                 >
                   {opt}
@@ -336,7 +340,7 @@ export default function Cotizador({
   }, [projects])
 
   // Normalize string for reliable comparison across API objects
-  const norm = (s) => (s || '').trim().toLowerCase()
+  const norm = (s) => String(Array.isArray(s) ? (s[0] || '') : (s || '')).trim().toLowerCase()
 
   // Enrich + sort: actively-selling projects first (drives default display)
   const enrichedPlantas = useMemo(() =>
@@ -363,7 +367,9 @@ export default function Cotizador({
   // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
   useEffect(() => {
     if (!universal && !apiId) { setPlantas([]); return }
-    const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion || selection?.filters)
+    const hasComuna = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna);
+    const hasTipologia = Array.isArray(filters.tipologia) ? filters.tipologia.length > 0 : Boolean(filters.tipologia);
+    const universalHasFilter = !!(hasComuna || filters.proyecto || hasTipologia || filters.orientacion || filters.precio || selection?.filters)
     if (universal && !universalHasFilter) { setPlantas([]); return }
 
     const url = universal
@@ -385,7 +391,8 @@ export default function Cotizador({
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiId, universal, Array.isArray(filters.comuna) ? filters.comuna.join(',') : filters.comuna, filters.proyecto, Array.isArray(filters.tipologia) ? filters.tipologia.join(',') : filters.tipologia, filters.orientacion, filters.precio, selection?.filters])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
@@ -393,16 +400,17 @@ export default function Cotizador({
       // Step 1: all comunas from projects (not just plantas — some projects have no available plantas)
       const comuna = [...new Set((projects || []).map((p) => (p.comuna || '').trim()).filter(Boolean))].sort()
 
-      const afterComunaProjects = filters.comuna
-        ? (projects || []).filter((p) => norm(p.comuna) === norm(filters.comuna))
+      const hasComunaFilter = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna)
+      const afterComunaProjects = hasComunaFilter
+        ? (projects || []).filter((p) => matchComuna(p.comuna, filters.comuna))
         : (projects || [])
       const proyecto = sortProjectsByCustomOrder([...new Set(afterComunaProjects.map((p) => p.name).filter(Boolean))])
 
       // Step 3: tipologías + orientaciones filtered by selected proyecto (from plantas)
       const afterProyecto = filters.proyecto
         ? enrichedPlantas.filter((p) => norm(p.proyecto?.name) === norm(filters.proyecto))
-        : (filters.comuna
-          ? enrichedPlantas.filter((p) => p._comunaNorm === norm(filters.comuna))
+        : (hasComunaFilter
+          ? enrichedPlantas.filter((p) => matchComuna(p.proyecto?.comuna, filters.comuna))
           : enrichedPlantas)
       const tipologia = [...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort()
       const orientacion = [...new Set(
