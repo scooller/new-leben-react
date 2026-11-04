@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
-import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, Building2 } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
@@ -890,6 +890,22 @@ export default function Cotizador({
         {/* Details grid */}
         <div className="col-lg-3 lb-proj-det-cot-details">
           <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
+            {universal && (
+              <div
+                className="lb-proj-det-cot-detail-item lb-proj-det-cot-detail-item--project d-flex align-items-center gap-2"
+                style={{ gridColumn: '1 / -1' }}
+              >
+                <span className="lb-proj-det-cot-detail-icon" data-icon="building">
+                  <Building2 size={24} />
+                </span>
+                <div className="d-flex flex-column">
+                  <span className="lb-proj-det-cot-detail-label">Proyecto</span>
+                  <span className="lb-proj-det-cot-detail-value">
+                    {activePlanta?.proyecto?.name || activeProject?.name || (Array.isArray(filters.proyecto) ? filters.proyecto[0] : filters.proyecto) || '—'}
+                  </span>
+                </div>
+              </div>
+            )}
             {(displayData.details?.length ? displayData.details : DEFAULT_EMPTY_DETAILS).map((d) => (
               <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
                 <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
@@ -997,7 +1013,11 @@ export default function Cotizador({
       <CotizadorForm
         show={showCotizar}
         onClose={() => setShowCotizar(false)}
-        thumbnails={displayData.floorPlan.thumbnails}
+        planImage={mainImage}
+        thumbnails={displayData.floorPlan?.thumbnails || []}
+        initialSelected={imgIndex}
+        plantaName={activePlanta?.name || displayData.title || ''}
+        projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}
       />
 
       {showShare && createPortal(

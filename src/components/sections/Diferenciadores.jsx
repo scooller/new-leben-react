@@ -8,7 +8,7 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { setFilterField, setFilters, toggleFilterItem, clearFilterField } from '../../store/slices/filterSlice.js'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { toArray, formatComuna } from '../../lib/projectUtils.js'
+import { toArray, formatComuna, getDynamicPriceRanges } from '../../lib/projectUtils.js'
 
 function MultiselectPill({ label, options = [], selected = [], onToggle, onClear }) {
   const [open, setOpen] = useState(false)
@@ -117,6 +117,12 @@ export default function Diferenciadores() {
     '4+ Dorm',
   ])
 
+  const [precioOptions, setPrecioOptions] = useState([
+    'Hasta 3.000 UF',
+    '3.000-5.000 UF',
+    '5.000+ UF',
+  ])
+
   const sectionRef = useRef(null)
 
   useEffect(() => {
@@ -140,6 +146,10 @@ export default function Diferenciadores() {
         if (progs.some((p) => /^3\s*D/i.test(p))) types.push('3 Dorm')
         if (progs.some((p) => /^[4-9]\s*D/i.test(p))) types.push('4+ Dorm')
         if (types.length) setTipoOptions(types)
+
+        // Dynamic price ranges from real projects
+        const rangos = getDynamicPriceRanges(data)
+        if (rangos.length) setPrecioOptions(rangos)
       }
     })
     return () => { cancelled = true }
@@ -208,9 +218,11 @@ export default function Diferenciadores() {
               onChange={(e) => dispatch(setFilterField({ field: 'precio', value: e.target.value }))}
             >
               <option value="">Precio UF</option>
-              <option value="Hasta 3.000 UF">Hasta 3.000 UF</option>
-              <option value="3.000-6.000 UF">3.000-6.000 UF</option>
-              <option value="6.000+ UF">6.000+ UF</option>
+              {precioOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
             </select>
           </div>
 

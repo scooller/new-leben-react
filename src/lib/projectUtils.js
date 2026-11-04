@@ -114,8 +114,6 @@ export function sortProjectsByCustomOrder(projects = [], orderList = PROJECT_DIS
   })
 }
 
-
-
 /** Normalize a value into an array of non-empty strings */
 export function toArray(val) {
   if (!val) return []
@@ -185,13 +183,59 @@ export function matchTipologia(programa, filter) {
   })
 }
 
-/** Match price against range filter ('Hasta 3.000 UF', '3.000-6.000 UF', '6.000+ UF') */
+/** Calculate dynamic UF price ranges based on actual project data */
+export function getDynamicPriceRanges(projects = []) {
+  const precios = (projects || []).map((p) => parseFloat(p.precio_desde)).filter((p) => p > 0)
+  if (!precios.length) {
+    return ['Hasta 3.000 UF', '3.000-5.000 UF', '5.000+ UF']
+  }
+  const min = Math.min(...precios)
+  const max = Math.max(...precios)
+
+  const minUF = Math.floor(min / 1000) * 1000
+  const maxUF = Math.ceil(max / 1000) * 1000
+
+  const rangos = []
+  if (minUF < 3000) {
+    rangos.push('Hasta 3.000 UF')
+  }
+  for (let lo = Math.max(minUF, 3000); lo < maxUF; lo += 2000) {
+    const hi = lo + 2000
+    rangos.push(`${lo.toLocaleString('es-CL')}-${hi.toLocaleString('es-CL')} UF`)
+  }
+  rangos.push(`${maxUF.toLocaleString('es-CL')}+ UF`)
+
+  return [...new Set(rangos)]
+}
+
+/** Match price against range filter in UF or Renta líquida */
 export function matchPrecio(precioValue, filter) {
   if (!filter) return true
   const uf = parseFloat(precioValue) || 0
   if (!uf) return true
 
   const lower = String(filter).toLowerCase().trim()
+
+  // Support Renta líquida ranges (from contact/invest forms)
+  if (lower.includes('$') || lower.includes('renta')) {
+    if (lower.includes('hasta 800') || lower.includes('menos de 1.000')) {
+      return uf <= 2500
+    }
+    if (lower.includes('800.000') || lower.includes('1.000.000 y 1.800')) {
+      return uf >= 2000 && uf <= 3500
+    }
+    if (lower.includes('1.500.000') || lower.includes('1.800.000 y 2.500')) {
+      return uf >= 3000 && uf <= 5000
+    }
+    if (lower.includes('2.500.000') || lower.includes('2.500.000 y 3.500')) {
+      return uf >= 4500 && uf <= 7000
+    }
+    if (lower.includes('4.000.000') || lower.includes('sobre 3.500')) {
+      return uf >= 6000
+    }
+  }
+
+  // Support UF ranges
   if (lower.startsWith('hasta')) {
     const max = parseInt(lower.replace(/[^\d]/g, ''), 10)
     return uf <= max
@@ -210,7 +254,6 @@ export function matchPrecio(precioValue, filter) {
   }
   return true
 }
-
 
 /** Filter raw projects by category / intent (vivir, invertir, entrega_inmediata, construccion) */
 export function filterProjectsByCategory(projects = [], category = 'todos') {

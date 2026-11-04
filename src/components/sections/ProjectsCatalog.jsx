@@ -5,7 +5,7 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import ProjectCard from '../ProjectCard.jsx'
 import ProjectCardSkeleton from '../ProjectCardSkeleton.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, filterProjectsByCategory } from '../../lib/projectUtils.js'
+import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, filterProjectsByCategory, getDynamicPriceRanges } from '../../lib/projectUtils.js'
 import SplitTitle from '../SplitTitle.jsx'
 
 /** Fetch raw projects from API when not supplied by parent */
@@ -37,15 +37,7 @@ function useDynamicFilters(rawProjects) {
     const tipologias = [...new Set(
       rawProjects.flatMap((p) => (p.tipologias || []).map((t) => t.programa).filter((t) => t && t !== 'LOCAL'))
     )].sort()
-    const precios = rawProjects.map((p) => p.precio_desde).filter(Boolean)
-    const minUF = Math.floor(Math.min(...precios) / 1000) * 1000
-    const maxUF = Math.ceil(Math.max(...precios) / 1000) * 1000
-    const rangos = []
-    for (let lo = minUF; lo < maxUF; lo += 2000) {
-      const hi = lo + 2000
-      rangos.push(`${lo.toLocaleString('es-CL')}-${hi.toLocaleString('es-CL')} UF`)
-    }
-    rangos.push(`${maxUF.toLocaleString('es-CL')}+ UF`)
+    const rangos = getDynamicPriceRanges(rawProjects)
     return [
       { id: 'ubicacion', label: 'Ubicación', options: comunas },
       { id: 'tipo', label: 'Tipología', options: tipologias },

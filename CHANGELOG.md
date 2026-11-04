@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.200] - 2026-11-04
+
+### Added
+- `CotizadorForm.jsx`: sincronización de la imagen exacta de la planta seleccionada (`mainImage`), con fallback automático al placeholder `/images/placeholder-floorplan.svg` y selector rápido adaptativo.
+- `CotizadorForm.jsx`: campo RUT con formateo dinámico y validador chileno (módulo 11) mediante `validateRut` y `formatRut` de `chileUtils.js`.
+- `Cotizador.jsx`: en cotizador universal, se despliega el nombre del proyecto activo en una fila completa superior dentro de `.lb-proj-det-cot-detail-grid` (`grid-column: 1 / -1`), ubicando planta, superficie y demás detalles ordenadamente debajo.
+
+### Changed
+- `_proyecto-detalle.scss`: soporte de diseño para `.lb-proj-det-cot-detail-item--project` ocupando el ancho completo de la grilla de detalles.
+
+## [0.9.199] - 2026-11-04
+
+### Added
+- Función `getDynamicPriceRanges(projects)` en `src/lib/projectUtils.js` que deriva rangos de precios UF dinámicamente según los proyectos reales en base de datos.
+- Soporte en `matchPrecio` para rangos de renta líquida (CLP) y UF con equivalencia de dividendo/capacidad hipotecaria.
+
+### Changed
+- `Diferenciadores.jsx`: opciones de `Precio UF` cargadas dinámicamente desde `/api/v1/proyectos` usando `getDynamicPriceRanges`.
+- `ProjectsCatalog.jsx`: estandarizado cálculo de rangos de precios usando `getDynamicPriceRanges(rawProjects)`.
+
 ## [0.9.198] - 2026-11-04
 
 ### Added
