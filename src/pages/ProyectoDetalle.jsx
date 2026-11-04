@@ -709,6 +709,7 @@ export default function ProyectoDetalle() {
           universal
           projects={apiProjects}
           selection={selection}
+          brochureUrl={virtualToursBrochure}
         />
 
         {/* PROYECTOS RELACIONADOS */}

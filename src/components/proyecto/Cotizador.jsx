@@ -113,6 +113,7 @@ const DEFAULT_EMPTY_DETAILS = [
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
+  const floorPlanImage = p.cover_image_url || p.imageUrl || p.interior_image_url || null
   return {
     details: [
       { icon: 'layers', label: 'Planta', value: p.name || '—' },
@@ -124,9 +125,9 @@ function plantaToDetails(p) {
     ],
     pricing: {
       label: 'Precio',
-      price: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}`,
+      price: `UF ${Math.round(parseFloat(p.precio_final || p.precio_lista) || 0).toLocaleString('es-CL')}`,
     },
-    floorPlanImage: p.interior_image_url || null,
+    floorPlanImage,
   }
 }
 
@@ -143,8 +144,10 @@ const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
 const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '', precio: '' })
 const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
 
-// Module-level cache for plantas (keyed by baseUrl)
+// Module-level cache for plantas, project galleries and brochures
 const plantasCache = new Map()
+const projectGalleryCache = new Map()
+const projectBrochureCache = new Map()
 
 /** Paginate through all available plantas from a base URL with parallel fetching */
 async function fetchPages(baseUrl) {
@@ -328,10 +331,13 @@ export default function Cotizador({
   onModifySearch,
   onFilterChange,
   className = '',
+  brochureUrl: propBrochureUrl,
 }) {
   const [activeData, setActiveData] = useState(() => data || DEFAULT_COTIZADOR_DATA)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
+  const [projectGallery, setProjectGallery] = useState([])
+  const [projectBrochure, setProjectBrochure] = useState(null)
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
@@ -571,14 +577,62 @@ export default function Cotizador({
   // where the empty-state message renders right away (no skeleton flash)
   const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
 
-  // Detectar si el proyecto filtrado corresponde a Edificio Inn
-  const isInn = Boolean(
-    (filters.proyecto && norm(filters.proyecto).includes('inn')) ||
-    (activeProject && norm(activeProject.name).includes('inn')) ||
-    apiId === 1 ||
-    apiId === 'inn' ||
-    urlParams.slug === 'inn'
-  )
+  // Current project key (id or slug) to load project gallery and brochure
+  const currentProjectKey = useMemo(() => {
+    return activePlanta?.proyecto?.slug || activePlanta?.proyecto?.id || activeProject?.slug || activeProject?.id || apiId || urlParams.slug || null
+  }, [activePlanta, activeProject, apiId, urlParams.slug])
+
+  // Fetch project gallery
+  useEffect(() => {
+    if (!currentProjectKey) {
+      setProjectGallery([])
+      return
+    }
+
+    if (projectGalleryCache.has(currentProjectKey)) {
+      setProjectGallery(projectGalleryCache.get(currentProjectKey))
+      return
+    }
+
+    let cancelled = false
+    apiFetch(`/api/v1/proyectos/${currentProjectKey}/gallery`).then(({ data, error }) => {
+      if (cancelled || error) return
+      const list = Array.isArray(data?.gallery) ? data.gallery : (Array.isArray(data?.galleries) ? data.galleries : [])
+      projectGalleryCache.set(currentProjectKey, list)
+      setProjectGallery(list)
+    }).catch(() => {})
+
+    return () => { cancelled = true }
+  }, [currentProjectKey])
+
+  // Fetch or resolve brochure
+  useEffect(() => {
+    if (propBrochureUrl) return
+    if (!currentProjectKey) {
+      setProjectBrochure(null)
+      return
+    }
+    if (activeProject?.brochure_pdf_url || activeProject?.brochure_url) {
+      setProjectBrochure(activeProject.brochure_pdf_url || activeProject.brochure_url)
+      return
+    }
+    if (projectBrochureCache.has(currentProjectKey)) {
+      setProjectBrochure(projectBrochureCache.get(currentProjectKey))
+      return
+    }
+
+    let cancelled = false
+    apiFetch(`/api/v1/proyectos/${currentProjectKey}/content`).then(({ data, error }) => {
+      if (cancelled || error || !data) return
+      const url = data.brochure_pdf_url || data.brochure_url || null
+      if (url) {
+        projectBrochureCache.set(currentProjectKey, url)
+        setProjectBrochure(url)
+      }
+    }).catch(() => {})
+
+    return () => { cancelled = true }
+  }, [currentProjectKey, propBrochureUrl, activeProject])
 
   // Active details: from filtered planta if available, else placeholder '-'
   const displayData = useMemo(() => {
@@ -606,37 +660,65 @@ export default function Cotizador({
       }
     }
     const enriched = plantaToDetails(planta)
-    const thumbnails = enriched.floorPlanImage
-      ? [enriched.floorPlanImage, ...safeActiveData.floorPlan.thumbnails]
-      : safeActiveData.floorPlan.thumbnails
     return {
       ...safeActiveData,
       details: enriched.details,
       pricing: { ...safeActiveData.pricing, ...enriched.pricing },
-      floorPlan: { ...safeActiveData.floorPlan, thumbnails },
+      floorPlan: { ...safeActiveData.floorPlan, image: enriched.floorPlanImage || PLACEHOLDER_FLOORPLAN },
     }
   }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
-  // Mockup brochure para Edificio Inn o desde displayData
-  const brochureUrl = displayData.brochureUrl || (isInn ? `${import.meta.env.BASE_URL}images/inn/Brochure_Digital_2026.pdf` : null)
+  // Real brochure from prop, displayData, activeProject or fetched from API
+  const brochureUrl = propBrochureUrl || displayData.brochureUrl || projectBrochure || null
+  const brochureDownloadName = useMemo(() => {
+    const projectName = activePlanta?.proyecto?.name || activeProject?.name || 'Proyecto'
+    return `${projectName.replace(/[^a-zA-Z0-9_-]/g, '_')}_Brochure.pdf`
+  }, [activePlanta, activeProject])
 
-  // Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto
-  const visibleThumbs = useMemo(() => {
-    const allThumbs = displayData.floorPlan?.thumbnails || []
-    if (isInn && allThumbs.length > 1) {
-      return allThumbs.slice(1).map((src, idx) => ({ src, originalIndex: idx + 1 }))
+  // Compose unified gallery items: unit floor plan first, then interior render (if distinct), then project gallery
+  const galleryItems = useMemo(() => {
+    const items = []
+    if (activePlanta) {
+      const planSrc = activePlanta.cover_image_url || activePlanta.imageUrl || activePlanta.interior_image_url
+      if (planSrc) {
+        items.push({
+          src: planSrc,
+          thumb: planSrc,
+          alt: `Planta ${activePlanta.name || ''}`.trim(),
+          title: `Planta ${activePlanta.name || ''}`.trim(),
+        })
+      }
+      if (activePlanta.interior_image_url && activePlanta.interior_image_url !== planSrc) {
+        items.push({
+          src: activePlanta.interior_image_url,
+          thumb: activePlanta.interior_image_url,
+          alt: `Interior ${activePlanta.name || ''}`.trim(),
+          title: `Interior ${activePlanta.name || ''}`.trim(),
+        })
+      }
     }
-    return allThumbs.map((src, idx) => ({ src, originalIndex: idx }))
-  }, [isInn, displayData.floorPlan?.thumbnails])
 
-  // Mockup de prueba: para Edificio Inn seleccionar el segundo thumb por defecto
+    if (Array.isArray(projectGallery) && projectGallery.length > 0) {
+      projectGallery.forEach((g) => {
+        const src = g.url || g.image_url
+        if (src && !items.some((it) => it.src === src)) {
+          items.push({
+            src,
+            thumb: g.thumbnail_url || src,
+            alt: g.alt || g.title || 'Galería del proyecto',
+            title: g.title || g.alt || '',
+          })
+        }
+      })
+    }
+
+    return items
+  }, [activePlanta, projectGallery])
+
+  // Reset image index to 0 when planta or project changes
   useEffect(() => {
-    if (isInn && displayData.floorPlan?.thumbnails?.length > 1) {
-      setImgIndex(1)
-    } else {
-      setImgIndex(0)
-    }
-  }, [isInn, selected, displayData.floorPlan?.thumbnails?.length])
+    setImgIndex(0)
+  }, [selected, currentProjectKey])
 
   // Resolve selected index from URL planta ID or external selection once filteredPlantas load
   useEffect(() => {
@@ -647,7 +729,7 @@ export default function Cotizador({
       : 0
     const valid = idx >= 0 ? idx : 0
     setSelected(valid)
-    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
+    setImgIndex(0)
     if (urlPlantaId != null || urlParams.slug) {
       const planta = filteredPlantas.find((p) => p.id === urlPlantaId)
       if (planta) {
@@ -659,7 +741,7 @@ export default function Cotizador({
         })
       }
     }
-  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id])
 
   // Update URL when selection changes — only if user navigated to a specific planta or has filters
   useEffect(() => {
@@ -688,15 +770,13 @@ export default function Cotizador({
   const openGallery = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    const thumbsToUse = isInn && displayData.floorPlan.thumbnails?.length > 1
-      ? displayData.floorPlan.thumbnails.slice(1)
-      : displayData.floorPlan.thumbnails
-    const images = (thumbsToUse && thumbsToUse.length ? thumbsToUse : [mainImage])
-      .filter(Boolean)
-      .map((src) => ({ src, type: 'image' }))
+    const images = (galleryItems.length > 0
+      ? galleryItems.map((it) => ({ src: it.src, thumb: it.thumb, caption: it.title || it.alt, type: 'image' }))
+      : [{ src: mainImage, type: 'image' }]
+    ).filter((it) => Boolean(it.src))
     if (!images.length) return
-    const targetIdx = isInn && imgIndex > 0 ? imgIndex - 1 : imgIndex
-    Fancybox.show(images, { startIndex: Math.max(0, Math.min(targetIdx, images.length - 1)) })
+    const targetIdx = Math.max(0, Math.min(imgIndex, images.length - 1))
+    Fancybox.show(images, { startIndex: targetIdx })
   }
 
   // Navigate between plantas — show loading effect until the new image loads
@@ -705,7 +785,7 @@ export default function Cotizador({
     if (next === selected || switching) return
     setSwitching(true)
     setSelected(next)
-    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
+    setImgIndex(0)
   }
 
   // Safety: never get stuck in loading state (cached or failed images)
@@ -715,7 +795,8 @@ export default function Cotizador({
     return () => clearTimeout(t)
   }, [switching, selected])
 
-  const mainImage = displayData.floorPlan?.thumbnails?.[imgIndex] ?? displayData.floorPlan?.image ?? PLACEHOLDER_FLOORPLAN
+  const activeGalleryItem = galleryItems[imgIndex] || galleryItems[0]
+  const mainImage = activeGalleryItem?.src || PLACEHOLDER_FLOORPLAN
 
   const content = (
     <div className="container g-4">
@@ -948,14 +1029,16 @@ export default function Cotizador({
             </ActionButton>
           </div>
           <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center justify-content-md-end">
-            {/* Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto */}
-            {visibleThumbs.map(({ src, originalIndex }, i) => (
+            {galleryItems.map((item, idx) => (
               <button
-                key={originalIndex}
-                className={`lb-proj-det-cot-thumb${imgIndex === originalIndex ? ' lb-proj-det-cot-thumb--active' : ''}`}
-                onClick={() => setImgIndex(originalIndex)}
+                key={idx}
+                type="button"
+                className={`lb-proj-det-cot-thumb${imgIndex === idx ? ' lb-proj-det-cot-thumb--active' : ''}`}
+                onClick={() => setImgIndex(idx)}
+                aria-label={item.title || item.alt || `Imagen ${idx + 1}`}
+                title={item.title || item.alt || `Imagen ${idx + 1}`}
               >
-                <img src={src} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
+                <img src={item.thumb || item.src} alt={item.alt || `Miniatura ${idx + 1}`} width="64" height="64" loading="lazy" />
               </button>
             ))}
           </div>
@@ -967,7 +1050,7 @@ export default function Cotizador({
               icon={DownloadIcon}
               href={brochureUrl || undefined}
               target={brochureUrl ? '_blank' : undefined}
-              download={brochureUrl ? 'Brochure_Digital_2026.pdf' : undefined}
+              download={brochureUrl ? brochureDownloadName : undefined}
               disabled={!brochureUrl}
             >
               Descargar Brochure
@@ -1014,7 +1097,7 @@ export default function Cotizador({
         show={showCotizar}
         onClose={() => setShowCotizar(false)}
         planImage={mainImage}
-        thumbnails={displayData.floorPlan?.thumbnails || []}
+        thumbnails={galleryItems.map((it) => it.thumb || it.src)}
         initialSelected={imgIndex}
         plantaName={activePlanta?.name || displayData.title || ''}
         projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.201] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: integración de la galería real del proyecto vía `/api/v1/proyectos/{id}/gallery` unificada junto a la planta arquitectónica (índice 0 = planta/render, índices 1..N = fotos de galería).
+- `Cotizador.jsx`: resolución dinámica del Brochure PDF por proyecto desde la API (`/api/v1/proyectos/{slug}/content` o `activeProject.brochure_pdf_url`), con nombre de archivo de descarga dinámico según el proyecto.
+- `Cotizador.jsx`: módulo de caché en memoria (`projectGalleryCache` y `projectBrochureCache`) para transiciones instantáneas entre proyectos.
+
+### Changed
+- `apiFetch.js`: soporte automático para respuestas JSON donde el payload no está envuelto en una clave `data` (ej. `/gallery`), retornando el payload completo sin fallar a `undefined`.
+- `Cotizador.jsx`: eliminados todos los mockups y excepciones hardcodeadas para Edificio INN (`isInn`, `Brochure_Digital_2026.pdf`, corte `slice(1)` de miniaturas, índice inicial forzado a 1).
+- `ProyectoDetalle.jsx`: paso directo de `brochureUrl` al componente `Cotizador`.
+
 ## [0.9.200] - 2026-11-04
 
 ### Added

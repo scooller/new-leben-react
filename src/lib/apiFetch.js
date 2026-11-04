@@ -80,7 +80,8 @@ export async function apiFetch(url, options = {}) {
 
       const json = await r.json()
       const meta = json.meta || (json.last_page ? { total: json.total, last_page: json.last_page } : null)
-      const res = { data: json.data, error: null, meta }
+      const resData = (json && typeof json === 'object' && 'data' in json) ? json.data : json
+      const res = { data: resData, error: null, meta }
 
       if (useCache && res.data !== null) {
         writeCache(url, res, ttl)
