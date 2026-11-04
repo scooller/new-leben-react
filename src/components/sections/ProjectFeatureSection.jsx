@@ -227,7 +227,7 @@ export default function ProjectFeatureSection({
             </ScrollAnim>
           ) : slides.length > 0 ? (
             <ScrollAnim className="col-lg-7 d-flex">
-              <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100">
+              <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100 position-relative">
                 <div className="carousel-inner lb-inn-proyecto__frame">
                   {slides.map((slide, index) => {
                     const rawTarget = (slide.link && typeof slide.link === 'string' && slide.link.trim()) || slide.img || slide.src
@@ -260,6 +260,30 @@ export default function ProjectFeatureSection({
                     )
                   })}
                 </div>
+                {slides.length > 1 && (
+                  <>
+                    <button
+                      className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
+                      type="button"
+                      data-bs-target={`#${carouselId}`}
+                      data-bs-slide="prev"
+                      onClick={() => carouselInstance.current?.prev()}
+                      aria-label="Anterior"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
+                      type="button"
+                      data-bs-target={`#${carouselId}`}
+                      data-bs-slide="next"
+                      onClick={() => carouselInstance.current?.next()}
+                      aria-label="Siguiente"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </>
+                )}
               </div>
             </ScrollAnim>
           ) : null}

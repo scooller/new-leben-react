@@ -107,7 +107,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
   onSelectLocation,
 }) {
   return (
-    <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide" data-bs-interval="false">
+    <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide position-relative" data-bs-interval="false">
       <div className="carousel-inner">
         {slides.map((slideItems, slideIndex) => (
           <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
@@ -169,10 +169,10 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
           </div>
         ))}
       </div>
-      <button className="lb-inn-gallery__nav lb-inn-gallery__nav--prev" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="prev" aria-label="Anterior">
+      <button className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="prev" aria-label="Anterior">
         <ChevronLeft size={20} />
       </button>
-      <button className="lb-inn-gallery__nav lb-inn-gallery__nav--next" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="next" aria-label="Siguiente">
+      <button className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next" type="button" data-bs-target="#innGalleryCarousel" data-bs-slide="next" aria-label="Siguiente">
         <ChevronRight size={20} />
       </button>
     </div>
