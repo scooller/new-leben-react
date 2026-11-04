@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.202] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: función `toAbsoluteUrl` para asegurar que las URLs de miniaturas y multimedia provenientes de la API se resuelvan como URLs absolutas completas sin importar el dominio o puerto del frontend.
+- `ProjectTeamAgents.jsx`: soporte completo para `resolved_avatar_url` de los asesores con fallback seguro ante imágenes rotas (`onError`).
+
+### Fixed
+- `back-ileben`: `Proyecto.php`, `ProjectGallery.php`, `ProjectDetailResource.php` y `EnrichesPlantPayload.php` actualizados para emitir `thumbnail_url` absolutos (`url(...)`) y asegurar que los avatares manuales de Curator en `Asesor` (`resolved_avatar_url`) se entreguen en los endpoints de proyectos y contenido web.
+
 ## [0.9.201] - 2026-11-04
 
 ### Added

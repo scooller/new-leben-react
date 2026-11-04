@@ -144,6 +144,23 @@ const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
 const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '', precio: '' })
 const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
 
+// Ensure thumbnail and media URLs from API are full absolute URLs
+function toAbsoluteUrl(url, fallbackHostUrl) {
+  if (!url) return fallbackHostUrl || ''
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url
+  }
+  if (fallbackHostUrl && (fallbackHostUrl.startsWith('http://') || fallbackHostUrl.startsWith('https://'))) {
+    try {
+      const origin = new URL(fallbackHostUrl).origin
+      return `${origin}/${url.replace(/^\/+/, '')}`
+    } catch {
+      // ignore
+    }
+  }
+  return url
+}
+
 // Module-level cache for plantas, project galleries and brochures
 const plantasCache = new Map()
 const projectGalleryCache = new Map()
@@ -701,10 +718,12 @@ export default function Cotizador({
     if (Array.isArray(projectGallery) && projectGallery.length > 0) {
       projectGallery.forEach((g) => {
         const src = g.url || g.image_url
+        const rawThumb = g.thumbnail_url || src
+        const thumb = toAbsoluteUrl(rawThumb, src)
         if (src && !items.some((it) => it.src === src)) {
           items.push({
             src,
-            thumb: g.thumbnail_url || src,
+            thumb: thumb || src,
             alt: g.alt || g.title || 'Galería del proyecto',
             title: g.title || g.alt || '',
           })
