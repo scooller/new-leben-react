@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.198] - 2026-11-04
+
+### Added
+- Animación interactiva de filtrado con `motion/react` (`AnimatePresence` y `motion.div` con transición `scale` y `fade out`) al filtrar proyectos en `ProjectsCatalog.jsx`.
+
+### Changed
+- `ProjectsCatalog.jsx`: botón "Resetear filtros" reubicado al interior de la barra de filtros (`.lb-filter-bar`), alineado a la derecha mediante `ms-auto`.
+- `CotizadorGeneral.jsx`: conectado callback `onReset` en `ProjectsCatalog` para restablecer filtros globales y categoría.
+
 ## [0.9.197] - 2026-11-04
 
 ### Added

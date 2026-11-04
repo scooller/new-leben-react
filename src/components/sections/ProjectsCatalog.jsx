@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ScrollAnim from '../ScrollAnim.jsx'
@@ -94,6 +95,7 @@ export default function ProjectsCatalog({
   error: externalError,
   groupByZone = true,
   category = 'todos',
+  onReset,
   id = 'proyectos',
   className = '',
 }) {
@@ -117,18 +119,6 @@ export default function ProjectsCatalog({
     <section className={`lb-featured container-fluid pb-4 pt-1 pb-md-5 ${className}`.trim()} id={id}>
       <div className="container d-flex flex-column">
         <SplitTitle as="h2" className='mb-3 pb-3'>Proyectos</SplitTitle>
-        {hasFilters && (
-          <div className="d-flex align-items-center justify-content-end">
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-sm rounded-pill"
-              onClick={() => setSearchParams({})}
-            >
-              Resetear filtros
-            </button>
-          </div>
-        )}
-
         {/* Filter bar */}
         <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3 mb-4">
           <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
@@ -152,6 +142,19 @@ export default function ProjectsCatalog({
               </select>
             ))}
           </div>
+
+          {hasFilters && (
+            <button
+              type="button"
+              className="btn btn-outline-secondary btn-sm rounded-pill px-3 ms-auto"
+              onClick={() => {
+                setSearchParams({})
+                onReset?.()
+              }}
+            >
+              Resetear filtros
+            </button>
+          )}
         </div>
 
         {projectsLoading ? (
@@ -182,24 +185,44 @@ export default function ProjectsCatalog({
                   <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
                 </ScrollAnim>
 
-                <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-                  {group.projects.map((project) => (
-                    <div key={project.name} className="col">
-                      <ProjectCard project={project} />
-                    </div>
-                  ))}
-                </ScrollAnim>
+                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                  <AnimatePresence mode="popLayout">
+                    {group.projects.map((project) => (
+                      <motion.div
+                        layout
+                        key={project.id || project.name}
+                        className="col"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      >
+                        <ProjectCard project={project} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
               </div>
             ))}
           </>
         ) : (
-          <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-            {filteredFlat.map((project) => (
-              <div key={project.name} className="col">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </ScrollAnim>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <AnimatePresence mode="popLayout">
+              {filteredFlat.map((project) => (
+                <motion.div
+                  layout
+                  key={project.id || project.name}
+                  className="col"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  <ProjectCard project={project} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         )}
 
         {!projectsLoading && !projectsError && filteredCount === 0 && (

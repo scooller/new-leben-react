@@ -237,6 +237,7 @@ export default function CotizadorGeneral() {
           loading={projectsLoading}
           error={projectsError}
           category={reduxFilters.categoria || 'todos'}
+          onReset={handleReset}
           groupByZone={false}
         />
       </main>
