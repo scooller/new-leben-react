@@ -3,7 +3,7 @@ import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { X, ChevronLeft, ChevronRight, Image } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Image, ZoomIn } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
@@ -128,7 +128,7 @@ export default function ProjectFeatureSection({
     <section ref={sectionRef} className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
       <div
         className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
-        style={{ '--lb-inn-proyecto-bg': `url("${base}${backgroundImage}")` }}
+        style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${/^(https?:)?\/\//.test(backgroundImage) || backgroundImage.startsWith('data:') ? backgroundImage : `${base}${backgroundImage.replace(/^\/+/, '')}`}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
           <div className="col-lg-5 align-self-stretch position-relative lb-inn-proyecto__text-column">
@@ -216,7 +216,7 @@ export default function ProjectFeatureSection({
             <ScrollAnim className="col-lg-7 d-flex">
               <div className="lb-inn-proyecto__frame w-100">
                 <video
-                  src={`${base}${mediaVideoSrc}`}
+                  src={/^(https?:)?\/\//.test(mediaVideoSrc) || mediaVideoSrc.startsWith('data:') ? mediaVideoSrc : `${base}${mediaVideoSrc.replace(/^\/+/, '')}`}
                   className="d-block w-100 h-100 object-fit-cover"
                   autoPlay
                   muted
@@ -227,12 +227,12 @@ export default function ProjectFeatureSection({
             </ScrollAnim>
           ) : slides.length > 0 ? (
             <ScrollAnim className="col-lg-7 d-flex">
-              <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100">
+              <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100 position-relative">
                 <div className="carousel-inner lb-inn-proyecto__frame">
                   {slides.map((slide, index) => {
                     const rawTarget = (slide.link && typeof slide.link === 'string' && slide.link.trim()) || slide.img || slide.src
                     const fancyboxHref = /^(https?:)?\/\//.test(rawTarget) ? rawTarget : `${base}${rawTarget.replace(/^\//, '')}`
-                    const imgSrc = `${base}${slide.img || slide.src}`
+                    const imgSrc = /^(https?:)?\/\//.test(slide.img || slide.src) ? (slide.img || slide.src) : `${base}${slide.img || slide.src}`
 
                     return (
                       <div
@@ -246,14 +246,44 @@ export default function ProjectFeatureSection({
                             data-fancybox={slide.fancyboxGroup || 'project-gallery'}
                             data-caption={slide.alt || ''}
                             tabIndex={0}
+                            className="d-block w-100 h-100 position-relative lb-img-trigger"
+                            aria-label="Ampliar imagen"
+                            style={{ cursor: 'zoom-in' }}
                           >
                             <img src={imgSrc} className="d-block w-100 h-100 object-fit-cover" alt={slide.alt || `Slide ${index + 1}`} />
+                            <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                              <ZoomIn size={16} />
+                            </span>
                           </a>
                         </div>
                       </div>
                     )
                   })}
                 </div>
+                {slides.length > 1 && (
+                  <>
+                    <button
+                      className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--prev"
+                      type="button"
+                      data-bs-target={`#${carouselId}`}
+                      data-bs-slide="prev"
+                      onClick={() => carouselInstance.current?.prev()}
+                      aria-label="Anterior"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      className="lb-proj-det-gallery-arrow lb-proj-det-gallery-arrow--next"
+                      type="button"
+                      data-bs-target={`#${carouselId}`}
+                      data-bs-slide="next"
+                      onClick={() => carouselInstance.current?.next()}
+                      aria-label="Siguiente"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </>
+                )}
               </div>
             </ScrollAnim>
           ) : null}
@@ -318,13 +348,17 @@ export default function ProjectFeatureSection({
                         data-fancybox="inn-espacios"
                         data-caption={activeImageObj.alt || ''}
                         aria-label={`Ampliar imagen`}
-                        className="w-100 h-100 position-relative d-block"
+                        className="w-100 h-100 position-relative d-block lb-img-trigger"
+                        style={{ cursor: 'zoom-in' }}
                       >
                         <img
                           src={`${base}${activeImageObj.img}`}
                           alt={activeImageObj.alt || ''}
                           className="w-100 h-100 object-fit-contain rounded-3"
                         />
+                        <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                          <ZoomIn size={16} />
+                        </span>
                         {activeImageObj.alt && (
                           <span className="lb-inn-spaces-modal__caption mx-auto position-absolute start-0 end-0 bottom-0">{activeImageObj.alt}</span>
                         )}

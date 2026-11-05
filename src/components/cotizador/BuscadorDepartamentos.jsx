@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { MapPin, Building2, Home, Compass, Search, ChevronDown, Check, ArrowRightLeft } from 'lucide-react'
-import { sortProjectsByCustomOrder, ORIENTACION_LABELS } from '../../lib/projectUtils.js'
+import { sortProjectsByCustomOrder, ORIENTACION_LABELS, filterProjectsByCategory } from '../../lib/projectUtils.js'
 
 const CATEGORY_TABS = [
   { id: 'todos', label: 'Departamentos' },
@@ -28,21 +28,41 @@ const ORIENTACIONES = [
   ...[...new Set(Object.values(ORIENTACION_LABELS))].map((label) => ({ value: label, label })),
 ]
 
+function normalizeDormValue(val) {
+  if (!val) return ''
+  const m = String(val).match(/^(\d+)\s*d/i) || String(val).match(/^(\d+)/)
+  if (m) {
+    const d = m[1]
+    if (['1', '2', '3', '4'].includes(d)) return `${d}D`
+  }
+  return val
+}
+
 export default function BuscadorDepartamentos({
   projects = [],
   onSearch,
+  onCategoryChange,
   initialFilters = {},
   className = '',
 }) {
-  const [activeCategory, setActiveCategory] = useState('todos')
+  const [activeCategory, setActiveCategory] = useState(() => initialFilters.categoria || initialFilters.tab || 'todos')
   const [intentPill, setIntentPill] = useState('todos')
-  const [comuna, setComuna] = useState(initialFilters.comuna || '')
+  const resolveFirst = (val) => Array.isArray(val) ? (val[0] || '') : (val || '')
+  const [comuna, setComuna] = useState(() => resolveFirst(initialFilters.comuna))
   const [proyecto, setProyecto] = useState(initialFilters.proyecto || '')
-  const [dormitorios, setDormitorios] = useState(initialFilters.tipologia || '')
+  const [dormitorios, setDormitorios] = useState(() => normalizeDormValue(resolveFirst(initialFilters.tipologia)) || '')
   const [orientacion, setOrientacion] = useState(initialFilters.orientacion || '')
 
   const [openDropdown, setOpenDropdown] = useState(null)
   const formRef = useRef(null)
+
+  useEffect(() => {
+    if (initialFilters.comuna !== undefined) setComuna(resolveFirst(initialFilters.comuna))
+    if (initialFilters.proyecto !== undefined) setProyecto(initialFilters.proyecto || '')
+    if (initialFilters.tipologia !== undefined) setDormitorios(normalizeDormValue(resolveFirst(initialFilters.tipologia)) || '')
+    if (initialFilters.orientacion !== undefined) setOrientacion(initialFilters.orientacion || '')
+    if (initialFilters.categoria || initialFilters.tab) setActiveCategory(initialFilters.categoria || initialFilters.tab)
+  }, [initialFilters.comuna, initialFilters.proyecto, initialFilters.tipologia, initialFilters.orientacion, initialFilters.categoria, initialFilters.tab])
 
   useEffect(() => {
     const handleOutside = (e) => {
@@ -57,14 +77,8 @@ export default function BuscadorDepartamentos({
   // Filter projects by intent / category
   const filteredProjectsByIntent = useMemo(() => {
     if (!projects || !projects.length) return []
-    let list = projects
     const filterType = intentPill !== 'todos' ? intentPill : activeCategory
-    if (filterType === 'entrega_inmediata') {
-      list = list.filter((p) => /venta|recepcion/i.test(p.etapa || ''))
-    } else if (filterType === 'construccion') {
-      list = list.filter((p) => /obra|construccion/i.test(p.etapa || ''))
-    }
-    return list
+    return filterProjectsByCategory(projects, filterType)
   }, [projects, activeCategory, intentPill])
 
   // Comunas with project count
@@ -114,12 +128,15 @@ export default function BuscadorDepartamentos({
   const handleSubmit = (e) => {
     e?.preventDefault()
     setOpenDropdown(null)
+    const effective = intentPill !== 'todos' ? intentPill : activeCategory
+    onCategoryChange?.(effective)
     onSearch?.({
       comuna,
       proyecto,
       tipologia: dormitorios,
       orientacion,
-      tab: activeCategory,
+      tab: effective,
+      categoria: effective,
     })
   }
 
@@ -135,6 +152,7 @@ export default function BuscadorDepartamentos({
             onClick={() => {
               setActiveCategory(tab.id)
               setProyecto('')
+              onCategoryChange?.(tab.id)
             }}
           >
             {tab.label}
@@ -156,6 +174,8 @@ export default function BuscadorDepartamentos({
                 onClick={() => {
                   setIntentPill(pill.id)
                   setProyecto('')
+                  const effective = pill.id !== 'todos' ? pill.id : activeCategory
+                  onCategoryChange?.(effective)
                 }}
               >
                 {intentPill === pill.id && <Check size={14} className="me-1 text-danger" />}

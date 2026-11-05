@@ -1,10 +1,11 @@
+import { motion, AnimatePresence } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ScrollAnim from '../ScrollAnim.jsx'
 import ProjectCard from '../ProjectCard.jsx'
 import ProjectCardSkeleton from '../ProjectCardSkeleton.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { groupByComuna, mapApiProject, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
+import { groupByComuna, mapApiProject, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, filterProjectsByCategory, getDynamicPriceRanges } from '../../lib/projectUtils.js'
 import SplitTitle from '../SplitTitle.jsx'
 
 /** Fetch raw projects from API when not supplied by parent */
@@ -36,15 +37,7 @@ function useDynamicFilters(rawProjects) {
     const tipologias = [...new Set(
       rawProjects.flatMap((p) => (p.tipologias || []).map((t) => t.programa).filter((t) => t && t !== 'LOCAL'))
     )].sort()
-    const precios = rawProjects.map((p) => p.precio_desde).filter(Boolean)
-    const minUF = Math.floor(Math.min(...precios) / 1000) * 1000
-    const maxUF = Math.ceil(Math.max(...precios) / 1000) * 1000
-    const rangos = []
-    for (let lo = minUF; lo < maxUF; lo += 2000) {
-      const hi = lo + 2000
-      rangos.push(`${lo.toLocaleString('es-CL')}-${hi.toLocaleString('es-CL')} UF`)
-    }
-    rangos.push(`${maxUF.toLocaleString('es-CL')}+ UF`)
+    const rangos = getDynamicPriceRanges(rawProjects)
     return [
       { id: 'ubicacion', label: 'Ubicación', options: comunas },
       { id: 'tipo', label: 'Tipología', options: tipologias },
@@ -54,25 +47,23 @@ function useDynamicFilters(rawProjects) {
 }
 
 /** Filter raw projects by searchParams and optionally group by comuna/zone */
-function useFilteredProjects(searchParams, rawProjects, groupByZone) {
+function useFilteredProjects(searchParams, rawProjects, groupByZone, category = 'todos') {
   return useMemo(() => {
-    const ubicacion = searchParams.get('ubicacion')
-    const tipo = searchParams.get('tipo')
+    const ubicacion = searchParams.get('ubicacion') || searchParams.get('comuna')
+    const tipo = searchParams.get('tipo') || searchParams.get('tipologia')
     const precio = searchParams.get('precio')
+    const urlCat = searchParams.get('categoria') || searchParams.get('tab')
+    const effectiveCat = category && category !== 'todos' ? category : (urlCat || 'todos')
 
-    const filtered = (rawProjects || []).filter((p) => {
-      if (ubicacion && !(p.comuna || 'Otros').trim().toLowerCase().includes(ubicacion.toLowerCase())) return false
-      if (tipo && !(p.tipologias || []).some((t) => t.programa === tipo)) return false
-      if (precio) {
-        const uf = p.precio_desde || 0
-        if (precio.endsWith('+ UF')) {
-          const min = parseInt(precio.replace(/[^\d]/g, ''), 10)
-          if (uf < min) return false
-        } else {
-          const [lo, hi] = precio.replace(' UF', '').split('-').map((s) => parseInt(s.replace(/\./g, ''), 10))
-          if (uf < lo || uf >= hi) return false
-        }
-      }
+    let baseProjects = rawProjects || []
+    if (effectiveCat && effectiveCat !== 'todos') {
+      baseProjects = filterProjectsByCategory(baseProjects, effectiveCat)
+    }
+
+    const filtered = baseProjects.filter((p) => {
+      if (ubicacion && !matchComuna(p.comuna, ubicacion)) return false
+      if (tipo && !(p.tipologias || []).some((t) => matchTipologia(t.programa, tipo))) return false
+      if (precio && !matchPrecio(p.precio_desde, precio)) return false
       return true
     })
 
@@ -87,7 +78,7 @@ function useFilteredProjects(searchParams, rawProjects, groupByZone) {
     const flat = sortProjectsByCustomOrder(filtered.map(mapApiProject))
 
     return { groups: [], flat, count: flat.length }
-  }, [searchParams, rawProjects, groupByZone])
+  }, [searchParams, rawProjects, groupByZone, category])
 }
 
 export default function ProjectsCatalog({
@@ -95,6 +86,8 @@ export default function ProjectsCatalog({
   loading: externalLoading,
   error: externalError,
   groupByZone = true,
+  category = 'todos',
+  onReset,
   id = 'proyectos',
   className = '',
 }) {
@@ -109,26 +102,15 @@ export default function ProjectsCatalog({
   const { groups: filteredGroups, flat: filteredFlat, count: filteredCount } = useFilteredProjects(
     searchParams,
     rawProjects,
-    groupByZone
+    groupByZone,
+    category
   )
-  const hasFilters = [...searchParams.keys()].length > 0
+  const hasFilters = [...searchParams.keys()].length > 0 || (category && category !== 'todos')
 
   return (
     <section className={`lb-featured container-fluid pb-4 pt-1 pb-md-5 ${className}`.trim()} id={id}>
       <div className="container d-flex flex-column">
         <SplitTitle as="h2" className='mb-3 pb-3'>Proyectos</SplitTitle>
-        {hasFilters && (
-          <div className="d-flex align-items-center justify-content-end">
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-sm rounded-pill"
-              onClick={() => setSearchParams({})}
-            >
-              Resetear filtros
-            </button>
-          </div>
-        )}
-
         {/* Filter bar */}
         <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between lb-filter-bar bg-white rounded-3 shadow-sm p-3 mb-4">
           <div className="d-flex flex-wrap gap-2 align-items-center flex-fill">
@@ -152,6 +134,19 @@ export default function ProjectsCatalog({
               </select>
             ))}
           </div>
+
+          {hasFilters && (
+            <button
+              type="button"
+              className="btn btn-outline-secondary btn-sm rounded-pill px-3 ms-auto"
+              onClick={() => {
+                setSearchParams({})
+                onReset?.()
+              }}
+            >
+              Resetear filtros
+            </button>
+          )}
         </div>
 
         {projectsLoading ? (
@@ -182,24 +177,44 @@ export default function ProjectsCatalog({
                   <h2 className="mb-0 lb-group-zone">{group.zone}</h2>
                 </ScrollAnim>
 
-                <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-                  {group.projects.map((project) => (
-                    <div key={project.name} className="col">
-                      <ProjectCard project={project} />
-                    </div>
-                  ))}
-                </ScrollAnim>
+                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                  <AnimatePresence mode="popLayout">
+                    {group.projects.map((project) => (
+                      <motion.div
+                        layout
+                        key={project.id || project.name}
+                        className="col"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      >
+                        <ProjectCard project={project} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
               </div>
             ))}
           </>
         ) : (
-          <ScrollAnim as="div" className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" animation="fade-up" stagger={0.15} delay={0.1}>
-            {filteredFlat.map((project) => (
-              <div key={project.name} className="col">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </ScrollAnim>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <AnimatePresence mode="popLayout">
+              {filteredFlat.map((project) => (
+                <motion.div
+                  layout
+                  key={project.id || project.name}
+                  className="col"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  <ProjectCard project={project} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         )}
 
         {!projectsLoading && !projectsError && filteredCount === 0 && (

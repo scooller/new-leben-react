@@ -55,7 +55,7 @@ function AgentRow({ agent, onSchedule }) {
         )}
       </div>
 
-      {agent.avatar && (
+      {agent.avatar ? (
         <div className="lb-inn-team-agents__avatar-wrapper">
           <img
             src={agent.avatar}
@@ -64,22 +64,37 @@ function AgentRow({ agent, onSchedule }) {
             height={90}
             loading="lazy"
             className="lb-inn-team-agents__avatar"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
           />
         </div>
-      )}
+      ) : null}
     </ScrollAnim>
   )
 }
 
 export default function ProjectTeamAgents({ data = {}, apiId }) {
-  const [agents, setAgents] = useState(data?.agents || [])
+  const [agents, setAgents] = useState(() => (data?.agents || []).map((a) => ({
+    name: a.name || a.full_name || '',
+    phone: a.phone || a.whatsapp_owner || '',
+    email: a.email || '',
+    avatar: a.resolved_avatar_url || a.avatar || a.avatar_url || a.avatar_manual_url || '',
+  })))
   const [showModal, setShowModal] = useState(false)
 
   const timeSlots = ['09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00']
   const today = new Date().toISOString().split('T')[0]
 
   useEffect(() => {
-    if (data?.agents) setAgents(data.agents)
+    if (data?.agents?.length) {
+      setAgents(data.agents.map((a) => ({
+        name: a.name || a.full_name || '',
+        phone: a.phone || a.whatsapp_owner || '',
+        email: a.email || '',
+        avatar: a.resolved_avatar_url || a.avatar || a.avatar_url || a.avatar_manual_url || '',
+      })))
+    }
   }, [data?.agents])
 
   useEffect(() => {
@@ -90,10 +105,10 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
       const apiAgents = resData?.asesores
       if (apiAgents?.length) {
         setAgents(apiAgents.map((a) => ({
-          name: a.full_name,
-          phone: a.whatsapp_owner || '',
+          name: a.full_name || a.name || '',
+          phone: a.whatsapp_owner || a.phone || '',
           email: a.email || '',
-          avatar: a.avatar_url || a.avatar_manual_url || '',
+          avatar: a.resolved_avatar_url || a.avatar || a.avatar_url || a.avatar_manual_url || '',
         })))
       }
     })

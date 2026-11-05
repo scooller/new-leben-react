@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 
@@ -340,8 +340,8 @@ export default function ProjectPanoramasModal({
                                 href={`${base}${card.image}`}
                                 data-fancybox={`panoramas-${currentCategory?.id || 'cat'}`}
                                 data-caption={`${card.title} · a ${card.distance} de ${projectName}`}
-                                className="d-block ratio ratio-16x9 text-decoration-none"
-                                style={{ cursor: 'pointer' }}
+                                className="d-block ratio ratio-16x9 text-decoration-none position-relative lb-img-trigger"
+                                style={{ cursor: 'zoom-in' }}
                               >
                                 <img
                                   src={`${base}${card.image}`}
@@ -349,6 +349,9 @@ export default function ProjectPanoramasModal({
                                   className="object-fit-cover w-100 h-100 lb-inn-panoramas-modal__card-img"
                                   loading="lazy"
                                 />
+                                <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                                  <ZoomIn size={16} />
+                                </span>
                               </a>
                               <div className="card-body p-1 px-4">
                                 <h3 className="lb-inn-panoramas-modal__card-title m-0">{card.title}</h3>
