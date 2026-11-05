@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.188] - 2026-11-05
+
+### Fixed
+- `src/lib/projectUtils.js`: Corregido `ORIENTACION_LABELS` donde los códigos inmobiliarios chilenos de la API `'P'` y `'SP'` estaban asignados erróneamente a `'Patio'` y `'Sin Patio'`, mapeándolos a `'Poniente'` y `'Sur-Poniente'`. Mapeado también `O` a `'Oriente'`, `NP` a `'Nor-Poniente'`, `NO` a `'Nor-Oriente'`, `SO` a `'Sur-Oriente'`, `PSO` y `NS`.
+- `src/components/cotizador/BuscadorDepartamentos.jsx`: Deduplicadas las opciones de orientación para eliminar etiquetas redundantes y remover "Patio".
+- `src/components/proyecto/Cotizador.jsx`: Añadido matcher `matchTipologia` para que filtros como `'1D'` seleccionados en el buscador coincidan correctamente con plantas `'1D+1B'`.
+
+### Changed
+- `src/lib/projectUtils.js`: Nuevos helpers `formatPriceUF`, `formatMeters`, `formatNumber` y `formatPrograma` para garantizar que precios y superficies no se redondeen a enteros sino que se presenten como flotantes de hasta 2 decimales en formato chileno (`es-CL`).
+- `src/components/proyecto/Cotizador.jsx`: Reemplazado `Math.round()` por `formatMeters` y `formatPriceUF` en superficie útil, terraza, superficie total y precio. Formateada la tipología a "X dormitorio(s) + Y baño(s)" con distinción singular/plural y label a "Dormitorios y Baños".
+- `src/components/proyecto/RelatedProjects.jsx`: Reemplazado redondeo entero por `formatMeters` y `formatPriceUF`, y aplicada nomenclatura de dormitorios completa.
+- `src/pages/ProyectoDetalle.jsx`, `src/data/projects.js`, `src/data/content.js`: Actualizada nomenclatura de "dorm/dorms" a "dormitorio/dormitorios" singular y plural.
+
 ## [0.9.187] - 2026-10-28
 
 ### Changed

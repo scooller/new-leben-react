@@ -71,7 +71,7 @@ export const searchFilters = {
       id: 'tipo',
       label: 'Tipo',
       placeholder: 'Todos',
-      options: ['1-2 Dorms', '2-3 Dorms'],
+      options: ['1-2 Dormitorios', '2-3 Dormitorios'],
     },
     {
       id: 'precio',

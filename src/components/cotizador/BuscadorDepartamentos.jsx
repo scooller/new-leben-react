@@ -25,7 +25,7 @@ const DORMITORIOS_OPTIONS = [
 
 const ORIENTACIONES = [
   { value: '', label: 'Cualquier orientación' },
-  ...Object.entries(ORIENTACION_LABELS).map(([k, label]) => ({ value: label, label, code: k })),
+  ...[...new Set(Object.values(ORIENTACION_LABELS))].map((label) => ({ value: label, label })),
 ]
 
 export default function BuscadorDepartamentos({

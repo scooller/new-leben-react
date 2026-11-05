@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
 
 /**
  * Related projects table — fetches real plantas from API.
@@ -56,9 +56,9 @@ export default function RelatedProjects({ data, onCotizar }) {
             nombre: `Dpto. ${p.name}`,
             piso: p.piso,
             ubicacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion,
-            tipologia: p.programa,
-            superficie: `${Math.round(parseFloat(p.superficie_util) || 0)} m²`,
-            precio: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}`,
+            tipologia: formatPrograma(p.programa),
+            superficie: formatMeters(p.superficie_util),
+            precio: formatPriceUF(p.precio_lista),
             _planta: p,
           })))
       })()

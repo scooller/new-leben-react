@@ -26,6 +26,7 @@ import { WavesLadderIcon } from '../components/icons/waves-ladder.jsx'
 import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { apiFetch } from '../lib/apiFetch.js'
+import { formatPriceUF } from '../lib/projectUtils.js'
 import { getProjectBySlug } from '../data/projects.js'
 
 const base = import.meta.env.BASE_URL
@@ -94,7 +95,7 @@ const INN_TABS = [
 
 const INN_INFO = [
   { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991,<br /> Puerto Varas' },
-  { id: 'tipologias', label: 'Tipologías', value: 'Deptos de 2, 3 y 4 dorms, dúplex <br />y deptos con patio privado' },
+  { id: 'tipologias', label: 'Tipologías', value: 'Deptos de 2, 3 y 4 dormitorios, dúplex <br />y deptos con patio privado' },
   { id: 'metrajes', label: 'Metrajes', value: 'Desde 85 m²' },
   { id: 'precio', label: 'Precio desde', value: '—' },
   { id: 'estado', label: 'Estado del proyecto', value: 'Entrega futura' },
@@ -438,7 +439,7 @@ export default function ProyectoDetalle() {
   const infoList = useMemo(() => {
     const raw = projectContent?.technical_info?.length ? projectContent.technical_info : INN_INFO
     const precio = currentProject?.precio_desde
-      ? `UF ${Math.round(currentProject.precio_desde).toLocaleString('es-CL')}`
+      ? formatPriceUF(currentProject.precio_desde)
       : null
     if (!precio) return raw
     return raw.map((item) => (item.id === 'precio' ? { ...item, value: precio } : item))

@@ -4,6 +4,47 @@ const etapaLabel = (etapa) =>
   : /terminacion/.test(etapa) ? 'Próxima Entrega'
   : etapa
 
+/** Format number with Chilean locale and up to maxDecimals (default 2) */
+export function formatNumber(val, maxDecimals = 2) {
+  const num = typeof val === 'number' ? val : parseFloat(val)
+  if (num === null || num === undefined || isNaN(num)) return '0'
+  return num.toLocaleString('es-CL', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: maxDecimals,
+  })
+}
+
+/** Format UF price as 'UF 3.128,72' or 'UF 0' */
+export function formatPriceUF(val) {
+  const num = typeof val === 'number' ? val : parseFloat(val)
+  if (!num || isNaN(num)) return 'UF 0'
+  return `UF ${formatNumber(num, 2)}`
+}
+
+/** Format surface in m² with up to 2 decimal places */
+export function formatMeters(val) {
+  const num = typeof val === 'number' ? val : parseFloat(val)
+  if (!num || isNaN(num)) return '- m²'
+  return `${formatNumber(num, 2)} m²`
+}
+
+/** Format real estate programa (e.g. '1D+1B', '2D+2B', '3 dorm + 2 baño', '3D+3B Dup') */
+export function formatPrograma(str) {
+  if (!str) return '—'
+  let res = String(str).trim()
+  res = res.replace(/(\d+)\s*(?:dorms?|D\b)/gi, (_, count) => {
+    const n = parseInt(count, 10)
+    return n === 1 ? '1 dormitorio' : `${n} dormitorios`
+  })
+  res = res.replace(/(\d+)\s*(?:baños?|B\b)/gi, (_, count) => {
+    const n = parseInt(count, 10)
+    return n === 1 ? '1 baño' : `${n} baños`
+  })
+  res = res.replace(/\bdup\b/gi, 'Dúplex')
+  res = res.replace(/\s*\+\s*/g, ' + ')
+  return res
+}
+
 /** Collapse tipologías into grouped ranges: '2D - 3D - 4D' (only dorms) */
 export function tipologiaSummary(tipologias) {
   const dorms = new Set()
@@ -28,7 +69,7 @@ export function mapApiProject(p) {
   const tipologia = tipologiaSummary(p.tipologias)
   const minTip = valid.filter((t) => t.precio_desde).map((t) => t.precio_desde)
   const desde = minTip.length ? Math.min(...minTip) : p.precio_desde
-  const precioDesde = desde ? `UF ${Math.round(desde).toLocaleString('es-CL')}` : 'UF 0'
+  const precioDesde = desde ? formatPriceUF(desde) : 'UF 0'
   return {
     id: p.id,
     _raw: p,
@@ -44,10 +85,23 @@ export function mapApiProject(p) {
 }
 
 export const ORIENTACION_LABELS = {
-  N: 'Norte', S: 'Sur', E: 'Oriente', O: 'Poniente',
-  NE: 'Nor-Oriente', NO: 'Nor-Poniente',
-  SE: 'Sur-Oriente', SO: 'Sur-Poniente',
-  P: 'Patio', SP: 'Sin Patio',
+  N: 'Norte',
+  S: 'Sur',
+  O: 'Oriente',
+  P: 'Poniente',
+  E: 'Oriente',
+  NO: 'Nor-Oriente',
+  NE: 'Nor-Oriente',
+  NP: 'Nor-Poniente',
+  SO: 'Sur-Oriente',
+  SE: 'Sur-Oriente',
+  SP: 'Sur-Poniente',
+  NS: 'Norte-Sur',
+  PSO: 'Poniente-Sur-Oriente',
+  Norte: 'Norte',
+  Sur: 'Sur',
+  Oriente: 'Oriente',
+  Poniente: 'Poniente',
 }
 
 /** Group raw API projects by comuna → [{ zone, projects }] */

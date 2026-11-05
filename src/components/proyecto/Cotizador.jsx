@@ -8,7 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS, sortProjectsByCustomOrder } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, sortProjectsByCustomOrder, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -104,7 +104,7 @@ const DEFAULT_COTIZADOR_DATA = Object.freeze({
 const DEFAULT_EMPTY_DETAILS = [
   { icon: 'layers', label: 'Planta', value: '-' },
   { icon: 'expand', label: 'Superficie útil', value: '- m²' },
-  { icon: 'home', label: 'Dorm + Baño', value: '-' },
+  { icon: 'home', label: 'Dormitorios y Baños', value: '-' },
   { icon: 'compass', label: 'Orientación', value: '-' },
   { icon: 'sun', label: 'Terraza', value: '- m²' },
   { icon: 'maximize', label: 'Superficie total', value: '- m²' },
@@ -116,15 +116,15 @@ function plantaToDetails(p) {
   return {
     details: [
       { icon: 'layers', label: 'Planta', value: p.name || '—' },
-      { icon: 'expand', label: 'Superficie útil', value: `${Math.round(parseFloat(p.superficie_util) || 0)} m²` },
-      { icon: 'home', label: 'Dorm + Baño', value: p.programa || '—' },
+      { icon: 'expand', label: 'Superficie útil', value: formatMeters(p.superficie_util) },
+      { icon: 'home', label: 'Dormitorios y Baños', value: formatPrograma(p.programa) },
       { icon: 'compass', label: 'Orientación', value: ORIENTACION_LABELS[p.orientacion] || p.orientacion || '—' },
-      ...(p.superficie_terraza ? [{ icon: 'sun', label: 'Terraza', value: `${Math.round(parseFloat(p.superficie_terraza))} m²` }] : []),
-      ...(p.superficie_total_principal ? [{ icon: 'maximize', label: 'Superficie total', value: `${Math.round(parseFloat(p.superficie_total_principal))} m²` }] : []),
+      ...(p.superficie_terraza ? [{ icon: 'sun', label: 'Terraza', value: formatMeters(p.superficie_terraza) }] : []),
+      ...(p.superficie_total_principal ? [{ icon: 'maximize', label: 'Superficie total', value: formatMeters(p.superficie_total_principal) }] : []),
     ],
     pricing: {
       label: 'Precio',
-      price: `UF ${Math.round(parseFloat(p.precio_lista) || 0).toLocaleString('es-CL')}`,
+      price: formatPriceUF(p.precio_lista),
     },
     floorPlanImage: p.interior_image_url || null,
   }
@@ -233,6 +233,19 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
       </div>
     </div>
   )
+}
+
+/** Check if planta matches selected tipología (supports exact '1D+1B' and category '1D') */
+function matchTipologia(plantaPrograma, filterTipologia) {
+  if (!filterTipologia) return true
+  if (plantaPrograma === filterTipologia) return true
+  const mFilter = String(filterTipologia).match(/^(\d+)D/i)
+  if (mFilter) {
+    const mPlanta = (plantaPrograma || '').match(/^(\d+)D/i)
+    if (mPlanta && mPlanta[1] === mFilter[1]) return true
+    if (filterTipologia === '4D' && mPlanta && parseInt(mPlanta[1], 10) >= 4) return true
+  }
+  return false
 }
 
 /** Derive universal filters from a selection ({ planta?, project?, filters? }) */
@@ -419,14 +432,14 @@ export default function Cotizador({
         .filter((p) =>
           (!filters.comuna || p._comunaNorm === norm(filters.comuna)) &&
           (!filters.proyecto || norm(p.proyecto?.name) === norm(filters.proyecto)) &&
-          (!filters.tipologia || p.programa === filters.tipologia) &&
+          (!filters.tipologia || matchTipologia(p.programa, filters.tipologia)) &&
           (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion)
         )
         .sort((a, b) => (parseFloat(a.precio_lista) || Infinity) - (parseFloat(b.precio_lista) || Infinity))
     }
     return plantas
       .filter((p) =>
-        (!filters.tipologia || p.programa === filters.tipologia) &&
+        (!filters.tipologia || matchTipologia(p.programa, filters.tipologia)) &&
         (!filters.producto || p.tipo_producto === filters.producto) &&
         (!filters.piso || String(p.piso) === String(filters.piso)) &&
         (!filters.planta || p.name?.charAt(0) === filters.planta)

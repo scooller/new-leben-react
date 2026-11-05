@@ -30,7 +30,7 @@ export const projectDetails = {
     // --- Tabs (sticky bar) ---
     tabs: [
       { id: 'direccion', label: 'Dirección', value: 'Vicente Pérez Rosales 991, Puerto Varas' },
-      { id: 'tipologia', label: 'Tipología', value: '2-3-4 Dorms' },
+      { id: 'tipologia', label: 'Tipología', value: '2, 3 y 4 Dormitorios' },
       { id: 'metraje', label: 'Metraje', value: 'Desde 85 m²' },
       { id: 'precio', label: 'Precio desde', value: '—' },
       { id: 'estado', label: 'Estado', value: 'Venta en Verde' },
@@ -119,7 +119,7 @@ export const projectDetails = {
       details: [
         { icon: 'layers', label: 'Planta', value: '110' },
         { icon: 'expand', label: 'Superficie útil', value: '85,57 m²' },
-        { icon: 'home', label: 'Dorm + Baño', value: '3 dorm + 2 baño' },
+        { icon: 'home', label: 'Dormitorios y Baños', value: '3 dormitorios + 2 baños' },
         { icon: 'sun', label: 'Terraza', value: '15,45 m²' },
         { icon: 'compass', label: 'Orientación', value: 'O' },
         { icon: 'maximize', label: 'Superficie total', value: '150,08 m²' },
