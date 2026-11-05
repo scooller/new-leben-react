@@ -1,14 +1,14 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
-import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, Building2 } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
-import { ORIENTACION_LABELS, sortProjectsByCustomOrder, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
+import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, formatComuna, toArray, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
 import { MailIcon } from '../icons/mail.jsx'
@@ -113,6 +113,8 @@ const DEFAULT_EMPTY_DETAILS = [
 
 /** Build details + pricing from a single planta object */
 function plantaToDetails(p) {
+  // Prioridad: interior_image_url; cover_image_url SOLO si no existe interior
+  const floorPlanImage = p.interior_image_url || p.cover_image_url || p.imageUrl || null
   return {
     details: [
       { icon: 'layers', label: 'Planta', value: p.name || '—' },
@@ -124,9 +126,9 @@ function plantaToDetails(p) {
     ],
     pricing: {
       label: 'Precio',
-      price: formatPriceUF(p.precio_lista),
+      price: formatPriceUF(p.precio_final || p.precio_lista),
     },
-    floorPlanImage: p.interior_image_url || null,
+    floorPlanImage,
   }
 }
 
@@ -140,11 +142,30 @@ const ETAPA_RANK = {
 }
 const etapaRank = (etapa) => ETAPA_RANK[(etapa || '').trim().toLowerCase()] ?? 3
 
-const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '' })
+const EMPTY_FILTERS_UNIVERSAL = Object.freeze({ comuna: '', proyecto: '', tipologia: '', orientacion: '', precio: '' })
 const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso: '', planta: '' })
 
-// Module-level cache for plantas (keyed by baseUrl)
+// Ensure thumbnail and media URLs from API are full absolute URLs
+function toAbsoluteUrl(url, fallbackHostUrl) {
+  if (!url) return fallbackHostUrl || ''
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url
+  }
+  if (fallbackHostUrl && (fallbackHostUrl.startsWith('http://') || fallbackHostUrl.startsWith('https://'))) {
+    try {
+      const origin = new URL(fallbackHostUrl).origin
+      return `${origin}/${url.replace(/^\/+/, '')}`
+    } catch {
+      // ignore
+    }
+  }
+  return url
+}
+
+// Module-level cache for plantas, project galleries and brochures
 const plantasCache = new Map()
+const projectGalleryCache = new Map()
+const projectBrochureCache = new Map()
 
 /** Paginate through all available plantas from a base URL with parallel fetching */
 async function fetchPages(baseUrl) {
@@ -188,7 +209,7 @@ async function fetchPages(baseUrl) {
 }
 
 /** Dropdown filter component */
-function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
+function FilterDropdown({ label, placeholder, options = [], selected, isMulti = false, onSelect }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -199,6 +220,18 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   }, [])
 
   const defaultText = placeholder || label
+  const selectedList = toArray(selected)
+  const selectedText = isMulti
+    ? (selectedList.length === 0
+      ? ''
+      : selectedList.length === 1
+        ? selectedList[0]
+        : selectedList.length === 2 && selectedList.join(', ').length <= 22
+          ? selectedList.join(', ')
+          : `${selectedList.length} seleccionad${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}`)
+    : (selected || '')
+
+  const isChecked = (opt) => selectedList.some((s) => s.toLowerCase().trim() === opt.toLowerCase().trim())
 
   return (
     <div className="lb-proj-det-filter-group" ref={ref}>
@@ -208,10 +241,59 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
           type="button"
           className="btn btn-outline-dark btn-sm dropdown-toggle lb-proj-det-filter-btn"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
         >
-          {selected || defaultText}
+          {selectedText || defaultText}
         </button>
-        {open && (
+
+        {open && isMulti && (
+          <div
+            className="dropdown-menu show lb-proj-det-filter-menu p-2 shadow-sm"
+            style={{ maxHeight: '280px', overflowY: 'auto', minWidth: '190px', zIndex: 1050 }}
+          >
+            {selectedList.length > 0 && (
+              <div className="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom px-2">
+                <span className="small text-muted">{selectedList.length} elegid${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}</span>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm text-danger text-decoration-none p-0 small"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onSelect([])
+                  }}
+                >
+                  Limpiar
+                </button>
+              </div>
+            )}
+            {options.map((opt) => {
+              const checked = isChecked(opt)
+              return (
+                <label
+                  key={opt}
+                  className={`d-flex align-items-center gap-2 px-2 py-1 rounded cursor-pointer ${checked ? 'bg-light text-danger fw-semibold' : 'text-dark'}`}
+                  style={{ cursor: 'pointer', fontSize: '0.875rem' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="checkbox"
+                    className="form-check-input mt-0"
+                    checked={checked}
+                    onChange={() => {
+                      const next = checked
+                        ? selectedList.filter((s) => s.toLowerCase().trim() !== opt.toLowerCase().trim())
+                        : [...selectedList, opt]
+                      onSelect(next)
+                    }}
+                  />
+                  <span>{opt}</span>
+                </label>
+              )
+            })}
+          </div>
+        )}
+
+        {open && !isMulti && (
           <ul className="dropdown-menu show lb-proj-det-filter-menu">
             <li>
               <button className="dropdown-item" onClick={() => { onSelect(''); setOpen(false) }}>
@@ -235,19 +317,6 @@ function FilterDropdown({ label, placeholder, options, selected, onSelect }) {
   )
 }
 
-/** Check if planta matches selected tipología (supports exact '1D+1B' and category '1D') */
-function matchTipologia(plantaPrograma, filterTipologia) {
-  if (!filterTipologia) return true
-  if (plantaPrograma === filterTipologia) return true
-  const mFilter = String(filterTipologia).match(/^(\d+)D/i)
-  if (mFilter) {
-    const mPlanta = (plantaPrograma || '').match(/^(\d+)D/i)
-    if (mPlanta && mPlanta[1] === mFilter[1]) return true
-    if (filterTipologia === '4D' && mPlanta && parseInt(mPlanta[1], 10) >= 4) return true
-  }
-  return false
-}
-
 /** Derive universal filters from a selection ({ planta?, project?, filters? }) */
 function filtersFromSelection(selection) {
   if (!selection) return null
@@ -259,10 +328,11 @@ function filtersFromSelection(selection) {
       proyecto: p.proyecto?.name || '',
       tipologia: p.programa || '',
       orientacion: ORIENTACION_LABELS[p.orientacion] || p.orientacion || '',
+      precio: '',
     }
   }
   if (selection.project) {
-    return { comuna: selection.project.comuna || '', proyecto: selection.project.name || '', tipologia: '', orientacion: '' }
+    return { comuna: selection.project.comuna || '', proyecto: selection.project.name || '', tipologia: '', orientacion: '', precio: '' }
   }
   return null
 }
@@ -277,11 +347,15 @@ export default function Cotizador({
   onProjectChange,
   onReset,
   onModifySearch,
+  onFilterChange,
   className = '',
+  brochureUrl: propBrochureUrl,
 }) {
   const [activeData, setActiveData] = useState(() => data || DEFAULT_COTIZADOR_DATA)
   const [selected, setSelected] = useState(0)
   const [imgIndex, setImgIndex] = useState(0)
+  const [projectGallery, setProjectGallery] = useState([])
+  const [projectBrochure, setProjectBrochure] = useState(null)
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
@@ -330,7 +404,13 @@ export default function Cotizador({
 
   const selectFilter = (updater) => {
     setFiltering(true)
-    setFilters(updater)
+    setFilters((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (universal && onFilterChange) {
+        onFilterChange(next)
+      }
+      return next
+    })
   }
 
   // Lookup project etapa by name for smart ordering
@@ -341,7 +421,7 @@ export default function Cotizador({
   }, [projects])
 
   // Normalize string for reliable comparison across API objects
-  const norm = (s) => (s || '').trim().toLowerCase()
+  const norm = (s) => String(Array.isArray(s) ? (s[0] || '') : (s || '')).trim().toLowerCase()
 
   // Enrich + sort: actively-selling projects first (drives default display)
   const enrichedPlantas = useMemo(() =>
@@ -368,7 +448,9 @@ export default function Cotizador({
   // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
   useEffect(() => {
     if (!universal && !apiId) { setPlantas([]); return }
-    const universalHasFilter = !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion || selection?.filters)
+    const hasComuna = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna);
+    const hasTipologia = Array.isArray(filters.tipologia) ? filters.tipologia.length > 0 : Boolean(filters.tipologia);
+    const universalHasFilter = !!(hasComuna || filters.proyecto || hasTipologia || filters.orientacion || filters.precio || selection?.filters)
     if (universal && !universalHasFilter) { setPlantas([]); return }
 
     const url = universal
@@ -390,26 +472,37 @@ export default function Cotizador({
     }).finally(() => { if (!cancelled) setLoading(false) })
 
     return () => { cancelled = true }
-  }, [apiId, universal, filters.comuna, filters.proyecto, filters.tipologia, filters.orientacion, selection?.filters])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiId, universal, Array.isArray(filters.comuna) ? filters.comuna.join(',') : filters.comuna, filters.proyecto, Array.isArray(filters.tipologia) ? filters.tipologia.join(',') : filters.tipologia, filters.orientacion, filters.precio, selection?.filters])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
     if (universal) {
-      // Step 1: all comunas from projects (not just plantas — some projects have no available plantas)
-      const comuna = [...new Set((projects || []).map((p) => (p.comuna || '').trim()).filter(Boolean))].sort()
+      // Step 1: all comunas from projects (formatted in Title Case)
+      const comuna = [...new Set((projects || []).map((p) => formatComuna((p.comuna || '').trim())).filter(Boolean))].sort()
 
-      const afterComunaProjects = filters.comuna
-        ? (projects || []).filter((p) => norm(p.comuna) === norm(filters.comuna))
+      const hasComunaFilter = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna)
+      const afterComunaProjects = hasComunaFilter
+        ? (projects || []).filter((p) => matchComuna(p.comuna, filters.comuna))
         : (projects || [])
       const proyecto = sortProjectsByCustomOrder([...new Set(afterComunaProjects.map((p) => p.name).filter(Boolean))])
 
       // Step 3: tipologías + orientaciones filtered by selected proyecto (from plantas)
       const afterProyecto = filters.proyecto
         ? enrichedPlantas.filter((p) => norm(p.proyecto?.name) === norm(filters.proyecto))
-        : (filters.comuna
-          ? enrichedPlantas.filter((p) => p._comunaNorm === norm(filters.comuna))
+        : (hasComunaFilter
+          ? enrichedPlantas.filter((p) => matchComuna(p.proyecto?.comuna, filters.comuna))
           : enrichedPlantas)
-      const tipologia = [...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort()
+      const progs = afterProyecto.flatMap((p) => [p.programa, p.programa_detalle]).filter(Boolean).map((s) => s.toUpperCase())
+      const tipologia = []
+      if (progs.some((p) => p.includes('STUDIO') || p.includes('ESTUDIO'))) tipologia.push('Studio')
+      if (progs.some((p) => /^1\s*D/i.test(p))) tipologia.push('1 Dorm')
+      if (progs.some((p) => /^2\s*D/i.test(p))) tipologia.push('2 Dorm')
+      if (progs.some((p) => /^3\s*D/i.test(p))) tipologia.push('3 Dorm')
+      if (progs.some((p) => /^[4-9]\s*D/i.test(p))) tipologia.push('4+ Dorm')
+      if (tipologia.length === 0) {
+        tipologia.push(...[...new Set(afterProyecto.map((p) => p.programa).filter(Boolean))].sort())
+      }
       const orientacion = [...new Set(
         afterProyecto.map((p) => p.orientacion).filter(Boolean)
           .map((code) => ORIENTACION_LABELS[code] || code)
@@ -430,10 +523,11 @@ export default function Cotizador({
     if (universal) {
       return enrichedPlantas
         .filter((p) =>
-          (!filters.comuna || p._comunaNorm === norm(filters.comuna)) &&
+          (!filters.comuna || matchComuna(p.proyecto?.comuna, filters.comuna)) &&
           (!filters.proyecto || norm(p.proyecto?.name) === norm(filters.proyecto)) &&
           (!filters.tipologia || matchTipologia(p.programa, filters.tipologia)) &&
-          (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion)
+          (!filters.orientacion || (ORIENTACION_LABELS[p.orientacion] || p.orientacion) === filters.orientacion) &&
+          (!filters.precio || matchPrecio(p.precio_lista, filters.precio))
         )
         .sort((a, b) => (parseFloat(a.precio_lista) || Infinity) - (parseFloat(b.precio_lista) || Infinity))
     }
@@ -452,7 +546,7 @@ export default function Cotizador({
 
   // Whether any filter is currently applied
   const hasFilters = universal
-    ? !!(filters.comuna || filters.proyecto || filters.tipologia || filters.orientacion)
+    ? !!((Array.isArray(filters.comuna) ? filters.comuna.length : filters.comuna) || filters.proyecto || (Array.isArray(filters.tipologia) ? filters.tipologia.length : filters.tipologia) || filters.orientacion || filters.precio)
     : !!(filters.tipologia || filters.producto || filters.piso || filters.planta)
 
   // Universal mode: notify parent when the active project changes
@@ -501,14 +595,62 @@ export default function Cotizador({
   // where the empty-state message renders right away (no skeleton flash)
   const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
 
-  // Detectar si el proyecto filtrado corresponde a Edificio Inn
-  const isInn = Boolean(
-    (filters.proyecto && norm(filters.proyecto).includes('inn')) ||
-    (activeProject && norm(activeProject.name).includes('inn')) ||
-    apiId === 1 ||
-    apiId === 'inn' ||
-    urlParams.slug === 'inn'
-  )
+  // Current project key (id or slug) to load project gallery and brochure
+  const currentProjectKey = useMemo(() => {
+    return activePlanta?.proyecto?.slug || activePlanta?.proyecto?.id || activeProject?.slug || activeProject?.id || apiId || urlParams.slug || null
+  }, [activePlanta, activeProject, apiId, urlParams.slug])
+
+  // Fetch project gallery
+  useEffect(() => {
+    if (!currentProjectKey) {
+      setProjectGallery([])
+      return
+    }
+
+    if (projectGalleryCache.has(currentProjectKey)) {
+      setProjectGallery(projectGalleryCache.get(currentProjectKey))
+      return
+    }
+
+    let cancelled = false
+    apiFetch(`/api/v1/proyectos/${currentProjectKey}/gallery`).then(({ data, error }) => {
+      if (cancelled || error) return
+      const list = Array.isArray(data?.gallery) ? data.gallery : (Array.isArray(data?.galleries) ? data.galleries : [])
+      projectGalleryCache.set(currentProjectKey, list)
+      setProjectGallery(list)
+    }).catch(() => {})
+
+    return () => { cancelled = true }
+  }, [currentProjectKey])
+
+  // Fetch or resolve brochure
+  useEffect(() => {
+    if (propBrochureUrl) return
+    if (!currentProjectKey) {
+      setProjectBrochure(null)
+      return
+    }
+    if (activeProject?.brochure_pdf_url || activeProject?.brochure_url) {
+      setProjectBrochure(activeProject.brochure_pdf_url || activeProject.brochure_url)
+      return
+    }
+    if (projectBrochureCache.has(currentProjectKey)) {
+      setProjectBrochure(projectBrochureCache.get(currentProjectKey))
+      return
+    }
+
+    let cancelled = false
+    apiFetch(`/api/v1/proyectos/${currentProjectKey}/content`).then(({ data, error }) => {
+      if (cancelled || error || !data) return
+      const url = data.brochure_pdf_url || data.brochure_url || null
+      if (url) {
+        projectBrochureCache.set(currentProjectKey, url)
+        setProjectBrochure(url)
+      }
+    }).catch(() => {})
+
+    return () => { cancelled = true }
+  }, [currentProjectKey, propBrochureUrl, activeProject])
 
   // Active details: from filtered planta if available, else placeholder '-'
   const displayData = useMemo(() => {
@@ -536,37 +678,60 @@ export default function Cotizador({
       }
     }
     const enriched = plantaToDetails(planta)
-    const thumbnails = enriched.floorPlanImage
-      ? [enriched.floorPlanImage, ...safeActiveData.floorPlan.thumbnails]
-      : safeActiveData.floorPlan.thumbnails
     return {
       ...safeActiveData,
       details: enriched.details,
       pricing: { ...safeActiveData.pricing, ...enriched.pricing },
-      floorPlan: { ...safeActiveData.floorPlan, thumbnails },
+      floorPlan: { ...safeActiveData.floorPlan, image: enriched.floorPlanImage || PLACEHOLDER_FLOORPLAN },
     }
   }, [safeActiveData, apiId, plantas, filteredPlantas, selected, universal])
 
-  // Mockup brochure para Edificio Inn o desde displayData
-  const brochureUrl = displayData.brochureUrl || (isInn ? `${import.meta.env.BASE_URL}images/inn/Brochure_Digital_2026.pdf` : null)
+  // Real brochure from prop, displayData, activeProject or fetched from API
+  const brochureUrl = propBrochureUrl || displayData.brochureUrl || projectBrochure || null
+  const brochureDownloadName = useMemo(() => {
+    const projectName = activePlanta?.proyecto?.name || activeProject?.name || 'Proyecto'
+    return `${projectName.replace(/[^a-zA-Z0-9_-]/g, '_')}_Brochure.pdf`
+  }, [activePlanta, activeProject])
 
-  // Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto
-  const visibleThumbs = useMemo(() => {
-    const allThumbs = displayData.floorPlan?.thumbnails || []
-    if (isInn && allThumbs.length > 1) {
-      return allThumbs.slice(1).map((src, idx) => ({ src, originalIndex: idx + 1 }))
+  // Compose unified gallery items: unit floor plan first, then interior render (if distinct), then project gallery
+  const galleryItems = useMemo(() => {
+    const items = []
+    if (activePlanta) {
+      // Prioridad: imagen interior; portada SOLO si no existe interior
+      const planSrc = activePlanta.interior_image_url || activePlanta.cover_image_url || activePlanta.imageUrl || null
+      if (planSrc) {
+        items.push({
+          src: planSrc,
+          thumb: planSrc,
+          alt: `Planta ${activePlanta.name || ''}`.trim(),
+          title: `Planta ${activePlanta.name || ''}`.trim(),
+        })
+      }
     }
-    return allThumbs.map((src, idx) => ({ src, originalIndex: idx }))
-  }, [isInn, displayData.floorPlan?.thumbnails])
 
-  // Mockup de prueba: para Edificio Inn seleccionar el segundo thumb por defecto
+    if (Array.isArray(projectGallery) && projectGallery.length > 0) {
+      projectGallery.forEach((g) => {
+        const src = g.url || g.image_url
+        const rawThumb = g.thumbnail_url || src
+        const thumb = toAbsoluteUrl(rawThumb, src)
+        if (src && !items.some((it) => it.src === src)) {
+          items.push({
+            src,
+            thumb: thumb || src,
+            alt: g.alt || g.title || 'Galería del proyecto',
+            title: g.title || g.alt || '',
+          })
+        }
+      })
+    }
+
+    return items
+  }, [activePlanta, projectGallery])
+
+  // Reset image index to 0 when planta or project changes
   useEffect(() => {
-    if (isInn && displayData.floorPlan?.thumbnails?.length > 1) {
-      setImgIndex(1)
-    } else {
-      setImgIndex(0)
-    }
-  }, [isInn, selected, displayData.floorPlan?.thumbnails?.length])
+    setImgIndex(0)
+  }, [selected, currentProjectKey])
 
   // Resolve selected index from URL planta ID or external selection once filteredPlantas load
   useEffect(() => {
@@ -577,7 +742,7 @@ export default function Cotizador({
       : 0
     const valid = idx >= 0 ? idx : 0
     setSelected(valid)
-    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
+    setImgIndex(0)
     if (urlPlantaId != null || urlParams.slug) {
       const planta = filteredPlantas.find((p) => p.id === urlPlantaId)
       if (planta) {
@@ -589,7 +754,7 @@ export default function Cotizador({
         })
       }
     }
-  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [filteredPlantas, urlPlantaId, urlParams.slug, selection?.planta?.id])
 
   // Update URL when selection changes — only if user navigated to a specific planta or has filters
   useEffect(() => {
@@ -618,15 +783,13 @@ export default function Cotizador({
   const openGallery = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    const thumbsToUse = isInn && displayData.floorPlan.thumbnails?.length > 1
-      ? displayData.floorPlan.thumbnails.slice(1)
-      : displayData.floorPlan.thumbnails
-    const images = (thumbsToUse && thumbsToUse.length ? thumbsToUse : [mainImage])
-      .filter(Boolean)
-      .map((src) => ({ src, type: 'image' }))
+    const images = (galleryItems.length > 0
+      ? galleryItems.map((it) => ({ src: it.src, thumb: it.thumb, caption: it.title || it.alt, type: 'image' }))
+      : [{ src: mainImage, type: 'image' }]
+    ).filter((it) => Boolean(it.src))
     if (!images.length) return
-    const targetIdx = isInn && imgIndex > 0 ? imgIndex - 1 : imgIndex
-    Fancybox.show(images, { startIndex: Math.max(0, Math.min(targetIdx, images.length - 1)) })
+    const targetIdx = Math.max(0, Math.min(imgIndex, images.length - 1))
+    Fancybox.show(images, { startIndex: targetIdx })
   }
 
   // Navigate between plantas — show loading effect until the new image loads
@@ -635,7 +798,7 @@ export default function Cotizador({
     if (next === selected || switching) return
     setSwitching(true)
     setSelected(next)
-    setImgIndex(isInn && displayData.floorPlan?.thumbnails?.length > 1 ? 1 : 0)
+    setImgIndex(0)
   }
 
   // Safety: never get stuck in loading state (cached or failed images)
@@ -645,7 +808,8 @@ export default function Cotizador({
     return () => clearTimeout(t)
   }, [switching, selected])
 
-  const mainImage = displayData.floorPlan?.thumbnails?.[imgIndex] ?? displayData.floorPlan?.image ?? PLACEHOLDER_FLOORPLAN
+  const activeGalleryItem = galleryItems[imgIndex] || galleryItems[0]
+  const mainImage = activeGalleryItem?.src || PLACEHOLDER_FLOORPLAN
 
   const content = (
     <div className="container g-4">
@@ -676,7 +840,8 @@ export default function Cotizador({
                       placeholder="Todas las comunas"
                       options={filterOptions.comuna}
                       selected={filters.comuna}
-                      onSelect={(v) => selectFilter({ comuna: v, proyecto: '', tipologia: '', orientacion: '' })}
+                      isMulti
+                      onSelect={(v) => selectFilter((f) => ({ ...f, comuna: v, proyecto: '' }))}
                     />
                     <FilterDropdown
                       label="Proyecto"
@@ -690,6 +855,7 @@ export default function Cotizador({
                       placeholder="Todas las tipologías"
                       options={filterOptions.tipologia}
                       selected={filters.tipologia}
+                      isMulti
                       onSelect={(v) => selectFilter((f) => ({ ...f, tipologia: v }))}
                     />
                     <FilterDropdown
@@ -778,7 +944,7 @@ export default function Cotizador({
           {showSkeleton ? (
             <div className="lb-skeleton lb-proj-det-cot-skeleton w-100" />
           ) : (
-            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'pointer' : 'default' }} role="button" tabIndex={0}>
+            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'zoom-in' : 'default' }} role="button" tabIndex={0}>
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
                 src={mainImage || PLACEHOLDER_FLOORPLAN}
@@ -788,6 +954,11 @@ export default function Cotizador({
                 loading="lazy"
                 decoding="async"
               />
+              {mainImage && (
+                <span className="lb-img-zoom-badge" aria-label="Ampliar imagen" title="Ampliar imagen">
+                  <ZoomIn size={16} />
+                </span>
+              )}
             </div>
           )}
           {filteredPlantas.length > 1 && (<>
@@ -813,6 +984,22 @@ export default function Cotizador({
         {/* Details grid */}
         <div className="col-lg-3 lb-proj-det-cot-details">
           <ScrollAnim as="div" className="lb-proj-det-cot-detail-grid">
+            {universal && (
+              <div
+                className="lb-proj-det-cot-detail-item lb-proj-det-cot-detail-item--project d-flex align-items-center gap-2"
+                style={{ gridColumn: '1 / -1' }}
+              >
+                <span className="lb-proj-det-cot-detail-icon" data-icon="building">
+                  <Building2 size={24} />
+                </span>
+                <div className="d-flex flex-column">
+                  <span className="lb-proj-det-cot-detail-label">Proyecto</span>
+                  <span className="lb-proj-det-cot-detail-value">
+                    {activePlanta?.proyecto?.name || activeProject?.name || (Array.isArray(filters.proyecto) ? filters.proyecto[0] : filters.proyecto) || '—'}
+                  </span>
+                </div>
+              </div>
+            )}
             {(displayData.details?.length ? displayData.details : DEFAULT_EMPTY_DETAILS).map((d) => (
               <div key={d.label} className="lb-proj-det-cot-detail-item d-flex align-items-center gap-2">
                 <span className="lb-proj-det-cot-detail-icon" data-icon={d.icon}>
@@ -855,14 +1042,16 @@ export default function Cotizador({
             </ActionButton>
           </div>
           <div className="lb-proj-det-cot-thumbs d-flex gap-2 flex-wrap justify-content-center justify-content-md-end">
-            {/* Mockup de prueba: para Edificio Inn se oculta el primer thumb y se selecciona el siguiente por defecto */}
-            {visibleThumbs.map(({ src, originalIndex }, i) => (
+            {galleryItems.map((item, idx) => (
               <button
-                key={originalIndex}
-                className={`lb-proj-det-cot-thumb${imgIndex === originalIndex ? ' lb-proj-det-cot-thumb--active' : ''}`}
-                onClick={() => setImgIndex(originalIndex)}
+                key={idx}
+                type="button"
+                className={`lb-proj-det-cot-thumb${imgIndex === idx ? ' lb-proj-det-cot-thumb--active' : ''}`}
+                onClick={() => setImgIndex(idx)}
+                aria-label={item.title || item.alt || `Imagen ${idx + 1}`}
+                title={item.title || item.alt || `Imagen ${idx + 1}`}
               >
-                <img src={src} alt={`Planta ${i + 1}`} width="64" height="64" loading="lazy" />
+                <img src={item.thumb || item.src} alt={item.alt || `Miniatura ${idx + 1}`} width="64" height="64" loading="lazy" />
               </button>
             ))}
           </div>
@@ -874,7 +1063,7 @@ export default function Cotizador({
               icon={DownloadIcon}
               href={brochureUrl || undefined}
               target={brochureUrl ? '_blank' : undefined}
-              download={brochureUrl ? 'Brochure_Digital_2026.pdf' : undefined}
+              download={brochureUrl ? brochureDownloadName : undefined}
               disabled={!brochureUrl}
             >
               Descargar Brochure
@@ -920,7 +1109,11 @@ export default function Cotizador({
       <CotizadorForm
         show={showCotizar}
         onClose={() => setShowCotizar(false)}
-        thumbnails={displayData.floorPlan.thumbnails}
+        planImage={mainImage}
+        thumbnails={galleryItems.map((it) => it.thumb || it.src)}
+        initialSelected={imgIndex}
+        plantaName={activePlanta?.name || displayData.title || ''}
+        projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}
       />
 
       {showShare && createPortal(

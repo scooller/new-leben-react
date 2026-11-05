@@ -5,18 +5,158 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.9.188] - 2026-11-05
+## [0.9.205] - 2026-11-05
 
 ### Fixed
 - `src/lib/projectUtils.js`: Corregido `ORIENTACION_LABELS` donde los códigos inmobiliarios chilenos de la API `'P'` y `'SP'` estaban asignados erróneamente a `'Patio'` y `'Sin Patio'`, mapeándolos a `'Poniente'` y `'Sur-Poniente'`. Mapeado también `O` a `'Oriente'`, `NP` a `'Nor-Poniente'`, `NO` a `'Nor-Oriente'`, `SO` a `'Sur-Oriente'`, `PSO` y `NS`.
-- `src/components/cotizador/BuscadorDepartamentos.jsx`: Deduplicadas las opciones de orientación para eliminar etiquetas redundantes y remover "Patio".
-- `src/components/proyecto/Cotizador.jsx`: Añadido matcher `matchTipologia` para que filtros como `'1D'` seleccionados en el buscador coincidan correctamente con plantas `'1D+1B'`.
+- `src/components/cotizador/BuscadorDepartamentos.jsx`: Deduplicadas las opciones de orientación para eliminar redundancias y remover "Patio".
 
 ### Changed
 - `src/lib/projectUtils.js`: Nuevos helpers `formatPriceUF`, `formatMeters`, `formatNumber` y `formatPrograma` para garantizar que precios y superficies no se redondeen a enteros sino que se presenten como flotantes de hasta 2 decimales en formato chileno (`es-CL`).
-- `src/components/proyecto/Cotizador.jsx`: Reemplazado `Math.round()` por `formatMeters` y `formatPriceUF` en superficie útil, terraza, superficie total y precio. Formateada la tipología a "X dormitorio(s) + Y baño(s)" con distinción singular/plural y label a "Dormitorios y Baños".
+- `src/components/proyecto/Cotizador.jsx`: Reemplazado `Math.round()` por `formatMeters` y `formatPriceUF` en superficie útil, terraza, superficie total y precio (`precio_final || precio_lista`). Formateada la tipología a "X dormitorio(s) + Y baño(s)" con distinción singular/plural y label a "Dormitorios y Baños".
 - `src/components/proyecto/RelatedProjects.jsx`: Reemplazado redondeo entero por `formatMeters` y `formatPriceUF`, y aplicada nomenclatura de dormitorios completa.
-- `src/pages/ProyectoDetalle.jsx`, `src/data/projects.js`, `src/data/content.js`: Actualizada nomenclatura de "dorm/dorms" a "dormitorio/dormitorios" singular y plural.
+- `src/pages/ProyectoDetalle.jsx`, `src/data/projects.js`, `src/data/content.js`: Actualizada nomenclatura de "dorm/dorms" a "dormitorio/dormitorios" singular y plural, y precio en barra técnica con hasta 2 decimales.
+
+## [0.9.204] - 2026-11-04
+
+### Added
+- `ProjectFeatureSection.jsx`: botones prev y next de navegación (`.lb-proj-det-gallery-arrow`) replicando el diseño circular con blur y hover rojo del cotizador en todos los carruseles de proyectos (fachadas, equipamiento y espacios).
+- `ProyectoDetalle.jsx`: aplicado diseño `.lb-proj-det-gallery-arrow` a los controles prev y next de `ProjectGalleryCarousel`.
+
+## [0.9.203] - 2026-11-04
+
+### Changed
+- `Cotizador.jsx`: ajustada prioridad de imagen de planta en el cotizador para mostrar exclusivamente la imagen interior (`interior_image_url`), utilizando la portada (`cover_image_url` / `imageUrl`) únicamente como fallback si no existe imagen interior.
+
+## [0.9.202] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: función `toAbsoluteUrl` para asegurar que las URLs de miniaturas y multimedia provenientes de la API se resuelvan como URLs absolutas completas sin importar el dominio o puerto del frontend.
+- `ProjectTeamAgents.jsx`: soporte completo para `resolved_avatar_url` de los asesores con fallback seguro ante imágenes rotas (`onError`).
+
+### Fixed
+- `back-ileben`: `Proyecto.php`, `ProjectGallery.php`, `ProjectDetailResource.php` y `EnrichesPlantPayload.php` actualizados para emitir `thumbnail_url` absolutos (`url(...)`) y asegurar que los avatares manuales de Curator en `Asesor` (`resolved_avatar_url`) se entreguen en los endpoints de proyectos y contenido web.
+
+## [0.9.201] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: integración de la galería real del proyecto vía `/api/v1/proyectos/{id}/gallery` unificada junto a la planta arquitectónica (índice 0 = planta/render, índices 1..N = fotos de galería).
+- `Cotizador.jsx`: resolución dinámica del Brochure PDF por proyecto desde la API (`/api/v1/proyectos/{slug}/content` o `activeProject.brochure_pdf_url`), con nombre de archivo de descarga dinámico según el proyecto.
+- `Cotizador.jsx`: módulo de caché en memoria (`projectGalleryCache` y `projectBrochureCache`) para transiciones instantáneas entre proyectos.
+
+### Changed
+- `apiFetch.js`: soporte automático para respuestas JSON donde el payload no está envuelto en una clave `data` (ej. `/gallery`), retornando el payload completo sin fallar a `undefined`.
+- `Cotizador.jsx`: eliminados todos los mockups y excepciones hardcodeadas para Edificio INN (`isInn`, `Brochure_Digital_2026.pdf`, corte `slice(1)` de miniaturas, índice inicial forzado a 1).
+- `ProyectoDetalle.jsx`: paso directo de `brochureUrl` al componente `Cotizador`.
+
+## [0.9.200] - 2026-11-04
+
+### Added
+- `CotizadorForm.jsx`: sincronización de la imagen exacta de la planta seleccionada (`mainImage`), con fallback automático al placeholder `/images/placeholder-floorplan.svg` y selector rápido adaptativo.
+- `CotizadorForm.jsx`: campo RUT con formateo dinámico y validador chileno (módulo 11) mediante `validateRut` y `formatRut` de `chileUtils.js`.
+- `Cotizador.jsx`: en cotizador universal, se despliega el nombre del proyecto activo en una fila completa superior dentro de `.lb-proj-det-cot-detail-grid` (`grid-column: 1 / -1`), ubicando planta, superficie y demás detalles ordenadamente debajo.
+
+### Changed
+- `_proyecto-detalle.scss`: soporte de diseño para `.lb-proj-det-cot-detail-item--project` ocupando el ancho completo de la grilla de detalles.
+
+## [0.9.199] - 2026-11-04
+
+### Added
+- Función `getDynamicPriceRanges(projects)` en `src/lib/projectUtils.js` que deriva rangos de precios UF dinámicamente según los proyectos reales en base de datos.
+- Soporte en `matchPrecio` para rangos de renta líquida (CLP) y UF con equivalencia de dividendo/capacidad hipotecaria.
+
+### Changed
+- `Diferenciadores.jsx`: opciones de `Precio UF` cargadas dinámicamente desde `/api/v1/proyectos` usando `getDynamicPriceRanges`.
+- `ProjectsCatalog.jsx`: estandarizado cálculo de rangos de precios usando `getDynamicPriceRanges(rawProjects)`.
+
+## [0.9.198] - 2026-11-04
+
+### Added
+- Animación interactiva de filtrado con `motion/react` (`AnimatePresence` y `motion.div` con transición `scale` y `fade out`) al filtrar proyectos en `ProjectsCatalog.jsx`.
+
+### Changed
+- `ProjectsCatalog.jsx`: botón "Resetear filtros" reubicado al interior de la barra de filtros (`.lb-filter-bar`), alineado a la derecha mediante `ms-auto`.
+- `CotizadorGeneral.jsx`: conectado callback `onReset` en `ProjectsCatalog` para restablecer filtros globales y categoría.
+
+## [0.9.197] - 2026-11-04
+
+### Added
+- Sincronización del filtro de categoría/intención ("Para vivir", "Para inversión", "Entrega inmediata", "En construcción") entre `BuscadorDepartamentos` y el catálogo inferior `ProjectsCatalog` en la página del cotizador (`CotizadorGeneral.jsx`).
+- Función utilitaria `filterProjectsByCategory` en `projectUtils.js` para filtrar proyectos según intención (etapas de entrega inmediata/construcción o tipologías orientadas a inversión/vivienda).
+- Parámetro `category` soportado en `ProjectsCatalog.jsx` para filtrar el listado visual de proyectos por pestaña seleccionada.
+
+## [0.9.196] - 2026-11-04
+
+### Added
+- `Cotizador.jsx`: Soporte multiselect interactivo con checkboxes en `FilterDropdown` para los dropdowns de Comuna y Tipología, permitiendo marcar/desmarcar opciones sin cerrar el menú.
+- Botón "Limpiar" y contador de opciones elegidas dentro de cada menú desplegable multiselect en el cotizador.
+- `formatComuna` exportada desde `projectUtils.js` para estandarizar comunas en Title Case tanto en Home como en Cotizador.
+- Opciones de tipología en `Cotizador.jsx` agrupadas consistentemente con el Home (`Studio`, `1 Dorm`, `2 Dorm`, `3 Dorm`, `4+ Dorm`).
+
+## [0.9.195] - 2026-11-04
+
+### Fixed
+- `Cotizador.jsx`: Corrección de `TypeError: (b || "").trim is not a function` cuando `filters.comuna` o `filters.tipologia` son arrays (multiselect).
+- Normalización en `norm()` y uso de `matchComuna()` en el cálculo de `filterOptions` y `afterComunaProjects` en lugar de llamadas directas a `.trim()` sobre arrays.
+- Adaptación de `FilterDropdown` para renderizar correctamente etiquetas cuando `selected` es un array.
+
+## [0.9.194] - 2026-11-04
+
+### Added
+- Filtros multiselect de Ubicación y Tipo en el Home (`Diferenciadores.jsx`) con componente flotante `MultiselectPill`, checkboxes individuales, conteo dinámico y botón de limpieza.
+- Opciones dinámicas de tipos sincronizadas con el backend (`Studio`, `1 Dorm`, `2 Dorm`, `3 Dorm`, `4+ Dorm`) y comunas dinámicas en Title Case derivadas de `/api/v1/proyectos`.
+- Soporte para arrays y múltiples valores en `matchComuna`, `matchTipologia` y `toArray` en `projectUtils.js`.
+- Acciones `toggleFilterItem` y `clearFilterField` en `filterSlice.js` para manejo multiselección.
+
+### Changed
+- `CotizadorGeneral.jsx`, `Cotizador.jsx` y `ProjectsCatalog.jsx`: adaptados para evaluar filtros múltiples (arrays o listas separadas por coma en URL) en tipologías y comunas.
+- `BuscadorDepartamentos.jsx`: extracción del primer valor cuando recibe filtros en formato array.
+
+## [0.9.193] - 2026-11-04
+
+### Added
+- Sincronización global del filtro de búsqueda entre la página de inicio (`Diferenciadores.jsx`) y el cotizador (`CotizadorGeneral.jsx`, `BuscadorDepartamentos.jsx`, `Cotizador.jsx`) mediante nuevo slice de Redux Toolkit (`filterSlice.js`).
+- Funciones utilitarias `matchTipologia` y `matchPrecio` en `projectUtils.js` para matching flexible de tipologías (rangos, distribución "1D", "2D") y rangos de precio UF ("Hasta 3.000 UF", "3.000-6.000 UF", "6.000+ UF").
+
+### Changed
+- `Diferenciadores.jsx`: Opciones de ubicación cargadas dinámicamente desde API (`/api/v1/proyectos`), valores vinculados a Redux y navegación directa al cotizador (`/cotizador?...`) sin saltar al catálogo inferior.
+- `CotizadorGeneral.jsx`: Detección automática de filtros desde Redux y query params de URL, activación directa del Cotizador con departamentos filtrados sin requerir filtrar nuevamente, y preservación de criterios en `BuscadorDepartamentos` al modificar búsqueda.
+- `Cotizador.jsx`: Integración de filtros por tipología y precio con `matchTipologia` y `matchPrecio`, y notificación de cambios de filtro (`onFilterChange`) para mantener sincronía bidireccional.
+
+## [0.9.192] - 2026-11-03
+
+### Fixed
+- Corrección de prefijo erróneo de URL base (`/https://...`) en videos de `VideoTextSection` y `ProjectFeatureSection`: ahora se detectan URLs absolutas (`http://`, `https://`, `data:`, `blob:`) y rutas ya prefijadas evitando anteponer `BASE_URL`.
+- Soporte para URLs absolutas y remotas de Curator en imágenes de fondo de `ProjectFeatureSection` e `InteriorismoSection`.
+
+## [0.9.191] - 2026-11-03
+
+### Added
+- Badge de zoom visual (`.lb-img-zoom-badge` con `ZoomIn`) y cursor interactivo `zoom-in` en todas las instancias de Fancybox restantes:
+  - Sección de Espacios Comunes y Equipamiento (`ProjectFeatureSection.jsx`): tanto en las diapositivas del carrusel como en la vista principal del modal de espacios (`inn-espacios`).
+  - Modal de panoramas del entorno (`ProjectPanoramasModal.jsx`): en las tarjetas de panoramas por categoría (`panoramas-*`).
+  - Visor de recorridos virtuales (`Recorridos360.jsx`): en las vistas de planos y vistas maestras cuando son imágenes (`recorridos-360`).
+
+## [0.9.190] - 2026-11-03
+
+### Added
+- Badge indicador de zoom visual estilo Apple HIG (`.lb-img-zoom-badge`) fijo en la esquina superior derecha de imágenes ampliables (planta en cotizador y tarjetas de galería).
+- Indicador con icono `ZoomIn` y material translúcido con desenfoque (`backdrop-filter`) visible estáticamente para comunicar affordance de clic/zoom antes de interactuar.
+- Cursor interactivo `zoom-in` nativo en los contenedores de imagen ampliables (`.lb-img-trigger`).
+
+## [0.9.189] - 2026-11-02
+
+### Fixed
+- Deshabilitado el caché de `sessionStorage` en `apiFetch` durante desarrollo (`!import.meta.env.DEV`), permitiendo ver actualizaciones del backend en tiempo real sin esperar 5 minutos de TTL.
+- Expuesta función global `window.clearApiCache()` en consola para purga instantánea manual del caché de sesión si existieran entradas previas.
+
+## [0.9.188] - 2026-11-02
+
+### Changed
+- `ProyectoDetalle.jsx`: Los proyectos (incluyendo INN) se consumen 100% desde los endpoints de backend (`/api/v1/proyectos` y `/api/v1/proyectos/:slug/content`) como única fuente de verdad.
+- `ProyectoDetalle.jsx`: Eliminados todos los fallbacks estáticos de INN (`INN_TABS`, `INN_THEME`, `INN_SLIDES`, etc.). Barra de navegación desktop/mobile (`projectTabs`) y renderizado de secciones generados dinámicamente según contenido retornado por la API.
+- `src/data/projects.js`: Marcado como deprecated, eliminados datos mock comentados y dependencias huérfanas.
+- `src/components/proyecto/ProjectPanoramasModal.jsx`: Eliminada variable redundante `base` a nivel de módulo para cumplir con ESLint.
 
 ## [0.9.187] - 2026-10-28
 
