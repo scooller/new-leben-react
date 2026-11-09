@@ -5,12 +5,24 @@ import Footer from '../components/layout/Footer.jsx'
 import NotFound from './NotFound.jsx'
 import TrabajaForm from '../components/TrabajaForm.jsx'
 import { staticPages, slugAliases } from '../data/staticPages.js'
+import { useSeo } from '../hooks/useSeo.js'
 
 export default function StaticPage({ slug: propSlug }) {
   const { slug: routeSlug } = useParams()
   const rawSlug = propSlug || routeSlug
   const resolvedSlug = slugAliases[rawSlug] || rawSlug
   const page = staticPages[resolvedSlug]
+
+  const firstParagraph = page?.paragraphs?.[0] ? page.paragraphs[0].replace(/<[^>]*>?/gm, '') : ''
+  const pageTitle = page?.title ? `${page.title}${page.subtitle ? ` — ${page.subtitle}` : ''}` : undefined
+
+  useSeo({
+    title: pageTitle,
+    description: firstParagraph || page?.subtitle || 'Leben Grupo Inmobiliario',
+    canonical: `/${resolvedSlug}`,
+    ogImage: page?.heroImage ? (page.heroImage.startsWith('http') ? page.heroImage : `https://ileben.cl${page.heroImage}`) : undefined,
+    noindex: resolvedSlug === 'bases-legales',
+  })
 
   if (!page) {
     return <NotFound />

@@ -105,6 +105,7 @@ export default function CotizadorForm({
                 {thumbnails.length > 1 ? (
                   <select
                     className="form-select"
+                    aria-label="Seleccionar tipología de planta"
                     value={selected}
                     onChange={(e) => setSelected(Number(e.target.value))}
                   >
@@ -113,13 +114,13 @@ export default function CotizadorForm({
                     ))}
                   </select>
                 ) : (
-                  <select className="form-select" disabled value="0">
+                  <select className="form-select" aria-label="Planta seleccionada" disabled value="0">
                     <option value="0">{plantaName || 'Planta seleccionada'}</option>
                   </select>
                 )}
                 <div className="mt-3">
-                  <label className="form-label fw-semibold">Bodega</label>
-                  <select className="form-select" defaultValue="">
+                  <label htmlFor="cf-bodega" className="form-label fw-semibold">Bodega</label>
+                  <select id="cf-bodega" className="form-select" defaultValue="">
                     <option value="" disabled>Sin bodega</option>
                     <option value="small">Bodega 4 m² — UF 250</option>
                     <option value="medium">Bodega 6 m² — UF 350</option>
@@ -127,8 +128,8 @@ export default function CotizadorForm({
                   </select>
                 </div>
                 <div className="mt-3">
-                  <label className="form-label fw-semibold">Estacionamiento</label>
-                  <select className="form-select" defaultValue="">
+                  <label htmlFor="cf-estacionamiento" className="form-label fw-semibold">Estacionamiento</label>
+                  <select id="cf-estacionamiento" className="form-select" defaultValue="">
                     <option value="" disabled>Sin estacionamiento</option>
                     <option value="covered">Techado — UF 1.800</option>
                     <option value="uncovered">Descubierto — UF 1.200</option>

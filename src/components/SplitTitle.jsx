@@ -102,6 +102,16 @@ export default function SplitTitle({
 
   const hasSplit = Boolean(parsedHtml?.wordCount || lines.length > 0)
 
+  const accessibleLabel = useMemo(() => {
+    if (rest['aria-label']) return rest['aria-label']
+    if (htmlContent) {
+      return htmlContent.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim()
+    }
+    const raw = text ?? children
+    const content = typeof raw === 'string' ? raw : extractText(raw)
+    return typeof content === 'string' ? content.replace(/\s+/g, ' ').trim() : undefined
+  }, [rest, htmlContent, text, children])
+
   useEffect(() => {
     if (!isLoaded || !ref.current || !hasSplit) return
     const ctx = gsap.context(() => {
@@ -120,7 +130,7 @@ export default function SplitTitle({
 
   if (parsedHtml) {
     return (
-      <Tag ref={ref} className={className} {...rest}>
+      <Tag ref={ref} className={className} aria-label={accessibleLabel} {...rest}>
         {parsedHtml.nodes}
       </Tag>
     )
@@ -128,7 +138,7 @@ export default function SplitTitle({
 
   if (lines.length > 0) {
     return (
-      <Tag ref={ref} className={className} {...rest}>
+      <Tag ref={ref} className={className} aria-label={accessibleLabel} {...rest}>
         {lines.map((words, lineIdx) => (
           <span key={lineIdx} style={{ display: lines.length > 1 ? 'block' : 'inline' }}>
             {words.map((word, i) => (
@@ -143,11 +153,11 @@ export default function SplitTitle({
   }
 
   if (dangerouslySetInnerHTML) {
-    return <Tag ref={ref} className={className} dangerouslySetInnerHTML={dangerouslySetInnerHTML} {...rest} />
+    return <Tag ref={ref} className={className} aria-label={accessibleLabel} dangerouslySetInnerHTML={dangerouslySetInnerHTML} {...rest} />
   }
 
   return (
-    <Tag ref={ref} className={className} {...rest}>
+    <Tag ref={ref} className={className} aria-label={accessibleLabel} {...rest}>
       {children}
     </Tag>
   )

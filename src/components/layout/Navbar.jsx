@@ -105,7 +105,7 @@ const menuGroups = [
   {
     title: 'Nosotros',
     items: [
-      { label: 'Quienes somos', to: '/quienes-somos' },
+      { label: 'Quiénes somos', to: '/quienes-somos' },
       { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
       { label: 'Proyectos realizados', to: '/nosotros' },
     ],

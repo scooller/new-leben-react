@@ -12,10 +12,18 @@ import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import { cookiesPageContent } from '../data/cookiesPageData.js'
 import { openCookieSettings } from '../store/slices/cookieSlice.js'
+import { useSeo } from '../hooks/useSeo.js'
 
 export default function CookiesPage() {
   const dispatch = useDispatch()
   const { hero, responsible, sections } = cookiesPageContent
+
+  useSeo({
+    title: 'Política de Cookies | Inmobiliaria Leben',
+    description: 'Información transparente sobre el uso, finalidad y configuración de cookies en el sitio web de Inmobiliaria Leben.',
+    canonical: '/cookies',
+    noindex: true,
+  })
 
   return (
     <>

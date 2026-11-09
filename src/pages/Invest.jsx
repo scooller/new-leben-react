@@ -13,6 +13,7 @@ import ScrollAnim from '../components/ScrollAnim.jsx'
 import Turnstile from '../components/common/Turnstile.jsx'
 import { investData as data } from '../data/invest.js'
 import { formatRut, validateRut, formatPhone, validatePhone, validateEmail } from '../lib/chileUtils.js'
+import { useSeo } from '../hooks/useSeo.js'
 
 import {
   Check,
@@ -30,6 +31,11 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function Invest() {
   useGsapAnimations()
+  useSeo({
+    title: 'Inversión Inmobiliaria y Departamentos con Rentabilidad | Inmobiliaria Leben',
+    description: 'Asesoría especializada para inversionistas. Rentabiliza tu patrimonio con departamentos de alta demanda y plusvalía en Chile.',
+    canonical: '/invest',
+  })
 
   const [activeFilter, setActiveFilter] = useState('SANTIAGO')
   const [openFaqIndex, setOpenFaqIndex] = useState(0)

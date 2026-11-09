@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
 import { useTrackingConsent } from './hooks/useTrackingConsent.js'
+import { useSeo } from './hooks/useSeo.js'
 
 // Layout
 import Navbar from './components/layout/Navbar.jsx'
@@ -37,6 +38,57 @@ const CookiesPage = lazy(() => import('./pages/CookiesPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 function Home() {
+  useSeo({
+    title: 'Departamentos y Proyectos en Venta en Chile',
+    description: 'Venta de departamentos y proyectos residenciales en Puerto Varas, Temuco y Santiago. Diseños sustentables, alta calidad y asesoría personalizada con Inmobiliaria Leben.',
+    canonical: '/',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'RealEstateAgent',
+        '@id': 'https://ileben.cl/#organization',
+        name: 'Inmobiliaria Leben',
+        legalName: 'Leben Grupo Inmobiliario',
+        url: 'https://ileben.cl',
+        logo: 'https://ileben.cl/images/brand/leben_bptl_pro.svg',
+        image: 'https://ileben.cl/images/home/hero-institucional.jpg',
+        description: 'Desarrollador y gestor inmobiliario con proyectos residenciales de alta gama en el sur y centro de Chile.',
+        telephone: '+56 9 3950 0089',
+        email: 'info@ileben.cl',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Dr. Manuel Barros Borgoño 386',
+          addressLocality: 'Providencia',
+          addressRegion: 'Región Metropolitana',
+          addressCountry: 'CL',
+        },
+        openingHoursSpecification: [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            opens: '09:00',
+            closes: '18:30',
+          },
+        ],
+        sameAs: [
+          'https://www.facebook.com/lebeninmobiliaria',
+          'https://www.instagram.com/lebeninmobiliaria',
+          'https://www.linkedin.com/company/leben-inmobiliaria',
+        ],
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': 'https://ileben.cl/#website',
+        url: 'https://ileben.cl',
+        name: 'Inmobiliaria Leben',
+        publisher: {
+          '@id': 'https://ileben.cl/#organization',
+        },
+      },
+    ],
+  })
+
   return (
     <>
       <Hero />
@@ -56,8 +108,9 @@ export default function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const timer = setTimeout(() => dispatch(setLoaded()), 800)
-    return () => clearTimeout(timer)
+    // Immediate activation on next frame to eliminate artificial FCP/LCP block
+    const raf = requestAnimationFrame(() => dispatch(setLoaded()))
+    return () => cancelAnimationFrame(raf)
   }, [dispatch])
 
   const location = useLocation()
@@ -125,20 +178,24 @@ export default function App() {
           <Route path="/proyectos/:slug" element={<ProyectoDetalle />} />
           <Route path="/proyectos/:slug/planta/:plantaId" element={<ProyectoDetalle />} />
           <Route path="/brokers" element={<Brokers />} />
-          {['/invest', '/inversionistas'].map((p) => (
-            <Route key={p} path={p} element={<Invest />} />
-          ))}
+          <Route path="/invest" element={<Invest />} />
+          <Route path="/inversionistas" element={<Navigate to="/invest" replace />} />
           <Route path="/cotizador" element={<CotizadorGeneral />} />
           <Route path="/cotizador/proyecto/:proyectoSlug/planta/:plantaId" element={<CotizadorGeneral />} />
           <Route path="/cotizador/proyecto/:proyectoSlug" element={<CotizadorGeneral />} />
           <Route path="/login" element={<Login />} />
           <Route path="/perfil" element={<Perfil />} />
-          {['/nosotros', '/quienes-somos', '/informacion-de-la-empresa', '/proceso-reserva-en-linea', '/bases-legales', '/trabaja-en-leben', '/trabaja-con-nosotros'].map((p) => (
-            <Route key={p} path={p} element={<StaticPage slug={p.slice(1)} />} />
-          ))}
-          {['/cookies', '/politica-de-cookies'].map((p) => (
-            <Route key={p} path={p} element={<CookiesPage />} />
-          ))}
+          {/* Static Pages - Canonical routes */}
+          <Route path="/nosotros" element={<StaticPage slug="nosotros" />} />
+          <Route path="/quienes-somos" element={<Navigate to="/nosotros" replace />} />
+          <Route path="/informacion-de-la-empresa" element={<Navigate to="/nosotros" replace />} />
+          <Route path="/proceso-reserva-en-linea" element={<StaticPage slug="proceso-reserva-en-linea" />} />
+          <Route path="/bases-legales" element={<StaticPage slug="bases-legales" />} />
+          <Route path="/trabaja-en-leben" element={<StaticPage slug="trabaja-en-leben" />} />
+          <Route path="/trabaja-con-nosotros" element={<Navigate to="/trabaja-en-leben" replace />} />
+          {/* Cookies */}
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/politica-de-cookies" element={<Navigate to="/cookies" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

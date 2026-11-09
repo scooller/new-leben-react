@@ -246,12 +246,13 @@ export default function TrabajaForm() {
         <div className="row g-3">
           {/* Nombre y Apellido */}
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-nombre" className="form-label small fw-semibold text-secondary">
               Nombre <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="nombre"
+              id="tf-nombre"
               className={`form-control ${fieldErrors.nombre ? 'is-invalid' : ''}`}
               placeholder="Tu nombre"
               value={formData.nombre}
@@ -262,12 +263,13 @@ export default function TrabajaForm() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-apellido" className="form-label small fw-semibold text-secondary">
               Apellido <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="apellido"
+              id="tf-apellido"
               className={`form-control ${fieldErrors.apellido ? 'is-invalid' : ''}`}
               placeholder="Tu apellido"
               value={formData.apellido}
@@ -279,12 +281,13 @@ export default function TrabajaForm() {
 
           {/* RUT y Telefono (+56) */}
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-rut" className="form-label small fw-semibold text-secondary">
               RUT <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="rut"
+              id="tf-rut"
               maxLength={12}
               className={`form-control ${fieldErrors.rut ? 'is-invalid' : ''}`}
               placeholder="Ej: 12.345.678-9"
@@ -297,7 +300,7 @@ export default function TrabajaForm() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-telefono" className="form-label small fw-semibold text-secondary">
               Teléfono <span className="text-danger">*</span>
             </label>
             <div className="input-group has-validation">
@@ -305,6 +308,7 @@ export default function TrabajaForm() {
               <input
                 type="tel"
                 name="telefono"
+                id="tf-telefono"
                 maxLength={9}
                 className={`form-control ${fieldErrors.telefono ? 'is-invalid' : ''}`}
                 placeholder="9 1234 5678"
@@ -319,12 +323,13 @@ export default function TrabajaForm() {
 
           {/* Email y Region Selector */}
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-email" className="form-label small fw-semibold text-secondary">
               Email <span className="text-danger">*</span>
             </label>
             <input
               type="email"
               name="email"
+              id="tf-email"
               className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
               placeholder="nombre@correo.cl"
               value={formData.email}
@@ -336,11 +341,12 @@ export default function TrabajaForm() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-region" className="form-label small fw-semibold text-secondary">
               Región de domicilio <span className="text-danger">*</span>
             </label>
             <select
               name="regiondedomicilio"
+              id="tf-region"
               className={`form-select ${fieldErrors.regiondedomicilio ? 'is-invalid' : ''}`}
               value={formData.regiondedomicilio}
               onChange={handleChange}
@@ -358,12 +364,13 @@ export default function TrabajaForm() {
 
           {/* Titulo y Experiencia (anos) */}
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-titulo" className="form-label small fw-semibold text-secondary">
               Título profesional / técnico <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="tituloprofesionaltecnico"
+              id="tf-titulo"
               className={`form-control ${fieldErrors.tituloprofesionaltecnico ? 'is-invalid' : ''}`}
               placeholder="Ej: Ingeniero Constructor / Arquitecto"
               value={formData.tituloprofesionaltecnico}
@@ -374,7 +381,7 @@ export default function TrabajaForm() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-experiencia" className="form-label small fw-semibold text-secondary">
               Años de experiencia <span className="text-danger">*</span>
             </label>
             <input
@@ -382,6 +389,7 @@ export default function TrabajaForm() {
               min="0"
               max="50"
               name="experiencia"
+              id="tf-experiencia"
               className={`form-control ${fieldErrors.experiencia ? 'is-invalid' : ''}`}
               placeholder="Ej: 5"
               value={formData.experiencia}
@@ -393,12 +401,13 @@ export default function TrabajaForm() {
 
           {/* Ultimo cargo y Ultima empresa */}
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-ultimocargo" className="form-label small fw-semibold text-secondary">
               Último cargo desempeñado <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="ultimocargodesempenado"
+              id="tf-ultimocargo"
               className={`form-control ${fieldErrors.ultimocargodesempenado ? 'is-invalid' : ''}`}
               placeholder="Ej: Jefe de Proyectos"
               value={formData.ultimocargodesempenado}
@@ -409,12 +418,13 @@ export default function TrabajaForm() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-ultimaempresa" className="form-label small fw-semibold text-secondary">
               Última empresa <span className="text-danger">*</span>
             </label>
             <input
               type="text"
               name="ultimaempresa"
+              id="tf-ultimaempresa"
               className={`form-control ${fieldErrors.ultimaempresa ? 'is-invalid' : ''}`}
               placeholder="Nombre de la empresa"
               value={formData.ultimaempresa}
@@ -426,7 +436,7 @@ export default function TrabajaForm() {
 
           {/* LinkedIn (opcional con mascara/normalizacion) */}
           <div className="col-12">
-            <label className="form-label small fw-semibold text-secondary d-flex align-items-center gap-1">
+            <label htmlFor="tf-linkedin" className="form-label small fw-semibold text-secondary d-flex align-items-center gap-1">
               <Linkedin size={15} className="text-primary" />
               <span>LinkedIn</span>
               <span className="text-muted fw-normal">(opcional)</span>
@@ -434,6 +444,7 @@ export default function TrabajaForm() {
             <input
               type="url"
               name="linkedin"
+              id="tf-linkedin"
               className={`form-control ${fieldErrors.linkedin ? 'is-invalid' : ''}`}
               placeholder="https://www.linkedin.com/in/tu-perfil o tu usuario"
               value={formData.linkedin}
@@ -451,7 +462,7 @@ export default function TrabajaForm() {
 
           {/* Cargar CV */}
           <div className="col-12">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="cargarcv-input" className="form-label small fw-semibold text-secondary">
               Cargar CV <span className="text-danger">*</span> <span className="text-muted fw-normal">(.pdf, .docx, .doc, .txt — máx. 10MB)</span>
             </label>
             <div className="input-group">
@@ -478,11 +489,12 @@ export default function TrabajaForm() {
 
           {/* Breve sintesis laboral */}
           <div className="col-12">
-            <label className="form-label small fw-semibold text-secondary">
+            <label htmlFor="tf-sintesis" className="form-label small fw-semibold text-secondary">
               Breve síntesis de tu experiencia laboral <span className="text-danger">*</span>
             </label>
             <textarea
               name="brevesintesisdetuexperiencialaboral"
+              id="tf-sintesis"
               rows={4}
               className={`form-control ${fieldErrors.brevesintesisdetuexperiencialaboral ? 'is-invalid' : ''}`}
               placeholder="Cuéntanos brevemente sobre tus principales logros, áreas de especialización e interés profesional..."

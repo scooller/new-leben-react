@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.206] - 2026-11-09
+
+### Added
+- `src/hooks/useSeo.js`: Hook nativo ultraliviano (0 dependencias) para gestión reactiva de metadatos (`document.title`, description, canonical, robots, Open Graph, Twitter Cards y Schema JSON-LD).
+- `public/robots.txt`: Archivo estático con directivas de rastreo de producción y referencia al sitemap canónico.
+- Schemas JSON-LD: `RealEstateAgent` y `WebSite` en portada; `ApartmentComplex` y `AggregateOffer` en detalle de proyectos.
+- Open Graph y Twitter Cards base en `index.html` para scrapers y previsualización en WhatsApp y redes sociales.
+
+### Changed
+- `index.html`: Carga asíncrona no bloqueante de Google Fonts (`preload` + `media="print" onload="this.media='all'"`).
+- `public/.htaccess`: Reglas de compresión `mod_deflate`, cabeceras de caché `mod_expires`, redirección 301 de normalización trailing slash y bypass de rewrite para `robots.txt` y `sitemap.xml`.
+- `src/App.jsx`: Eliminado retardo artificial de 800ms de carga del loader inicial (unblock FCP/LCP); reemplazadas rutas duplicadas con redirección reactiva canónica (`/inversionistas` a `/invest`, `/quienes-somos` a `/nosotros`, `/trabaja-con-nosotros` a `/trabaja-en-leben`, `/politica-de-cookies` a `/cookies`).
+- `src/components/SplitTitle.jsx`: Añadido atributo `aria-label` en el encabezado contenedor para evitar fragmentación de lectura en lectores de pantalla (VoiceOver/NVDA).
+- `src/components/layout/Footer.jsx`: Añadido atributo `alt="Leben Grupo Inmobiliario"` en el logo corporativo.
+- `src/components/TrabajaForm.jsx` y `src/components/proyecto/CotizadorForm.jsx`: Vinculados atributos `htmlFor` de labels con `id` de inputs/selects, y añadidos `aria-label` descriptivos.
+- `src/components/proyecto/Cotizador.jsx`: Generación dinámica y contextual del atributo `alt` en la imagen del plano arquitectónico.
+- `back-ileben/routes/web.php`: Actualizado generador de `sitemap.xml` para reflejar rutas reales del frontend React y depurar rutas muertas 404.
+
 ## [0.9.205] - 2026-11-05
 
 ### Fixed

@@ -75,7 +75,7 @@ export default function Footer() {
           {/* Col 1: Logo + badges */}
           <div className="col-12 col-md-3 d-flex flex-column gap-3">
             <div className="fs-2 fw-bold">
-              <img src="/images/brand/leben_bptl_pro.svg" alt="" className="flex-shrink-0 img-logo" fetchPriority="high" />
+              <img src="/images/brand/leben_bptl_pro.svg" alt="Leben Grupo Inmobiliario" className="flex-shrink-0 img-logo" fetchPriority="high" />
             </div>
             <div className="d-flex gap-2">
               {social.map((s, i) => {

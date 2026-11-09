@@ -9,6 +9,7 @@ import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import ScrollAnim from '../components/ScrollAnim.jsx'
 import ProjectsCatalog from '../components/sections/ProjectsCatalog.jsx'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
+import { useSeo } from '../hooks/useSeo.js'
 import { apiFetch } from '../lib/apiFetch.js'
 import { setFilters, setFilterField, resetFilters } from '../store/slices/filterSlice.js'
 
@@ -34,6 +35,11 @@ function useApiProjects() {
 
 export default function CotizadorGeneral() {
   useGsapAnimations()
+  useSeo({
+    title: 'Cotizador de Departamentos Online | Inmobiliaria Leben',
+    description: 'Cotiza tu departamento en línea con Inmobiliaria Leben. Proyectos en Puerto Varas, Temuco y Santiago con precios actualizados en UF y asesoría comercial personalizada.',
+    canonical: '/cotizador',
+  })
   const { data: rawProjects, loading: projectsLoading, error: projectsError } = useApiProjects()
 
   const [activeProject, setActiveProject] = useState(null)

@@ -14,6 +14,7 @@ import HeroShell from '../components/sections/HeroShell.jsx'
 import { Check, Mail, ChevronRight, ChevronLeft } from 'lucide-react'
 import Turnstile from '../components/common/Turnstile.jsx'
 import { formatPhone, validatePhone, validateEmail } from '../lib/chileUtils.js'
+import { useSeo } from '../hooks/useSeo.js'
 import { BadgePercentIcon } from '../components/icons/badge-percent.jsx'
 import { HomeIcon } from '../components/icons/home.jsx'
 import { BellIcon } from '../components/icons/bell.jsx'
@@ -32,6 +33,11 @@ const benefitIcons = {
 
 export default function Brokers() {
   useGsapAnimations()
+  useSeo({
+    title: 'Red de Brokers Inmobiliarios | Inmobiliaria Leben',
+    description: 'Únete al Círculo de Brokers de Leben y comercializa proyectos de alta gama en Puerto Varas, Temuco y Santiago con soporte integral y atractivas comisiones.',
+    canonical: '/brokers',
+  })
   const [activeEventTab, setActiveEventTab] = useState(data.events.tabs[0].id)
   const [eventSlideIndex, setEventSlideIndex] = useState(0)
   const [formData, setFormData] = useState({})

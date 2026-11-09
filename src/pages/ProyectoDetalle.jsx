@@ -27,6 +27,7 @@ import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { apiFetch } from '../lib/apiFetch.js'
 import { formatPriceUF } from '../lib/projectUtils.js'
+import { useSeo } from '../hooks/useSeo.js'
 
 const base = import.meta.env.BASE_URL
 
@@ -181,7 +182,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
 })
 
 export default function ProyectoDetalle() {
-  const { slug } = useParams()
+  const { slug, plantaId } = useParams()
   const cleanSlug = useMemo(() => {
     if (!slug) return 'inn'
     return slug.toLowerCase().replace(/edificio\s+/i, '').replace(/^edificio-/, '').trim()
@@ -267,6 +268,54 @@ export default function ProyectoDetalle() {
       cot.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
+
+  // --- METADATOS Y SCHEMA DINÁMICOS (SEO) ---
+  const projectName = currentProject?.name || projectContent?.name || (cleanSlug ? cleanSlug.toUpperCase() : 'Proyecto')
+  const comuna = currentProject?.comuna || projectContent?.comuna || ''
+  const precioDesde = currentProject?.precio_desde ? `Desde UF ${currentProject.precio_desde}` : ''
+  const seoTitle = selectedPlanta
+    ? `Planta ${selectedPlanta.name || ''} — Edificio ${projectName}${comuna ? ` en ${comuna}` : ''}`
+    : `Edificio ${projectName}${comuna ? ` en ${comuna}` : ''} — Departamentos en Venta`
+  const seoDesc = projectContent?.hero?.subtitle || currentProject?.descripcion || `Descubre Edificio ${projectName}${comuna ? ` en ${comuna}` : ''}. Departamentos de alta gama ${precioDesde}. Cotiza online con Inmobiliaria Leben.`
+  const seoImage = resolveUrl(projectContent?.overview_images?.left || projectContent?.hero?.logo_url || currentProject?.portada_url)
+  const canonicalPath = selectedPlanta
+    ? `/proyectos/${cleanSlug}/planta/${selectedPlanta.id || plantaId}`
+    : `/proyectos/${cleanSlug}`
+
+  const projectSchema = useMemo(() => {
+    if (!currentProject && !projectContent) return null
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ApartmentComplex',
+      name: `Edificio ${projectName}`,
+      description: seoDesc,
+      url: `https://ileben.cl/proyectos/${cleanSlug}`,
+      image: seoImage || undefined,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: comuna || 'Chile',
+        addressCountry: 'CL',
+        streetAddress: currentProject?.direccion || undefined,
+      },
+      ...(currentProject?.precio_desde ? {
+        offers: {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'CLF',
+          lowPrice: currentProject.precio_desde,
+          offerCount: currentProject?.total_unidades || undefined,
+          availability: 'https://schema.org/InStock',
+        },
+      } : {}),
+    }
+  }, [currentProject, projectContent, projectName, seoDesc, cleanSlug, seoImage, comuna])
+
+  useSeo({
+    title: seoTitle,
+    description: seoDesc,
+    canonical: canonicalPath,
+    ogImage: seoImage,
+    schema: projectSchema,
+  })
 
   // --- DERIVACIÓN DINÁMICA DE SECCIONES DESDE EL BACKEND ---
 

@@ -7,13 +7,40 @@
   Header edit Content-Security-Policy "trusted-types ([^;]+)" "trusted-types $1 goog#html 'allow-duplicates'"
 </IfModule>
 
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
+  # Strip trailing slash from non-directory requests (301)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} (.+)/$
+  RewriteRule ^ %1 [L,R=301]
+
   # Route /api/* to PHP proxy (must be before SPA fallback)
   RewriteRule ^api/ api-proxy.php [L,QSA]
 
+  # Direct pass-through for robots.txt and sitemap.xml
+  RewriteRule ^robots\.txt$ - [L]
+  RewriteRule ^sitemap\.xml$ - [L]
+
+  # SPA Fallback
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

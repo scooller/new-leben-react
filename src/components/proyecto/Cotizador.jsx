@@ -948,7 +948,7 @@ export default function Cotizador({
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
                 src={mainImage || PLACEHOLDER_FLOORPLAN}
-                alt="Planta del departamento y esquicio del edificio"
+                alt={activePlanta?.name ? `Planta ${activePlanta.name}${activePlanta.programa ? ` - ${activePlanta.programa}` : ''}${selection?.project?.name ? ` - Edificio ${selection.project.name}` : ''}` : 'Planta arquitectónica del departamento'}
                 className={`lb-proj-det-cot-plan-img w-100 lb-img-interactive object-fit-contain ${switching ? ' is-loading' : ''}`}
                 onLoad={() => setSwitching(false)}
                 loading="lazy"
