@@ -102,9 +102,8 @@
   RewriteCond %{REQUEST_URI} !^/(\.well-known|api|images|assets|robots\.txt|sitemap\.xml|auth\.md)
   RewriteRule ^(.*)$ markdown.php?path=$1 [L,QSA]
 
-  # Social Crawler Previews for Projects (Facebook, WhatsApp, Twitter, LinkedIn, Telegram, Slack)
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|Pinterest) [NC]
-  RewriteRule ^proyectos/([a-zA-Z0-9_-]+) share.php?slug=$1 [L,QSA]
+  # Dynamic Open Graph, Twitter Cards and SEO for Project Pages
+  RewriteRule ^proyectos/([a-zA-Z0-9_-]+)/?$ share.php?slug=$1 [L,QSA]
 
   # SPA Fallback
   RewriteRule ^index\.html$ - [L]

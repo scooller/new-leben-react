@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.211] - 2026-11-09
+
+### Added
+- `public/share.php`: Inyección server-side de Open Graph tags (`og:url`, `og:type`, `og:title`, `og:description`, `og:image`, `og:image:secure_url`, `og:logo`) para todas las solicitudes a `/proyectos/:slug` sin depender del User-Agent.
+- `index.html` & `src/hooks/useSeo.js`: Añadida etiqueta `<meta property="og:logo" content="..." />` con isotipo oficial de marca.
+
+### Changed
+- `public/.htaccess`: Regla de reescritura de proyectos generalizada para que cualquier crawler, auditor SEO o navegador obtenga el HTML con metadatos Open Graph inyectados antes de la ejecución de React.
+
 ## [0.9.210] - 2026-11-09
 
 ### Added

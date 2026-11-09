@@ -88,6 +88,7 @@ export function useSeo({
     updateMeta('property', 'og:image', absoluteImage)
     updateMeta('property', 'og:image:secure_url', absoluteImage)
     updateMeta('property', 'og:image:alt', pageTitle)
+    updateMeta('property', 'og:logo', toAbsoluteUrl('/images/brand/logo-isotipo.webp', baseUrl))
 
     // 5. Twitter Card
     updateMeta('name', 'twitter:card', 'summary_large_image')

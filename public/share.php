@@ -2,13 +2,11 @@
 
 /**
  * Lightweight Social Share / Crawler Meta Injector (Ponytail Principle)
- * Intercepts social scrapers (WhatsApp, Facebook, Twitter/X, LinkedIn, Telegram, Slack)
- * and serves index.html with dynamically injected Open Graph & Twitter Card tags for projects.
+ * Serves index.html with dynamically injected Open Graph & Twitter Card tags for projects.
  *
  * All URLs and credentials are read dynamically from environment variables / .env (no hardcoding).
  */
 
-// Helper to read environment variables from system or .env/.env.local
 function get_env_var(string $key, string $default = ''): string
 {
     $val = getenv($key);
@@ -65,8 +63,7 @@ $currentOrigin = $protocol . $detectedHost;
 
 $SITE_URL = rtrim(get_env_var('SITE_URL', get_env_var('VITE_SITE_URL', $currentOrigin)), '/');
 $DEFAULT_IMAGE = $SITE_URL . '/images/home/hero-institucional.jpg';
-$DEFAULT_TITLE = 'Inmobiliaria Leben | Departamentos y Proyectos en Venta en Chile';
-$DEFAULT_DESC = 'Descubre departamentos en venta en el sur y centro de Chile con Inmobiliaria Leben. Proyectos exclusivos en Puerto Varas, Temuco y Santiago.';
+$LOGO_URL = $SITE_URL . '/images/brand/logo-isotipo.webp';
 
 // 2. Slug extraction
 $slug = trim($_GET['slug'] ?? '');
@@ -129,8 +126,8 @@ if (!$projectData && !empty($apiBase)) {
 }
 
 // Fallbacks if API is unreachable or returns empty
-$formattedName = ucwords(str_replace(['-', '_'], ' ', $cleanSlug));
-$projectName = $projectData['name'] ?? $formattedName;
+$rawName = $projectData['name'] ?? $formattedName;
+$projectName = trim(preg_replace('/^edificio\s+/i', '', $rawName));
 $comuna = $projectData['hero']['location'] ?? $projectData['technical_info'][1]['value'] ?? '';
 $comunaStr = !empty($comuna) ? " en {$comuna}" : '';
 
@@ -159,34 +156,47 @@ if (!file_exists($indexPath)) {
 
 $html = file_get_contents($indexPath);
 
+function set_or_inject_meta(string $html, string $attr, string $key, string $content): string
+{
+    $safeContent = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
+    $pattern = '/<meta\s+' . preg_quote($attr, '/') . '=["\']' . preg_quote($key, '/') . '["\'][^>]*>/i';
+    $replacement = '<meta ' . $attr . '="' . $key . '" content="' . $safeContent . '" />';
+    if (preg_match($pattern, $html)) {
+        return preg_replace($pattern, $replacement, $html);
+    }
+    return str_ireplace('</head>', "    {$replacement}\n  </head>", $html);
+}
+
 // Safe tag replacements
 $safeTitle = htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8');
-$safeDesc = htmlspecialchars($pageDesc, ENT_QUOTES, 'UTF-8');
 $safeUrl = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
-$safeImage = htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8');
 
-// Replace Title
+// Title & Canonical
 $html = preg_replace('/<title>.*?<\/title>/i', "<title>{$safeTitle}</title>", $html);
-
-// Replace Canonical
 $html = preg_replace('/<link rel="canonical" href=".*?"\s*\/?>/i', "<link rel=\"canonical\" href=\"{$safeUrl}\" />", $html);
 
-// Replace Meta Description
-$html = preg_replace('/<meta name="description" content=".*?"\s*\/?>/i', "<meta name=\"description\" content=\"{$safeDesc}\" />", $html);
+// Meta Description
+$html = set_or_inject_meta($html, 'name', 'description', $pageDesc);
 
-// Replace Open Graph Tags
-$html = preg_replace('/<meta property="og:title" content=".*?"\s*\/?>/i', "<meta property=\"og:title\" content=\"{$safeTitle}\" />", $html);
-$html = preg_replace('/<meta property="og:description" content=".*?"\s*\/?>/i', "<meta property=\"og:description\" content=\"{$safeDesc}\" />", $html);
-$html = preg_replace('/<meta property="og:url" content=".*?"\s*\/?>/i', "<meta property=\"og:url\" content=\"{$safeUrl}\" />", $html);
-$html = preg_replace('/<meta property="og:image" content=".*?"\s*\/?>/i', "<meta property=\"og:image\" content=\"{$safeImage}\" />", $html);
-$html = preg_replace('/<meta property="og:image:secure_url" content=".*?"\s*\/?>/i', "<meta property=\"og:image:secure_url\" content=\"{$safeImage}\" />", $html);
-$html = preg_replace('/<meta property="og:image:alt" content=".*?"\s*\/?>/i', "<meta property=\"og:image:alt\" content=\"{$safeTitle}\" />", $html);
+// Core Open Graph Tags (OG)
+$html = set_or_inject_meta($html, 'property', 'og:site_name', 'Inmobiliaria Leben');
+$html = set_or_inject_meta($html, 'property', 'og:locale', 'es_CL');
+$html = set_or_inject_meta($html, 'property', 'og:type', 'website');
+$html = set_or_inject_meta($html, 'property', 'og:url', $canonicalUrl);
+$html = set_or_inject_meta($html, 'property', 'og:title', $pageTitle);
+$html = set_or_inject_meta($html, 'property', 'og:description', $pageDesc);
+$html = set_or_inject_meta($html, 'property', 'og:image', $imageUrl);
+$html = set_or_inject_meta($html, 'property', 'og:image:secure_url', $imageUrl);
+$html = set_or_inject_meta($html, 'property', 'og:image:alt', $pageTitle);
+$html = set_or_inject_meta($html, 'property', 'og:logo', $LOGO_URL);
 
-// Replace Twitter Tags
-$html = preg_replace('/<meta name="twitter:title" content=".*?"\s*\/?>/i', "<meta name=\"twitter:title\" content=\"{$safeTitle}\" />", $html);
-$html = preg_replace('/<meta name="twitter:description" content=".*?"\s*\/?>/i', "<meta name=\"twitter:description\" content=\"{$safeDesc}\" />", $html);
-$html = preg_replace('/<meta name="twitter:image" content=".*?"\s*\/?>/i', "<meta name=\"twitter:image\" content=\"{$safeImage}\" />", $html);
-$html = preg_replace('/<meta name="twitter:image:alt" content=".*?"\s*\/?>/i', "<meta name=\"twitter:image:alt\" content=\"{$safeTitle}\" />", $html);
+// Twitter Cards
+$html = set_or_inject_meta($html, 'name', 'twitter:card', 'summary_large_image');
+$html = set_or_inject_meta($html, 'name', 'twitter:site', '@leben_inmuebles');
+$html = set_or_inject_meta($html, 'name', 'twitter:title', $pageTitle);
+$html = set_or_inject_meta($html, 'name', 'twitter:description', $pageDesc);
+$html = set_or_inject_meta($html, 'name', 'twitter:image', $imageUrl);
+$html = set_or_inject_meta($html, 'name', 'twitter:image:alt', $pageTitle);
 
 header('Content-Type: text/html; charset=UTF-8');
 header('Cache-Control: public, max-age=600');
