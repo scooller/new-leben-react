@@ -1,4 +1,6 @@
-# Agent Authentication & API Guide — Inmobiliaria Leben
+# Auth.md
+
+# Inmobiliaria Leben Agent Authentication & API Guide
 
 Welcome to the **Inmobiliaria Leben** agent API and resource gateway.
 
@@ -24,4 +26,4 @@ To request an agent API key or webhook credentials, submit an agent registration
 - **Agent Skills (RFC v0.2.0):** `/.well-known/agent-skills/index.json`
 - **MCP Server Card (SEP-1649):** `/.well-known/mcp/server-card.json`
 - **ARD Manifest:** `/.well-known/ai-catalog.json`
-
+- **OAuth Protected Resource (RFC 9728):** `/.well-known/oauth-protected-resource`

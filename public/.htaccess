@@ -13,24 +13,49 @@
   Header add Link '</auth.md>; rel="help"'
 
   # CORS for discovery manifests
-  <FilesMatch "(api-catalog|\.json|\.md)$">
+  <FilesMatch "(api-catalog|\.json|\.md|oauth-.*|openid-.*)$">
     Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+
+  # Prevent caching of discovery manifests, robots.txt, and sitemaps so crawlers always get fresh rules
+  <FilesMatch "(robots\.txt|sitemap\.xml|api-catalog|auth\.md|\.json|oauth-.*|openid-.*)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
   </FilesMatch>
 </IfModule>
 
 # MIME type definitions for agent discovery
 <IfModule mod_mime.c>
+  AddType text/plain .txt
   AddType text/markdown .md
   AddType application/json .json
 </IfModule>
 
+<Files "robots.txt">
+  ForceType "text/plain; charset=UTF-8"
+  Header set Content-Type "text/plain; charset=UTF-8"
+</Files>
+
+<Files "sitemap.xml">
+  ForceType "application/xml; charset=UTF-8"
+  Header set Content-Type "application/xml; charset=UTF-8"
+</Files>
+
 <Files "api-catalog">
   ForceType "application/linkset+json; charset=UTF-8"
+  Header set Content-Type "application/linkset+json; charset=UTF-8"
 </Files>
 
 <Files "auth.md">
   ForceType "text/markdown; charset=UTF-8"
+  Header set Content-Type "text/markdown; charset=UTF-8"
 </Files>
+
+<FilesMatch "^(oauth-protected-resource|oauth-authorization-server|openid-configuration)$">
+  ForceType "application/json; charset=UTF-8"
+  Header set Content-Type "application/json; charset=UTF-8"
+</FilesMatch>
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript text/markdown application/javascript application/json application/xml application/linkset+json image/svg+xml
@@ -39,6 +64,11 @@
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"
+  ExpiresByType text/plain "access plus 0 seconds"
+  ExpiresByType text/markdown "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 0 seconds"
+  ExpiresByType application/linkset+json "access plus 0 seconds"
   ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
