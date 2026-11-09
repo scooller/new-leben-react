@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.214] - 2026-11-09
+
+### Added
+- `AGENTS.md` (frontend y backend): Directiva obligatoria estricta prohibiendo terminantemente inventar, asumir o alucinar ubicaciones de proyectos inmobiliarios. Alcance geográfico oficial fijado como política inmutable a "el sur de Chile y Santiago", requiriendo que comunas o proyectos específicos provengan 100% de consultas vivas a la base de datos o API.
+
 ## [0.9.213] - 2026-11-09
 
 ### Changed

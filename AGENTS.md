@@ -20,6 +20,10 @@
    - Bump `version` in `package.json` (semantic: patch = fix/refactor, minor = feature, major = breaking).
    - Add an entry to `CHANGELOG.md` (Keep a Changelog format) describing the changes.
    - Both must stay in sync (same version in `package.json` and `CHANGELOG.md`).
+8. **ZERO INVENTED LOCATIONS (Critical Business Rule)** — NEVER invent, assume, or hallucinate cities, communes, or project locations (e.g. NEVER mention Temuco, Valdivia, or any unconfirmed locality).
+   - Official geographic scope is strictly **"el sur de Chile y Santiago"** (specifically Puerto Varas, Frutillar / Llanquihue en el sur, y Santiago / Región Metropolitana).
+   - In all copy, SEO, Open Graph, Twitter cards, LLM manifests, API schemas, and marketing texts, always summarize coverage strictly as **"el sur de Chile y Santiago"**.
+   - Specific project names and locations MUST ONLY come directly from live database / API queries (`/api/v1/proyectos`). Assuming unconfirmed cities is a severe violation.
 
 ***
 
@@ -145,6 +149,7 @@ When an agent needs to report a bug, request a feature, or log a finding:
 10. **Use RTK by default** — in React applications, global state and async data flows must default to Redux Toolkit unless the repository explicitly uses another standard.
 11. **Use Graphify by default** — in graph-based or relationship-driven interfaces, Graphify is the preferred solution unless an existing project dependency already defines another tool.
 12. **Use tgrep for searching** — `tgrep` is the preferred search CLI across the codebase; use it proactively before modifying code.
+13. **Strict real estate geography** — NEVER invent, assume, or hallucinate project locations. Inmobiliaria Leben operates ONLY in **el sur de Chile y Santiago**. Derivation of specific projects and communes must come 100% from live DB/API data.
 
 ***
 
