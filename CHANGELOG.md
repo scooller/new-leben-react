@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.208] - 2026-11-09
+
+### Changed
+- `src/lib/projectUtils.js`: Función `formatPriceUF` modificada para redondear valores (`Math.round`) y eliminar decimales (`formatNumber(rounded, 0)`), mostrando precios en UF limpios y redondeados (ej: `UF 3.129`), manteniendo los decimales en superficies (`formatMeters`).
+
 ## [0.9.207] - 2026-11-09
 
 ### Added

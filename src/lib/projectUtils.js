@@ -14,11 +14,11 @@ export function formatNumber(val, maxDecimals = 2) {
   })
 }
 
-/** Format UF price as 'UF 3.128,72' or 'UF 0' */
+/** Format UF price rounded without decimals as 'UF 3.129' or 'UF 0' */
 export function formatPriceUF(val) {
   const num = typeof val === 'number' ? val : parseFloat(val)
   if (!num || isNaN(num)) return 'UF 0'
-  return `UF ${formatNumber(num, 2)}`
+  return `UF ${formatNumber(Math.round(num), 0)}`
 }
 
 /** Format surface in m² with up to 2 decimal places */
