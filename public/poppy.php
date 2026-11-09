@@ -42,4 +42,3 @@ header('Access-Control-Allow-Methods: GET, HEAD, OPTIONS');
 header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
 echo json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 exit;
-
