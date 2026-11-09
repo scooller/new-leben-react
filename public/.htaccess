@@ -40,6 +40,10 @@
   RewriteRule ^robots\.txt$ - [L]
   RewriteRule ^sitemap\.xml$ - [L]
 
+  # Social Crawler Previews for Projects (Facebook, WhatsApp, Twitter, LinkedIn, Telegram, Slack)
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|Pinterest) [NC]
+  RewriteRule ^proyectos/([a-zA-Z0-9_-]+) share.php?slug=$1 [L,QSA]
+
   # SPA Fallback
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f

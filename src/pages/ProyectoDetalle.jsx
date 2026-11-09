@@ -277,7 +277,18 @@ export default function ProyectoDetalle() {
     ? `Planta ${selectedPlanta.name || ''} — Edificio ${projectName}${comuna ? ` en ${comuna}` : ''}`
     : `Edificio ${projectName}${comuna ? ` en ${comuna}` : ''} — Departamentos en Venta`
   const seoDesc = projectContent?.hero?.subtitle || currentProject?.descripcion || `Descubre Edificio ${projectName}${comuna ? ` en ${comuna}` : ''}. Departamentos de alta gama ${precioDesde}. Cotiza online con Inmobiliaria Leben.`
-  const seoImage = resolveUrl(projectContent?.overview_images?.left || projectContent?.hero?.logo_url || currentProject?.portada_url)
+  const rawProjectImage =
+    selectedPlanta?.plano_url ||
+    selectedPlanta?.img ||
+    projectContent?.overview?.collage?.left ||
+    projectContent?.project_section?.slides?.[0]?.img ||
+    projectContent?.project_slides?.[0]?.img ||
+    projectContent?.equipment?.bg_image_url ||
+    currentProject?.imageUrl ||
+    currentProject?.portada_url ||
+    currentProject?.salesforce_portada_url ||
+    '/images/home/hero-institucional.jpg'
+  const seoImage = resolveUrl(rawProjectImage)
   const canonicalPath = selectedPlanta
     ? `/proyectos/${cleanSlug}/planta/${selectedPlanta.id || plantaId}`
     : `/proyectos/${cleanSlug}`

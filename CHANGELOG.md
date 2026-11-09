@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.209] - 2026-11-09
+
+### Added
+- `src/hooks/useSeo.js`: Metadatos Open Graph y Twitter Cards enriquecidos (`og:site_name`, `og:locale`, `og:image:secure_url`, `og:image:alt`, `twitter:site`, `twitter:image:alt`), resolución dinámica del origen según el entorno (`window.location.origin` / `VITE_SITE_URL`), normalización a URLs absolutas y prevención de duplicación del sufijo de marca en títulos.
+- `public/share.php`: Script nativo ultraliviano (solución Ponytail) para interceptar crawlers de redes sociales (WhatsApp, Facebook, Twitter/X, LinkedIn, Telegram, Slack) e inyectar dinámicamente Open Graph y Twitter Cards en `index.html` para proyectos con caché de 1 hora. Configuración 100% dinámica desde variables de entorno (`API_TARGET`, `DEV_API_TARGET`, `API_TOKEN`, etc.), sin URLs hardcodeadas.
+- `public/api-proxy.php`: Eliminadas credenciales y URLs fijas. Configuración dinámica leída desde variables de entorno del servidor o `.env` / `.env.local`.
+- `public/.htaccess`: Regla RewriteCond para enrutar scrapers sociales hacia `share.php` en rutas `/proyectos/*` antes del fallback SPA de React.
+- `index.html`: Etiquetas base Open Graph y Twitter Cards completas (`og:site_name`, `og:locale`, `og:image:secure_url`, `og:image:alt`, `twitter:site`, `twitter:image:alt`).
+
+### Changed
+- `src/pages/ProyectoDetalle.jsx`: Prioridad mejorada para selección de imagen Open Graph y Twitter Card del proyecto (renders de portada, overview collage, carrusel de proyecto, plano de planta seleccionada en vez del logotipo hero).
+
 ## [0.9.208] - 2026-11-09
 
 ### Changed
