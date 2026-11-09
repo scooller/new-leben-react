@@ -1,0 +1,23 @@
+{
+  "protocol_version": "0.1",
+  "organization": {
+    "name": "Inmobiliaria Leben",
+    "domain": "ileben.cl"
+  },
+  "auth": {
+    "issuer": "https://ileben.cl"
+  },
+  "web": {},
+  "apis": [
+    {
+      "name": "catalog-api",
+      "endpoint": "https://ileben.cl/api/v1/proyectos",
+      "description": "Catálogo de proyectos y departamentos disponibles en venta"
+    }
+  ],
+  "agent": {
+    "name": "leben-agent",
+    "description": "Agente comercial y cotizador de proyectos inmobiliarios Leben"
+  }
+}
+

@@ -1,0 +1,37 @@
+{
+  "issuer": "https://ileben.cl",
+  "authorization_endpoint": "https://ileben.cl/login",
+  "token_endpoint": "https://ileben.cl/api/v1/login",
+  "revocation_endpoint": "https://ileben.cl/oauth/revoke",
+  "registration_endpoint": "https://ileben.cl/api/v1/register",
+  "poppy_domains": [
+    "ileben.cl",
+    "test.ileben.cl",
+    "dev.ileben.cl"
+  ],
+  "response_types_supported": [
+    "token",
+    "code"
+  ],
+  "grant_types_supported": [
+    "client_credentials",
+    "password",
+    "authorization_code"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_post",
+    "bearer"
+  ],
+  "agent_auth": {
+    "register_uri": "https://ileben.cl/auth.md",
+    "supported_identity_types": [
+      "agent",
+      "organization"
+    ],
+    "credential_types": [
+      "api_key",
+      "bearer_token"
+    ]
+  }
+}
+

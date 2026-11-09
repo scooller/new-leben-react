@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.212] - 2026-11-09
+
+### Added
+- `public/poppy.php` y `public/.well-known/poppy.json`: Manifiesto de descubrimiento de **Personal Agent Protocol (Poppy)** (`protocol_version: 0.1`) con resolución dinámica de dominio y emisor para cumplir con la validación de `https://personalagentprotocol.org`.
+- `public/oauth-server.php`: Descriptor dinámico RFC 8414 con binding de `poppy_domains`, `revocation_endpoint`, `token_endpoint` y `authorization_endpoint`.
+- `c:\laragon\app\back-ileben\routes\web.php`: Rutas homólogas en backend Laravel para `/.well-known/poppy.json` y metadatos de Poppy en `/.well-known/oauth-authorization-server`.
+
 ## [0.9.211] - 2026-11-09
 
 ### Added

@@ -2,7 +2,13 @@
   "issuer": "https://ileben.cl",
   "authorization_endpoint": "https://ileben.cl/login",
   "token_endpoint": "https://ileben.cl/api/v1/login",
+  "revocation_endpoint": "https://ileben.cl/oauth/revoke",
   "registration_endpoint": "https://ileben.cl/api/v1/register",
+  "poppy_domains": [
+    "ileben.cl",
+    "test.ileben.cl",
+    "dev.ileben.cl"
+  ],
   "response_types_supported": [
     "token",
     "code"
@@ -28,4 +34,3 @@
     ]
   }
 }
-

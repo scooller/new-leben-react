@@ -91,6 +91,10 @@
   # Route /api/* to PHP proxy (must be before SPA fallback)
   RewriteRule ^api/ api-proxy.php [L,QSA]
 
+  # Personal Agent Protocol (Poppy) & Dynamic OAuth Authorization Server
+  RewriteRule ^\.well-known/poppy\.json$ poppy.php [L,QSA]
+  RewriteRule ^\.well-known/oauth-authorization-server$ oauth-server.php [L,QSA]
+
   # Direct pass-through for robots.txt, sitemap.xml, auth.md, and .well-known
   RewriteRule ^robots\.txt$ - [L]
   RewriteRule ^sitemap\.xml$ - [L]
