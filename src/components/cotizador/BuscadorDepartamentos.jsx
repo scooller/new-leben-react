@@ -103,6 +103,35 @@ export default function BuscadorDepartamentos({
     return sortProjectsByCustomOrder(names)
   }, [filteredProjectsByIntent, comuna])
 
+  // Available dormitorios filtered in cascade by selected project or comuna
+  const availableDormitoriosOptions = useMemo(() => {
+    let relevant = filteredProjectsByIntent
+    if (proyecto) {
+      relevant = relevant.filter((p) => (p.name || '').trim().toLowerCase() === proyecto.trim().toLowerCase())
+    } else if (comuna) {
+      relevant = relevant.filter((p) => (p.comuna || '').trim().toLowerCase() === comuna.trim().toLowerCase())
+    }
+
+    const progs = relevant.flatMap((p) => (p.tipologias || []).map((t) => t.programa || '')).filter(Boolean)
+    if (!progs.length) return DORMITORIOS_OPTIONS
+
+    return DORMITORIOS_OPTIONS.filter((d) => {
+      if (!d.value) return true
+      if (d.value === '1D') return progs.some((s) => /^1\s*d/i.test(s))
+      if (d.value === '2D') return progs.some((s) => /^2\s*d/i.test(s))
+      if (d.value === '3D') return progs.some((s) => /^3\s*d/i.test(s))
+      if (d.value === '4D') return progs.some((s) => /^[4-9]\s*d/i.test(s))
+      return true
+    })
+  }, [filteredProjectsByIntent, proyecto, comuna])
+
+  // Reset dormitorios if no longer available in filtered options
+  useEffect(() => {
+    if (dormitorios && !availableDormitoriosOptions.some((d) => d.value === dormitorios)) {
+      setDormitorios('')
+    }
+  }, [dormitorios, availableDormitoriosOptions])
+
   // Quick chips
   const popularComunas = useMemo(() => {
     return comunasWithCount.slice(0, 6).map((c) => c.name)
@@ -312,7 +341,7 @@ export default function BuscadorDepartamentos({
                       <span className="lb-buscador-route-label">Dormitorios</span>
                       <span className={`lb-buscador-route-value ${!dormitorios ? 'is-placeholder' : ''}`}>
                         {dormitorios
-                          ? (DORMITORIOS_OPTIONS.find((d) => d.value === dormitorios)?.label || dormitorios)
+                          ? (availableDormitoriosOptions.find((d) => d.value === dormitorios)?.label || dormitorios)
                           : 'Cualquier distribución'}
                       </span>
                     </div>
@@ -322,7 +351,7 @@ export default function BuscadorDepartamentos({
                   {openDropdown === 'dormitorios' && (
                     <div className="lb-buscador-dropdown-menu">
                       <div className="lb-buscador-dropdown-header">Distribución y dormitorios</div>
-                      {DORMITORIOS_OPTIONS.map((d) => (
+                      {availableDormitoriosOptions.map((d) => (
                         <button
                           key={d.value}
                           type="button"

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.207] - 2026-11-09
+
+### Added
+- `src/components/proyecto/Cotizador.jsx`: Banner de alerta informativo (`.lb-proj-det-cot-empty-alert`) con icono de advertencia, explicación contextual de por qué no hay resultados y botones de 1 clic ("Quitar filtro dormitorios", "Ver todo {proyecto}", "Limpiar filtros").
+- `src/components/proyecto/Cotizador.jsx`: Estado vacío amigable `.lb-proj-det-cot-no-results` en la tarjeta de plano para evitar mostrar esquicio roto o precio "UF -" cuando no hay plantas coincidentes.
+
+### Changed
+- `src/components/cotizador/BuscadorDepartamentos.jsx`: Filtros en cascada dinámicos. Las opciones de dormitorios (`availableDormitoriosOptions`) ahora se filtran automáticamente por el proyecto o comuna seleccionados, auto-limpiando la tipología si no existe en la nueva selección.
+- `src/components/proyecto/Cotizador.jsx`: Validación automática reactiva de filtros en cascada para auto-limpiar tipología u orientación incompatible al cambiar de proyecto o comuna. Botón "Cotizar" deshabilitado (`disabled={!activePlanta}`) cuando no hay planta activa seleccionada.
+
 ## [0.9.206] - 2026-11-09
 
 ### Added

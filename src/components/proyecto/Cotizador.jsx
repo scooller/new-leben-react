@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Fancybox } from '@fancyapps/ui'
-import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, Building2 } from 'lucide-react'
+import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, Building2, AlertCircle } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import CotizadorForm from './CotizadorForm.jsx'
@@ -518,6 +518,24 @@ export default function Cotizador({
     }
   }, [enrichedPlantas, plantas, projects, universal, filters.comuna, filters.proyecto])
 
+  // Auto-validate cascading filters: if current tipologia or orientacion is not in available options, clear them
+  useEffect(() => {
+    if (!universal) return
+    if (filters.tipologia && filterOptions.tipologia.length > 0) {
+      const activeTips = Array.isArray(filters.tipologia) ? filters.tipologia : [filters.tipologia]
+      const valid = activeTips.filter((t) => filterOptions.tipologia.includes(t))
+      if (valid.length === 0 && activeTips.length > 0) {
+        setFilters((prev) => ({
+          ...prev,
+          tipologia: Array.isArray(prev.tipologia) ? [] : '',
+        }))
+      }
+    }
+    if (filters.orientacion && filterOptions.orientacion.length > 0 && !filterOptions.orientacion.includes(filters.orientacion)) {
+      setFilters((prev) => ({ ...prev, orientacion: '' }))
+    }
+  }, [universal, filterOptions.tipologia, filterOptions.orientacion, filters.tipologia, filters.orientacion])
+
   // Filtered plantas — cheapest first so the most affordable option shows by default
   const filteredPlantas = useMemo(() => {
     if (universal) {
@@ -937,12 +955,98 @@ export default function Cotizador({
         </ScrollAnim>
       </div>
 
+      {/* Alert Banner when filters produce 0 plants */}
+      {hasFilters && filteredPlantas.length === 0 && !showSkeleton && (
+        <div className="alert alert-warning border-0 shadow-sm rounded-4 p-4 mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 lb-proj-det-cot-empty-alert">
+          <div className="d-flex align-items-start gap-3">
+            <AlertCircle size={28} className="text-warning flex-shrink-0 mt-1" />
+            <div>
+              <h4 className="h6 fw-bold mb-1 text-dark">
+                {filters.proyecto
+                  ? `El proyecto "${filters.proyecto}" no cuenta con unidades disponibles para estos filtros`
+                  : (Array.isArray(filters.comuna) ? filters.comuna.length : filters.comuna)
+                    ? `No encontramos departamentos en "${Array.isArray(filters.comuna) ? filters.comuna.join(', ') : filters.comuna}" con estos filtros`
+                    : 'No encontramos departamentos para la combinación de filtros seleccionada'}
+              </h4>
+              <p className="small text-muted mb-0">
+                {filters.tipologia
+                  ? 'Prueba cambiando el número de dormitorios o la orientación para ver las plantas disponibles.'
+                  : 'Modifica o limpia los filtros para explorar otras alternativas del catálogo.'}
+              </p>
+            </div>
+          </div>
+          <div className="d-flex flex-wrap align-items-center gap-2 flex-shrink-0">
+            {filters.tipologia && (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-dark"
+                onClick={() => selectFilter((f) => ({ ...f, tipologia: '' }))}
+              >
+                Quitar filtro dormitorios
+              </button>
+            )}
+            {filters.proyecto && (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-dark"
+                onClick={() => selectFilter((f) => ({ ...f, tipologia: '', orientacion: '', precio: '' }))}
+              >
+                Ver todo {filters.proyecto}
+              </button>
+            )}
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => {
+                selectFilter(EMPTY_FILTERS)
+                onReset?.()
+              }}
+            >
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main row: planta y esquicio unificados (ratio 133:60) + details */}
       <div className="mb-4 row g-4 lb-proj-det-cot-main" id="detalle-cot">
         {/* Floor plan card unificada */}
         <div className="col-lg-9 lb-proj-det-cot-plan-card">
           {showSkeleton ? (
             <div className="lb-skeleton lb-proj-det-cot-skeleton w-100" />
+          ) : filteredPlantas.length === 0 ? (
+            <div className="lb-proj-det-cot-no-results text-center py-5 d-flex flex-column align-items-center justify-content-center bg-white rounded-3 border" style={{ minHeight: '380px' }}>
+              <div className="rounded-circle bg-light p-3 mb-3 d-inline-flex">
+                <Building2 size={36} className="text-secondary opacity-75" />
+              </div>
+              <h5 className="fw-bold mb-2">Sin plantas encontradas</h5>
+              <p className="text-muted small mb-3" style={{ maxWidth: '440px' }}>
+                {filters.proyecto
+                  ? `No existen unidades que coincidan con los filtros en ${filters.proyecto}. Selecciona otra tipología o explora otros proyectos.`
+                  : 'Ajusta los filtros arriba para encontrar departamentos disponibles en esta ubicación.'}
+              </p>
+              <div className="d-flex flex-wrap gap-2 justify-content-center">
+                {filters.tipologia && (
+                  <button
+                    type="button"
+                    className="btn btn-dark btn-sm px-3"
+                    onClick={() => selectFilter((f) => ({ ...f, tipologia: '' }))}
+                  >
+                    Ver todas las tipologías
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm px-3"
+                  onClick={() => {
+                    selectFilter(EMPTY_FILTERS)
+                    onReset?.()
+                  }}
+                >
+                  Restablecer búsqueda
+                </button>
+              </div>
+            </div>
           ) : (
             <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'zoom-in' : 'default' }} role="button" tabIndex={0}>
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
@@ -1025,6 +1129,7 @@ export default function Cotizador({
               <div className="col-md">
                 <button
                   className="btn btn-primary w-100 lb-proj-det-cot-cta"
+                  disabled={!activePlanta}
                   onClick={() => setShowCotizar(true)}
                 >
                   {displayData.ctaText || 'Cotizar'}
