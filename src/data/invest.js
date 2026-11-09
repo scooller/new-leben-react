@@ -66,7 +66,7 @@ export const investData = {
       'Ñuñoa',
       'Macul',
       'Valdivia',
-      'Temuco',
+      'Puerto Varas',
     ],
     projects: [
       'Edificio Indi (Independencia)',

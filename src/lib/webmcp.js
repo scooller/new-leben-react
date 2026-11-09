@@ -41,7 +41,7 @@ export function initWebMcp() {
       inputSchema: {
         type: 'object',
         properties: {
-          comuna: { type: 'string', description: 'Nombre de la comuna (ej: Temuco, Puerto Varas, Santiago)' },
+          comuna: { type: 'string', description: 'Nombre de la comuna (ej: Puerto Varas, Frutillar, Santiago)' },
           query: { type: 'string', description: 'Nombre del proyecto o término de búsqueda' },
         },
       },

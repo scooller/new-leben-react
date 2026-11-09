@@ -21,10 +21,10 @@ if (empty($cleanPath)) {
     $md = <<<MD
 # Inmobiliaria Leben — Departamentos y Proyectos en Venta en Chile
 
-Descubre departamentos exclusivos en venta en las mejores ubicaciones del sur y centro de Chile: **Puerto Varas**, **Temuco** y **Santiago**. Proyectos diseñados con altos estándares de arquitectura, eficiencia energética y plusvalía garantizada.
+Descubre departamentos exclusivos en venta en las mejores ubicaciones del **sur de Chile** y **Santiago**. Proyectos diseñados con altos estándares de arquitectura, eficiencia energética y plusvalía garantizada.
 
 ## Proyectos Destacados
-- **Edificio INN** (Temuco): Departamentos modernos con excelente conectividad, áreas comunes de vanguardia y terminaciones premium.
+- **Edificio INN** (Puerto Varas): Departamentos modernos con excelente conectividad, áreas comunes de vanguardia y terminaciones premium.
 - **Cumbres del Sur** (Puerto Varas): Entorno natural incomparable, vista a volcanes y lagos, alta demanda residencial y turística.
 - **Parque Frutillar** (Frutillar / Llanquihue): Calidad de vida sureña con diseño sustentable.
 
@@ -77,7 +77,7 @@ MD;
 Asesoría integral para inversionistas que buscan rentabilidad y plusvalía en Chile.
 
 ## Modelos de Inversión
-- **Renta Residencial:** Alta demanda de arriendo en ciudades universitarias y turísticas (Temuco, Puerto Varas).
+- **Renta Residencial:** Alta demanda de arriendo en ciudades turísticas y de alta plusvalía del sur de Chile y Santiago.
 - **Asesoría Financiera:** Gestión de crédito hipotecario y beneficios tributarios.
 MD;
 } else {

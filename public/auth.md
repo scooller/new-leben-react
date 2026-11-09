@@ -5,7 +5,7 @@
 Welcome to the **Inmobiliaria Leben** agent API and resource gateway.
 
 ## 1. Overview
-Inmobiliaria Leben provides automated discovery and programmatic access to real estate development data, apartment inventory, and quoting tools in Chile (Temuco, Puerto Varas, Santiago).
+Inmobiliaria Leben provides automated discovery and programmatic access to real estate development data, apartment inventory, and quoting tools in Chile (sur de Chile y Santiago).
 
 ## 2. API Endpoints
 - **Base URL:** `https://ileben.cl/api/v1`

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 const DEFAULT_TITLE = 'Inmobiliaria Leben | Departamentos y Proyectos en Venta en Chile'
-const DEFAULT_DESC = 'Descubre departamentos en venta en el sur y centro de Chile con Inmobiliaria Leben. Proyectos exclusivos en Puerto Varas, Temuco y Santiago.'
+const DEFAULT_DESC = 'Descubre departamentos en venta en el sur de Chile y Santiago con Inmobiliaria Leben. Proyectos exclusivos, alta calidad y diseño sustentable.'
 const SITE_NAME = 'Inmobiliaria Leben'
 const LOCALE = 'es_CL'
 const TWITTER_SITE = '@leben_inmuebles'

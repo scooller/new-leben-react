@@ -40,7 +40,7 @@ const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 function Home() {
   useSeo({
     title: 'Departamentos y Proyectos en Venta en Chile',
-    description: 'Venta de departamentos y proyectos residenciales en Puerto Varas, Temuco y Santiago. Diseños sustentables, alta calidad y asesoría personalizada con Inmobiliaria Leben.',
+    description: 'Venta de departamentos y proyectos residenciales en el sur de Chile y Santiago. Diseños sustentables, alta calidad y asesoría personalizada con Inmobiliaria Leben.',
     canonical: '/',
     schema: [
       {

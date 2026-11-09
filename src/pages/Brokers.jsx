@@ -35,7 +35,7 @@ export default function Brokers() {
   useGsapAnimations()
   useSeo({
     title: 'Red de Brokers Inmobiliarios | Inmobiliaria Leben',
-    description: 'Únete al Círculo de Brokers de Leben y comercializa proyectos de alta gama en Puerto Varas, Temuco y Santiago con soporte integral y atractivas comisiones.',
+    description: 'Únete al Círculo de Brokers de Leben y comercializa proyectos de alta gama en el sur de Chile y Santiago con soporte integral y atractivas comisiones.',
     canonical: '/brokers',
   })
   const [activeEventTab, setActiveEventTab] = useState(data.events.tabs[0].id)

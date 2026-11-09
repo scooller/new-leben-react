@@ -37,7 +37,7 @@ export default function CotizadorGeneral() {
   useGsapAnimations()
   useSeo({
     title: 'Cotizador de Departamentos Online | Inmobiliaria Leben',
-    description: 'Cotiza tu departamento en línea con Inmobiliaria Leben. Proyectos en Puerto Varas, Temuco y Santiago con precios actualizados en UF y asesoría comercial personalizada.',
+    description: 'Cotiza tu departamento en línea con Inmobiliaria Leben. Proyectos en el sur de Chile y Santiago con precios actualizados en UF y asesoría comercial personalizada.',
     canonical: '/cotizador',
   })
   const { data: rawProjects, loading: projectsLoading, error: projectsError } = useApiProjects()

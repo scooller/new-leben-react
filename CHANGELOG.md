@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.213] - 2026-11-09
+
+### Changed
+- Eliminada toda mención a Temuco en metadatos, descripciones SEO, Open Graph, Twitter Cards, catálogo de agentes (`auth.md`, `ai-catalog.json`, `markdown.php`), cotizador y formulario de inversión. Áreas de venta estandarizadas estrictamente a "el sur de Chile y Santiago".
+
 ## [0.9.212] - 2026-11-09
 
 ### Added
