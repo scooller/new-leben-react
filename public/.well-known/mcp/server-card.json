@@ -1,0 +1,23 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card-v1.json",
+  "serverInfo": {
+    "name": "leben-real-estate-mcp",
+    "version": "1.0.0",
+    "description": "Model Context Protocol (MCP) server for Inmobiliaria Leben real estate catalog, apartments, pricing and quotes"
+  },
+  "transport": {
+    "type": "http",
+    "endpoint": "https://ileben.cl/wp-json/mcp/v1/http"
+  },
+  "capabilities": {
+    "tools": {
+      "list": true,
+      "call": true
+    },
+    "resources": {
+      "list": true,
+      "read": true
+    }
+  }
+}
+

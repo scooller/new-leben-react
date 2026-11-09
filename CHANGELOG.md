@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.210] - 2026-11-09
+
+### Added
+- `public/robots.txt`: Reglas explícitas RFC 9309 para crawlers de IA (`OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` en Allow; `GPTBot`, `ClaudeBot`, `Google-Extended`, `CCBot` en Disallow) y directiva Content Signals (`Content-Signal: ai-train=no, search=yes, ai-input=no`).
+- `public/sitemap.xml`: Sitemap canónico nativo en el root público con URLs oficiales, changefreq y prioridades.
+- `public/.well-known/api-catalog` y `api-catalog.json`: Catálogo de APIs RFC 9727 / RFC 9264 con MIME `application/linkset+json`.
+- `public/.well-known/openid-configuration` y `oauth-authorization-server`: Metadatos RFC 8414 para descubrimiento OAuth/OIDC de agentes.
+- `public/.well-known/oauth-protected-resource`: Descriptor RFC 9728 de recursos protegidos, scopes y métodos soportados.
+- `public/auth.md`: Documento Markdown en raíz con instrucciones de autenticación y consumo de APIs para agentes.
+- `public/.well-known/mcp/server-card.json`: MCP Server Card SEP-1649 para descubrimiento automático del servidor MCP de Leben.
+- `public/.well-known/agent-skills/index.json`: Índice de descubrimiento de skills (Agent Skills Discovery RFC v0.2.0).
+- `public/.well-known/ai-catalog.json`: Manifiesto ARD (Agentic Resource Discovery) con identificadores URN y representativeQueries.
+- `public/markdown.php`: Negociación de contenido `Accept: text/markdown` para entregar Markdown nativo con cabeceras `Content-Type: text/markdown` y `x-markdown-tokens`.
+- `public/.htaccess`: Cabeceras Link RFC 8288 para descubrimiento de agentes (`api-catalog`, `service-desc`, `related`, `help`), reglas CORS para `.well-known` y bypass de SPA fallback para archivos de agentes.
+- `src/lib/webmcp.js`: Implementación de la API WebMCP (`document.modelContext.registerTool`) y anotaciones declarativas en formularios de búsqueda y cotización.
+
 ## [0.9.209] - 2026-11-09
 
 ### Added

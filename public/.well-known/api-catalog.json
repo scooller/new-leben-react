@@ -1,0 +1,26 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://ileben.cl/api/v1",
+      "service-desc": [
+        {
+          "href": "https://ileben.cl/api/v1/proyectos",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://ileben.cl/auth.md",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://ileben.cl/api/v1/proyectos",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}
+

@@ -5,10 +5,35 @@
   # Permitir politica goog#html de Google Analytics / GTM en Content-Security-Policy
   Header always edit Content-Security-Policy "trusted-types ([^;]+)" "trusted-types $1 goog#html 'allow-duplicates'"
   Header edit Content-Security-Policy "trusted-types ([^;]+)" "trusted-types $1 goog#html 'allow-duplicates'"
+
+  # RFC 8288 Link response headers for AI Agent Discovery
+  Header add Link '</.well-known/api-catalog>; rel="api-catalog"'
+  Header add Link '</.well-known/ai-catalog.json>; rel="service-desc"'
+  Header add Link '</.well-known/agent-skills/index.json>; rel="related"'
+  Header add Link '</auth.md>; rel="help"'
+
+  # CORS for discovery manifests
+  <FilesMatch "(api-catalog|\.json|\.md)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
 </IfModule>
 
+# MIME type definitions for agent discovery
+<IfModule mod_mime.c>
+  AddType text/markdown .md
+  AddType application/json .json
+</IfModule>
+
+<Files "api-catalog">
+  ForceType "application/linkset+json; charset=UTF-8"
+</Files>
+
+<Files "auth.md">
+  ForceType "text/markdown; charset=UTF-8"
+</Files>
+
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript text/markdown application/javascript application/json application/xml application/linkset+json image/svg+xml
 </IfModule>
 
 <IfModule mod_expires.c>
@@ -36,9 +61,16 @@
   # Route /api/* to PHP proxy (must be before SPA fallback)
   RewriteRule ^api/ api-proxy.php [L,QSA]
 
-  # Direct pass-through for robots.txt and sitemap.xml
+  # Direct pass-through for robots.txt, sitemap.xml, auth.md, and .well-known
   RewriteRule ^robots\.txt$ - [L]
   RewriteRule ^sitemap\.xml$ - [L]
+  RewriteRule ^auth\.md$ - [L]
+  RewriteRule ^\.well-known/ - [L]
+
+  # Markdown for Agents Negotiation (Accept: text/markdown)
+  RewriteCond %{HTTP:Accept} text/markdown [NC]
+  RewriteCond %{REQUEST_URI} !^/(\.well-known|api|images|assets|robots\.txt|sitemap\.xml|auth\.md)
+  RewriteRule ^(.*)$ markdown.php?path=$1 [L,QSA]
 
   # Social Crawler Previews for Projects (Facebook, WhatsApp, Twitter, LinkedIn, Telegram, Slack)
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|Pinterest) [NC]

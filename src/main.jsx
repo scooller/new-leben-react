@@ -15,6 +15,9 @@ import './styles/main.scss'
 
 // App
 import App from './App.jsx'
+import { initWebMcp } from './lib/webmcp.js'
+
+initWebMcp()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

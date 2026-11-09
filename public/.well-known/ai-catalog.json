@@ -1,0 +1,43 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "name": "Inmobiliaria Leben",
+    "domain": "ileben.cl",
+    "description": "Departamentos y proyectos residenciales en venta en Puerto Varas, Temuco y Santiago de Chile."
+  },
+  "entries": [
+    {
+      "id": "urn:air:ileben.cl:real-estate:catalog",
+      "displayName": "Catálogo de Proyectos Inmobiliarios Leben",
+      "type": "application/json",
+      "url": "https://ileben.cl/api/v1/proyectos",
+      "representativeQueries": [
+        "proyectos inmobiliarios en venta en chile",
+        "departamentos en puerto varas temuco santiago",
+        "comprar departamento en verde inmobiliaria leben"
+      ]
+    },
+    {
+      "id": "urn:air:ileben.cl:tools:mcp-server",
+      "displayName": "Servidor MCP Inmobiliaria Leben",
+      "type": "application/json",
+      "url": "https://ileben.cl/.well-known/mcp/server-card.json",
+      "representativeQueries": [
+        "consultar departamentos y disponibilidad via mcp",
+        "mcp server for chilean real estate properties"
+      ]
+    },
+    {
+      "id": "urn:air:ileben.cl:actions:cotizador",
+      "displayName": "Cotizador de Departamentos Online",
+      "type": "text/html",
+      "url": "https://ileben.cl/cotizador",
+      "representativeQueries": [
+        "cotizar departamento 2 dormitorios en temuco",
+        "precios departamentos puerto varas en uf",
+        "cotizacion online inmobiliaria leben"
+      ]
+    }
+  ]
+}
+
