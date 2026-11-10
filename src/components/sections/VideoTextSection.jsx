@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SplitTitle from '../SplitTitle.jsx'
 import ScrollAnim from '../ScrollAnim.jsx'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -13,17 +14,10 @@ export default function VideoTextSection({
   videoSrc = 'video/inn-test.mp4',
   className = '',
 }) {
-  const base = import.meta.env.BASE_URL
   const sectionRef = useRef(null)
   const videoWrapRef = useRef(null)
 
-  const resolvedVideoSrc = !videoSrc
-    ? ''
-    : /^(https?:)?\/\//.test(videoSrc) || videoSrc.startsWith('data:') || videoSrc.startsWith('blob:')
-      ? videoSrc
-      : videoSrc.startsWith(base)
-        ? videoSrc
-        : `${base}${videoSrc.replace(/^\/+/, '')}`
+  const resolvedVideoSrc = resolveUrl(videoSrc, 'video/inn-test.mp4')
 
   useEffect(() => {
     const section = sectionRef.current

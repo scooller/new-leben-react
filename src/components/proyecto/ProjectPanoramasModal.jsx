@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 
 export const PANORAMAS_CATEGORIES = [
   {
@@ -166,15 +167,10 @@ export default function ProjectPanoramasModal({
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const carouselRef = useRef(null)
   const carouselInstance = useRef(null)
-  const base = import.meta.env.BASE_URL
 
   const modalBg = useMemo(() => {
-    if (!backgroundImage) return `${base}images/inn/panoramas/bg-forest.jpg`
-    if (backgroundImage.startsWith('http') || backgroundImage.startsWith('/') || backgroundImage.startsWith('data:')) {
-      return backgroundImage
-    }
-    return `${base}${backgroundImage}`
-  }, [base, backgroundImage])
+    return resolveUrl(backgroundImage, 'images/inn/panoramas/bg-forest.jpg')
+  }, [backgroundImage])
 
   const activeCategories = Array.isArray(categories) && categories.length > 0 ? categories : PANORAMAS_CATEGORIES
   const currentCategory = activeCategories[activeCatIndex] || activeCategories[0]
@@ -337,14 +333,14 @@ export default function ProjectPanoramasModal({
                           <div key={card.id} className="col-12 col-md-6">
                             <div className="card lb-inn-panoramas-modal__card h-100 border-0 rounded-1 overflow-hidden">
                               <a
-                                href={`${base}${card.image}`}
+                                href={resolveUrl(card.image)}
                                 data-fancybox={`panoramas-${currentCategory?.id || 'cat'}`}
                                 data-caption={`${card.title} · a ${card.distance} de ${projectName}`}
                                 className="d-block ratio ratio-16x9 text-decoration-none position-relative lb-img-trigger"
                                 style={{ cursor: 'zoom-in' }}
                               >
                                 <img
-                                  src={`${base}${card.image}`}
+                                  src={resolveUrl(card.image)}
                                   alt={card.title}
                                   className="object-fit-cover w-100 h-100 lb-inn-panoramas-modal__card-img"
                                   loading="lazy"

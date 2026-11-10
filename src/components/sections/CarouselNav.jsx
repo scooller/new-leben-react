@@ -1,13 +1,14 @@
 import { useRef } from 'react'
 import { hover } from '../icons/animated-icon.jsx'
 import ScrollAnim from '../ScrollAnim.jsx'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 
 // Icono por item: string = imagen estática | componente = icono animado en hover (ref propio)
 function ItemIcon({ icon }) {
   const ref = useRef(null)
   if (!icon) return null
   if (typeof icon === 'string') {
-    return <img src={`${import.meta.env.BASE_URL}${icon}`} alt="" aria-hidden="true" />
+    return <img src={resolveUrl(icon)} alt="" aria-hidden="true" />
   }
   const Icon = icon
   return (

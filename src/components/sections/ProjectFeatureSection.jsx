@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { X, ChevronLeft, ChevronRight, Image, ZoomIn } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 
 // Fuerza del parallax del carrusel (se sobrescribe desde Inn.jsx)
 const PARALLAX_STRENGTH = 14
@@ -40,7 +41,6 @@ export default function ProjectFeatureSection({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const spacesModalRef = useRef(null)
-  const base = import.meta.env.BASE_URL
   const sectionRef = useRef(null)
   const carouselEl = useRef(null)
   const carouselInstance = useRef(null)
@@ -132,7 +132,7 @@ export default function ProjectFeatureSection({
     <section ref={sectionRef} className={`lb-inn-proyecto ${className}`.trim()} id={id} aria-label={ariaLabel}>
       <div
         className="container lb-shadow-box px-3 px-md-5 py-3 py-md-4 pt-4 pt-lg-8"
-        style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${/^(https?:)?\/\//.test(backgroundImage) || backgroundImage.startsWith('data:') ? backgroundImage : `${base}${backgroundImage.replace(/^\/+/, '')}`}")` : undefined }}
+        style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${resolveUrl(backgroundImage)}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
           <div className="col-lg-5 align-self-stretch position-relative lb-inn-proyecto__text-column">
@@ -167,7 +167,7 @@ export default function ProjectFeatureSection({
                   {highlight}
                   {highlightLogos.map((logo, index) => (
                     <div className={`col d-flex align-items-center justify-content-center ${index > 0 ? 'border-start border-dark-subtle' : ''}`.trim()} key={logo.src || index}>
-                      <img src={`${base}${logo.src}`} alt={logo.alt || ''} className={`img-fluid ${logo.className || ''}`.trim()} />
+                      <img src={resolveUrl(logo.src)} alt={logo.alt || ''} className={`img-fluid ${logo.className || ''}`.trim()} />
                     </div>
                   ))}
                 </ScrollAnim>
@@ -220,7 +220,7 @@ export default function ProjectFeatureSection({
             <ScrollAnim className="col-lg-7 d-flex">
               <div className="lb-inn-proyecto__frame w-100">
                 <video
-                  src={/^(https?:)?\/\//.test(mediaVideoSrc) || mediaVideoSrc.startsWith('data:') ? mediaVideoSrc : `${base}${mediaVideoSrc.replace(/^\/+/, '')}`}
+                  src={resolveUrl(mediaVideoSrc)}
                   className="d-block w-100 h-100 object-fit-cover"
                   autoPlay
                   muted
@@ -235,8 +235,8 @@ export default function ProjectFeatureSection({
                 <div className="carousel-inner lb-inn-proyecto__frame">
                   {slides.map((slide, index) => {
                     const rawTarget = (slide.link && typeof slide.link === 'string' && slide.link.trim()) || slide.img || slide.src
-                    const fancyboxHref = /^(https?:)?\/\//.test(rawTarget) ? rawTarget : `${base}${rawTarget.replace(/^\//, '')}`
-                    const imgSrc = /^(https?:)?\/\//.test(slide.img || slide.src) ? (slide.img || slide.src) : `${base}${slide.img || slide.src}`
+                    const fancyboxHref = resolveUrl(rawTarget)
+                    const imgSrc = resolveUrl(slide.img || slide.src)
 
                     return (
                       <div
@@ -346,9 +346,10 @@ export default function ProjectFeatureSection({
                   {(() => {
                     const activeImageObj = spacesModal.galleries[activeGalleryIndex]?.images[activeImageIndex];
                     if (!activeImageObj) return null;
+                    const activeImgUrl = resolveUrl(activeImageObj.img);
                     return (
                       <a
-                        href={`${base}${activeImageObj.img}`}
+                        href={activeImgUrl}
                         data-fancybox="inn-espacios"
                         data-caption={activeImageObj.alt || ''}
                         aria-label={`Ampliar imagen`}
@@ -356,7 +357,7 @@ export default function ProjectFeatureSection({
                         style={{ cursor: 'zoom-in' }}
                       >
                         <img
-                          src={`${base}${activeImageObj.img}`}
+                          src={activeImgUrl}
                           alt={activeImageObj.alt || ''}
                           className="w-100 h-100 object-fit-contain rounded-3"
                         />
@@ -437,7 +438,7 @@ export default function ProjectFeatureSection({
                         }}
                       >
                         <img
-                          src={`${base}${imgObj.thumb || imgObj.img}`}
+                          src={resolveUrl(imgObj.thumb || imgObj.img)}
                           alt={`Thumb ${idx}`}
                           className="w-100 h-100 object-fit-cover"
                         />

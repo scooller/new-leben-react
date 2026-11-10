@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { images } from '../data/content.js'
+import { resolveUrl } from '../lib/resolveUrl.js'
 
 /**
  * Reusable project card — Bootstrap card structure.
@@ -12,9 +13,10 @@ export default function ProjectCard({ project, to, onClick, ctaLabel = 'Ver Proy
   const link = to || `/proyectos/${project.slug || project.name.toLowerCase().replace(/\s+/g, '-').replace(/edificio-/i, '')}`
 
   // Support both key-based images (from content.js) and full URL paths (from projects.js)
-  const imgSrc = typeof project.image === 'string' && (project.image.startsWith('http') || project.image.startsWith('/'))
+  const rawImage = typeof project.image === 'string' && (project.image.startsWith('http') || project.image.startsWith('/') || project.image.includes('/'))
     ? project.image
     : images[project.image]
+  const imgSrc = resolveUrl(rawImage)
 
   const CardTag = onClick ? 'button' : Link
   const cardProps = onClick ? { onClick: () => onClick(project) } : { to: link }

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { EyeOff } from 'lucide-react'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 
 /** Catálogo de vistas por departamento y piso en Edificio INN */
 const INN_VISTAS = {
@@ -91,12 +92,10 @@ export default function WindowPanViewer({ planta = null }) {
   const touchStartRef = useRef(null)
   const panRef = useRef({ x: 0, y: 0 })
 
-  const base = import.meta.env.BASE_URL
-
   const vistaInfo = useMemo(() => resolveVista(planta), [planta])
   const currentImages = vistaInfo.images
   const currentImageFile = currentImages[shotIndex] || currentImages[0]
-  const imageSrc = currentImageFile ? `${base}images/inn/vistas/${currentImageFile}` : ''
+  const imageSrc = currentImageFile ? resolveUrl(`images/inn/vistas/${currentImageFile}`) : ''
 
   // Detectar touch
   useEffect(() => {

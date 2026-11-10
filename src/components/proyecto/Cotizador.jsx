@@ -8,6 +8,7 @@ import SplitTitle from '../SplitTitle.jsx'
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
 import { buildCotizaUrlWithUtms } from '../../lib/utmSession.js'
+import { resolveUrl } from '../../lib/resolveUrl.js'
 import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, formatComuna, toArray, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
@@ -147,19 +148,20 @@ const EMPTY_FILTERS_PROJECT = Object.freeze({ tipologia: '', producto: '', piso:
 
 // Ensure thumbnail and media URLs from API are full absolute URLs
 function toAbsoluteUrl(url, fallbackHostUrl) {
-  if (!url) return fallbackHostUrl || ''
-  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    return url
+  if (!url) return resolveUrl(fallbackHostUrl)
+  const resolved = resolveUrl(url)
+  if (/^(?:https?:)?\/\//i.test(resolved) || /^data:/i.test(resolved)) {
+    return resolved
   }
-  if (fallbackHostUrl && (fallbackHostUrl.startsWith('http://') || fallbackHostUrl.startsWith('https://'))) {
+  if (fallbackHostUrl && /^(?:https?:)?\/\//i.test(fallbackHostUrl)) {
     try {
-      const origin = new URL(fallbackHostUrl).origin
-      return `${origin}/${url.replace(/^\/+/, '')}`
+      const origin = new URL(resolveUrl(fallbackHostUrl)).origin
+      return `${origin}/${resolved.replace(/^\/+/, '')}`
     } catch {
       // ignore
     }
   }
-  return url
+  return resolved
 }
 
 // Module-level cache for plantas, project galleries and brochures
@@ -739,7 +741,8 @@ export default function Cotizador({
     const items = []
     if (activePlanta) {
       // Prioridad: imagen interior; portada SOLO si no existe interior
-      const planSrc = activePlanta.interior_image_url || activePlanta.cover_image_url || activePlanta.imageUrl || null
+      const rawPlan = activePlanta.interior_image_url || activePlanta.cover_image_url || activePlanta.imageUrl || null
+      const planSrc = rawPlan ? resolveUrl(rawPlan) : null
       if (planSrc) {
         items.push({
           src: planSrc,
@@ -752,8 +755,9 @@ export default function Cotizador({
 
     if (Array.isArray(projectGallery) && projectGallery.length > 0) {
       projectGallery.forEach((g) => {
-        const src = g.url || g.image_url
-        const rawThumb = g.thumbnail_url || src
+        const rawSrc = g.url || g.image_url
+        const src = rawSrc ? resolveUrl(rawSrc) : ''
+        const rawThumb = g.thumbnail_url || rawSrc
         const thumb = toAbsoluteUrl(rawThumb, src)
         if (src && !items.some((it) => it.src === src)) {
           items.push({
@@ -1218,7 +1222,7 @@ export default function Cotizador({
                 className="card h-100 lb-proj-det-cot-planta-card"
                 onClick={() => { setActiveData(p.data); setSelected(0) }}
               >
-                {p.image && <img src={p.image} alt={p.label} className="card-img-top" loading="lazy" />}
+                {p.image && <img src={resolveUrl(p.image)} alt={p.label} className="card-img-top" loading="lazy" />}
                 <div className="card-body">
                   <SplitTitle as='h5' className="card-title mb-0" text={p.label} />
                 </div>

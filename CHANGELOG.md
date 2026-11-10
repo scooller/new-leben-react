@@ -8,7 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- `src/pages/ProyectoDetalle.jsx` & `src/components/sections/ProjectFeatureSection.jsx`: Sincronización bidireccional entre el carrusel de Espacios Comunes y los íconos de navegación (`CarouselNav` / `.lb-inn-hero-tabs--plain`). Al navegar con las flechas prev/next o autoplay, el ícono activo cambia en sincronía inmediata con el slide.
+- `src/lib/resolveUrl.js`: Creado helper universal para normalizar URLs de assets y medios en todo el frontend. Usa regex `/^\/+(https?:\/\/)/i` para limpiar prefijos erróneos de barra diagonal antes de URLs absolutas (ej. `'/https://dev.ileben.cl/curator/...'`), respeta URLs completas y prepende `BASE_URL` únicamente a rutas relativas locales.
+- `src/components/proyecto/ProjectPanoramasModal.jsx`, `src/pages/ProyectoDetalle.jsx`, `src/components/sections/ProjectFeatureSection.jsx`, `src/components/sections/InteriorismoSection.jsx`, `src/components/sections/VideoTextSection.jsx`, `src/components/sections/CarouselNav.jsx`, `src/components/ProjectCard.jsx` & `src/components/proyecto/Cotizador.jsx`: Migrados para usar `resolveUrl`, eliminando URLs malformadas en modal de Experiencias y galerías dinámicas.
+
+## [0.9.220] - 2026-11-10
+
+### Fixed
+- `src/lib/resolveUrl.js`: Utilidad centralizada de resolución y saneamiento de URLs de medios con regex para eliminar barras accidentales previas a protocolos (`/https://...`).
+- Componentes y páginas (`ProjectPanoramasModal`, `ProyectoDetalle`, `ProjectFeatureSection`, `InteriorismoSection`, `VideoTextSection`, `CarouselNav`, `ProjectCard`, `Cotizador`): Estandarizados con `resolveUrl` para garantizar que las URLs absolutas devueltas por la API se muestren sin prefijo local.
 
 ## [0.9.219] - 2026-11-10
 

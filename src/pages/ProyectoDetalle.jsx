@@ -28,25 +28,10 @@ import { HotTubIcon } from '../components/icons/hot-tub.jsx'
 import { apiFetch } from '../lib/apiFetch.js'
 import { formatPriceUF } from '../lib/projectUtils.js'
 import { useSeo } from '../hooks/useSeo.js'
-
-const base = import.meta.env.BASE_URL
+import { resolveUrl } from '../lib/resolveUrl.js'
 
 // Parallax estándar para secciones de ficha
 const PARALLAX_STRENGTH = -12
-
-// Helper para resolver rutas relativas locales y URLs absolutas/Curator
-const resolveUrl = (path, fallback = '') => {
-  if (!path) {
-    if (!fallback) return ''
-    return fallback.startsWith('http://') || fallback.startsWith('https://') || fallback.startsWith('data:')
-      ? fallback
-      : `${base}${fallback.replace(/^\/+/, '')}`
-  }
-  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
-    return path
-  }
-  return `${base}${path.replace(/^\/+/, '')}`
-}
 
 // Helper para formatear títulos multilínea con saltos de línea (\n)
 const formatMultiline = (text) => {
@@ -134,7 +119,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
-                        src={resolveUrl(loc.img, 'images/inn/ubicacion/nuevo.jpg')}
+                        src={resolveUrl(loc.img || loc.image_url, 'images/inn/ubicacion/nuevo.jpg')}
                         alt={loc.name}
                         className="d-block w-100 lb-inn-gallery__img"
                         loading="lazy"
@@ -146,7 +131,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                         }}
                       />
                       <a
-                        href={resolveUrl(loc.img, 'images/inn/ubicacion/nuevo.jpg')}
+                        href={resolveUrl(loc.img || loc.image_url, 'images/inn/ubicacion/nuevo.jpg')}
                         data-fancybox="inn-galeria"
                         className="lb-inn-gallery__zoom lb-img-zoom-badge position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
