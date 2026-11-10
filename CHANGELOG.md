@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- `src/lib/apiFetch.js`, `src/lib/webmcp.js`, `vite.config.js`, `public/api-proxy.php` & `public/share.php`: Resolución de rutas parciales (`/api/v1/...`) a la URL completa de la API (`https://dev.ileben.cl/api/v1/...`) en producción e inyección de configuración base en `dist/api-proxy.php` y `dist/share.php`, corrigiendo los errores HTTP 500 en `test.ileben.cl`.
+### Added
+- `README.md` & `AGENTS.md`: Documentados los endpoints oficiales de API para producción (`https://admin.ileben.cl/`) y desarrollo (`https://dev.ileben.cl/`).
+
+## [0.9.218] - 2026-11-10
+
+### Added
+- `README.md` & `AGENTS.md`: Definición formal de entornos de API del backend Laravel: producción (`https://admin.ileben.cl/api/v1`) y desarrollo (`https://dev.ileben.cl/api/v1`).
 
 ## [0.9.217] - 2026-11-10
 

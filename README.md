@@ -37,6 +37,15 @@ npm run preview
 
 ---
 
+## API Environments
+
+| Entorno | Base URL | API Endpoint |
+|---|---|---|
+| **Producción** | `https://admin.ileben.cl/` | `https://admin.ileben.cl/api/v1` |
+| **Desarrollo** | `https://dev.ileben.cl/` | `https://dev.ileben.cl/api/v1` |
+
+---
+
 ## Cumplimiento Ley 21.719 (Chile) y Sistema de Cookies & Analítica Anónima
 
 Este proyecto incorpora un sistema integral de consentimiento, bloqueo y privacidad adaptado a los estándares de la **Ley N° 21.719 sobre Protección de Datos Personales de Chile** (que crea la Agencia de Protección de Datos Personales - APDP) y directrices de SERNAC.

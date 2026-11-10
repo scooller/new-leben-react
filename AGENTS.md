@@ -78,7 +78,10 @@ All agent personas are defined in `.agents/`. Each agent has a specific role and
 Agents must assume this repository may use a modern full-stack web development stack and should detect the actual implementation before making changes.
 
 ### Backend
-- PHP applications, especially Laravel-based architectures.
+- PHP applications, especially Laravel-based architectures (`back-ileben`).
+- **API Environments:**
+  - **Producción:** `https://admin.ileben.cl/` (Base API: `https://admin.ileben.cl/api/v1`)
+  - **Desarrollo:** `https://dev.ileben.cl/` (Base API: `https://dev.ileben.cl/api/v1`)
 - WordPress and WooCommerce implementations when the project is CMS-driven.
 - REST API, webhook, and third-party service integrations.
 
@@ -200,6 +203,8 @@ curl -s -X POST \
 | CI/CD pipelines | `.github/workflows/` | Automated testing and deployment |
 | Issue templates | `.github/ISSUE_TEMPLATE/` | Structured bug/feature reporting |
 | Remote MCP | `https://ileben.cl/wp-json/mcp/v1/http` | WordPress live data, content & media |
+| API Producción | `https://admin.ileben.cl/api/v1` | Backend Laravel producción |
+| API Desarrollo | `https://dev.ileben.cl/api/v1` | Backend Laravel desarrollo/staging |
 
 ***
 
