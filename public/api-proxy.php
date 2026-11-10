@@ -59,7 +59,8 @@ $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
 $currentOrigin = ($isHttps ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
-$API_BASE = rtrim(get_proxy_env('API_TARGET', get_proxy_env('DEV_API_TARGET', '')), '/');
+$rawApiBase = get_proxy_env('API_TARGET', get_proxy_env('DEV_API_TARGET', 'https://dev.ileben.cl'));
+$API_BASE = preg_replace('#/(?:api(?:/v1)?)?/?$#', '', rtrim($rawApiBase, '/'));
 $API_TOKEN = get_proxy_env('API_TOKEN', get_proxy_env('DEV_API_TOKEN', ''));
 $AUTHORIZED_URL = rtrim(get_proxy_env('API_ORIGIN', get_proxy_env('DEV_API_ORIGIN', $currentOrigin)), '/');
 $REFERER = get_proxy_env('API_REFERER', get_proxy_env('DEV_API_REFERER', $AUTHORIZED_URL . '/'));

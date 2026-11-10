@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- `src/components/proyecto/Cotizador.jsx`: Botón "Cotizar" deshabilitado cuando el proyecto no tiene configurada una URL de cotizador (`cotiza_url`) desde el backend, eliminando el fallback al formulario estático.
+### Fixed
+- `src/lib/apiFetch.js`, `src/lib/webmcp.js`, `vite.config.js`, `public/api-proxy.php` & `public/share.php`: Resolución de rutas parciales (`/api/v1/...`) a la URL completa de la API (`https://dev.ileben.cl/api/v1/...`) en producción e inyección de configuración base en `dist/api-proxy.php` y `dist/share.php`, corrigiendo los errores HTTP 500 en `test.ileben.cl`.
+
+## [0.9.217] - 2026-11-10
+
+### Fixed
+- `src/lib/apiFetch.js` & `src/lib/webmcp.js`: `resolveApiUrl()` convierte endpoints parciales (`/api/v1/...`) en la URL completa de la API (`https://dev.ileben.cl/api/v1/...`) con cabecera `Authorization: Bearer`.
+- `vite.config.js`, `public/api-proxy.php` & `public/share.php`: URL completa por defecto (`https://dev.ileben.cl`) y plugin de compilación (`inject-dist-php-defaults`) para inyectar variables de entorno en `dist/api-proxy.php` y `dist/share.php` durante el build, eliminando el error `500 Internal Server Error` al desplegar `dist/`.
 
 ## [0.9.216] - 2026-11-10
 

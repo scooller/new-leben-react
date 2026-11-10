@@ -1,6 +1,21 @@
 const inflight = new Map()
 const PREFIX = 'lb_api:'
 const DEFAULT_TTL = 5 * 60 * 1000 // 5 minutes
+const API_BASE = (import.meta.env.VITE_API_TARGET || 'https://dev.ileben.cl').replace(/\/(?:api(?:\/v1)?)?\/?$/, '')
+const API_TOKEN = import.meta.env.VITE_API_TOKEN || ''
+
+/**
+ * Resolve partial API paths (e.g. '/api/v1/proyectos') to full API URLs.
+ * In local Vite dev (`import.meta.env.DEV`), keeps relative path for Vite dev proxy
+ * unless a full URL is already passed.
+ */
+export function resolveApiUrl(url) {
+  if (!url || typeof url !== 'string') return url
+  if (/^https?:\/\//i.test(url)) return url
+  const normalizedPath = url.startsWith('/') ? url : `/${url}`
+  if (import.meta.env.DEV) return normalizedPath
+  return `${API_BASE}${normalizedPath}`
+}
 
 function readCache(key) {
   try {
@@ -65,9 +80,16 @@ export async function apiFetch(url, options = {}) {
     if (inflight.has(url)) return inflight.get(url)
   }
 
+  const fetchUrl = resolveApiUrl(url)
+  const headers = {
+    Accept: 'application/json',
+    ...(API_TOKEN && !import.meta.env.DEV ? { Authorization: `Bearer ${API_TOKEN}` } : {}),
+    ...(options.headers || {}),
+  }
+
   const promise = (async () => {
     try {
-      const r = await fetch(url, options)
+      const r = await fetch(fetchUrl, { ...options, headers })
 
       if (!r.ok) {
         return { data: null, error: `HTTP ${r.status}` }

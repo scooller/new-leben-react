@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch'
+
 /**
  * WebMCP Browser Agent Tools Integration
  * Implements WebMCP spec: https://webmachinelearning.github.io/webmcp/
@@ -47,8 +49,8 @@ export function initWebMcp() {
       },
       execute: async ({ comuna, query } = {}) => {
         try {
-          const res = await fetch('/api/v1/proyectos')
-          const data = await res.json()
+          const { data, error } = await apiFetch('/api/v1/proyectos')
+          if (error) return { error }
           let list = Array.isArray(data) ? data : (data?.data || [])
           if (comuna) {
             list = list.filter((p) => p.comuna?.toLowerCase().includes(comuna.toLowerCase()))
@@ -75,8 +77,9 @@ export function initWebMcp() {
       },
       execute: async ({ slug }) => {
         try {
-          const res = await fetch(`/api/v1/proyectos/${encodeURIComponent(slug)}/content`)
-          return await res.json()
+          const { data, error } = await apiFetch(`/api/v1/proyectos/${encodeURIComponent(slug)}/content`)
+          if (error) return { error }
+          return data
         } catch (e) {
           return { error: e.message }
         }

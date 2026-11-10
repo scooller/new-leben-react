@@ -78,7 +78,8 @@ $cleanSlug = strtolower(preg_replace('/^edificio-/', '', preg_replace('/edificio
 $canonicalUrl = $SITE_URL . '/proyectos/' . $cleanSlug;
 
 // 3. Dynamic API Configuration from environment
-$apiBase = rtrim(get_env_var('API_TARGET', get_env_var('DEV_API_TARGET', '')), '/');
+$rawApiBase = get_env_var('API_TARGET', get_env_var('DEV_API_TARGET', 'https://dev.ileben.cl'));
+$apiBase = preg_replace('#/(?:api(?:/v1)?)?/?$#', '', rtrim($rawApiBase, '/'));
 $apiToken = get_env_var('API_TOKEN', get_env_var('DEV_API_TOKEN', ''));
 $apiOrigin = get_env_var('API_ORIGIN', get_env_var('DEV_API_ORIGIN', $currentOrigin));
 
