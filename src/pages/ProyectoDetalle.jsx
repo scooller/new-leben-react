@@ -315,6 +315,42 @@ export default function ProyectoDetalle() {
 
   // --- DERIVACIÓN DINÁMICA DE SECCIONES DESDE EL BACKEND ---
 
+  // Inyección de CSS y JavaScript personalizados por proyecto (con aislamiento y limpieza)
+  useEffect(() => {
+    const rawCss = projectContent?.custom_css
+    const rawJs = projectContent?.custom_js
+    const css = typeof rawCss === 'string' ? rawCss.trim().replace(/^<style[^>]*>/i, '').replace(/<\/style>$/i, '').trim() : ''
+    const js = typeof rawJs === 'string' ? rawJs.trim().replace(/^<script[^>]*>/i, '').replace(/<\/script>$/i, '').trim() : ''
+
+    let styleEl = document.getElementById('lb-project-custom-css')
+    if (css) {
+      if (!styleEl) {
+        styleEl = document.createElement('style')
+        styleEl.id = 'lb-project-custom-css'
+        document.head.appendChild(styleEl)
+      }
+      styleEl.textContent = css
+    } else if (styleEl) {
+      styleEl.remove()
+    }
+
+    let scriptEl = document.getElementById('lb-project-custom-js')
+    if (js) {
+      if (scriptEl) scriptEl.remove()
+      scriptEl = document.createElement('script')
+      scriptEl.id = 'lb-project-custom-js'
+      scriptEl.textContent = `/* Inyección personalizada Proyecto: ${cleanSlug} */\n(function() {\n${js}\n})();`
+      document.body.appendChild(scriptEl)
+    } else if (scriptEl) {
+      scriptEl.remove()
+    }
+
+    return () => {
+      document.getElementById('lb-project-custom-css')?.remove()
+      document.getElementById('lb-project-custom-js')?.remove()
+    }
+  }, [projectContent?.custom_css, projectContent?.custom_js, cleanSlug])
+
   // Paleta de colores
   const themeStyles = useMemo(() => {
     const theme = projectContent?.theme || {}

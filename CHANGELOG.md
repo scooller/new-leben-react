@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- `src/lib/resolveUrl.js`: Creado helper universal para normalizar URLs de assets y medios en todo el frontend. Usa regex `/^\/+(https?:\/\/)/i` para limpiar prefijos erróneos de barra diagonal antes de URLs absolutas (ej. `'/https://dev.ileben.cl/curator/...'`), respeta URLs completas y prepende `BASE_URL` únicamente a rutas relativas locales.
-- `src/components/proyecto/ProjectPanoramasModal.jsx`, `src/pages/ProyectoDetalle.jsx`, `src/components/sections/ProjectFeatureSection.jsx`, `src/components/sections/InteriorismoSection.jsx`, `src/components/sections/VideoTextSection.jsx`, `src/components/sections/CarouselNav.jsx`, `src/components/ProjectCard.jsx` & `src/components/proyecto/Cotizador.jsx`: Migrados para usar `resolveUrl`, eliminando URLs malformadas en modal de Experiencias y galerías dinámicas.
+### Added
+- `src/pages/ProyectoDetalle.jsx`: Inyección aislada de CSS (`<style id="lb-project-custom-css">`) y JavaScript (`<script id="lb-project-custom-js">`) personalizados por proyecto provistos desde el backend (`projectContent.custom_css` y `projectContent.custom_js`). Se limpian automáticamente al desmontar la ficha o cambiar de proyecto para evitar fugas entre proyectos.
+
+## [0.9.221] - 2026-11-10
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`: Soporte de inyección exclusiva de `custom_css` y `custom_js` configurados en la pestaña 'Identidad Visual, Paleta & Hero' del backend, con encapsulado IIFE y ciclo de vida limpio por proyecto.
 
 ## [0.9.220] - 2026-11-10
 
