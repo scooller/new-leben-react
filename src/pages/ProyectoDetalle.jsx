@@ -384,6 +384,7 @@ export default function ProyectoDetalle() {
   const projectEyebrow = projectContent?.project_section?.eyebrow || 'Proyecto'
   const projectTitle = formatMultiline(projectContent?.project_section?.title || currentProject?.name || '')
   const projectDescHtml = projectContent?.project_section?.description || currentProject?.descripcion || ''
+  const projectBg = resolveUrl(projectContent?.project_section?.bg_image_url)
   const projectHighlightOffer = projectContent?.project_section?.highlight_offer ?? null
   const projectSlides = useMemo(() => {
     return projectContent?.project_section?.slides || projectContent?.project_slides || []
@@ -741,6 +742,7 @@ export default function ProyectoDetalle() {
             slides={projectSlides}
             carouselId="projectCarousel"
             parallaxStrength={10}
+            backgroundImage={projectBg}
             activeSlide={activeSlide}
             onSlideChange={setActiveSlide}
             showIndicators={false}
