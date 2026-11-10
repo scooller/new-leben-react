@@ -1561,8 +1561,12 @@ $inn-map-card-bg: #f6f1eb;
       box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
     }
 
-    // Bootstrap .ratio no tiene overflow:hidden — lo forzamos para clipear el scale de la imagen
+    // Aspect ratio 16:9 y overflow:hidden para clipear el scale de la imagen
     .ratio {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
       border-right: 1rem solid $inn-map-card-bg;
     }
@@ -1574,6 +1578,11 @@ $inn-map-card-bg: #f6f1eb;
   }
 
   &__card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.45s ease;
 
     .lb-inn-panoramas-modal__card:hover & {

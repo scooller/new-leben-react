@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.9.222] - 2026-11-10
 
-### Added
-- `src/pages/ProyectoDetalle.jsx`: Inyección aislada de CSS (`<style id="lb-project-custom-css">`) y JavaScript (`<script id="lb-project-custom-js">`) personalizados por proyecto provistos desde el backend (`projectContent.custom_css` y `projectContent.custom_js`). Se limpian automáticamente al desmontar la ficha o cambiar de proyecto para evitar fugas entre proyectos.
+### Fixed
+- `src/styles/global.scss`: Eliminada la regla global `.ratio::before { position: absolute; }` que sacaba de flujo al pseudo-elemento generador de alto en Bootstrap 5, provocando colapso a 0px de altura en los contenedores `.ratio` del modal de Experiencias (`ProjectPanoramasModal`).
+- `src/styles/components/_inn.scss`: En `.lb-inn-panoramas-modal__card`, asegurado `display: block; width: 100%; aspect-ratio: 16 / 9; position: relative; overflow: hidden;` en `.ratio` y `position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;` en la imagen, garantizando renderizado y proporción adecuada.
+- `src/pages/ProyectoDetalle.jsx`: Ajuste de alineación con `justify-content-around` en fila de especificaciones técnicas del proyecto.
 
 ## [0.9.221] - 2026-11-10
 

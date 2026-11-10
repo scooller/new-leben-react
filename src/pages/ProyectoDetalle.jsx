@@ -717,7 +717,7 @@ export default function ProyectoDetalle() {
         {infoList.length > 0 && (
           <section className="lb-inn-info" aria-label="Datos del proyecto">
             <div className="container">
-              <div className="row row-cols-1 row-cols-lg-5 text-center gx-4 gy-3">
+              <div className="row row-cols-1 row-cols-lg-5 text-center justify-content-around gx-4 gy-3">
                 {infoList.map((t, i) => (
                   <ScrollAnim animation='scale' delay={0.2 * (i + 1)} className="col" key={t.id}>
                     <div className="d-flex flex-column gap-1">
