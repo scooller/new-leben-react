@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- `src/lib/utmSession.js` & `src/App.jsx`: Captura y persistencia de parámetros UTM desde la URL y sincronización con `GET /api/v1/site-config` (`utm_*_default`, `evento_sale`, `sale_utm_campaign`, `sale_campaign_override`) como fuente de verdad.
-- `src/components/proyecto/Cotizador.jsx`: Modal con `<iframe>` al hacer clic en "Cotizar" cargando `cotiza_url` del proyecto con inyección automática de parámetros UTM.
+### Changed
+- `src/components/proyecto/Cotizador.jsx`: Botón "Cotizar" deshabilitado cuando el proyecto no tiene configurada una URL de cotizador (`cotiza_url`) desde el backend, eliminando el fallback al formulario estático.
+
+## [0.9.216] - 2026-11-10
+
+### Changed
+- `src/components/proyecto/Cotizador.jsx`: Botón "Cotizar" deshabilitado (`disabled={!activePlanta || !rawCotizaUrl}`) cuando el proyecto no posee `cotiza_url` configurado en el backend, eliminando el fallback de `CotizadorForm`.
 
 ## [0.9.215] - 2026-11-10
 

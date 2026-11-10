@@ -4,7 +4,6 @@ import { Fancybox } from '@fancyapps/ui'
 import { Layers, Expand, Home, Sun, Compass, Maximize, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, Building2, AlertCircle } from 'lucide-react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
-import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
@@ -655,6 +654,8 @@ export default function Cotizador({
       setProjectCotizaUrl(activeProject.cotiza_url)
     } else if (projectCotizaUrlCache.has(currentProjectKey)) {
       setProjectCotizaUrl(projectCotizaUrlCache.get(currentProjectKey))
+    } else {
+      setProjectCotizaUrl(null)
     }
 
     if (propBrochureUrl) {
@@ -665,6 +666,8 @@ export default function Cotizador({
     } else if (projectBrochureCache.has(currentProjectKey)) {
       setProjectBrochure(projectBrochureCache.get(currentProjectKey))
       if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
+    } else {
+      setProjectBrochure(null)
     }
 
     let cancelled = false
@@ -675,10 +678,9 @@ export default function Cotizador({
         projectBrochureCache.set(currentProjectKey, url)
         setProjectBrochure(url)
       }
-      if (data.cotiza_url) {
-        projectCotizaUrlCache.set(currentProjectKey, data.cotiza_url)
-        setProjectCotizaUrl(data.cotiza_url)
-      }
+      const cotizaUrl = data.cotiza_url || null
+      projectCotizaUrlCache.set(currentProjectKey, cotizaUrl)
+      setProjectCotizaUrl(cotizaUrl)
     }).catch(() => {})
 
     return () => { cancelled = true }
@@ -1150,8 +1152,8 @@ export default function Cotizador({
               <div className="col-md">
                 <button
                   className="btn btn-primary w-100 lb-proj-det-cot-cta"
-                  disabled={!activePlanta && !rawCotizaUrl}
-                  onClick={() => setShowCotizar(true)}
+                  disabled={!activePlanta || !rawCotizaUrl}
+                  onClick={() => rawCotizaUrl && setShowCotizar(true)}
                 >
                   {displayData.ctaText || 'Cotizar'}
                 </button>
@@ -1232,42 +1234,30 @@ export default function Cotizador({
     <section className={`lb-proj-det-cotizador pt-4 pb-1 pt-md-5 ${className}`.trim()} id="cotizador" ref={ref}>
       {content}
 
-      {rawCotizaUrl ? (
-        showCotizar && createPortal(
-          <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.65)', zIndex: 1055 }} onClick={() => setShowCotizar(false)}>
-            <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-content overflow-hidden">
-                <div className="modal-header">
-                  <h5 className="modal-title">
-                    Cotizar — {activePlanta?.proyecto?.name || activeProject?.name || selection?.project?.name || displayData.title}
-                    {activePlanta?.name ? ` · ${activePlanta.name}` : ''}
-                  </h5>
-                  <button type="button" className="btn-close" onClick={() => setShowCotizar(false)} aria-label="Cerrar" />
-                </div>
-                <div className="modal-body p-0">
-                  <iframe
-                    src={cotizaIframeUrl}
-                    title={`Cotizar ${activePlanta?.proyecto?.name || activeProject?.name || ''}`}
-                    className="w-100"
-                    style={{ height: '80vh', border: 0 }}
-                    allowFullScreen
-                  />
-                </div>
+      {showCotizar && rawCotizaUrl && createPortal(
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.65)', zIndex: 1055 }} onClick={() => setShowCotizar(false)}>
+          <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content overflow-hidden">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  Cotizar — {activePlanta?.proyecto?.name || activeProject?.name || selection?.project?.name || displayData.title}
+                  {activePlanta?.name ? ` · ${activePlanta.name}` : ''}
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowCotizar(false)} aria-label="Cerrar" />
+              </div>
+              <div className="modal-body p-0">
+                <iframe
+                  src={cotizaIframeUrl}
+                  title={`Cotizar ${activePlanta?.proyecto?.name || activeProject?.name || ''}`}
+                  className="w-100"
+                  style={{ height: '80vh', border: 0 }}
+                  allowFullScreen
+                />
               </div>
             </div>
-          </div>,
-          document.body
-        )
-      ) : (
-        <CotizadorForm
-          show={showCotizar}
-          onClose={() => setShowCotizar(false)}
-          planImage={mainImage}
-          thumbnails={galleryItems.map((it) => it.thumb || it.src)}
-          initialSelected={imgIndex}
-          plantaName={activePlanta?.name || displayData.title || ''}
-          projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}
-        />
+          </div>
+        </div>,
+        document.body
       )}
 
       {showShare && createPortal(
