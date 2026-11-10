@@ -4,6 +4,27 @@ const DEFAULT_TTL = 5 * 60 * 1000 // 5 minutes
 const API_BASE = (import.meta.env.VITE_API_TARGET || 'https://dev.ileben.cl').replace(/\/(?:api(?:\/v1)?)?\/?$/, '')
 const API_TOKEN = import.meta.env.VITE_API_TOKEN || ''
 
+export const isDev = Boolean(
+  import.meta.env.DEV ||
+  (typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.startsWith('dev.') ||
+    window.location.hostname.startsWith('test.') ||
+    window.location.port !== ''
+  ))
+)
+
+// En entornos dev, purgar caché previo en sessionStorage para reflejar cambios del backend al instante
+if (typeof window !== 'undefined' && isDev) {
+  try {
+    const staleKeys = Object.keys(sessionStorage).filter((k) => k.startsWith(PREFIX))
+    staleKeys.forEach((k) => sessionStorage.removeItem(k))
+  } catch {
+    // fail silent
+  }
+}
+
 /**
  * Resolve partial API paths (e.g. '/api/v1/proyectos') to full API URLs.
  * In local Vite dev (`import.meta.env.DEV`), keeps relative path for Vite dev proxy
@@ -18,6 +39,7 @@ export function resolveApiUrl(url) {
 }
 
 function readCache(key) {
+  if (isDev) return null
   try {
     const raw = sessionStorage.getItem(PREFIX + key)
     if (!raw) return null
@@ -33,6 +55,7 @@ function readCache(key) {
 }
 
 function writeCache(key, val, ttl) {
+  if (isDev) return
   try {
     sessionStorage.setItem(PREFIX + key, JSON.stringify({
       val,
@@ -71,7 +94,7 @@ export function clearApiCache(pattern) {
  */
 export async function apiFetch(url, options = {}) {
   const isGet = !options.method || options.method.toUpperCase() === 'GET'
-  const useCache = isGet && options.cache !== false && !import.meta.env.DEV
+  const useCache = isGet && options.cache !== false && !isDev
   const ttl = options.ttl ?? DEFAULT_TTL
 
   if (useCache) {
@@ -84,6 +107,7 @@ export async function apiFetch(url, options = {}) {
   const headers = {
     Accept: 'application/json',
     ...(API_TOKEN && !import.meta.env.DEV ? { Authorization: `Bearer ${API_TOKEN}` } : {}),
+    ...(isDev ? { 'Cache-Control': 'no-cache' } : {}),
     ...(options.headers || {}),
   }
 

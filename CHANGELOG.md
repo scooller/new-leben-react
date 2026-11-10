@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.224] - 2026-11-10
+
+### Changed
+- `src/lib/apiFetch.js`: Desactivada la persistencia y lectura de caché (`sessionStorage`) en entornos de desarrollo (`import.meta.env.DEV`, `localhost`, subdominios `dev.*`, `test.*`). Se eliminan claves previas en sessionStorage al inicializar y se envía cabecera `Cache-Control: no-cache` para garantizar que cambios editoriales y CSS personalizado en el backend se reflejen de inmediato sin esperas ni purgas manuales. En producción se mantiene el almacenamiento en caché de 5 minutos.
+
 ## [0.9.223] - 2026-11-10
 
 ### Added
