@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- `README.md` & `AGENTS.md`: Documentados los endpoints oficiales de API para producción (`https://admin.ileben.cl/`) y desarrollo (`https://dev.ileben.cl/`).
+### Fixed
+- `src/pages/ProyectoDetalle.jsx` & `src/components/sections/ProjectFeatureSection.jsx`: Sincronización bidireccional entre el carrusel de Espacios Comunes y los íconos de navegación (`CarouselNav` / `.lb-inn-hero-tabs--plain`). Al navegar con las flechas prev/next o autoplay, el ícono activo cambia en sincronía inmediata con el slide.
+
+## [0.9.219] - 2026-11-10
+
+### Fixed
+- `src/pages/ProyectoDetalle.jsx`: Implementado `handleEspaciosSlideChange` y pasado a `onSlideChange` en `ProjectFeatureSection` de Espacios Comunes para sincronizar `activeEspacioSlide` con las flechas prev/next.
+- `src/components/sections/ProjectFeatureSection.jsx`: Escucha de evento `slide.bs.carousel` para sincronía visual inmediata y guard con `currentSlideRef` para evitar re-triggers cíclicos de `.to()`.
 
 ## [0.9.218] - 2026-11-10
 

@@ -44,6 +44,7 @@ export default function ProjectFeatureSection({
   const sectionRef = useRef(null)
   const carouselEl = useRef(null)
   const carouselInstance = useRef(null)
+  const currentSlideRef = useRef(0)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -74,14 +75,15 @@ export default function ProjectFeatureSection({
       })
     }, section)
 
-    const onSlid = (event) => {
+    const onSlide = (event) => {
+      currentSlideRef.current = event.to
       if (onSlideChange) onSlideChange(event.to)
     }
 
-    carousel.addEventListener('slid.bs.carousel', onSlid)
+    carousel.addEventListener('slide.bs.carousel', onSlide)
 
     return () => {
-      carousel.removeEventListener('slid.bs.carousel', onSlid)
+      carousel.removeEventListener('slide.bs.carousel', onSlide)
       Fancybox.unbind(carousel)
       ctx.revert()
       c.dispose()
@@ -91,6 +93,8 @@ export default function ProjectFeatureSection({
 
   useEffect(() => {
     if (!carouselInstance.current || !slides.length || typeof activeSlide !== 'number') return
+    if (currentSlideRef.current === activeSlide) return
+    currentSlideRef.current = activeSlide
     carouselInstance.current.to(Math.max(0, Math.min(activeSlide, slides.length - 1)))
   }, [activeSlide, slides.length])
 

@@ -422,6 +422,12 @@ export default function ProyectoDetalle() {
     return idx !== -1 ? idx : activeEspacioSlide
   }, [activeEspacioSlide, espaciosNavItems, espaciosSlides])
 
+  const handleEspaciosSlideChange = useCallback((slideIndex) => {
+    const targetNavId = espaciosSlides[slideIndex]?.navId
+    const navIdx = espaciosNavItems.findIndex((item) => item.id === targetNavId)
+    setActiveEspacioSlide(navIdx !== -1 ? navIdx : slideIndex)
+  }, [espaciosSlides, espaciosNavItems])
+
   // 4. Mapa & Ubicación (si no tiene imagen de mapa, no se renderiza)
   const mapData = useMemo(() => {
     const rawImage = projectContent?.map?.image_url
@@ -817,6 +823,7 @@ export default function ProyectoDetalle() {
               ariaLabel="Espacios"
               showIndicators={false}
               activeSlide={espaciosSlideIndex}
+              onSlideChange={handleEspaciosSlideChange}
             />
 
             {espaciosNavItems.length > 0 && (
