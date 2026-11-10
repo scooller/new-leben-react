@@ -6,6 +6,7 @@ import { setLoaded } from './store/slices/uiSlice.js'
 import { useGsapAnimations } from './hooks/useGsapAnimations.js'
 import { useTrackingConsent } from './hooks/useTrackingConsent.js'
 import { useSeo } from './hooks/useSeo.js'
+import { captureUtmParamsFromUrl, syncUtmConfigFromBackend } from './lib/utmSession.js'
 
 // Layout
 import Navbar from './components/layout/Navbar.jsx'
@@ -114,6 +115,14 @@ export default function App() {
   }, [dispatch])
 
   const location = useLocation()
+
+  useEffect(() => {
+    captureUtmParamsFromUrl(location.search)
+  }, [location.search])
+
+  useEffect(() => {
+    syncUtmConfigFromBackend()
+  }, [])
 
   // Prevent browser from restoring old scroll positions across route changes
   useEffect(() => {

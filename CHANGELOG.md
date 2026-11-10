@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `src/lib/utmSession.js` & `src/App.jsx`: Captura y persistencia de parámetros UTM desde la URL y sincronización con `GET /api/v1/site-config` (`utm_*_default`, `evento_sale`, `sale_utm_campaign`, `sale_campaign_override`) como fuente de verdad.
+- `src/components/proyecto/Cotizador.jsx`: Modal con `<iframe>` al hacer clic en "Cotizar" cargando `cotiza_url` del proyecto con inyección automática de parámetros UTM.
+
+## [0.9.215] - 2026-11-10
+
+### Added
+- `src/lib/utmSession.js` & `src/App.jsx`: Captura de parámetros UTM desde la URL en `sessionStorage` (`ileben-utms-session`) y sincronización con `/api/v1/site-config` del backend (`seo.utm_*_default`, `evento_sale`, `seo.sale_utm_campaign` y `seo.sale_campaign_override`) como fuente de verdad para UTMs por defecto y eventos especiales (Sale).
+- `src/components/proyecto/Cotizador.jsx`: Al hacer clic en "Cotizar", si el proyecto tiene configurado `cotiza_url` ("URL Cotizar por defecto" en Información General de Filament), abre un modal Bootstrap con `<iframe>` inyectando las UTMs resueltas al link.
+- `C:\laragon\app\back-ileben`: Campo `cotiza_url` ("URL Cotizar por defecto") agregado al final de la sección **Información General** en `ProyectoForm`, migración de base de datos y exposición en `ProyectoController`, `PlantController` y `ProjectDetailResource`.
+
 ## [0.9.214] - 2026-11-09
 
 ### Added

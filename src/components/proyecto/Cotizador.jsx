@@ -8,6 +8,7 @@ import CotizadorForm from './CotizadorForm.jsx'
 // Carga diferida: WindowPanViewer para recorrer la vista con efecto ventana
 const WindowPanViewer = lazy(() => import('./WindowPanViewer.jsx'))
 import { apiFetch } from '../../lib/apiFetch.js'
+import { buildCotizaUrlWithUtms } from '../../lib/utmSession.js'
 import { ORIENTACION_LABELS, sortProjectsByCustomOrder, matchTipologia, matchPrecio, matchComuna, formatComuna, toArray, formatMeters, formatPriceUF, formatPrograma } from '../../lib/projectUtils.js'
 import { ExternalLinkIcon } from '../icons/external-link.jsx'
 import { WhatsAppIcon } from '../icons/whatsapp.jsx'
@@ -166,6 +167,7 @@ function toAbsoluteUrl(url, fallbackHostUrl) {
 const plantasCache = new Map()
 const projectGalleryCache = new Map()
 const projectBrochureCache = new Map()
+const projectCotizaUrlCache = new Map()
 
 /** Paginate through all available plantas from a base URL with parallel fetching */
 async function fetchPages(baseUrl) {
@@ -356,6 +358,7 @@ export default function Cotizador({
   const [imgIndex, setImgIndex] = useState(0)
   const [projectGallery, setProjectGallery] = useState([])
   const [projectBrochure, setProjectBrochure] = useState(null)
+  const [projectCotizaUrl, setProjectCotizaUrl] = useState(null)
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
@@ -641,29 +644,40 @@ export default function Cotizador({
     return () => { cancelled = true }
   }, [currentProjectKey])
 
-  // Fetch or resolve brochure
+  // Fetch or resolve brochure and cotiza_url
   useEffect(() => {
-    if (propBrochureUrl) return
     if (!currentProjectKey) {
       setProjectBrochure(null)
+      setProjectCotizaUrl(null)
       return
     }
-    if (activeProject?.brochure_pdf_url || activeProject?.brochure_url) {
+    if (activeProject?.cotiza_url) {
+      setProjectCotizaUrl(activeProject.cotiza_url)
+    } else if (projectCotizaUrlCache.has(currentProjectKey)) {
+      setProjectCotizaUrl(projectCotizaUrlCache.get(currentProjectKey))
+    }
+
+    if (propBrochureUrl) {
+      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
+    } else if (activeProject?.brochure_pdf_url || activeProject?.brochure_url) {
       setProjectBrochure(activeProject.brochure_pdf_url || activeProject.brochure_url)
-      return
-    }
-    if (projectBrochureCache.has(currentProjectKey)) {
+      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
+    } else if (projectBrochureCache.has(currentProjectKey)) {
       setProjectBrochure(projectBrochureCache.get(currentProjectKey))
-      return
+      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
     }
 
     let cancelled = false
     apiFetch(`/api/v1/proyectos/${currentProjectKey}/content`).then(({ data, error }) => {
       if (cancelled || error || !data) return
       const url = data.brochure_pdf_url || data.brochure_url || null
-      if (url) {
+      if (url && !propBrochureUrl) {
         projectBrochureCache.set(currentProjectKey, url)
         setProjectBrochure(url)
+      }
+      if (data.cotiza_url) {
+        projectCotizaUrlCache.set(currentProjectKey, data.cotiza_url)
+        setProjectCotizaUrl(data.cotiza_url)
       }
     }).catch(() => {})
 
@@ -706,6 +720,13 @@ export default function Cotizador({
 
   // Real brochure from prop, displayData, activeProject or fetched from API
   const brochureUrl = propBrochureUrl || displayData.brochureUrl || projectBrochure || null
+  const rawCotizaUrl = activePlanta?.proyecto?.cotiza_url
+    || activeProject?.cotiza_url
+    || selection?.project?.cotiza_url
+    || projectCotizaUrl
+    || displayData?.cotizaUrl
+    || null
+  const cotizaIframeUrl = showCotizar && rawCotizaUrl ? buildCotizaUrlWithUtms(rawCotizaUrl) : ''
   const brochureDownloadName = useMemo(() => {
     const projectName = activePlanta?.proyecto?.name || activeProject?.name || 'Proyecto'
     return `${projectName.replace(/[^a-zA-Z0-9_-]/g, '_')}_Brochure.pdf`
@@ -1129,7 +1150,7 @@ export default function Cotizador({
               <div className="col-md">
                 <button
                   className="btn btn-primary w-100 lb-proj-det-cot-cta"
-                  disabled={!activePlanta}
+                  disabled={!activePlanta && !rawCotizaUrl}
                   onClick={() => setShowCotizar(true)}
                 >
                   {displayData.ctaText || 'Cotizar'}
@@ -1211,15 +1232,43 @@ export default function Cotizador({
     <section className={`lb-proj-det-cotizador pt-4 pb-1 pt-md-5 ${className}`.trim()} id="cotizador" ref={ref}>
       {content}
 
-      <CotizadorForm
-        show={showCotizar}
-        onClose={() => setShowCotizar(false)}
-        planImage={mainImage}
-        thumbnails={galleryItems.map((it) => it.thumb || it.src)}
-        initialSelected={imgIndex}
-        plantaName={activePlanta?.name || displayData.title || ''}
-        projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}
-      />
+      {rawCotizaUrl ? (
+        showCotizar && createPortal(
+          <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.65)', zIndex: 1055 }} onClick={() => setShowCotizar(false)}>
+            <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content overflow-hidden">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    Cotizar — {activePlanta?.proyecto?.name || activeProject?.name || selection?.project?.name || displayData.title}
+                    {activePlanta?.name ? ` · ${activePlanta.name}` : ''}
+                  </h5>
+                  <button type="button" className="btn-close" onClick={() => setShowCotizar(false)} aria-label="Cerrar" />
+                </div>
+                <div className="modal-body p-0">
+                  <iframe
+                    src={cotizaIframeUrl}
+                    title={`Cotizar ${activePlanta?.proyecto?.name || activeProject?.name || ''}`}
+                    className="w-100"
+                    style={{ height: '80vh', border: 0 }}
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )
+      ) : (
+        <CotizadorForm
+          show={showCotizar}
+          onClose={() => setShowCotizar(false)}
+          planImage={mainImage}
+          thumbnails={galleryItems.map((it) => it.thumb || it.src)}
+          initialSelected={imgIndex}
+          plantaName={activePlanta?.name || displayData.title || ''}
+          projectName={activePlanta?.proyecto?.name || activeProject?.name || ''}
+        />
+      )}
 
       {showShare && createPortal(
         <div className="modal d-block" tabIndex="-1" onClick={() => setShowShare(false)}>
