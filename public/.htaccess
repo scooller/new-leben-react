@@ -23,6 +23,13 @@
     Header set Pragma "no-cache"
     Header set Expires "0"
   </FilesMatch>
+
+  # Prevent caching of HTML (SPA entrypoint) so new bundle hashes are loaded immediately
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
 </IfModule>
 
 # MIME type definitions for agent discovery
@@ -64,6 +71,7 @@
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
   ExpiresByType text/plain "access plus 0 seconds"
   ExpiresByType text/markdown "access plus 0 seconds"
   ExpiresByType application/json "access plus 0 seconds"
@@ -109,8 +117,9 @@
   # Dynamic Open Graph, Twitter Cards and SEO for Project Pages
   RewriteRule ^proyectos/([a-zA-Z0-9_-]+)/?$ share.php?slug=$1 [L,QSA]
 
-  # SPA Fallback
+  # SPA Fallback (Never route missing /assets/ to index.html to prevent MIME errors on obsolete chunks)
   RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_URI} !^/assets/
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]

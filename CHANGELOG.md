@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.225] - 2026-11-11
+
+### Fixed
+- `public/.htaccess`: 
+  - Añadido control de caché estricto (`no-cache, no-store, must-revalidate`) y `ExpiresByType text/html "access plus 0 seconds"` para evitar que los navegadores almacenen en caché `index.html` con URLs hash o rutas directas, lo cual provocaba desincronización de hashes tras nuevos despliegues.
+  - En la regla de fallback SPA de `mod_rewrite`, excluido el prefijo `/assets/` (`RewriteCond %{REQUEST_URI} !^/assets/`) para evitar que chunks obsoletos retornen `index.html` (MIME `text/html`) con error `Failed to load module script`.
+- `src/main.jsx`:
+  - Registrado listener `window.addEventListener('vite:preloadError')` para recargar automáticamente la página (`location.reload()`) y descargar el bundle nuevo cuando un chunk lazy de Vite falla al cargarse por actualización de despliegue.
+
 ## [0.9.224] - 2026-11-10
 
 ### Changed

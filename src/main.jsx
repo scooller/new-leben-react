@@ -17,6 +17,11 @@ import './styles/main.scss'
 import App from './App.jsx'
 import { initWebMcp } from './lib/webmcp.js'
 
+// Auto-reload to fetch fresh bundle when dynamic import chunk fails after a new deploy
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload()
+})
+
 initWebMcp()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
