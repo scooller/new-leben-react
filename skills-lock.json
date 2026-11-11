@@ -1,17 +1,23 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
     "apple-design": {
       "source": "dickwu/apple-design-skill",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "a35331c049004f3408e6591ea2f3013cebc8cd7eb673e7713ded8db86b373bc4"
+      "computedHash": "bdf7ebe3c47e7512f7a07cee7ea4c9eebf153ad9425f90c0a9f6cb0c859247ca"
     },
     "brag": {
       "source": "latent-spaces/brag",
       "sourceType": "github",
       "skillPath": "skills/brag/SKILL.md",
-      "computedHash": "fbab8e80d994e7d1852fafcb916a1a45ce4becda84aa92cab3666f02012caf41"
+      "computedHash": ""
+    },
+    "modern-web-guidance": {
+      "source": "GoogleChrome/modern-web-guidance",
+      "sourceType": "github",
+      "skillPath": "skills/modern-web-guidance/SKILL.md",
+      "computedHash": "9e69ce00dc314b64f6664031b70295ea46c7de93ac682c624808df6e48e08b66"
     }
   }
 }
