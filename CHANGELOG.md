@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.230] - 2026-11-11
+
+### Fixed
+- `src/styles/components/_inn.scss`: todos los fondos `linear-gradient` de botones/filtros/badges usan `--lb-project-gradient` del back (nueva variable `\$inn-gradient`). Eliminados overrides en `.lb-project-btn` que pisaban gradiente y sombra del tema.
+
 ## [0.9.229] - 2026-11-11
 
 ### Fixed

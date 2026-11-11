@@ -10,6 +10,7 @@ $inn-gris: #808080;
 $inn-gris-dark: #101010;
 $inn-celeste: rgb(226, 237, 249);
 $inn-gold-bg: var(--lb-project-accent-bg, #faf4e8);
+$inn-gradient: var(--lb-project-gradient, #{$lb-gradient-gold});
 $inn-map-card-bg: #f6f1eb;
 
 // Import team agents styles (namespace evita conflicto de variables $inn-*)
@@ -27,7 +28,7 @@ $inn-map-card-bg: #f6f1eb;
 .lb-project-btn,
 .lb-inn .btn-gold,
 .lb-project-detail .btn-gold {
-  background: var(--lb-project-gradient, #{$lb-gradient-gold});
+  background: $inn-gradient;
   border: 1px solid var(--lb-project-accent, #d8b35c);
   box-shadow: 0 4px 14px var(--lb-project-btn-shadow, rgba(158, 122, 76, 0.25));
   display: inline-flex;
@@ -40,11 +41,8 @@ $inn-map-card-bg: #f6f1eb;
   text-transform: uppercase;
   white-space: nowrap;
   padding: 0.65rem 1.75rem;
-  background: $lb-gradient-gold;
   color: $lb-white !important;
-  border: 1px solid $inn-gold;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(158, 122, 76, 0.25);
   transition: background-color 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover,
@@ -164,7 +162,7 @@ $inn-map-card-bg: #f6f1eb;
 
       &:hover,
       &.active {
-        background: $lb-gradient-gold;
+        background: $inn-gradient;
         color: $lb-white;
         border-color: $inn-gold;
 
@@ -250,7 +248,7 @@ $inn-map-card-bg: #f6f1eb;
 
       &:hover,
       &.active {
-        background: $lb-gradient-gold;
+        background: $inn-gradient;
         color: $lb-white;
         border-color: $inn-gold;
 
@@ -297,7 +295,7 @@ $inn-map-card-bg: #f6f1eb;
   }
 
   &__badge {
-    background: $lb-gradient-gold;
+    background: $inn-gradient;
     color: $lb-white;
     font-size: 0.65rem;
     font-weight: 700;
@@ -725,13 +723,13 @@ $inn-map-card-bg: #f6f1eb;
     }
 
     &:hover {
-      background: $lb-gradient-gold;
+      background: $inn-gradient;
       color: $lb-white;
       border-color: $inn-gold;
     }
 
     &.active {
-      background: $lb-gradient-gold;
+      background: $inn-gradient;
       color: $lb-white;
       border-color: $inn-gold;
 
@@ -763,7 +761,7 @@ $inn-map-card-bg: #f6f1eb;
       }
 
       &.active {
-        background: $lb-gradient-gold;
+        background: $inn-gradient;
         color: $lb-white;
         border-color: $inn-gold;
         box-shadow: 0 2px 8px rgba(158, 122, 76, 0.3);
@@ -1113,7 +1111,7 @@ $inn-map-card-bg: #f6f1eb;
 
     &:hover,
     &.active {
-      background: $lb-gradient-gold;
+      background: $inn-gradient;
       border-color: $inn-gold;
       color: $lb-white;
     }
@@ -1130,7 +1128,7 @@ $inn-map-card-bg: #f6f1eb;
     &:hover,
     &:active,
     &.active {
-      background: $lb-gradient-gold;
+      background: $inn-gradient;
       border-color: $inn-gold;
       color: $lb-white;
     }
@@ -1249,7 +1247,7 @@ $inn-map-card-bg: #f6f1eb;
 
       &:hover,
       &.active {
-        background: $lb-gradient-gold;
+        background: $inn-gradient;
         color: $lb-white;
         border-color: $inn-gold;
       }
