@@ -482,6 +482,7 @@ export default function ProyectoDetalle() {
       logo: resolveUrl(projectContent?.map?.logo_url),
       btnText: projectContent?.map?.btn_text || 'Experiencias',
       address: projectContent?.map?.address || currentProject?.direccion || '',
+      bgColor: projectContent?.map?.bg_color || projectContent?.entorno?.bg_color || null,
       pin: {
         x: projectContent?.map?.pin?.x ?? 33.3,
         y: projectContent?.map?.pin?.y ?? 72.4,
@@ -543,6 +544,7 @@ export default function ProyectoDetalle() {
   const interiorismoTitle = formatMultiline(projectContent?.interiorismo?.title || 'MAESTRÍA EN CADA DETALLE')
   const interiorismoDesc = projectContent?.interiorismo?.description || ''
   const interiorismoBg = resolveUrl(projectContent?.interiorismo?.bg_image_url)
+  const interiorismoNamePosition = projectContent?.interiorismo?.name_position || 'overlay'
   const designers = projectContent?.interiorismo?.designers?.length ? projectContent.interiorismo.designers : undefined
 
   // Modal Panoramas
@@ -904,7 +906,11 @@ export default function ProyectoDetalle() {
 
         {/* 4. SECCIÓN MAPA Y UBICACIÓN */}
         {mapData.hasMap && (
-          <section className="container-fluid lb-inn-map" id="ubicacion">
+          <section
+            className="container-fluid lb-inn-map"
+            id="ubicacion"
+            style={mapData.bgColor ? { backgroundColor: mapData.bgColor } : undefined}
+          >
             <div className="container">
               <div className="row g-0">
                 <div className="col-12 col-lg-5 ps-3 ps-md-4 ps-lg-5 d-flex flex-column justify-content-center">
@@ -1034,6 +1040,7 @@ export default function ProyectoDetalle() {
             description={interiorismoDesc}
             backgroundImage={interiorismoBg}
             designers={designers}
+            namePosition={interiorismoNamePosition}
             id="interiorismo"
             ariaLabel="Interiorismo"
           />

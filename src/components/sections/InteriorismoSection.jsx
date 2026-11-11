@@ -21,6 +21,7 @@ export default function InteriorismoSection({
   parallaxStrength = DESIGNER_PARALLAX,
   parallaxEase = 'power1.out',
   parallaxScrub = 1.5,
+  namePosition = 'overlay',
   // Array of designers with their images and text content
   designers = [
     {
@@ -132,39 +133,53 @@ export default function InteriorismoSection({
           </div>
 
           <div className="col-lg-6 d-flex flex-column gap-4">
-            <div className="d-flex designers g-4 h-100">
-              {designers.map((designer, index) => (
-                <div
-                  key={designer.name || index}
-                  className="d-flex col"
-                >
-                  <button
-                    type="button"
-                    className={`btn btn-lg lb-inn-interiorismo__designer-btn ${index === activeDesigner ? 'active' : ''
-                      }`}
-                    onClick={designer.text ? () => setActiveDesigner(index) : undefined}
-                    disabled={!designer.text}
-                    style={{
-                      ...(!designer.text && { opacity: 1 }),
-                    }}
+            <div className={`d-flex designers g-4 h-100 ${namePosition === 'above' ? 'designers--above' : ''}`}>
+              {designers.map((designer, index) => {
+                const isAbove = namePosition === 'above'
+                return (
+                  <div
+                    key={designer.name || index}
+                    className="d-flex col"
                   >
-                    <ScrollAnim
-                      as="div"
-                      animation='fade-up'
-                      className="lb-inn-interiorismo__designer-img"
-                      aria-hidden="true"
-                      delay={0.1 * index}
-                      style={designer.image ? {
-                        backgroundImage: `url("${resolveUrl(designer.image)}")`,
-                      } : undefined}
-                    />
-                    <SplitTitle
-                      className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
-                      dangerouslySetInnerHTML={{ __html: designer.name }}
-                    />
-                  </button>
-                </div>
-              ))}
+                    <button
+                      type="button"
+                      className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
+                        isAbove ? 'lb-inn-interiorismo__designer-btn--above' : ''
+                      } ${index === activeDesigner ? 'active' : ''}`}
+                      onClick={designer.text ? () => setActiveDesigner(index) : undefined}
+                      disabled={!designer.text}
+                      style={{
+                        ...(!designer.text && { opacity: 1 }),
+                      }}
+                    >
+                      {isAbove && (
+                        <SplitTitle
+                          className="lb-inn-interiorismo__designer-name lb-inn-interiorismo__designer-name--above mb-3 px-1"
+                          dangerouslySetInnerHTML={{ __html: designer.name }}
+                        />
+                      )}
+                      <div className={isAbove ? 'lb-inn-interiorismo__designer-img-card' : 'w-100 h-100 position-absolute top-0 start-0'}>
+                        <ScrollAnim
+                          as="div"
+                          animation='fade-up'
+                          className="lb-inn-interiorismo__designer-img"
+                          aria-hidden="true"
+                          delay={0.1 * index}
+                          style={designer.image ? {
+                            backgroundImage: `url("${resolveUrl(designer.image)}")`,
+                          } : undefined}
+                        />
+                      </div>
+                      {!isAbove && (
+                        <SplitTitle
+                          className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
+                          dangerouslySetInnerHTML={{ __html: designer.name }}
+                        />
+                      )}
+                    </button>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

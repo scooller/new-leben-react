@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.227] - 2026-11-11
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`:
+  - Sección mapa: lectura de `bgColor` desde `projectContent.map.bg_color` / `entorno.bg_color` aplicando estilo inline condicional (`backgroundColor`) con fallback natural a `$inn-gold-light` (`--lb-project-accent-light`).
+  - Sección interiorismo: lectura y pase de `namePosition` (`'overlay'` | `'above'`) al componente `InteriorismoSection`.
+- `src/components/sections/InteriorismoSection.jsx`:
+  - Soporte para prop `namePosition`.
+  - Cuando `namePosition === 'above'`, renderiza el nombre y cargo en la parte superior antes de la tarjeta de foto con clase `.lb-inn-interiorismo__designer-btn--above` y contenedor `.lb-inn-interiorismo__designer-img-card`.
+- `src/styles/components/_inn.scss`:
+  - Agregadas reglas para `.lb-inn-interiorismo__designer-btn--above`: flujo vertical, título con `text-transform: uppercase`, espaciado inferior, contenedor de imagen con bordes redondeados (`border-radius: 8px`), y foto con esquinas redondeadas.
+
 ## [0.9.226] - 2026-11-11
 
 ### Added
