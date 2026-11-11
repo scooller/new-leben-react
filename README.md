@@ -5,6 +5,18 @@ Built with React 19, Vite 6, Redux Toolkit, Bootstrap 5, GSAP, and Motion.
 
 ---
 
+## 🌐 Entornos y Sitios Oficiales
+
+| Entorno / Rol | URL | Descripción |
+|---|---|---|
+| **Producción — Web Principal** | <https://ileben.cl> (o <https://leben.cl>) | Sitio web institucional y fichas de proyecto en producción |
+| **Producción — Sitio Ventas** | <https://sale.ileben.cl> | Plataforma de cotización, ventas y reserva online en producción |
+| **Producción — Panel Admin** | <https://admin.ileben.cl> | Panel administrativo Filament y API backend en producción |
+| **Desarrollo / Staging — Web** | <https://test.ileben.cl> | Sitio web y fichas de proyecto en entorno de desarrollo/pruebas |
+| **Desarrollo / Local** | `http://localhost:5173` (front) / `http://localhost:8000` (back) | Entorno local de desarrollo |
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
