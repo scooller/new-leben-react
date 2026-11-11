@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.226] - 2026-11-11
+
+### Added
+- `src/components/PageLoader.jsx`: Incorporado isotipo institucional con animación de pulso (`.lb-loader-logo`) y soporte para mensajes opcionales (`message`).
+- `src/pages/ProyectoDetalle.jsx`: Implementado estado de carga (`contentLoading`) con pantalla de espera branded (`PageLoader`) antes de renderizar la ficha, eliminando saltos de diseño y estados vacíos mientras se obtiene el contenido desde el backend. Si el proyecto no existe, renderiza `NotFound` limpiamente.
+
 ## [0.9.225] - 2026-11-11
 
 ### Fixed

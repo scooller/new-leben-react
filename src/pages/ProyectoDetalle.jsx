@@ -29,6 +29,8 @@ import { apiFetch } from '../lib/apiFetch.js'
 import { formatPriceUF } from '../lib/projectUtils.js'
 import { useSeo } from '../hooks/useSeo.js'
 import { resolveUrl } from '../lib/resolveUrl.js'
+import PageLoader from '../components/PageLoader.jsx'
+import NotFound from './NotFound.jsx'
 
 // Parallax estándar para secciones de ficha
 const PARALLAX_STRENGTH = -12
@@ -199,6 +201,8 @@ export default function ProyectoDetalle() {
   const [currentProject, setCurrentProject] = useState(null)
   const [selectedPlanta, setSelectedPlanta] = useState(null)
   const [projectContent, setProjectContent] = useState(null)
+  const [contentLoading, setContentLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
 
   // Cargar catálogo de proyectos desde el backend
   useEffect(() => {
@@ -226,10 +230,23 @@ export default function ProyectoDetalle() {
   // Cargar contenido editorial 100% dinámico desde el backend (única fuente de verdad)
   useEffect(() => {
     let cancelled = false
+    setContentLoading(true)
+    setLoadError(false)
     apiFetch(`/api/v1/proyectos/${cleanSlug}/content`).then(({ data, error }) => {
-      if (cancelled || error || !data) return
+      if (cancelled) return
+      if (error || !data) {
+        setLoadError(true)
+        setContentLoading(false)
+        return
+      }
       setProjectContent(data)
-    }).catch(() => { })
+      setContentLoading(false)
+    }).catch(() => {
+      if (!cancelled) {
+        setLoadError(true)
+        setContentLoading(false)
+      }
+    })
     return () => { cancelled = true }
   }, [cleanSlug])
 
@@ -584,6 +601,22 @@ export default function ProyectoDetalle() {
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [projectTabs])
+
+  if (contentLoading && !projectContent) {
+    return (
+      <>
+        <Navbar />
+        <main className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
+          <PageLoader message="Cargando proyecto..." />
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
+  if (loadError && !projectContent) {
+    return <NotFound />
+  }
 
   return (
     <>
