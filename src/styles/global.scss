@@ -558,3 +558,7 @@ h6,
   }
 }
 
+/* Fix ratio, para qye el bloque NO empuje el contenido */
+.ratio::before {
+  position: absolute;
+}
