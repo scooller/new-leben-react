@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.231] - 2026-11-11
+
+### Added
+- `src/components/sections/ProjectFeatureSection.jsx`:
+  - Recibe prop `carouselSpacing` (`{ top, bottom }`).
+  - Aplica dinámicamente `paddingTop` y/o `paddingBottom` (admitiendo `px`, `rem`, etc., con fallback por defecto `0`) directamente sobre la columna `.col-lg-7.d-flex` del carrusel/video.
+- `src/pages/ProyectoDetalle.jsx`:
+  - Traspaso de `carousel_spacing` desde la API (`project_section`, `equipment` y `espacios`) a cada instancia de `ProjectFeatureSection`.
+
 ## [0.9.230] - 2026-11-11
 
 ### Fixed

@@ -775,6 +775,7 @@ export default function ProyectoDetalle() {
             descriptionHtml={projectDescHtml}
             highlightOffer={projectHighlightOffer}
             slides={projectSlides}
+            carouselSpacing={projectContent?.project_section?.carousel_spacing}
             carouselId="projectCarousel"
             parallaxStrength={10}
             backgroundImage={projectBg}
@@ -803,6 +804,7 @@ export default function ProyectoDetalle() {
             descriptionHtml={equipmentDescHtml}
             highlightLogos={equipmentBrands}
             slides={equipmentSlides}
+            carouselSpacing={projectContent?.equipment?.carousel_spacing}
             carouselId="projectEquipmentCarousel"
             parallaxStrength={PARALLAX_STRENGTH}
             backgroundImage={equipmentBg}
@@ -873,6 +875,7 @@ export default function ProyectoDetalle() {
               eyebrow={espaciosEyebrow}
               descriptionHtml={espaciosDescHtml}
               slides={espaciosSlides}
+              carouselSpacing={projectContent?.espacios?.carousel_spacing}
               carouselId="projectEspaciosCarousel"
               parallaxStrength={PARALLAX_STRENGTH}
               backgroundImage={espaciosBg}

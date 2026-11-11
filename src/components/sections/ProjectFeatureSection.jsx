@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Carousel from 'bootstrap/js/dist/carousel'
 import { Fancybox } from '@fancyapps/ui'
 import { gsap } from 'gsap'
@@ -36,6 +36,7 @@ export default function ProjectFeatureSection({
   showIndicators = true,
   // { buttonLabel, items: [{ label, icon, img, alt }] }
   spacesModal,
+  carouselSpacing,
 }) {
   const [showSpacesModal, setShowSpacesModal] = useState(false)
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
@@ -45,6 +46,17 @@ export default function ProjectFeatureSection({
   const carouselEl = useRef(null)
   const carouselInstance = useRef(null)
   const currentSlideRef = useRef(0)
+
+  const carouselColumnStyle = useMemo(() => {
+    if (!carouselSpacing) return undefined
+    const paddingTop = carouselSpacing.top && carouselSpacing.top !== '0' ? carouselSpacing.top : undefined
+    const paddingBottom = carouselSpacing.bottom && carouselSpacing.bottom !== '0' ? carouselSpacing.bottom : undefined
+    if (!paddingTop && !paddingBottom) return undefined
+    return {
+      ...(paddingTop ? { paddingTop } : {}),
+      ...(paddingBottom ? { paddingBottom } : {}),
+    }
+  }, [carouselSpacing])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -217,7 +229,7 @@ export default function ProjectFeatureSection({
           </div>
 
           {mediaVideoSrc ? (
-            <ScrollAnim className="col-lg-7 d-flex">
+            <ScrollAnim className="col-lg-7 d-flex" style={carouselColumnStyle}>
               <div className="lb-inn-proyecto__frame w-100">
                 <video
                   src={resolveUrl(mediaVideoSrc)}
@@ -230,7 +242,7 @@ export default function ProjectFeatureSection({
               </div>
             </ScrollAnim>
           ) : slides.length > 0 ? (
-            <ScrollAnim className="col-lg-7 d-flex">
+            <ScrollAnim className="col-lg-7 d-flex" style={carouselColumnStyle}>
               <div ref={carouselEl} id={carouselId} className="carousel slide carousel-fade w-100 position-relative">
                 <div className="carousel-inner lb-inn-proyecto__frame">
                   {slides.map((slide, index) => {
