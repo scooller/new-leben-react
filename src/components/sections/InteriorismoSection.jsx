@@ -15,37 +15,14 @@ export default function InteriorismoSection({
   eyebrow,
   title,
   description,
-  backgroundImage = 'images/inn/interiorismo.svg',
+  backgroundImage = null,
   id = 'interiorismo',
   ariaLabel = 'Interiorismo',
   parallaxStrength = DESIGNER_PARALLAX,
   parallaxEase = 'power1.out',
   parallaxScrub = 1.5,
   namePosition = 'overlay',
-  // Array of designers with their images and text content
-  designers = [
-    {
-      name: 'Sofía Iturralde<br/><small>Interiorista</small>',
-      image: 'images/inn/Foto_Iturralde.jpg',
-      alt: 'Diseño de Sofía Iturralde',
-      color: '#d9bc70',
-      // text: 'Diseño contemporáneo que combina minimalismo con elementos naturales, creando espacios luminosos y acogedores que resaltan la belleza de los materiales.',
-    },
-    {
-      name: 'Rafael Rivera<br/><small>Iluminador</small>',
-      image: 'images/inn/Foto_Rivera.jpg',
-      alt: 'Diseño de Rafael Rivera',
-      color: '#b78d56',
-      // text: 'Estilo ecléctico que mezcla tradición y modernidad, con un enfoque en la funcionalidad y la elegancia atemporal.',
-    },
-    // {
-    //   name: 'Teresa Leighton',
-    //   image: 'images/inn/interiorismo-teresa.jpg',
-    //   alt: 'Diseño de Teresa Leighton',
-    //   color: '#a68761',
-    //   text: 'Enfoque holístico que integra bienestar y diseño, creando ambientes que promueven el equilibrio y la armonía.',
-    // },
-  ],
+  designers = [],
 }) {
   const [activeDesigner, setActiveDesigner] = useState(0)
   const sectionRef = useRef(null)
@@ -94,7 +71,7 @@ export default function InteriorismoSection({
     }
   }, [parallaxStrength, parallaxEase, parallaxScrub])
 
-  const currentDesigner = designers[activeDesigner]
+  const currentDesigner = designers[activeDesigner] || null
 
   return (
     <section ref={sectionRef} className="lb-inn-proyecto lb-inn-interiorismo pb-5 mb-5" id={id} aria-label={ariaLabel}>
@@ -103,7 +80,7 @@ export default function InteriorismoSection({
         style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${resolveUrl(backgroundImage)}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
-          <div className="col-lg-6 align-self-stretch position-relative lb-inn-proyecto__text-column">
+          <div className={`${designers.length > 0 ? 'col-lg-6' : 'col-12'} align-self-stretch position-relative lb-inn-proyecto__text-column`}>
             <div className="h-100 pe-4" animation="fade-up">
               {eyebrow && (
                 <ScrollAnim as="span" animation='flip-x' className="lb-inn-proyecto__eyebrow">
@@ -119,7 +96,7 @@ export default function InteriorismoSection({
                 <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text w-md-80" dangerouslySetInnerHTML={{ __html: description }} />
               )}
 
-              {currentDesigner.text && (
+              {currentDesigner?.text && (
                 <div className="lb-inn-interiorismo__designer-content mt-4">
                   <SplitTitle style={{ color: currentDesigner.color }} className="lb-inn-interiorismo__designer-name mb-3"
                     dangerouslySetInnerHTML={{ __html: currentDesigner.name }}
@@ -132,56 +109,58 @@ export default function InteriorismoSection({
             </div>
           </div>
 
-          <div className="col-lg-6 d-flex flex-column gap-4">
-            <div className={`d-flex designers g-4 h-100 ${namePosition === 'above' ? 'designers--above' : ''}`}>
-              {designers.map((designer, index) => {
-                const isAbove = namePosition === 'above'
-                return (
-                  <div
-                    key={designer.name || index}
-                    className="d-flex col"
-                  >
-                    <button
-                      type="button"
-                      className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
-                        isAbove ? 'lb-inn-interiorismo__designer-btn--above' : ''
-                      } ${index === activeDesigner ? 'active' : ''}`}
-                      onClick={designer.text ? () => setActiveDesigner(index) : undefined}
-                      disabled={!designer.text}
-                      style={{
-                        ...(!designer.text && { opacity: 1 }),
-                      }}
+          {designers.length > 0 && (
+            <div className="col-lg-6 d-flex flex-column gap-4">
+              <div className={`d-flex designers g-4 h-100 ${namePosition === 'above' ? 'designers--above' : ''}`}>
+                {designers.map((designer, index) => {
+                  const isAbove = namePosition === 'above'
+                  return (
+                    <div
+                      key={designer.name || index}
+                      className="d-flex col"
                     >
-                      {isAbove && (
-                        <SplitTitle
-                          className="lb-inn-interiorismo__designer-name lb-inn-interiorismo__designer-name--above mb-3 px-1"
-                          dangerouslySetInnerHTML={{ __html: designer.name }}
-                        />
-                      )}
-                      <div className={isAbove ? 'lb-inn-interiorismo__designer-img-card' : 'w-100 h-100 position-absolute top-0 start-0'}>
-                        <ScrollAnim
-                          as="div"
-                          animation='fade-up'
-                          className="lb-inn-interiorismo__designer-img"
-                          aria-hidden="true"
-                          delay={0.1 * index}
-                          style={designer.image ? {
-                            backgroundImage: `url("${resolveUrl(designer.image)}")`,
-                          } : undefined}
-                        />
-                      </div>
-                      {!isAbove && (
-                        <SplitTitle
-                          className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
-                          dangerouslySetInnerHTML={{ __html: designer.name }}
-                        />
-                      )}
-                    </button>
-                  </div>
-                )
-              })}
+                      <button
+                        type="button"
+                        className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
+                          isAbove ? 'lb-inn-interiorismo__designer-btn--above' : ''
+                        } ${index === activeDesigner ? 'active' : ''}`}
+                        onClick={designer.text ? () => setActiveDesigner(index) : undefined}
+                        disabled={!designer.text}
+                        style={{
+                          ...(!designer.text && { opacity: 1 }),
+                        }}
+                      >
+                        {isAbove && (
+                          <SplitTitle
+                            className="lb-inn-interiorismo__designer-name lb-inn-interiorismo__designer-name--above mb-3 px-1"
+                            dangerouslySetInnerHTML={{ __html: designer.name }}
+                          />
+                        )}
+                        <div className={isAbove ? 'lb-inn-interiorismo__designer-img-card' : 'w-100 h-100 position-absolute top-0 start-0'}>
+                          <ScrollAnim
+                            as="div"
+                            animation='fade-up'
+                            className="lb-inn-interiorismo__designer-img"
+                            aria-hidden="true"
+                            delay={0.1 * index}
+                            style={designer.image ? {
+                              backgroundImage: `url("${resolveUrl(designer.image)}")`,
+                            } : undefined}
+                          />
+                        </div>
+                        {!isAbove && (
+                          <SplitTitle
+                            className="lb-inn-interiorismo__designer-name mt-3 mb-2 px-2"
+                            dangerouslySetInnerHTML={{ __html: designer.name }}
+                          />
+                        )}
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

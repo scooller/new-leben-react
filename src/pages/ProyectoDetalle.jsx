@@ -121,19 +121,19 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
-                        src={resolveUrl(loc.img || loc.image_url, 'images/inn/ubicacion/nuevo.jpg')}
+                        src={resolveUrl(loc.img || loc.image_url)}
                         alt={loc.name}
                         className="d-block w-100 lb-inn-gallery__img"
                         loading="lazy"
                         onError={(e) => {
-                          const fallback = resolveUrl('images/inn/ubicacion/nuevo.jpg')
+                          const fallback = ''
                           if (e.currentTarget.src !== fallback) {
                             e.currentTarget.src = fallback
                           }
                         }}
                       />
                       <a
-                        href={resolveUrl(loc.img || loc.image_url, 'images/inn/ubicacion/nuevo.jpg')}
+                        href={resolveUrl(loc.img || loc.image_url)}
                         data-fancybox="inn-galeria"
                         className="lb-inn-gallery__zoom lb-img-zoom-badge position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
@@ -416,7 +416,7 @@ export default function ProyectoDetalle() {
   // 2. Equipamiento
   const [activeEquipmentSlide, setActiveEquipmentSlide] = useState(0)
   const equipmentEyebrow = projectContent?.equipment?.eyebrow || 'Equipamiento'
-  const equipmentTitle = formatMultiline(projectContent?.equipment?.title || 'SOFISTICACIÓN EN CADA DETALLE')
+  const equipmentTitle = formatMultiline(projectContent?.equipment?.title || '')
   const equipmentDescHtml = projectContent?.equipment?.description || ''
   const equipmentBg = resolveUrl(projectContent?.equipment?.bg_image_url)
   const equipmentBrands = useMemo(() => projectContent?.equipment?.brands || [], [projectContent?.equipment?.brands])
@@ -432,7 +432,7 @@ export default function ProyectoDetalle() {
   // 3. Espacios Comunes
   const [activeEspacioSlide, setActiveEspacioSlide] = useState(0)
   const espaciosEyebrow = projectContent?.espacios?.eyebrow || 'Espacios'
-  const espaciosTitle = formatMultiline(projectContent?.espacios?.title || 'ESPACIOS DE OTRO NIVEL')
+  const espaciosTitle = formatMultiline(projectContent?.espacios?.title || '')
   const espaciosDescHtml = projectContent?.espacios?.description || ''
   const espaciosBg = resolveUrl(projectContent?.espacios?.bg_image_url)
 
@@ -541,11 +541,11 @@ export default function ProyectoDetalle() {
 
   // 5. Interiorismo
   const interiorismoEyebrow = projectContent?.interiorismo?.eyebrow || 'Interiorismo'
-  const interiorismoTitle = formatMultiline(projectContent?.interiorismo?.title || 'MAESTRÍA EN CADA DETALLE')
+  const interiorismoTitle = formatMultiline(projectContent?.interiorismo?.title || '')
   const interiorismoDesc = projectContent?.interiorismo?.description || ''
   const interiorismoBg = resolveUrl(projectContent?.interiorismo?.bg_image_url)
   const interiorismoNamePosition = projectContent?.interiorismo?.name_position || 'overlay'
-  const designers = projectContent?.interiorismo?.designers?.length ? projectContent.interiorismo.designers : undefined
+  const designers = useMemo(() => Array.isArray(projectContent?.interiorismo?.designers) ? projectContent.interiorismo.designers : [], [projectContent?.interiorismo?.designers])
 
   // Modal Panoramas
   const panoramasCategories = projectContent?.panoramas?.categories || []
@@ -577,7 +577,7 @@ export default function ProyectoDetalle() {
     if (mapData.hasMap) {
       tabs.push({ id: 'ubicacion', label: 'Ubicación' })
     }
-    if (interiorismoDesc || (designers && designers.length > 0)) {
+    if (interiorismoDesc || designers.length > 0) {
       tabs.push({ id: 'interiorismo', label: 'Interiorismo' })
     }
     tabs.push({ id: 'contacto', label: 'Contacto' })
@@ -1032,7 +1032,7 @@ export default function ProyectoDetalle() {
         )}
 
         {/* 5. INTERIORISMO */}
-        {(interiorismoDesc || (designers && designers.length > 0)) && (
+        {(interiorismoDesc || designers.length > 0) && (
           <InteriorismoSection
             eyebrow={interiorismoEyebrow}
             title={interiorismoTitle}

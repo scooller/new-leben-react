@@ -438,7 +438,7 @@ $inn-map-card-bg: #f6f1eb;
 
   .container.lb-shadow-box {
     margin-bottom: 2.5rem;
-    background-image: var(--lb-inn-proyecto-bg, url(/images/inn/bg-montain.svg));
+    background-image: var(--lb-inn-proyecto-bg, none);
     background-repeat: no-repeat;
     background-position: 55% 5%;
     background-size: cover;

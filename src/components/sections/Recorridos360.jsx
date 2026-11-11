@@ -6,33 +6,9 @@ import SplitTitle from '../SplitTitle'
 
 const isImage = (src) => /\.(png|jpe?g|webp|gif|avif|svg)(\?|#|$)/i.test(src)
 
-const TOURS = [
-  {
-    label: 'Masterplan',
-    title: 'Masterplan',
-    images: [
-      { title: 'Masterplan', src: '/images/inn/masterplan inn.jpg' },
-      { title: 'Masterplan Primer Piso', src: '/images/inn/masterplan-piso-1.jpg' },
-      { title: 'Masterplan Piso 10', src: '/images/inn/masterplan-piso-10.jpg' },
-    ],
-    allow: 'fullscreen',
-  },
-  {
-    label: 'Piloto 360',
-    src: 'https://my.matterport.com/show/?m=hQ8Fm33FqFY&brand=0',
-    title: 'Conoce tu próximo departamento',
-    allow: 'fullscreen; autoplay',
-  },
-  {
-    label: 'Vista 360',
-    src: 'https://www.lanube360.com/ileben1/',
-    title: 'En primera línea frente al lago',
-    allow: 'fullscreen',
-  },
-]
 
 export default function Recorridos360({
-  tours = TOURS,
+  tours = [],
   title,
   eyebrow,
   brochureUrl,

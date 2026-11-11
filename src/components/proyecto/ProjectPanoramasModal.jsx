@@ -159,7 +159,7 @@ function CarFrontIcon({ size = 16, className = '' }) {
 export default function ProjectPanoramasModal({
   show,
   onClose,
-  categories = PANORAMAS_CATEGORIES,
+  categories = [],
   projectName = 'INN',
   backgroundImage,
 }) {
@@ -169,10 +169,10 @@ export default function ProjectPanoramasModal({
   const carouselInstance = useRef(null)
 
   const modalBg = useMemo(() => {
-    return resolveUrl(backgroundImage, 'images/inn/panoramas/bg-forest.jpg')
+    return backgroundImage ? resolveUrl(backgroundImage) : null
   }, [backgroundImage])
 
-  const activeCategories = Array.isArray(categories) && categories.length > 0 ? categories : PANORAMAS_CATEGORIES
+  const activeCategories = Array.isArray(categories) ? categories : []
   const currentCategory = activeCategories[activeCatIndex] || activeCategories[0]
   const rawCards = (currentCategory?.slides || []).flat()
   const slides = useMemo(() => chunkIntoPairs(rawCards), [rawCards])

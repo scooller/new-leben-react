@@ -23,7 +23,7 @@ export default function ProjectFeatureSection({
   highlightOffer,
   slides = [],
   mediaVideoSrc,
-  backgroundImage = 'images/inn/Volcan.svg',
+  backgroundImage = null,
   carouselId = 'project-carousel',
   className = 'pb-5 mb-5',
   id = 'proyecto',

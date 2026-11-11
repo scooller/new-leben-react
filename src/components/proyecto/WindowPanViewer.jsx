@@ -43,6 +43,14 @@ function resolveVista(planta) {
     return { available: false, unit: '—', floor: '—', images: [], isExact: false }
   }
 
+  const rawProjectSlug = (planta.proyecto_slug || planta.proyecto?.slug || '').toLowerCase()
+  const rawProjectName = (planta.proyecto_name || planta.proyecto?.name || '').toLowerCase()
+  const isEdificioInn = rawProjectSlug.includes('inn') || rawProjectName.includes('inn') || (!rawProjectSlug && !rawProjectName)
+
+  if (!isEdificioInn) {
+    return { available: false, unit: '—', floor: '—', images: [], isExact: false }
+  }
+
   // Extraer números del nombre o código
   const raw = `${planta.name || ''} ${planta.numero || ''} ${planta.codigo || ''}`
   const match = raw.match(/\b([2-9]\d{2})\b/)

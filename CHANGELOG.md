@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.228] - 2026-11-11
+
+### Removed & Fixed
+- **Eliminados fallbacks fijos de Edificio INN cuando la API viene vacía**:
+  - `src/components/sections/InteriorismoSection.jsx`: Eliminados diseñadores hardcodeados por defecto (`designers = []`), fondo SVG por defecto (`backgroundImage = null`), y renderizado condicional de columnas evitando caídas cuando no hay diseñadores configurados.
+  - `src/components/sections/ProjectFeatureSection.jsx`: Eliminado fondo por defecto `'images/inn/Volcan.svg'` (`backgroundImage = null`).
+  - `src/styles/components/_inn.scss`: Eliminado fallback CSS a `url(/images/inn/bg-montain.svg)` (`background-image: var(--lb-inn-proyecto-bg, none)`).
+  - `src/components/sections/Recorridos360.jsx`: Eliminado catálogo constante `TOURS` y default prop (`tours = []`), retornando `null` si no hay recorridos definidos.
+  - `src/components/proyecto/ProjectPanoramasModal.jsx`: Eliminado default a `PANORAMAS_CATEGORIES` y fondo por defecto a bosque de INN.
+  - `src/components/proyecto/WindowPanViewer.jsx`: Restringido el visor de fotos de vistas fijas exclusivamente a unidades pertenecientes a INN.
+  - `src/pages/ProyectoDetalle.jsx`: Eliminados títulos hardcodeados de INN en equipamiento, espacios e interiorismo (`'SOFISTICACIÓN EN CADA DETALLE'`, `'ESPACIOS DE OTRO NIVEL'`, `'MAESTRÍA EN CADA DETALLE'`) y fallback a `images/inn/ubicacion/nuevo.jpg` en la galería de ubicación.
+
 ## [0.9.227] - 2026-11-11
 
 ### Added
