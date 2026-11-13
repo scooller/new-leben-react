@@ -146,8 +146,17 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                       <div className="lb-inn-gallery__overlay">
                         <h4 className="lb-inn-gallery__title">{loc.label || loc.name}</h4>
                         <div className="lb-inn-gallery__time">
-                          <WalkIcon size={14} />
-                          <span>a {loc.time || '15 minutos'}</span>
+                          {loc.is_project ? (
+                            <>
+                              <MapPin size={14} style={{ display: 'inline-block', verticalAlign: '-1px', flexShrink: 0 }} />
+                              <span>{loc.time || 'Punto central'}</span>
+                            </>
+                          ) : (
+                            <>
+                              <WalkIcon size={14} />
+                              <span>a {loc.time || '15 minutos'}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -487,6 +496,8 @@ export default function ProyectoDetalle() {
         x: projectContent?.map?.pin?.x ?? 33.3,
         y: projectContent?.map?.pin?.y ?? 72.4,
         logo: resolveUrl(projectContent?.map?.pin?.logo_url),
+        image: resolveUrl(projectContent?.map?.pin?.image_url),
+        name: projectContent?.map?.pin?.name || currentProject?.name || 'Proyecto',
       },
     }
   }, [projectContent, currentProject])
@@ -494,6 +505,11 @@ export default function ProyectoDetalle() {
   const locationPoints = useMemo(() => {
     return projectContent?.map?.pois || []
   }, [projectContent])
+
+  const projectPoiIndex = useMemo(() => {
+    const idx = locationPoints.findIndex((p) => p.is_project)
+    return idx !== -1 ? idx : 0
+  }, [locationPoints])
 
   const gallerySlides = useMemo(() => generateGallerySlides(locationPoints), [locationPoints])
 
@@ -960,22 +976,34 @@ export default function ProyectoDetalle() {
                       />
 
                       {/* Pin PROYECTO */}
-                      <div
-                        className="lb-inn-map__pin-inn position-absolute"
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleSelectLocation(projectPoiIndex)
+                        }}
+                        onPointerDown={(e) => {
+                          if (e.button === 0) {
+                            handleSelectLocation(projectPoiIndex)
+                          }
+                        }}
+                        className={`lb-inn-map__pin-inn position-absolute ${activeLocationIndex === projectPoiIndex ? 'active lb-inn-map__pin-inn--active' : ''}`}
                         style={{ left: `${mapData.pin.x}%`, top: `${mapData.pin.y}%` }}
-                        title={currentProject?.name || 'PROYECTO'}
+                        title={mapData.pin.name || currentProject?.name || 'PROYECTO'}
+                        aria-label={`Seleccionar ${mapData.pin.name || currentProject?.name || 'Proyecto'}`}
                       >
                         {mapData.pin.logo && (
                           <img
                             src={mapData.pin.logo}
-                            alt={currentProject?.name || 'PROYECTO'}
+                            alt={mapData.pin.name || currentProject?.name || 'PROYECTO'}
                             className="lb-inn-map__pin-inn-img"
                           />
                         )}
-                      </div>
+                      </button>
 
                       {/* Pines interactivos */}
                       {locationPoints.map((point, index) => {
+                        if (point.is_project) return null
                         const isSelected = activeLocationIndex === index
                         const dir = point.direction || point.dir || 'right'
                         return (

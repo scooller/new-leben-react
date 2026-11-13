@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.232] - 2026-11-13
+
+### Added
+- `src/pages/ProyectoDetalle.jsx`:
+  - Pin del proyecto interactivo: convertido a `<button type="button">` con click/pointer listener que activa y centra el POI principal del proyecto en el carrusel (`projectPoiIndex`).
+  - Animación y sincronización bidireccional: al hacer click en la primera tarjeta del carrusel (POI del proyecto) o navegar hacia ella, el pin del proyecto en el mapa activa la clase `active` / `lb-inn-map__pin-inn--active` con animación de rebote y resplandor.
+  - Tarjeta de POI principal en carrusel: icono `MapPin` y texto contextual (`Punto central` / `Ubicación`).
+  - Exclusión de pines duplicados en el mapa para POIs marcados como `is_project`.
+- `src/styles/components/_inn.scss`:
+  - Estilos de botón interactivo para `.lb-inn-map__pin-inn` con `cursor: pointer`, hover optimizado y focus-visible.
+  - Animación `@keyframes lb-pin-inn-bounce` y filtro drop-shadow con acento dinámico de proyecto (`--lb-project-accent`) para el estado activo.
+
 ## [0.9.231] - 2026-11-11
 
 ### Added
