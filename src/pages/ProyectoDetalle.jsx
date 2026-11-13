@@ -117,7 +117,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                       }
                     }}
                     className={`lb-inn-gallery__card ${cardIdx === 1 ? 'lb-inn-gallery__card--main lb-inn-gallery__card--active' : ''}`}
-                    aria-label={`${loc.label || loc.name} - a ${loc.time || '15 minutos'}`}
+                    aria-label={loc.is_project ? `${loc.label || loc.name} - ${loc.address || loc.time || 'Ubicación'}` : `${loc.label || loc.name} - a ${loc.time || '15 minutos'}`}
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
                       <img
@@ -503,8 +503,21 @@ export default function ProyectoDetalle() {
   }, [projectContent, currentProject])
 
   const locationPoints = useMemo(() => {
-    return projectContent?.map?.pois || []
-  }, [projectContent])
+    const pois = projectContent?.map?.pois || []
+    const fallbackAddress = projectContent?.map?.address || currentProject?.direccion || ''
+    if (!fallbackAddress) return pois
+
+    return pois.map((poi) => {
+      if (poi.is_project && (!poi.address || poi.time === 'Ubicación')) {
+        return {
+          ...poi,
+          address: poi.address || fallbackAddress,
+          time: poi.address || (poi.time && poi.time !== 'Ubicación' ? poi.time : fallbackAddress),
+        }
+      }
+      return poi
+    })
+  }, [projectContent, currentProject])
 
   const projectPoiIndex = useMemo(() => {
     const idx = locationPoints.findIndex((p) => p.is_project)

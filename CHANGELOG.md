@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `src/pages/ProyectoDetalle.jsx`:
   - Pin del proyecto interactivo: convertido a `<button type="button">` con click/pointer listener que activa y centra el POI principal del proyecto en el carrusel (`projectPoiIndex`).
   - Animación y sincronización bidireccional: al hacer click en la primera tarjeta del carrusel (POI del proyecto) o navegar hacia ella, el pin del proyecto en el mapa activa la clase `active` / `lb-inn-map__pin-inn--active` con animación de rebote y resplandor.
-  - Tarjeta de POI principal en carrusel: icono `MapPin` y texto contextual (`Punto central` / `Ubicación`).
+  - Tarjeta de POI principal en carrusel: icono `MapPin` y dirección visible configurada en el admin (`loc.address` / `loc.time` / `mapData.address`, e.g. "Vicente Pérez Rosales 991, Puerto Varas").
   - Exclusión de pines duplicados en el mapa para POIs marcados como `is_project`.
 - `src/styles/components/_inn.scss`:
   - Estilos de botón interactivo para `.lb-inn-map__pin-inn` con `cursor: pointer`, hover optimizado y focus-visible.
