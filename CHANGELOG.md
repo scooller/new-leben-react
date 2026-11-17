@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.234] - 2026-11-17
+
+### Added
+- `src/components/icons/amenities.jsx`:
+  - Nuevos componentes de íconos animados para amenidades y espacios comunes con micro-animaciones al hacer hover (`startAnimation`/`stopAnimation`) usando `motion/react` y `createAnimatedIcon`:
+    - `FlameKindlingIcon` (`flame-kindling`)
+    - `HeaterIcon` (`heater`)
+    - `ShoppingCartIcon` (`shopping-cart`)
+    - `WavesVerticalIcon` (`waves-vertical`)
+    - `CinemaIcon` (`cinema`)
+    - `BuildingIcon` (`building`)
+    - `LeafIcon` (`leaf`)
+    - `UtensilsIcon` (`utensils`)
+    - `CoffeeIcon` (`coffee`)
+    - `DropletsIcon` (`droplets`)
+    - `BikeIcon` (`bike`)
+    - `FuelIcon` (`fuel`)
+    - `SofaIcon` (`sofa`)
+    - `FishingHookIcon` (`fishing-hook`)
+    - `MicrowaveIcon` (`microwave`)
+    - `PlantPotIcon` (`plant-pot`)
+    - `GroceriesIcon` (`groceries`)
+    - `WarehouseWavesIcon` (`warehouse-waves`)
+- `src/pages/ProyectoDetalle.jsx`:
+  - Registrados todos los nuevos íconos en `ICON_MAP` para mapeo directo con los datos provistos desde el backend en `espacios_items.icon_key`.
+
 ## [0.9.233] - 2026-11-17
 
 ### Fixed

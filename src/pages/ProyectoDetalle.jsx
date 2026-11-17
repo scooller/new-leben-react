@@ -25,6 +25,27 @@ import { DumbbellIcon } from '../components/icons/dumbbell.jsx'
 import { WavesLadderIcon } from '../components/icons/waves-ladder.jsx'
 import { KayakIcon } from '../components/icons/kayak.jsx'
 import { HotTubIcon } from '../components/icons/hot-tub.jsx'
+import { FlameIcon } from '../components/icons/flame.jsx'
+import {
+  FlameKindlingIcon,
+  HeaterIcon,
+  ShoppingCartIcon,
+  WavesVerticalIcon,
+  CinemaIcon,
+  BuildingIcon,
+  LeafIcon,
+  UtensilsIcon,
+  CoffeeIcon,
+  DropletsIcon,
+  BikeIcon,
+  FuelIcon,
+  SofaIcon,
+  FishingHookIcon,
+  MicrowaveIcon,
+  PlantPotIcon,
+  GroceriesIcon,
+  WarehouseWavesIcon,
+} from '../components/icons/amenities.jsx'
 import { apiFetch } from '../lib/apiFetch.js'
 import { formatPriceUF } from '../lib/projectUtils.js'
 import { useSeo } from '../hooks/useSeo.js'
@@ -52,12 +73,32 @@ const formatMultiline = (text) => {
 // Mapa de íconos para navegación de amenidades / espacios
 const ICON_MAP = {
   bell: ConciergeBellIcon,
+  'concierge-bell': ConciergeBellIcon,
   table: TableIcon,
   'chef-hat': ChefHatIcon,
   dumbbell: DumbbellIcon,
   'hot-tub': HotTubIcon,
   'waves-ladder': WavesLadderIcon,
   kayak: KayakIcon,
+  'flame-kindling': FlameKindlingIcon,
+  heater: HeaterIcon,
+  'shopping-cart': ShoppingCartIcon,
+  'waves-vertical': WavesVerticalIcon,
+  cinema: CinemaIcon,
+  flame: FlameIcon,
+  building: BuildingIcon,
+  leaf: LeafIcon,
+  utensils: UtensilsIcon,
+  coffee: CoffeeIcon,
+  droplets: DropletsIcon,
+  bike: BikeIcon,
+  fuel: FuelIcon,
+  sofa: SofaIcon,
+  'fishing-hook': FishingHookIcon,
+  microwave: MicrowaveIcon,
+  'plant-pot': PlantPotIcon,
+  groceries: GroceriesIcon,
+  'warehouse-waves': WarehouseWavesIcon,
 }
 
 function WalkIcon({ size = 14, className = '' }) {
