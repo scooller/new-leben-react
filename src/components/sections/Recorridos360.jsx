@@ -77,7 +77,7 @@ export default function Recorridos360({
               href={currentSrc}
               data-fancybox="recorridos-360"
               data-caption={currentTitle}
-              className="d-block w-100 h-100 position-relative lb-img-trigger"
+              className="d-block w-100 h-100 lb-img-trigger"
               style={{ cursor: 'zoom-in' }}
               aria-label={`Ampliar ${currentTitle}`}
             >

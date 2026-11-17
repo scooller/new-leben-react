@@ -26,15 +26,15 @@ export const brokersData = {
       { icon: 'building', text: 'Proyectos únicos con ubicaciones premium en Santiago y Regiones.' },
       { icon: 'bell', text: 'Invitación a preventas y lanzamientos exclusivos.' },
       { icon: 'user-check', text: 'Apoyo en la gestión durante cada etapa del proceso de venta.' },
-      { icon: 'award', text: 'Respaldo de una inmobiliaria certificada por Great Place to Work.' },
+      { icon: 'award', text: 'Respaldo de una inmobiliaria certificada por Best Place to Live.' },
       { icon: 'gift', text: 'Premios al Mejor Broker 2025: Pasajes + Hotel para 2 personas por 5 días en Punta Cana.' },
     ],
   },
 
   // --- Comparison Table ---
   tiers: {
-    eyebrow: 'Tiers Exclusivos',
-    title: 'Categorías de Brokers Partner con Beneficios',
+    eyebrow: 'Beneficios Exclusivos',
+    title: 'Categorías de Brokers Partner',
     columns: [
       {
         name: 'PARTNER BLACK',

@@ -80,7 +80,7 @@ export default function InteriorismoSection({
         style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${resolveUrl(backgroundImage)}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
-          <div className={`${designers.length > 0 ? 'col-lg-6' : 'col-12'} align-self-stretch position-relative lb-inn-proyecto__text-column`}>
+          <div className={`${designers.length > 0 ? 'col-lg-6' : 'col-12'} col-l align-self-stretch position-relative lb-inn-proyecto__text-column`}>
             <div className="h-100 pe-4" animation="fade-up">
               {eyebrow && (
                 <ScrollAnim as="span" animation='flip-x' className="lb-inn-proyecto__eyebrow">
@@ -110,7 +110,7 @@ export default function InteriorismoSection({
           </div>
 
           {designers.length > 0 && (
-            <div className="col-lg-6 d-flex flex-column gap-4">
+            <div className="col-lg-6 d-flex flex-column gap-4 col-r">
               <div className={`d-flex designers g-4 h-100 ${namePosition === 'above' ? 'designers--above' : ''}`}>
                 {designers.map((designer, index) => {
                   const isAbove = namePosition === 'above'
@@ -121,9 +121,8 @@ export default function InteriorismoSection({
                     >
                       <button
                         type="button"
-                        className={`btn btn-lg lb-inn-interiorismo__designer-btn ${
-                          isAbove ? 'lb-inn-interiorismo__designer-btn--above' : ''
-                        } ${index === activeDesigner ? 'active' : ''}`}
+                        className={`btn btn-lg lb-inn-interiorismo__designer-btn ${isAbove ? 'lb-inn-interiorismo__designer-btn--above' : ''
+                          } ${index === activeDesigner ? 'active' : ''}`}
                         onClick={designer.text ? () => setActiveDesigner(index) : undefined}
                         disabled={!designer.text}
                         style={{

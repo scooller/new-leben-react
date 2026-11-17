@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.233] - 2026-11-17
+
+### Fixed
+- `src/pages/ProyectoDetalle.jsx`:
+  - Corregido Fancybox en carrusel de galería (`ProjectGalleryCarousel`): movido el `Fancybox.bind` al ciclo de vida del propio componente `ProjectGalleryCarousel` con `useEffect([slides, galleryRef])`. Previamente no se ejecutaba porque el `useEffect` en `ProyectoDetalle` corría en el montaje inicial mientras `contentLoading` era `true` (`galleryRef.current` era `null` debido a `PageLoader`), saliendo con `return` prematuro y nunca volviendo a ejecutarse con `[]`.
+  - Actualizado el `useEffect` del carrusel Bootstrap con dependencias `[contentLoading, gallerySlides]`.
+  - Eliminado `target='_blank'` del botón de zoom y añadido `data-caption` con el nombre del POI.
+
 ## [0.9.232] - 2026-11-13
 
 ### Added

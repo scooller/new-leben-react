@@ -95,6 +95,19 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
   galleryRef,
   onSelectLocation,
 }) {
+  useEffect(() => {
+    const el = galleryRef?.current
+    if (!el) return
+
+    Fancybox.bind(el, '[data-fancybox]', {
+      Toolbar: { display: { left: [], right: ['close'] } },
+    })
+
+    return () => {
+      Fancybox.unbind(el)
+    }
+  }, [slides, galleryRef])
+
   return (
     <div ref={galleryRef} id="innGalleryCarousel" className="carousel slide position-relative" data-bs-interval="false">
       <div className="carousel-inner">
@@ -120,21 +133,10 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                     aria-label={loc.is_project ? `${loc.label || loc.name} - ${loc.address || loc.time || 'Ubicación'}` : `${loc.label || loc.name} - a ${loc.time || '15 minutos'}`}
                   >
                     <div className="lb-inn-gallery__img-wrap position-relative">
-                      <img
-                        src={resolveUrl(loc.img || loc.image_url)}
-                        alt={loc.name}
-                        className="d-block w-100 lb-inn-gallery__img"
-                        loading="lazy"
-                        onError={(e) => {
-                          const fallback = ''
-                          if (e.currentTarget.src !== fallback) {
-                            e.currentTarget.src = fallback
-                          }
-                        }}
-                      />
                       <a
                         href={resolveUrl(loc.img || loc.image_url)}
                         data-fancybox="inn-galeria"
+                        data-caption={loc.label || loc.name}
                         className="lb-inn-gallery__zoom lb-img-zoom-badge position-absolute top-0 end-0 m-2 rounded-circle"
                         onClick={(e) => e.stopPropagation()}
                         title="Ver foto ampliada"
@@ -159,6 +161,18 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                           )}
                         </div>
                       </div>
+                      <img
+                        src={resolveUrl(loc.img || loc.image_url)}
+                        alt={loc.name}
+                        className="d-block w-100 lb-inn-gallery__img"
+                        loading="lazy"
+                        onError={(e) => {
+                          const fallback = ''
+                          if (e.currentTarget.src !== fallback) {
+                            e.currentTarget.src = fallback
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -536,10 +550,6 @@ export default function ProyectoDetalle() {
     const c = Carousel.getOrCreateInstance(galleryEl, { interval: false, ride: false, wrap: true })
     galleryCarouselInstance.current = c
 
-    Fancybox.bind(galleryEl, '[data-fancybox]', {
-      Toolbar: { display: { left: [], right: ['close'] } },
-    })
-
     const onSlid = (event) => {
       if (typeof event.to === 'number') {
         setActiveLocationIndex(event.to)
@@ -550,11 +560,10 @@ export default function ProyectoDetalle() {
 
     return () => {
       galleryEl.removeEventListener('slid.bs.carousel', onSlid)
-      Fancybox.unbind(galleryEl)
       c.dispose()
       galleryCarouselInstance.current = null
     }
-  }, [])
+  }, [contentLoading, gallerySlides])
 
   const handleSelectLocation = useCallback((index) => {
     setActiveLocationIndex(index)
