@@ -22,27 +22,27 @@ export default function Testimonials() {
     }
   }, [])
 
-  const { title, certTitle, certClients, ratingLabel, ratingScore, reviews: staticReviews } = defaultData
+  const { title, certTitle, certClients, ratingLabel, ratingScore } = defaultData
 
   const reviews = useMemo(() => {
-    if (apiReviews && apiReviews.length > 0) {
-      return apiReviews.map((item) => {
-        const text = item.review_text || item.text || ''
-        const quotedText = text.startsWith('"') ? text : `"${text}"`
-        return {
-          id: item.id,
-          name: item.name,
-          role: item.role,
-          avatarUrl: item.avatar_url ? resolveApiUrl(item.avatar_url) : null,
-          avatar: item.avatar,
-          rating: Number(item.rating) || 5,
-          text: quotedText,
-          time: item.review_date_human || item.time || '',
-        }
-      })
-    }
-    return staticReviews
-  }, [apiReviews, staticReviews])
+    if (!apiReviews || !Array.isArray(apiReviews)) return []
+    return apiReviews.map((item) => {
+      const text = item.review_text || item.text || ''
+      const quotedText = text.startsWith('"') ? text : `"${text}"`
+      return {
+        id: item.id,
+        name: item.name,
+        role: item.role,
+        avatarUrl: item.avatar_url ? resolveApiUrl(item.avatar_url) : null,
+        avatar: item.avatar,
+        rating: Number(item.rating) || 5,
+        text: quotedText,
+        time: item.review_date_human || item.time || '',
+      }
+    })
+  }, [apiReviews])
+
+  if (reviews.length === 0) return null
 
   return (
     <ScrollAnim as="section" id="testimonials" className="lb-testimonials container lb-shadow lb-radius-tr" animation="fade-up" duration={1}>

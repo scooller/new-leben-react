@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.243] - 2026-11-25
+
+### Removed
+- `src/components/sections/ProjectOfMonthSection.jsx`:
+  - Eliminado fallback estático `projectOfMonthContent` de `content.js`. Ahora la sección y sus recursos multimedia se generan exclusivamente si existen en la respuesta de la API `/api/v1/pages/home`.
+- `src/components/layout/Navbar.jsx`:
+  - Eliminados fallbacks estáticos `defaultMainLinks`, `menuLinks` y `menuGroups`.
+  - La navegación principal (`/api/v1/menus/header_main`) y el menú desplegable con enlaces planos y agrupaciones (`/api/v1/menus/header_dropdown`) se cargan 100% de forma dinámica desde el backend.
+- `src/components/layout/Footer.jsx`:
+  - Eliminados fallbacks estáticos `defaultCorporateLinks` y `defaultCopyrightLinks`. Todos los enlaces corporativos y legales provienen directamente de `/api/v1/menus/footer_corporate` y `/api/v1/menus/footer_legal`.
+- `src/components/sections/Testimonials.jsx`:
+  - Eliminado fallback a reseñas estáticas (`reviews: staticReviews`). Si no hay testimonios en `/api/v1/testimonials`, no se renderizan datos ficticios.
+
 ## [0.9.242] - 2026-11-25
 
 ### Added

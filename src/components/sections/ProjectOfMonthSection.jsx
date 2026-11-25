@@ -3,7 +3,6 @@ import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { HouseHeartIcon } from '../icons/house-heart.jsx'
 import { hover } from '../icons/animated-icon.jsx'
-import { projectOfMonthContent as staticContent } from '../../data/content.js'
 import { apiFetch, resolveApiUrl } from '../../lib/apiFetch.js'
 
 export default function ProjectOfMonthSection() {
@@ -29,20 +28,22 @@ export default function ProjectOfMonthSection() {
   }, [])
 
   const content = useMemo(() => {
-    if (!apiData) return staticContent
+    if (!apiData) return null
     const d = apiData.data || {}
-    const photo = d.photo_url ? resolveApiUrl(d.photo_url) : (d.photo ? resolveApiUrl(d.photo) : staticContent.photo)
-    const video = d.video_url ? resolveApiUrl(d.video_url) : (d.video ? resolveApiUrl(d.video) : staticContent.video)
+    const photo = d.photo_url ? resolveApiUrl(d.photo_url) : (d.photo ? resolveApiUrl(d.photo) : '')
+    const video = d.video_url ? resolveApiUrl(d.video_url) : (d.video ? resolveApiUrl(d.video) : '')
     return {
-      title: apiData.title || staticContent.title,
-      titleHighlight: d.title_highlight || d.titleHighlight || staticContent.titleHighlight,
-      text: d.description || d.text || staticContent.text,
+      title: apiData.title || '',
+      titleHighlight: d.title_highlight || d.titleHighlight || '',
+      text: d.description || d.text || '',
       photo,
       video,
-      buttonText: d.button_text || d.cta?.label || staticContent.buttonText,
-      buttonLink: d.button_link || d.cta?.url || staticContent.buttonLink,
+      buttonText: d.button_text || d.cta?.label || '',
+      buttonLink: d.button_link || d.cta?.url || '',
     }
   }, [apiData])
+
+  if (!content) return null
 
   const titleWithSpace = content.title.endsWith(' ') ? content.title : `${content.title} `
 

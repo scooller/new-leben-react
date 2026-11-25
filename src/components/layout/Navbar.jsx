@@ -79,48 +79,17 @@ function Navlink({ link, className }) {
     : <a href={link.href} target={target} rel={rel} className={fullClass}>{content}</a>
 }
 
-const defaultMainLinks = [
-  { label: 'Invest', to: '/invest' },
-  { label: 'Brokers', to: '/brokers' },
-  { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, class: 'btn-highlight' },
-  { label: 'Clientes', to: '/login' },
-]
-
-/** Links planos (sin submenú) */
-// const menuLinks = []
-const menuLinks = [
-  { label: 'Proyectos', to: '/cotizador#proyectos' },
-  { label: 'Locales comerciales', href: 'https://locales.ileben.cl/' },
-]
-
-/** Links agrupados bajo un encabezado */
-const menuGroups = [
-  // {
-  //   title: 'Locales Comerciales',
-  //   items: [
-  //     { label: 'Independencia', href: 'https://locales.ileben.cl/#indi' },
-  //     { label: 'Santiago Centro', href: 'https://locales.ileben.cl/#living-town' },
-  //     { label: 'Puerto Montt', href: 'https://locales.ileben.cl/#parque-germania' },
-  //   ]
-  // },
-  {
-    title: 'Nosotros',
-    items: [
-      { label: 'Quiénes somos', to: '/quienes-somos' },
-      { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
-      { label: 'Proyectos realizados', to: '/nosotros' },
-    ],
-  },
-  {
-    title: 'Personas',
-    items: [
-      { label: 'Canal de denuncias y consultas', href: 'https://denuncias.ileben.cl/' },
-      { label: 'Acceso Colaboradores', href: 'https://leben.buk.cl' },
-    ],
-  },
-]
-
-// mainMobileLinks is computed dynamically from active mainLinks inside Navbar component
+function formatLink(item) {
+  return {
+    label: item.label,
+    to: item.url?.startsWith('/') ? item.url : undefined,
+    href: item.url && !item.url.startsWith('/') ? item.url : undefined,
+    featured: item.is_featured,
+    class: item.is_featured ? 'btn-highlight' : undefined,
+    target: item.target && item.target !== '_self' ? item.target : undefined,
+    badge: item.badge || undefined,
+  }
+}
 
 /** Links dinámicos por página — aparecen después del separador */
 const pageLinksMap = {
@@ -173,25 +142,38 @@ function getPageLinks(pathname) {
 
 export default function Navbar({ className = '' }) {
   const [scrolled, setScrolled] = useState(false)
-  const [apiMainLinks, setApiMainLinks] = useState(null)
+  const [apiMainLinks, setApiMainLinks] = useState([])
+  const [dropdownData, setDropdownData] = useState({ flat: [], groups: [] })
   const location = useLocation()
   const pageLinks = getPageLinks(location.pathname)
 
   useEffect(() => {
     let isMounted = true
+
     apiFetch('/api/v1/menus/header_main')
       .then(({ data, error }) => {
-        if (!error && data?.items && Array.isArray(data.items) && data.items.length > 0 && isMounted) {
-          const links = data.items.map((item) => ({
-            label: item.label,
-            to: item.url.startsWith('/') ? item.url : undefined,
-            href: !item.url.startsWith('/') ? item.url : undefined,
-            featured: item.is_featured,
-            class: item.is_featured ? 'btn-highlight' : undefined,
-            target: item.target && item.target !== '_self' ? item.target : undefined,
-            badge: item.badge || undefined,
-          }))
-          setApiMainLinks(links)
+        if (!error && data?.items && Array.isArray(data.items) && isMounted) {
+          setApiMainLinks(data.items.map(formatLink))
+        }
+      })
+      .catch(() => {})
+
+    apiFetch('/api/v1/menus/header_dropdown')
+      .then(({ data, error }) => {
+        if (!error && data?.items && Array.isArray(data.items) && isMounted) {
+          const flat = []
+          const groups = []
+          data.items.forEach((item) => {
+            if (item.children && Array.isArray(item.children) && item.children.length > 0) {
+              groups.push({
+                title: item.label,
+                items: item.children.map(formatLink),
+              })
+            } else {
+              flat.push(formatLink(item))
+            }
+          })
+          setDropdownData({ flat, groups })
         }
       })
       .catch(() => {})
@@ -201,12 +183,10 @@ export default function Navbar({ className = '' }) {
     }
   }, [])
 
-  const mainLinks = useMemo(() => {
-    if (apiMainLinks && apiMainLinks.length > 0) return apiMainLinks
-    return defaultMainLinks
-  }, [apiMainLinks])
-
+  const mainLinks = apiMainLinks
   const mainMobileLinks = useMemo(() => mainLinks.slice(0, 1), [mainLinks])
+  const menuLinks = dropdownData.flat
+  const menuGroups = dropdownData.groups
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)

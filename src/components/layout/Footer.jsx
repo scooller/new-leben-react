@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { footerContent } from '../../data/content.js'
 import { slugAliases } from '../../data/staticPages.js'
@@ -18,17 +18,6 @@ const socialIcons = {
   instagram: InstagramIcon,
   linkedin: LinkedinIcon,
 }
-
-const defaultCorporateLinks = [
-  { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
-  { label: 'Bases legales', to: '/bases-legales' },
-  { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
-]
-const defaultCopyrightLinks = [
-  { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
-  { label: 'Política de cookies', to: '/cookies' },
-  { label: 'Canal de Denuncias y Consultas', href: 'https://denuncias.ileben.cl/' }
-]
 
 export default function Footer() {
   const { legal, address, schedule, phone, email, social, socialLinks, copyright } = footerContent
@@ -104,15 +93,8 @@ export default function Footer() {
     }
   }, [])
 
-  const corporateLinks = useMemo(() => {
-    if (apiCorporate && apiCorporate.length > 0) return apiCorporate
-    return defaultCorporateLinks
-  }, [apiCorporate])
-
-  const copyrightLinks = useMemo(() => {
-    if (apiLegal && apiLegal.length > 0) return apiLegal
-    return defaultCopyrightLinks
-  }, [apiLegal])
+  const corporateLinks = apiCorporate || []
+  const copyrightLinks = apiLegal || []
 
   return (
     <footer className="lb-footer container-fluid">
