@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.242] - 2026-11-25
+
+### Added
+- `src/components/sections/ProjectOfMonthSection.jsx`:
+  - Consumo reactivo de sección `project_of_month` desde `/api/v1/pages/home` vía `apiFetch`.
+  - Soporte de título, título destacado, texto, foto, video y botón CTA con resolución de URLs vía `resolveApiUrl`.
+  - Fallback a datos estáticos de `projectOfMonthContent`.
+- `src/components/layout/Navbar.jsx`:
+  - Consumo dinámico de `/api/v1/menus/header_main` vía `apiFetch`.
+  - Mapeo automático de links principales, destacados (`btn-highlight`), badges y targets con fallback a navegación estática.
+- `src/components/layout/Footer.jsx`:
+  - Consumo dinámico de menús `/api/v1/menus/footer_corporate` y `/api/v1/menus/footer_legal` vía `apiFetch`.
+  - Mapeo responsivo con fallback a links corporativos y legales estáticos.
+
 ## [0.9.241] - 2026-11-25
 
 ### Added

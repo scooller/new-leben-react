@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { footerContent } from '../../data/content.js'
 import { slugAliases } from '../../data/staticPages.js'
+import { apiFetch } from '../../lib/apiFetch.js'
 import { hover } from '../icons/animated-icon.jsx'
 import { MapPinIcon } from '../icons/map-pin.jsx'
 import { ClockIcon } from '../icons/clock.jsx'
@@ -17,6 +18,17 @@ const socialIcons = {
   instagram: InstagramIcon,
   linkedin: LinkedinIcon,
 }
+
+const defaultCorporateLinks = [
+  { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
+  { label: 'Bases legales', to: '/bases-legales' },
+  { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
+]
+const defaultCopyrightLinks = [
+  { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
+  { label: 'Política de cookies', to: '/cookies' },
+  { label: 'Canal de Denuncias y Consultas', href: 'https://denuncias.ileben.cl/' }
+]
 
 export default function Footer() {
   const { legal, address, schedule, phone, email, social, socialLinks, copyright } = footerContent
@@ -51,16 +63,56 @@ export default function Footer() {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.street}, ${address.city}`)}`
   const phoneLink = `tel:${phone.replace(/\D/g, '')}`
 
-  const corporateLinks = [
-    { label: 'Trabaja en Leben', to: '/trabaja-en-leben' },
-    { label: 'Bases legales', to: '/bases-legales' },
-    { label: 'Proceso de Reserva en línea', to: '/proceso-reserva-en-linea' },
-  ]
-  const copyrightLinks = [
-    { label: 'Información de la empresa', to: '/informacion-de-la-empresa' },
-    { label: 'Política de cookies', to: '/cookies' },
-    { label: 'Canal de Denuncias y Consultas', href: 'https://denuncias.ileben.cl/' }
-  ]
+  const [apiCorporate, setApiCorporate] = useState(null)
+  const [apiLegal, setApiLegal] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    apiFetch('/api/v1/menus/footer_corporate')
+      .then(({ data, error }) => {
+        if (!error && data?.items && Array.isArray(data.items) && data.items.length > 0 && isMounted) {
+          setApiCorporate(
+            data.items.map((item) => ({
+              label: item.label,
+              to: item.url.startsWith('/') ? item.url : undefined,
+              href: !item.url.startsWith('/') ? item.url : undefined,
+              target: item.target && item.target !== '_self' ? item.target : undefined,
+            }))
+          )
+        }
+      })
+      .catch(() => {})
+
+    apiFetch('/api/v1/menus/footer_legal')
+      .then(({ data, error }) => {
+        if (!error && data?.items && Array.isArray(data.items) && data.items.length > 0 && isMounted) {
+          setApiLegal(
+            data.items.map((item) => ({
+              label: item.label,
+              to: item.url.startsWith('/') ? item.url : undefined,
+              href: !item.url.startsWith('/') ? item.url : undefined,
+              target: item.target && item.target !== '_self' ? item.target : undefined,
+            }))
+          )
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const corporateLinks = useMemo(() => {
+    if (apiCorporate && apiCorporate.length > 0) return apiCorporate
+    return defaultCorporateLinks
+  }, [apiCorporate])
+
+  const copyrightLinks = useMemo(() => {
+    if (apiLegal && apiLegal.length > 0) return apiLegal
+    return defaultCopyrightLinks
+  }, [apiLegal])
 
   return (
     <footer className="lb-footer container-fluid">

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
+import { apiFetch } from '../../lib/apiFetch.js'
 
 /** Render a link from {label, to?, href?, route?, featured?, highlight?, active?, className?, variant?, badge?} config */
 function Navlink({ link, className }) {
@@ -78,7 +79,7 @@ function Navlink({ link, className }) {
     : <a href={link.href} target={target} rel={rel} className={fullClass}>{content}</a>
 }
 
-const mainLinks = [
+const defaultMainLinks = [
   { label: 'Invest', to: '/invest' },
   { label: 'Brokers', to: '/brokers' },
   { label: 'Cotizar', to: '/cotizador#cotizador-gral', featured: true, class: 'btn-highlight' },
@@ -119,7 +120,7 @@ const menuGroups = [
   },
 ]
 
-const mainMobileLinks = mainLinks.slice(0, 1)
+// mainMobileLinks is computed dynamically from active mainLinks inside Navbar component
 
 /** Links dinámicos por página — aparecen después del separador */
 const pageLinksMap = {
@@ -172,8 +173,40 @@ function getPageLinks(pathname) {
 
 export default function Navbar({ className = '' }) {
   const [scrolled, setScrolled] = useState(false)
+  const [apiMainLinks, setApiMainLinks] = useState(null)
   const location = useLocation()
   const pageLinks = getPageLinks(location.pathname)
+
+  useEffect(() => {
+    let isMounted = true
+    apiFetch('/api/v1/menus/header_main')
+      .then(({ data, error }) => {
+        if (!error && data?.items && Array.isArray(data.items) && data.items.length > 0 && isMounted) {
+          const links = data.items.map((item) => ({
+            label: item.label,
+            to: item.url.startsWith('/') ? item.url : undefined,
+            href: !item.url.startsWith('/') ? item.url : undefined,
+            featured: item.is_featured,
+            class: item.is_featured ? 'btn-highlight' : undefined,
+            target: item.target && item.target !== '_self' ? item.target : undefined,
+            badge: item.badge || undefined,
+          }))
+          setApiMainLinks(links)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const mainLinks = useMemo(() => {
+    if (apiMainLinks && apiMainLinks.length > 0) return apiMainLinks
+    return defaultMainLinks
+  }, [apiMainLinks])
+
+  const mainMobileLinks = useMemo(() => mainLinks.slice(0, 1), [mainLinks])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)

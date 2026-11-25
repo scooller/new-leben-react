@@ -1,12 +1,50 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 import { HouseHeartIcon } from '../icons/house-heart.jsx'
 import { hover } from '../icons/animated-icon.jsx'
-import { projectOfMonthContent as content } from '../../data/content.js'
+import { projectOfMonthContent as staticContent } from '../../data/content.js'
+import { apiFetch, resolveApiUrl } from '../../lib/apiFetch.js'
 
 export default function ProjectOfMonthSection() {
   const iconRef = useRef(null)
+  const [apiData, setApiData] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+    apiFetch('/api/v1/pages/home')
+      .then(({ data, error }) => {
+        if (!error && data?.sections && isMounted) {
+          const section = data.sections.find((s) => s.key === 'project_of_month' || s.section_key === 'project_of_month')
+          if (section) {
+            setApiData(section)
+          }
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const content = useMemo(() => {
+    if (!apiData) return staticContent
+    const d = apiData.data || {}
+    const photo = d.photo_url ? resolveApiUrl(d.photo_url) : (d.photo ? resolveApiUrl(d.photo) : staticContent.photo)
+    const video = d.video_url ? resolveApiUrl(d.video_url) : (d.video ? resolveApiUrl(d.video) : staticContent.video)
+    return {
+      title: apiData.title || staticContent.title,
+      titleHighlight: d.title_highlight || d.titleHighlight || staticContent.titleHighlight,
+      text: d.description || d.text || staticContent.text,
+      photo,
+      video,
+      buttonText: d.button_text || d.cta?.label || staticContent.buttonText,
+      buttonLink: d.button_link || d.cta?.url || staticContent.buttonLink,
+    }
+  }, [apiData])
+
+  const titleWithSpace = content.title.endsWith(' ') ? content.title : `${content.title} `
 
   return (
     <section className="lb-project-month">
@@ -20,7 +58,7 @@ export default function ProjectOfMonthSection() {
 
           <div className="col-lg-4">
             <div className="lb-project-month-copy rounded">
-              <SplitTitle as='h2' className='lb-project-month-title' dangerouslySetInnerHTML={{ __html: content.title + ' <span className="text-danger">' + content.titleHighlight + '</span>' }} />
+              <SplitTitle as='h2' className='lb-project-month-title' dangerouslySetInnerHTML={{ __html: titleWithSpace + '<span className="text-danger">' + content.titleHighlight + '</span>' }} />
               <ScrollAnim as="p" animation="fade-right" duration={1} delay={0.2} className="lb-project-month-text">
                 {content.text}
               </ScrollAnim>
