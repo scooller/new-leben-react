@@ -16,8 +16,33 @@ export default function VideoTextSection({
 }) {
   const sectionRef = useRef(null)
   const videoWrapRef = useRef(null)
+  const videoRef = useRef(null)
 
   const resolvedVideoSrc = resolveUrl(videoSrc, 'video/inn-test.mp4')
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const videoEl = videoRef.current
+    if (!section || !videoEl) return
+    if (typeof IntersectionObserver === 'undefined') {
+      videoEl.play().catch(() => {})
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          videoEl.play().catch(() => {})
+        } else {
+          videoEl.pause()
+        }
+      },
+      { rootMargin: '300px 0px' }
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [resolvedVideoSrc])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -46,7 +71,7 @@ export default function VideoTextSection({
   return (
     <section ref={sectionRef} className={`lb-inn-video-banner container-fluid ${className}`.trim()} aria-label={title || 'Sección con video y texto'}>
       <div ref={videoWrapRef} className="lb-inn-video-banner__video-wrap">
-        <video src={resolvedVideoSrc} autoPlay muted loop playsInline />
+        <video ref={videoRef} src={resolvedVideoSrc} preload="none" muted loop playsInline />
         <div className="lb-inn-video-banner__overlay" />
       </div>
 

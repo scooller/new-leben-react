@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.238] - 2026-11-25
+
+### Fixed
+- `src/components/sections/VideoTextSection.jsx`:
+  - Cambiados videos intermedios fuera de pantalla a `preload="none"` con reproducción controlada por `IntersectionObserver` (`rootMargin: 300px`), evitando conexiones MP4 concurrentes al cargar fichas de proyecto.
+- `public/api-proxy.php`:
+  - Agregado `CURLOPT_CONNECTTIMEOUT => 5` y reducido `CURLOPT_TIMEOUT` de 30s a 15s para liberar workers PHP más rápido ante demoras del upstream.
+
 ## [0.9.237] - 2026-11-25
 
 ### Fixed
