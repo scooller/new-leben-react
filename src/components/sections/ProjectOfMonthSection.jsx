@@ -15,7 +15,7 @@ export default function ProjectOfMonthSection() {
       .then(({ data, error }) => {
         if (!error && data?.sections && isMounted) {
           const section = data.sections.find((s) => s.key === 'project_of_month' || s.section_key === 'project_of_month')
-          if (section) {
+          if (section && section.is_active !== false) {
             setApiData(section)
           }
         }

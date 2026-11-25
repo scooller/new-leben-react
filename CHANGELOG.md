@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.244] - 2026-11-25
+
+### Changed
+- `src/components/sections/ProjectOfMonthSection.jsx`:
+  - Añadida validación de visibilidad `is_active !== false` desde la API de backend para ocultar la sección de forma automática si se desactiva desde la pestaña "Proyecto Destacado" en Site Settings.
+
 ## [0.9.243] - 2026-11-25
 
 ### Removed
