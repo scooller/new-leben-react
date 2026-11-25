@@ -363,7 +363,6 @@ export default function Cotizador({
   const ref = useRef(null)
   const shareIconRef = useRef(null)
   const countIconRef = useRef(null)
-  const [showCotizar, setShowCotizar] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showVistas, setShowVistas] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -730,7 +729,7 @@ export default function Cotizador({
     || projectCotizaUrl
     || displayData?.cotizaUrl
     || null
-  const cotizaIframeUrl = showCotizar && rawCotizaUrl ? buildCotizaUrlWithUtms(rawCotizaUrl) : ''
+  const cotizaUrl = rawCotizaUrl ? buildCotizaUrlWithUtms(rawCotizaUrl) : null
   const brochureDownloadName = useMemo(() => {
     const projectName = activePlanta?.proyecto?.name || activeProject?.name || 'Proyecto'
     return `${projectName.replace(/[^a-zA-Z0-9_-]/g, '_')}_Brochure.pdf`
@@ -1154,13 +1153,24 @@ export default function Cotizador({
                 </div>
               </div>
               <div className="col-md">
-                <button
-                  className="btn btn-primary w-100 lb-proj-det-cot-cta"
-                  disabled={!activePlanta || !rawCotizaUrl}
-                  onClick={() => rawCotizaUrl && setShowCotizar(true)}
-                >
-                  {displayData.ctaText || 'Cotizar'}
-                </button>
+                {cotizaUrl && activePlanta ? (
+                  <a
+                    href={cotizaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary w-100 lb-proj-det-cot-cta text-decoration-none"
+                  >
+                    {displayData.ctaText || 'Cotizar'}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100 lb-proj-det-cot-cta"
+                    disabled
+                  >
+                    {displayData.ctaText || 'Cotizar'}
+                  </button>
+                )}
               </div>
             </div>
           </ScrollAnim>
@@ -1237,32 +1247,6 @@ export default function Cotizador({
   return (
     <section className={`lb-proj-det-cotizador pt-4 pb-1 pt-md-5 ${className}`.trim()} id="cotizador" ref={ref}>
       {content}
-
-      {showCotizar && rawCotizaUrl && createPortal(
-        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.65)', zIndex: 1055 }} onClick={() => setShowCotizar(false)}>
-          <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content overflow-hidden">
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  Cotizar — {activePlanta?.proyecto?.name || activeProject?.name || selection?.project?.name || displayData.title}
-                  {activePlanta?.name ? ` · ${activePlanta.name}` : ''}
-                </h5>
-                <button type="button" className="btn-close" onClick={() => setShowCotizar(false)} aria-label="Cerrar" />
-              </div>
-              <div className="modal-body p-0">
-                <iframe
-                  src={cotizaIframeUrl}
-                  title={`Cotizar ${activePlanta?.proyecto?.name || activeProject?.name || ''}`}
-                  className="w-100"
-                  style={{ height: '80vh', border: 0 }}
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
 
       {showShare && createPortal(
         <div className="modal d-block" tabIndex="-1" onClick={() => setShowShare(false)}>

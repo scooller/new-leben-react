@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.235] - 2026-11-25
+
+### Changed
+- `src/components/proyecto/Cotizador.jsx`:
+  - Botón "Cotizar" ahora abre enlace externo en una nueva ventana/pestaña (`target="_blank" rel="noopener noreferrer"`) inyectando parámetros UTM (`buildCotizaUrlWithUtms`), eliminando el modal con iframe interno y estados asociados.
+
 ## [0.9.234] - 2026-11-17
 
 ### Added
