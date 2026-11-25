@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.237] - 2026-11-25
+
+### Fixed
+- `src/lib/apiFetch.js`:
+  - Habilitada deduplicación `inflight` para peticiones `GET` también en entornos dev y reintento único (350ms) ante errores de red transitorios o respuestas HTTP 429/5xx.
+- `src/components/proyecto/Cotizador.jsx`:
+  - Consultas acotadas por `proyecto_id` / `project_slug` (o `comuna_slug`) en modo universal en vez de descargar todo el catálogo paginado en cada ficha de proyecto.
+  - Corregido envenenamiento de `plantasCache` (no cachea fallos parciales de páginas) y agregada deduplicación `plantasInflight`, chunking de páginas y estado explícito de error con botón "Reintentar" en lugar de mostrar falsamente "Sin plantas encontradas".
+  - Agregado `prefetchPlantasBySlug`, control `loadedUrl !== targetUrl` durante cargas pendientes, reutilización de `gallery`/`cotiza_url`/`brochure` desde `selection.project` y resguardo de `replaceState` exclusivamente en rutas `/cotizador`.
+- `src/pages/ProyectoDetalle.jsx`:
+  - Prefetch paralelo de plantas por slug al entrar al detalle, reseteo inmediato al cambiar de proyecto y fusión de `resolvedProject` para evitar waterfalls y llamadas duplicadas.
+- `src/components/proyecto/RelatedProjects.jsx` & `src/components/proyecto/ProjectTeamAgents.jsx`:
+  - Agregado `disponible=1` en `RelatedProjects` por proyecto y omitida consulta redundante de asesores cuando `ProjectTeamAgents` ya recibe `data.agents`.
+
 ## [0.9.236] - 2026-11-25
 
 ### Added

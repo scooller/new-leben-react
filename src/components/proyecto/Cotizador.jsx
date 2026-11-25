@@ -164,51 +164,147 @@ function toAbsoluteUrl(url, fallbackHostUrl) {
   return resolved
 }
 
+const ALL_PLANTAS_URL = '/api/v1/plantas?disponible=1'
+
+// Normalize string for reliable comparison across API objects
+const norm = (s) => String(Array.isArray(s) ? (s[0] || '') : (s || '')).trim().toLowerCase()
+
+function toCleanSlug(val) {
+  return String(val || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/^edificio[\s-]+/i, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 // Module-level cache for plantas, project galleries and brochures
 const plantasCache = new Map()
+const plantasInflight = new Map()
+const slugPrefetchPromises = new Map()
 const projectGalleryCache = new Map()
 const projectBrochureCache = new Map()
 const projectCotizaUrlCache = new Map()
 
-/** Paginate through all available plantas from a base URL with parallel fetching */
+/** Paginate through all available plantas from a base URL with safe error handling */
 async function fetchPages(baseUrl) {
   if (plantasCache.has(baseUrl)) {
-    return plantasCache.get(baseUrl)
+    return { data: plantasCache.get(baseUrl), error: null }
+  }
+  if (plantasInflight.has(baseUrl)) {
+    return plantasInflight.get(baseUrl)
   }
 
-  const firstRes = await apiFetch(`${baseUrl}&perPage=100&page=1`)
-  if (firstRes.error || !Array.isArray(firstRes.data) || firstRes.data.length === 0) {
-    return []
-  }
-
-  const all = [...firstRes.data]
-  const lastPage = firstRes.meta?.last_page || (firstRes.data.length < 100 ? 1 : null)
-
-  if (lastPage && lastPage > 1) {
-    const pagePromises = []
-    for (let p = 2; p <= lastPage; p++) {
-      pagePromises.push(apiFetch(`${baseUrl}&perPage=100&page=${p}`))
+  const promise = (async () => {
+    const firstRes = await apiFetch(`${baseUrl}&perPage=100&page=1`)
+    if (firstRes.error || !Array.isArray(firstRes.data)) {
+      return { data: [], error: firstRes.error || 'Error al cargar plantas' }
     }
-    const results = await Promise.all(pagePromises)
-    for (const r of results) {
-      if (Array.isArray(r.data)) {
-        all.push(...r.data)
+    if (firstRes.data.length === 0) {
+      plantasCache.set(baseUrl, [])
+      return { data: [], error: null }
+    }
+
+    const all = [...firstRes.data]
+    const lastPage = firstRes.meta?.last_page || (firstRes.data.length < 100 ? 1 : null)
+    let pageError = null
+
+    if (lastPage && lastPage > 1) {
+      for (let start = 2; start <= lastPage; start += 3) {
+        const end = Math.min(lastPage, start + 2)
+        const pagePromises = []
+        for (let p = start; p <= end; p++) {
+          pagePromises.push(apiFetch(`${baseUrl}&perPage=100&page=${p}`))
+        }
+        const results = await Promise.all(pagePromises)
+        for (const r of results) {
+          if (r.error || !Array.isArray(r.data)) {
+            pageError = r.error || 'Error parcial al cargar plantas'
+          } else {
+            all.push(...r.data)
+          }
+        }
+      }
+    } else if (!lastPage) {
+      let page = 2
+      while (true) {
+        const { data, error } = await apiFetch(`${baseUrl}&perPage=100&page=${page}`)
+        if (error || !Array.isArray(data)) {
+          pageError = error || 'Error parcial al cargar plantas'
+          break
+        }
+        if (data.length === 0) break
+        all.push(...data)
+        if (data.length < 100) break
+        page++
       }
     }
-  } else if (!lastPage) {
-    let page = 2
-    while (true) {
-      const { data, error } = await apiFetch(`${baseUrl}&perPage=100&page=${page}`)
-      if (error || !Array.isArray(data) || data.length === 0) break
-      all.push(...data)
-      if (data.length < 100) break
-      page++
+
+    const available = all.filter((p) => p.is_available)
+    if (!pageError) {
+      plantasCache.set(baseUrl, available)
+      if (baseUrl.includes('project_slug=') && available[0]?.proyecto?.id) {
+        plantasCache.set(`/api/v1/plantas?proyecto_id=${available[0].proyecto.id}&disponible=1`, available)
+      }
     }
+    return { data: available, error: pageError }
+  })().finally(() => {
+    plantasInflight.delete(baseUrl)
+  })
+
+  plantasInflight.set(baseUrl, promise)
+  return promise
+}
+
+export function prefetchPlantasBySlug(slug) {
+  const clean = toCleanSlug(slug)
+  if (!clean) return null
+  if (slugPrefetchPromises.has(clean)) return slugPrefetchPromises.get(clean)
+  const url = `/api/v1/plantas?project_slug=${encodeURIComponent(`${clean},edificio-${clean}`)}&disponible=1`
+  const p = fetchPages(url).finally(() => {
+    slugPrefetchPromises.delete(clean)
+  })
+  slugPrefetchPromises.set(clean, p)
+  return p
+}
+
+function resolveTargetUrl({ universal, apiId, filters, projects, selectionProject, hasSelectionFilters, urlParams }) {
+  if (!universal) {
+    return apiId ? `/api/v1/plantas?proyecto_id=${apiId}&disponible=1` : null
+  }
+  const hasComuna = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna)
+  const hasTipologia = Array.isArray(filters.tipologia) ? filters.tipologia.length > 0 : Boolean(filters.tipologia)
+  const universalHasFilter = !!(hasComuna || filters.proyecto || hasTipologia || filters.orientacion || filters.precio || hasSelectionFilters || urlParams.plantaId || urlParams.slug)
+  if (!universalHasFilter) return null
+  if (plantasCache.has(ALL_PLANTAS_URL)) return ALL_PLANTAS_URL
+
+  if (filters.proyecto) {
+    const target = norm(filters.proyecto)
+    const matched = (projects || []).find((p) => norm(p.name) === target)
+      || (selectionProject && norm(selectionProject.name) === target ? selectionProject : null)
+    if (matched?.id) {
+      return `/api/v1/plantas?proyecto_id=${matched.id}&disponible=1`
+    }
+    const clean = toCleanSlug(matched?.slug || filters.proyecto)
+    return clean ? `/api/v1/plantas?project_slug=${encodeURIComponent(`${clean},edificio-${clean}`)}&disponible=1` : ALL_PLANTAS_URL
   }
 
-  const available = all.filter((p) => p.is_available)
-  plantasCache.set(baseUrl, available)
-  return available
+  if (urlParams.slug && !hasComuna && !hasTipologia && !filters.orientacion && !filters.precio) {
+    const clean = toCleanSlug(urlParams.slug)
+    return clean ? `/api/v1/plantas?project_slug=${encodeURIComponent(`${clean},edificio-${clean}`)}&disponible=1` : ALL_PLANTAS_URL
+  }
+
+  if (hasComuna) {
+    if (Array.isArray(projects) && projects.length > 0) {
+      const ids = projects.filter((p) => matchComuna(p.comuna, filters.comuna)).map((p) => p.id).filter(Boolean)
+      return ids.length > 0 ? `/api/v1/plantas?proyecto_id=${ids.join(',')}&disponible=1` : '__EMPTY__'
+    }
+    const slugs = toArray(filters.comuna).map(toCleanSlug).filter(Boolean)
+    return slugs.length > 0 ? `/api/v1/plantas?comuna_slug=${encodeURIComponent(slugs.join(','))}&disponible=1` : ALL_PLANTAS_URL
+  }
+
+  return ALL_PLANTAS_URL
 }
 
 /** Dropdown filter component */
@@ -375,6 +471,7 @@ export default function Cotizador({
   const urlPlantaId = urlParams.plantaId
 
   const updateUrl = (plantaId, projectSlug) => {
+    if (!window.location.pathname.startsWith('/cotizador')) return
     const slug = projectSlug || urlParams.slug
     if (!slug) return
     const path = plantaId
@@ -392,9 +489,26 @@ export default function Cotizador({
   const EMPTY_FILTERS = universal ? EMPTY_FILTERS_UNIVERSAL : EMPTY_FILTERS_PROJECT
 
   // API plantas
-  const [plantas, setPlantas] = useState([])
-  const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState(() => filtersFromSelection(selection) || EMPTY_FILTERS)
+  const [initialCache] = useState(() => {
+    const initUrl = resolveTargetUrl({
+      universal,
+      apiId,
+      filters,
+      projects,
+      selectionProject: selection?.project,
+      hasSelectionFilters: Boolean(selection?.filters),
+      urlParams,
+    })
+    return (initUrl && initUrl !== '__EMPTY__' && plantasCache.has(initUrl))
+      ? { url: initUrl, data: plantasCache.get(initUrl) }
+      : null
+  })
+  const [plantas, setPlantas] = useState(() => initialCache?.data || [])
+  const [loadedUrl, setLoadedUrl] = useState(() => initialCache?.url || null)
+  const [loading, setLoading] = useState(false)
+  const [fetchError, setFetchError] = useState(null)
+  const [retryTick, setRetryTick] = useState(0)
   const [filtering, setFiltering] = useState(false)
   const [switching, setSwitching] = useState(false)
 
@@ -423,9 +537,6 @@ export default function Cotizador({
     return map
   }, [projects])
 
-  // Normalize string for reliable comparison across API objects
-  const norm = (s) => String(Array.isArray(s) ? (s[0] || '') : (s || '')).trim().toLowerCase()
-
   // Enrich + sort: actively-selling projects first (drives default display)
   const enrichedPlantas = useMemo(() =>
     plantas
@@ -447,36 +558,83 @@ export default function Cotizador({
     setSelected(0)
   }, [data])
 
-  // Fetch plantas from API — universal paginates through ALL available, otherwise per-project
-  // ponytail: lazy load — universal skips fetch until user applies a filter; apiId fetches eagerly
-  useEffect(() => {
-    if (!universal && !apiId) { setPlantas([]); return }
-    const hasComuna = Array.isArray(filters.comuna) ? filters.comuna.length > 0 : Boolean(filters.comuna);
-    const hasTipologia = Array.isArray(filters.tipologia) ? filters.tipologia.length > 0 : Boolean(filters.tipologia);
-    const universalHasFilter = !!(hasComuna || filters.proyecto || hasTipologia || filters.orientacion || filters.precio || selection?.filters)
-    if (universal && !universalHasFilter) { setPlantas([]); return }
+  const matchedSelectedProject = useMemo(() => {
+    if (!filters.proyecto) return null
+    const target = norm(filters.proyecto)
+    return (projects || []).find((p) => norm(p.name) === target)
+      || (selection?.project && norm(selection.project.name) === target ? selection.project : null)
+  }, [filters.proyecto, projects, selection?.project])
 
-    const url = universal
-      ? '/api/v1/plantas?disponible=1'
-      : `/api/v1/plantas?proyecto_id=${apiId}&disponible=1`
+  const targetUrl = useMemo(() => resolveTargetUrl({
+    universal,
+    apiId,
+    filters,
+    projects,
+    selectionProject: selection?.project,
+    hasSelectionFilters: Boolean(selection?.filters),
+    urlParams,
+  }), [universal, apiId, filters, projects, selection?.project, selection?.filters, urlParams])
+
+  // Fetch plantas from API — scoped by project or comuna when available
+  useEffect(() => {
+    if (!targetUrl) {
+      setPlantas([])
+      setLoadedUrl(null)
+      setFetchError(null)
+      setLoading(false)
+      return
+    }
+    if (targetUrl === '__EMPTY__') {
+      setPlantas([])
+      setLoadedUrl('__EMPTY__')
+      setFetchError(null)
+      setLoading(false)
+      return
+    }
 
     // Instant cache hit — no spinner flash
-    if (plantasCache.has(url)) {
-      setPlantas(plantasCache.get(url))
+    if (plantasCache.has(targetUrl)) {
+      setPlantas(plantasCache.get(targetUrl))
+      setLoadedUrl(targetUrl)
+      setFetchError(null)
       setLoading(false)
       return
     }
 
     let cancelled = false
     setLoading(true)
+    setFetchError(null)
 
-    fetchPages(url).then((all) => {
-      if (!cancelled) setPlantas(all)
-    }).finally(() => { if (!cancelled) setLoading(false) })
+    const load = async () => {
+      if (targetUrl.startsWith('/api/v1/plantas?proyecto_id=') && !targetUrl.includes(',')) {
+        const prefetchClean = toCleanSlug(matchedSelectedProject?.slug || matchedSelectedProject?.name || filters.proyecto)
+        const inflightPrefetch = prefetchClean ? slugPrefetchPromises.get(prefetchClean) : null
+        if (inflightPrefetch) {
+          const pref = await inflightPrefetch
+          if (cancelled) return
+          if (!pref.error && pref.data.length > 0) {
+            plantasCache.set(targetUrl, pref.data)
+            setPlantas(pref.data)
+            setLoadedUrl(targetUrl)
+            setFetchError(null)
+            return
+          }
+        }
+      }
+
+      const { data: all, error } = await fetchPages(targetUrl)
+      if (cancelled) return
+      setPlantas(all)
+      setFetchError(error && all.length === 0 ? error : null)
+      setLoadedUrl(targetUrl)
+    }
+
+    load().finally(() => {
+      if (!cancelled) setLoading(false)
+    })
 
     return () => { cancelled = true }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiId, universal, Array.isArray(filters.comuna) ? filters.comuna.join(',') : filters.comuna, filters.proyecto, Array.isArray(filters.tipologia) ? filters.tipologia.join(',') : filters.tipologia, filters.orientacion, filters.precio, selection?.filters])
+  }, [targetUrl, matchedSelectedProject, filters.proyecto, retryTick])
 
   // Unique filter options from enriched plantas — cascading in universal mode
   const filterOptions = useMemo(() => {
@@ -614,12 +772,13 @@ export default function Cotizador({
 
   // Skeleton while fetching/searching — EXCEPT the initial no-filter state,
   // where the empty-state message renders right away (no skeleton flash)
-  const showSkeleton = (loading || filtering) && !(showEmptyState && !hasFilters)
+  const isPendingFetch = loading || Boolean(targetUrl && targetUrl !== '__EMPTY__' && loadedUrl !== targetUrl)
+  const showSkeleton = (isPendingFetch || filtering) && !(showEmptyState && !hasFilters)
 
   // Current project key (id or slug) to load project gallery and brochure
   const currentProjectKey = useMemo(() => {
-    return activePlanta?.proyecto?.slug || activePlanta?.proyecto?.id || activeProject?.slug || activeProject?.id || apiId || urlParams.slug || null
-  }, [activePlanta, activeProject, apiId, urlParams.slug])
+    return activePlanta?.proyecto?.slug || activePlanta?.proyecto?.id || activeProject?.slug || activeProject?.id || selection?.project?.slug || selection?.project?.id || apiId || urlParams.slug || null
+  }, [activePlanta, activeProject, selection?.project, apiId, urlParams.slug])
 
   // Fetch project gallery
   useEffect(() => {
@@ -633,6 +792,17 @@ export default function Cotizador({
       return
     }
 
+    const selProj = selection?.project
+    const selMatches = selProj && (
+      selProj.slug === currentProjectKey ||
+      String(selProj.id) === String(currentProjectKey)
+    )
+    if (selMatches && Array.isArray(selProj.gallery) && selProj.gallery.length > 0) {
+      projectGalleryCache.set(currentProjectKey, selProj.gallery)
+      setProjectGallery(selProj.gallery)
+      return
+    }
+
     let cancelled = false
     apiFetch(`/api/v1/proyectos/${currentProjectKey}/gallery`).then(({ data, error }) => {
       if (cancelled || error) return
@@ -642,7 +812,7 @@ export default function Cotizador({
     }).catch(() => {})
 
     return () => { cancelled = true }
-  }, [currentProjectKey])
+  }, [currentProjectKey, selection?.project])
 
   // Fetch or resolve brochure and cotiza_url
   useEffect(() => {
@@ -651,22 +821,31 @@ export default function Cotizador({
       setProjectCotizaUrl(null)
       return
     }
-    if (activeProject?.cotiza_url) {
-      setProjectCotizaUrl(activeProject.cotiza_url)
+    const knownCotiza = activeProject?.cotiza_url || selection?.project?.cotiza_url || null
+    if (knownCotiza) {
+      setProjectCotizaUrl(knownCotiza)
     } else if (projectCotizaUrlCache.has(currentProjectKey)) {
       setProjectCotizaUrl(projectCotizaUrlCache.get(currentProjectKey))
     } else {
       setProjectCotizaUrl(null)
     }
 
+    const knownBrochure = propBrochureUrl
+      || activeProject?.brochure_pdf_url
+      || activeProject?.brochure_url
+      || selection?.project?.brochure_pdf_url
+      || selection?.project?.brochure_url
+      || null
+    const hasCachedCotiza = Boolean(knownCotiza || projectCotizaUrlCache.has(currentProjectKey))
+
     if (propBrochureUrl) {
-      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
-    } else if (activeProject?.brochure_pdf_url || activeProject?.brochure_url) {
-      setProjectBrochure(activeProject.brochure_pdf_url || activeProject.brochure_url)
-      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
+      if (hasCachedCotiza) return
+    } else if (knownBrochure) {
+      setProjectBrochure(knownBrochure)
+      if (hasCachedCotiza) return
     } else if (projectBrochureCache.has(currentProjectKey)) {
       setProjectBrochure(projectBrochureCache.get(currentProjectKey))
-      if (projectCotizaUrlCache.has(currentProjectKey) || activeProject?.cotiza_url) return
+      if (hasCachedCotiza) return
     } else {
       setProjectBrochure(null)
     }
@@ -685,7 +864,7 @@ export default function Cotizador({
     }).catch(() => {})
 
     return () => { cancelled = true }
-  }, [currentProjectKey, propBrochureUrl, activeProject])
+  }, [currentProjectKey, propBrochureUrl, activeProject, selection?.project])
 
   // Active details: from filtered planta if available, else placeholder '-'
   const displayData = useMemo(() => {
@@ -871,7 +1050,7 @@ export default function Cotizador({
         {displayData.filters && (
           <ScrollAnim as="div" className="col-lg-6 lb-proj-det-cot-filters-col">
             <div className="lb-proj-det-cot-filters">
-              {(loading && !universal) ? (
+              {(isPendingFetch && !universal) ? (
                 <div className="lb-proj-det-cot-loading d-flex align-items-center gap-2">
                   <span className="spinner-border spinner-border-sm" role="status" />
                   <span className="text-muted small">Cargando plantas…</span>
@@ -946,11 +1125,11 @@ export default function Cotizador({
         )}
 
         <ScrollAnim as="div" className="col-lg-3 lb-proj-det-cot-filter-actions-col">
-          {!(loading && !universal) && (
+          {!(isPendingFetch && !universal) && (
             <div className="d-flex align-items-center justify-content-between gap-2 gap-md-3 w-100 flex-wrap">
               <span className="badge text-bg-dark d-inline-flex align-items-center gap-1 lb-proj-det-filter-badge" {...hover(countIconRef)}>
                 <MapPinHouseIcon ref={countIconRef} size={14} />
-                {showSkeleton ? 'Buscando deptos…' : (loading && !plantas.length) ? '…' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
+                {showSkeleton ? 'Buscando deptos…' : (isPendingFetch && !plantas.length) ? '…' : fetchError ? 'Error de carga' : !(universal || apiId) ? 'Filtros demo' : (universal && !hasFilters) ? '—' : `${filteredPlantas.length} depto${filteredPlantas.length !== 1 ? 's' : ''} encontrado${filteredPlantas.length !== 1 ? 's' : ''}`}
               </span>
               <div className="d-flex align-items-center gap-2">
                 {onModifySearch && (
@@ -967,8 +1146,9 @@ export default function Cotizador({
                   disabled={!hasFilters}
                   onClick={() => {
                     selectFilter(EMPTY_FILTERS)
-                    sessionStorage.clear()
-                    window.history.replaceState(null, '', '/cotizador/')
+                    if (window.location.pathname.startsWith('/cotizador')) {
+                      window.history.replaceState(null, '', '/cotizador/')
+                    }
                     onReset?.()
                   }}
                 >
@@ -982,7 +1162,7 @@ export default function Cotizador({
       </div>
 
       {/* Alert Banner when filters produce 0 plants */}
-      {hasFilters && filteredPlantas.length === 0 && !showSkeleton && (
+      {hasFilters && filteredPlantas.length === 0 && !showSkeleton && !fetchError && (
         <div className="alert alert-warning border-0 shadow-sm rounded-4 p-4 mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 lb-proj-det-cot-empty-alert">
           <div className="d-flex align-items-start gap-3">
             <AlertCircle size={28} className="text-warning flex-shrink-0 mt-1" />
@@ -1040,6 +1220,28 @@ export default function Cotizador({
         <div className="col-lg-9 lb-proj-det-cot-plan-card">
           {showSkeleton ? (
             <div className="lb-skeleton lb-proj-det-cot-skeleton w-100" />
+          ) : fetchError ? (
+            <div className="lb-proj-det-cot-no-results text-center py-5 d-flex flex-column align-items-center justify-content-center bg-white rounded-3 border" style={{ minHeight: '380px' }}>
+              <div className="rounded-circle bg-light p-3 mb-3 d-inline-flex">
+                <AlertCircle size={36} className="text-danger opacity-75" />
+              </div>
+              <h5 className="fw-bold mb-2">No pudimos cargar las plantas disponibles</h5>
+              <p className="text-muted small mb-3" style={{ maxWidth: '440px' }}>
+                Ocurrió un problema temporal de conexión al consultar las unidades disponibles. Intenta nuevamente.
+              </p>
+              <button
+                type="button"
+                className="btn btn-outline-danger btn-sm px-4 d-inline-flex align-items-center gap-1"
+                onClick={() => {
+                  setFetchError(null)
+                  setLoadedUrl(null)
+                  setRetryTick((c) => c + 1)
+                }}
+              >
+                <RotateCcw size={14} />
+                Reintentar
+              </button>
+            </div>
           ) : filteredPlantas.length === 0 ? (
             <div className="lb-proj-det-cot-no-results text-center py-5 d-flex flex-column align-items-center justify-content-center bg-white rounded-3 border" style={{ minHeight: '380px' }}>
               <div className="rounded-circle bg-light p-3 mb-3 d-inline-flex">

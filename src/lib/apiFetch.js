@@ -100,8 +100,8 @@ export async function apiFetch(url, options = {}) {
   if (useCache) {
     const cached = readCache(url)
     if (cached) return cached
-    if (inflight.has(url)) return inflight.get(url)
   }
+  if (isGet && inflight.has(url)) return inflight.get(url)
 
   const fetchUrl = resolveApiUrl(url)
   const headers = {
@@ -113,7 +113,23 @@ export async function apiFetch(url, options = {}) {
 
   const promise = (async () => {
     try {
-      const r = await fetch(fetchUrl, { ...options, headers })
+      const attemptFetch = async () => fetch(fetchUrl, { ...options, headers })
+      let r
+      try {
+        r = await attemptFetch()
+        if (isGet && (r.status === 429 || r.status >= 500)) {
+          await new Promise((res) => setTimeout(res, 350))
+          r = await attemptFetch()
+        }
+      } catch {
+        if (!isGet) return { data: null, error: 'Error de conexión' }
+        await new Promise((res) => setTimeout(res, 350))
+        try {
+          r = await attemptFetch()
+        } catch {
+          return { data: null, error: 'Error de conexión' }
+        }
+      }
 
       if (!r.ok) {
         return { data: null, error: `HTTP ${r.status}` }
@@ -141,7 +157,7 @@ export async function apiFetch(url, options = {}) {
     }
   })()
 
-  if (useCache) {
+  if (isGet) {
     inflight.set(url, promise)
   }
 

@@ -34,7 +34,7 @@ export default function RelatedProjects({ data, onCotizar }) {
     // Fetch by comuna (universal mode) or by single project
     const baseParams = data.comuna
       ? `comuna=${encodeURIComponent(data.comuna)}&disponible=1`
-      : `proyecto_id=${data.apiId}`
+      : `proyecto_id=${data.apiId}&disponible=1`
 
       ; (async () => {
         const all = []

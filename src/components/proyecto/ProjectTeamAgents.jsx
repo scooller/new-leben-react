@@ -98,7 +98,7 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
   }, [data?.agents])
 
   useEffect(() => {
-    if (!apiId) return
+    if (!apiId || data?.agents?.length) return
     let cancelled = false
     apiFetch(`/api/v1/proyectos/${apiId}?include_asesores=1`).then(({ data: resData, error }) => {
       if (cancelled || error) return
@@ -113,7 +113,7 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
       }
     })
     return () => { cancelled = true }
-  }, [apiId])
+  }, [apiId, data?.agents?.length])
 
   const handleSchedule = (e) => {
     e.preventDefault()

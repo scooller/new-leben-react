@@ -12,7 +12,7 @@ import ProjectFeatureSection from '../components/sections/ProjectFeatureSection.
 import HeroShell from '../components/sections/HeroShell.jsx'
 import Recorridos360 from '../components/sections/Recorridos360.jsx'
 import VideoTextSection from '../components/sections/VideoTextSection.jsx'
-import Cotizador from '../components/proyecto/Cotizador.jsx'
+import Cotizador, { prefetchPlantasBySlug } from '../components/proyecto/Cotizador.jsx'
 import RelatedProjects from '../components/proyecto/RelatedProjects.jsx'
 import Alternatives from '../components/proyecto/Alternatives.jsx'
 import InteriorismoSection from '../components/sections/InteriorismoSection.jsx'
@@ -268,6 +268,13 @@ export default function ProyectoDetalle() {
   const [contentLoading, setContentLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
 
+  // Prefetch plantas del proyecto en paralelo con el contenido y limpiar estado al cambiar de slug
+  useEffect(() => {
+    setCurrentProject(null)
+    setSelectedPlanta(null)
+    prefetchPlantasBySlug(cleanSlug)
+  }, [cleanSlug])
+
   // Cargar catálogo de proyectos desde el backend
   useEffect(() => {
     let cancelled = false
@@ -322,9 +329,27 @@ export default function ProyectoDetalle() {
     }
   }, [projectContent?.project_id, apiProjects, currentProject])
 
+  const resolvedProject = useMemo(() => {
+    if (!currentProject && !projectContent) return null
+    return {
+      ...(currentProject || {}),
+      id: currentProject?.id || projectContent?.project_id || null,
+      slug: currentProject?.slug || projectContent?.slug || cleanSlug,
+      name: currentProject?.name || projectContent?.name || '',
+      comuna: currentProject?.comuna || projectContent?.comuna || projectContent?.hero?.location || '',
+      cotiza_url: currentProject?.cotiza_url || projectContent?.cotiza_url || null,
+      brochure_pdf_url: currentProject?.brochure_pdf_url || projectContent?.brochure_pdf_url || projectContent?.virtual_tours?.brochure_url || null,
+      gallery: projectContent?.gallery || currentProject?.gallery || null,
+    }
+  }, [currentProject, projectContent, cleanSlug])
+
   const selection = useMemo(
-    () => (selectedPlanta ? { planta: selectedPlanta } : currentProject ? { project: currentProject } : undefined),
-    [selectedPlanta, currentProject]
+    () => (selectedPlanta
+      ? { planta: selectedPlanta, project: resolvedProject }
+      : resolvedProject
+        ? { project: resolvedProject }
+        : undefined),
+    [selectedPlanta, resolvedProject]
   )
 
   const handleCotizarPlanta = (planta) => {
