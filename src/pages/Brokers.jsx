@@ -11,7 +11,7 @@ import SplitTitle from '../components/SplitTitle.jsx'
 import HeroShell from '../components/sections/HeroShell.jsx'
 
 // Icons
-import { Check, Mail, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Check, Mail, ChevronRight, ChevronLeft, Phone } from 'lucide-react'
 import Turnstile from '../components/common/Turnstile.jsx'
 import { formatPhone, validatePhone, validateEmail } from '../lib/chileUtils.js'
 import { useSeo } from '../hooks/useSeo.js'
@@ -297,13 +297,58 @@ export default function Brokers() {
         </section>
 
         {/* ======================= KAM INFO BAR ======================= */}
-        <section className="py-5 bg-white">
+        <section className="py-5 bg-white" id="kam">
           <div className="container">
             <ScrollAnim animation="fade-up" className="d-flex flex-column align-items-center gap-4 text-center">
               <div className="d-flex align-items-center gap-2 fs-5 fw-bold text-dark">
                 <Mail size={22} className="text-danger flex-shrink-0" />
                 <span>{data.kam.text}</span>
               </div>
+
+              {/* Tarjeta explicativa del rol KAM y contacto */}
+              {data.kam.definition && (
+                <div className="card border-0 bg-light rounded-4 p-4 p-md-4 shadow-sm w-100 text-start" style={{ maxWidth: '840px' }}>
+                  <div className="row align-items-center g-3">
+                    <div className="col-lg-7">
+                      <div className="d-flex align-items-center gap-2 mb-2">
+                        <span className="badge text-bg-danger text-uppercase px-2 py-1">¿Qué es un KAM?</span>
+                        <span className="text-muted small fw-semibold">Key Account Manager</span>
+                      </div>
+                      <p className="text-secondary mb-0 small lh-base">
+                        {data.kam.definition}
+                      </p>
+                    </div>
+                    {data.kam.manager && (
+                      <div className="col-lg-5 border-start-lg ps-lg-4">
+                        <div className="d-flex flex-column">
+                          <span className="text-muted small text-uppercase fw-bold" style={{ fontSize: '0.75rem' }}>KAM a cargo</span>
+                          <span className="fw-bold text-dark fs-6">{data.kam.manager.name}</span>
+                          <span className="text-muted small mb-2">{data.kam.manager.role}</span>
+                          <div className="d-flex flex-wrap gap-2">
+                            <a
+                              href={data.kam.manager.whatsappUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 rounded-pill px-3"
+                            >
+                              <Phone size={13} />
+                              <span>WhatsApp</span>
+                            </a>
+                            <a
+                              href={`mailto:${data.kam.manager.email}`}
+                              className="btn btn-sm btn-outline-dark d-inline-flex align-items-center gap-1 rounded-pill px-3"
+                            >
+                              <Mail size={13} />
+                              <span>Email</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <div className="lb-brokers-kam__chevrons">
                 {data.kam.tiers.map((tier, i) => (
                   <div key={i} className={`lb-brokers-kam-chevron lb-brokers-kam-chevron--${i}`}>

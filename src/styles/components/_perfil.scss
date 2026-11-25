@@ -471,6 +471,11 @@
     &--profile {
       padding: 2rem;
     }
+
+    &--kam {
+      border-left: 4px solid $lb-red;
+      background: linear-gradient(135deg, #fff, rgba($lb-red, 0.03));
+    }
   }
 
   &__card-header {

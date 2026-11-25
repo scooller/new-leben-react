@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.236] - 2026-11-25
+
+### Added
+- `src/data/brokers.js` & `src/pages/Brokers.jsx`:
+  - Agregada definición del rol KAM y tarjeta destacada con información de contacto del KAM a cargo (Nicolás Muñoz).
+- `src/data/users.js`:
+  - Enriquecido mock del broker con `assignedKam`, precio en UF en cada venta (`priceUF`), porcentaje de comisión (`commissionPct`) y asignación de `project` a cada recurso de marketing.
+- `src/pages/PerfilBroker.jsx`:
+  - **Mis Datos**: Agregada tarjeta del KAM a cargo con botones directos a WhatsApp y Email.
+  - **Historial de ventas**: Agregada columna "Precio (UF)" en la tabla, junto con 2 gráficos SVG responsive: evolución de ventas totales en UF y gráfico de torta (Donut) con distribución 3 INN – 1 BAUM – 1 CAPITANES.
+  - **Comisiones**: Agregada columna "% Comisión".
+  - **Recursos**: Agregadas pestañas de filtro por proyecto (`Todos`, `Edificio INN`, `Baum`, `Capitanes`, `General`) con etiquetas identificadoras por tarjeta.
+- `src/styles/components/_perfil.scss`:
+  - Estilos dedicados para la tarjeta de KAM en el dashboard (`.lb-dashboard__card--kam`).
+
 ## [0.9.235] - 2026-11-25
 
 ### Changed

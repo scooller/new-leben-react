@@ -116,6 +116,14 @@ export const brokersData = {
   // --- KAM Info Bar ---
   kam: {
     text: '¿Cómo mantenerme o subir de categoría? Asesórate con tu KAM',
+    definition: 'Un KAM (Key Account Manager) de brokers gestiona y hace crecer la relación comercial con corredores o agencias externas que actúan como canal de venta.',
+    manager: {
+      name: 'Nicolás Muñoz',
+      role: 'Key Account Manager Brokers',
+      email: 'nicolas.munoz@ileben.cl',
+      phone: '+56 9 9129 7804',
+      whatsappUrl: 'https://wa.me/56991297804?text=Hola%20Nicol%C3%A1s%2C%20soy%20broker%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n',
+    },
     tiers: [
       { label: 'SILVER', subtitle: 'VENTAS HASTA UF 10.000', minUF: 0, maxUF: 10000 },
       { label: 'GOLD', subtitle: 'VENTAS SOBRE DE UF 10.000', minUF: 10000, maxUF: 15000 },
