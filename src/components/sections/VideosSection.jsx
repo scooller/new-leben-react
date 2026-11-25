@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { videosContent, images } from '../../data/content.js'
-import { apiFetch } from '../../lib/apiFetch.js'
-import { mapApiProject } from '../../lib/projectUtils.js'
+import { apiFetch, resolveApiUrl } from '../../lib/apiFetch.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
@@ -12,17 +11,17 @@ export default function VideosSection() {
   const { monthLabel, project, gallery } = videosContent
   const sectionRef = useRef(null)
   const isLoaded = useSelector((s) => s.ui.isLoaded)
-  const [apiPrice, setApiPrice] = useState(null)
+  const [featuredProject, setFeaturedProject] = useState(null)
 
   useEffect(() => {
     let cancelled = false
-    apiFetch('/api/v1/proyectos').then(({ data }) => {
-      if (cancelled || !Array.isArray(data)) return
-      const p = data.find((x) => x.id === 9 || (x.name && x.name.toLowerCase().includes('inn')))
-      if (p) {
-        setApiPrice(mapApiProject(p).precioDesde)
-      }
-    }).catch(() => { })
+    apiFetch('/api/v1/site-config')
+      .then(({ data }) => {
+        if (!cancelled && data?.featured_project) {
+          setFeaturedProject(data.featured_project)
+        }
+      })
+      .catch(() => {})
     return () => { cancelled = true }
   }, [])
 
@@ -43,10 +42,26 @@ export default function VideosSection() {
     return () => ctx.revert()
   }, [isLoaded])
 
+  const resolveImage = (url, fallback) => {
+    if (!url || typeof url !== 'string' || !url.trim()) return fallback
+    const trimmed = url.trim()
+    if (trimmed.startsWith('/storage/') || trimmed.startsWith('storage/')) return fallback
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed
+    return resolveApiUrl(trimmed)
+  }
+
+  const displayName = featuredProject?.name || project.name
+  const displayLocation = featuredProject?.location || project.location
+  const displayPrice = (featuredProject?.price && featuredProject.price !== '—') ? featuredProject.price : (project.price || '—')
+  const displayMonthLabel = featuredProject?.month_label || monthLabel
+  const displayMainImage = resolveImage(featuredProject?.main_image, project.mainImage)
+  const displaySideImage = resolveImage(featuredProject?.side_image, project.sideImage)
+  const buttonLink = featuredProject?.button_link || (featuredProject?.slug ? `/proyectos/${featuredProject.slug}` : '/proyectos/inn')
+
   const meta = [
-    { icon: 'user', label: 'Proyecto', value: project.name },
-    { icon: 'mapPin', label: 'Ubicación', value: project.location },
-    { icon: 'building', label: 'Desde', value: apiPrice || project.price || '—' },
+    { icon: 'user', label: 'Proyecto', value: displayName },
+    { icon: 'mapPin', label: 'Ubicación', value: displayLocation },
+    { icon: 'building', label: 'Desde', value: displayPrice },
   ]
 
   return (
@@ -56,7 +71,7 @@ export default function VideosSection() {
         <section className="lb-videos container lb-radius-tl lb-radius-tr" id="proyecto-del-mes">
           <div className="d-flex flex-column gap-3">
             <div className="d-flex justify-content-between align-items-center lb-section-header lb-parallax-text">
-              <SplitTitle className="lb-month-label" text={monthLabel} />
+              <SplitTitle className="lb-month-label" text={displayMonthLabel} />
             </div>
 
             <div className="d-flex gap-3 lb-video-row">
@@ -74,8 +89,8 @@ export default function VideosSection() {
                 </ScrollAnim>
                 <ScrollAnim animation='scale' className="lb-thumb-main-wrap">
                   <img
-                    src={project.mainImage}
-                    alt={project.name}
+                    src={displayMainImage}
+                    alt={displayName}
                     className="lb-thumb-main lb-img-interactive"
                     data-fancybox="gallery"
                     loading="lazy"
@@ -85,7 +100,7 @@ export default function VideosSection() {
               </div>
               <ScrollAnim animation='fade-up' delay={0.25} className="flex-fill rounded lb-video-side lb-img-trigger" tabIndex={0}>
                 <img
-                  src={project.sideImage}
+                  src={displaySideImage}
                   alt="Vista adicional"
                   className="lb-thumb-side lb-img-interactive"
                   data-fancybox="gallery"
@@ -102,7 +117,7 @@ export default function VideosSection() {
               </ScrollAnim>
               <ScrollAnim className="col-md-6 col-12 d-flex justify-content-md-end justify-content-start">
                 <div className="btn-group">
-                  <Link to="/proyectos/inn" className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
+                  <Link to={buttonLink} className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
                   <Link to="/cotizador#proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
                 </div>
               </ScrollAnim>

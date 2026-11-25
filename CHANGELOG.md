@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.246] - 2026-11-25
+
+### Changed
+- `src/components/sections/VideosSection.jsx`:
+  - Separada la sección "Proyecto Destacado del Mes" (`#proyecto-del-mes`) para consumir la configuración dinámica `featured_project` de `/api/v1/site-config` (nombre, comuna/ubicación, precio desde, etiquetas, imágenes y enlace al proyecto).
+  - Eliminado el hardcodeo de búsqueda de proyecto ID 9 / "inn" y enlaces estáticos.
+  - Fallbacks multimedia resueltos directamente a los recursos locales del frontend (`/images/home/...`), previniendo 404 por rutas inexistentes de backend.
+- `src/components/sections/ProjectOfMonthSection.jsx`:
+  - Separada la sección "Noticia / Colaboración del Mes" (`.lb-project-month`) para consumir `news_of_month` de `/api/v1/site-config` (o sección home).
+  - Resueltos los fallbacks de foto y video directamente en el frontend (`/images/inn/RAPC_EXT_Elevacioen-Tarde_Media16.jpg` y `/video/maria gracia.mp4`), filtrando rutas no existentes de `/storage/` en backend.
+
 ## [0.9.245] - 2026-11-25
 
 ### Added
