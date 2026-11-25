@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { FileText, Download, Building2, ShieldCheck, CheckCircle2, MapPin } from 'lucide-react'
 import Navbar from '../components/layout/Navbar.jsx'
@@ -6,12 +7,29 @@ import NotFound from './NotFound.jsx'
 import TrabajaForm from '../components/TrabajaForm.jsx'
 import { staticPages, slugAliases } from '../data/staticPages.js'
 import { useSeo } from '../hooks/useSeo.js'
+import { apiFetch } from '../lib/apiFetch.js'
 
 export default function StaticPage({ slug: propSlug }) {
   const { slug: routeSlug } = useParams()
   const rawSlug = propSlug || routeSlug
   const resolvedSlug = slugAliases[rawSlug] || rawSlug
   const page = staticPages[resolvedSlug]
+  const [apiPage, setApiPage] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+    apiFetch(`/api/v1/pages/${resolvedSlug}`)
+      .then(({ data, error }) => {
+        if (!error && data && isMounted) {
+          setApiPage(data)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [resolvedSlug])
 
   const firstParagraph = page?.paragraphs?.[0] ? page.paragraphs[0].replace(/<[^>]*>?/gm, '') : ''
   const pageTitle = page?.title ? `${page.title}${page.subtitle ? ` — ${page.subtitle}` : ''}` : undefined
@@ -66,13 +84,24 @@ export default function StaticPage({ slug: propSlug }) {
         <section className="container py-5 my-3">
           <div className="row justify-content-center">
             <div className="col-lg-10">
-              {/* Main Paragraphs */}
-              {page.paragraphs && page.paragraphs.length > 0 && (
+              {/* Dynamic WYSIWYG Section Content from Backend */}
+              {apiPage?.sections && apiPage.sections.some((s) => s.content && s.is_active !== false) ? (
                 <div className="mb-5">
-                  {page.paragraphs.map((p, idx) => (
-                    <p key={idx} className="fs-5 lh-lg text-secondary mb-3" dangerouslySetInnerHTML={{ __html: p }}></p>
-                  ))}
+                  {apiPage.sections.map((sec) =>
+                    sec.content && sec.is_active !== false ? (
+                      <div key={sec.key} className="fs-5 lh-lg text-secondary mb-4 lb-wysiwyg-content" dangerouslySetInnerHTML={{ __html: sec.content }} />
+                    ) : null
+                  )}
                 </div>
+              ) : (
+                /* Main Paragraphs */
+                page.paragraphs && page.paragraphs.length > 0 && (
+                  <div className="mb-5">
+                    {page.paragraphs.map((p, idx) => (
+                      <p key={idx} className="fs-5 lh-lg text-secondary mb-3" dangerouslySetInnerHTML={{ __html: p }}></p>
+                    ))}
+                  </div>
+                )
               )}
 
               {/* Company Details (Información de la empresa) */}

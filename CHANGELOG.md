@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.245] - 2026-11-25
+
+### Added
+- `src/pages/StaticPage.jsx`:
+  - Consumo reactivo de `/api/v1/pages/{slug}` para renderizar secciones con contenido enriquecido WYSIWYG (`sec.content`) editado desde Filament mediante `dangerouslySetInnerHTML`.
+
 ## [0.9.244] - 2026-11-25
 
 ### Changed
