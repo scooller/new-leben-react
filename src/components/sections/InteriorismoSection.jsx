@@ -80,7 +80,7 @@ export default function InteriorismoSection({
         style={{ '--lb-inn-proyecto-bg': backgroundImage ? `url("${resolveUrl(backgroundImage)}")` : undefined }}
       >
         <div className="row align-items-stretch g-5">
-          <div className={`${designers.length > 0 ? 'col-lg-6' : 'col-12'} col-l align-self-stretch position-relative lb-inn-proyecto__text-column`}>
+          <div className={`${designers.length > 0 ? 'col-lg-5' : 'col-12'} col-l align-self-stretch position-relative lb-inn-proyecto__text-column`}>
             <div className="h-100 pe-4" animation="fade-up">
               {eyebrow && (
                 <ScrollAnim as="span" animation='flip-x' className="lb-inn-proyecto__eyebrow">
@@ -93,7 +93,7 @@ export default function InteriorismoSection({
               )}
 
               {description && (
-                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text w-md-80" dangerouslySetInnerHTML={{ __html: description }} />
+                <ScrollAnim as="p" animation='fade-up' className="lb-inn-proyecto__text" dangerouslySetInnerHTML={{ __html: description }} />
               )}
 
               {currentDesigner?.text && (
@@ -110,7 +110,7 @@ export default function InteriorismoSection({
           </div>
 
           {designers.length > 0 && (
-            <div className="col-lg-6 d-flex flex-column gap-4 col-r">
+            <div className="col-lg-7 d-flex flex-column gap-4 col-r">
               <div className={`d-flex designers g-4 h-100 ${namePosition === 'above' ? 'designers--above' : ''}`}>
                 {designers.map((designer, index) => {
                   const isAbove = namePosition === 'above'

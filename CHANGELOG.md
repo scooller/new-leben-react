@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.240] - 2026-11-25
+
+### Added
+- `src/components/proyecto/ProjectPanoramasModal.jsx`:
+  - Campo opcional `description` en tarjetas de panoramas / experiencias del modal.
+  - Renderizado condicional de descripción en el cuerpo de cada tarjeta y en el caption ampliado de Fancybox.
+- `src/styles/components/_inn.scss`:
+  - Estilo `.lb-inn-panoramas-modal__card-desc` con limitador de 2 líneas (`-webkit-line-clamp: 2`) para mantener uniformidad visual en slides de carrusel.
+
 ## [0.9.239] - 2026-11-25
 
 ### Added
