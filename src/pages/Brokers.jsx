@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { useGsapAnimations } from '../hooks/useGsapAnimations.js'
 import { brokersData as data } from '../data/brokers.js'
+import { apiFetch, resolveApiUrl } from '../lib/apiFetch.js'
 
 // Reusable
 import Navbar from '../components/layout/Navbar.jsx'
@@ -38,15 +39,68 @@ export default function Brokers() {
     description: 'Únete al Círculo de Brokers de Leben y comercializa proyectos de alta gama en el sur de Chile y Santiago con soporte integral y atractivas comisiones.',
     canonical: '/brokers',
   })
+  const [portalData, setPortalData] = useState(null)
   const [activeEventTab, setActiveEventTab] = useState(data.events.tabs[0].id)
   const [eventSlideIndex, setEventSlideIndex] = useState(0)
   const [formData, setFormData] = useState({})
   const [categoryIndex, setCategoryIndex] = useState(0)
 
+  useEffect(() => {
+    let isMounted = true
+    apiFetch('/api/v1/brokers/portal')
+      .then(({ data: res, error }) => {
+        if (!error && res && isMounted) {
+          setPortalData(res)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  // Alliances from API or fallback to static data
+  const alliancesLogos = useMemo(() => {
+    if (portalData?.alliances && portalData.alliances.length > 0) {
+      return portalData.alliances.map((a) => ({
+        name: a.name,
+        logo: a.image_url ? resolveApiUrl(a.image_url) : '',
+        url: a.url,
+      }))
+    }
+    return data.alliances.logos
+  }, [portalData])
+
+  // Events / Galleries from API or fallback
+  const { eventTabs, eventGalleries } = useMemo(() => {
+    if (portalData?.galleries && portalData.galleries.length > 0) {
+      const tabs = portalData.galleries.map((g) => ({
+        id: String(g.year || g.title).toLowerCase().replace(/\s+/g, '-'),
+        label: g.title,
+      }))
+      const galleriesMap = {}
+      portalData.galleries.forEach((g) => {
+        const tabId = String(g.year || g.title).toLowerCase().replace(/\s+/g, '-')
+        galleriesMap[tabId] = (g.items || [])
+          .map((item) => (item.image_url ? resolveApiUrl(item.image_url) : ''))
+          .filter(Boolean)
+      })
+      return { eventTabs: tabs, eventGalleries: galleriesMap }
+    }
+    return { eventTabs: data.events.tabs, eventGalleries: data.events.gallery }
+  }, [portalData])
+
+  useEffect(() => {
+    if (eventTabs.length > 0 && !eventTabs.some((t) => t.id === activeEventTab)) {
+      setActiveEventTab(eventTabs[0].id)
+      setEventSlideIndex(0)
+    }
+  }, [eventTabs, activeEventTab])
+
   const categories = data.tiers.categories || []
   const activeCategory = categories[categoryIndex] || categories[0]
 
-  const currentEventPhotos = data.events.gallery[activeEventTab] || []
+  const currentEventPhotos = eventGalleries[activeEventTab] || eventGalleries[eventTabs[0]?.id] || []
   const totalEventSlides = Math.ceil(currentEventPhotos.length / 3)
 
   const handlePrevEvent = () => {
@@ -450,7 +504,7 @@ export default function Brokers() {
             </ScrollAnim>
 
             <ScrollAnim animation="scale" delay={0.1} className="d-flex justify-content-center flex-wrap gap-2 my-4">
-              {data.events.tabs.map((tab) => (
+              {eventTabs.map((tab) => (
                 <button
                   key={tab.id}
                   className={`btn rounded-pill px-4 py-2 fw-bold ${tab.id === activeEventTab ? 'btn-danger shadow-sm' : 'btn-light text-secondary'}`}
@@ -540,7 +594,7 @@ export default function Brokers() {
 
           <div className="lb-brokers-alliances-marquee py-2">
             <div className="lb-brokers-alliances-track">
-              {[...data.alliances.logos, ...data.alliances.logos].map((item, i) => (
+              {[...alliancesLogos, ...alliancesLogos].map((item, i) => (
                 <div key={i} className="lb-brokers-alliance-item d-flex align-items-center justify-content-center px-4">
                   <img
                     src={item.logo}

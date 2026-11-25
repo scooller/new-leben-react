@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.239] - 2026-11-25
+
+### Added
+- `src/pages/Brokers.jsx`:
+  - Consumo dinámico de la API `/api/v1/brokers/portal` para sincronizar alianzas activas y galerías/eventos con la base de datos backend.
+  - Soporte de fallback transparente a `src/data/brokers.js` en caso de carga o modo desconectado.
+  - Sincronización automática de pestañas de eventos (`eventTabs`) y resolución de URLs de imágenes mediante `resolveApiUrl`.
+
 ## [0.9.238] - 2026-11-25
 
 ### Fixed
