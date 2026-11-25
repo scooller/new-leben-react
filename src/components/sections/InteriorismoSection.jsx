@@ -138,7 +138,7 @@ export default function InteriorismoSection({
                         <div className={isAbove ? 'lb-inn-interiorismo__designer-img-card' : 'w-100 h-100 position-absolute top-0 start-0'}>
                           <ScrollAnim
                             as="div"
-                            animation='fade-up'
+                            animation='flip-x'
                             className="lb-inn-interiorismo__designer-img"
                             aria-hidden="true"
                             delay={0.1 * index}

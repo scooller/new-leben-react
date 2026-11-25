@@ -156,7 +156,9 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
           <div className={`carousel-item ${slideIndex === 0 ? 'active' : ''}`} key={slideIndex}>
             <div className="row g-3">
               {slideItems.map((loc, cardIdx) => (
-                <div
+                <ScrollAnim
+                  animation='flip-y'
+                  delay={0.1 * slideIndex}
                   className={`col-12 col-md-4 ${cardIdx !== 1 ? 'd-none d-md-block' : ''}`}
                   key={`${slideIndex}-${loc.id}-${cardIdx}`}
                 >
@@ -216,7 +218,7 @@ const ProjectGalleryCarousel = memo(function ProjectGalleryCarousel({
                       />
                     </div>
                   </div>
-                </div>
+                </ScrollAnim>
               ))}
             </div>
           </div>

@@ -1,9 +1,48 @@
-import { testimonials, images } from '../../data/content.js'
+import { useEffect, useState, useMemo } from 'react'
+import { testimonials as defaultData, images } from '../../data/content.js'
+import { apiFetch, resolveApiUrl } from '../../lib/apiFetch.js'
 import ScrollAnim from '../ScrollAnim.jsx'
 import SplitTitle from '../SplitTitle.jsx'
 
 export default function Testimonials() {
-  const { title, certTitle, certClients, ratingLabel, ratingScore, reviews } = testimonials
+  const [apiReviews, setApiReviews] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+    apiFetch('/api/v1/testimonials')
+      .then(({ data: res, error }) => {
+        if (!error && Array.isArray(res) && res.length > 0 && isMounted) {
+          setApiReviews(res)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const { title, certTitle, certClients, ratingLabel, ratingScore, reviews: staticReviews } = defaultData
+
+  const reviews = useMemo(() => {
+    if (apiReviews && apiReviews.length > 0) {
+      return apiReviews.map((item) => {
+        const text = item.review_text || item.text || ''
+        const quotedText = text.startsWith('"') ? text : `"${text}"`
+        return {
+          id: item.id,
+          name: item.name,
+          role: item.role,
+          avatarUrl: item.avatar_url ? resolveApiUrl(item.avatar_url) : null,
+          avatar: item.avatar,
+          rating: Number(item.rating) || 5,
+          text: quotedText,
+          time: item.review_date_human || item.time || '',
+        }
+      })
+    }
+    return staticReviews
+  }, [apiReviews, staticReviews])
 
   return (
     <ScrollAnim as="section" id="testimonials" className="lb-testimonials container lb-shadow lb-radius-tr" animation="fade-up" duration={1}>
@@ -52,7 +91,16 @@ export default function Testimonials() {
             <div className="col" key={review.id}>
             <div className="bg-white rounded-3 shadow-sm lb-review-card d-flex flex-column gap-3 lb-img-trigger h-100" tabIndex={0}>
               <div className="d-flex align-items-center gap-2">
-                <img src={images[review.avatar]} alt={review.name} width="44" height="44" className="rounded-circle flex-shrink-0 lb-img-interactive" style={{ objectFit: 'cover' }} loading="lazy" decoding="async" />
+                <img
+                  src={review.avatarUrl || images[review.avatar] || images.avatarHerman}
+                  alt={review.name}
+                  width="44"
+                  height="44"
+                  className="rounded-circle flex-shrink-0 lb-img-interactive"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="d-flex flex-column">
                   <p className="fw-bold mb-0 text-dark lb-reviewer-name">{review.name}</p>
                   <p className="fs-6 text-muted mb-0 lb-reviewer-role">{review.role}</p>
