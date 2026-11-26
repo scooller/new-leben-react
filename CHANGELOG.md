@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.248] - 2026-11-26
+
+### Added
+- `src/components/proyecto/ProjectPanoramasModal.jsx`:
+  - Soporte dinámico para `eyebrow` (subtítulo al lado de "Ubicación", por defecto "Experiencias"), `title` (por defecto "EL SUR, A TU MANERA") y `description` (con reemplazo automático de variable `{projectName}` / `{proyecto}`) configurables desde el backend.
+- `src/pages/ProyectoDetalle.jsx`:
+  - Sincronizado el botón de experiencias en la sección de Mapa (`btnText`) y los textos del modal con `projectContent.panoramas`.
+
 ## [0.9.247] - 2026-11-26
 
 ### Security

@@ -176,6 +176,9 @@ export default function ProjectPanoramasModal({
   categories = [],
   projectName = 'INN',
   backgroundImage,
+  eyebrow = 'Experiencias',
+  title = 'EL SUR, A TU MANERA',
+  description,
 }) {
   const [activeCatIndex, setActiveCatIndex] = useState(0)
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
@@ -296,13 +299,15 @@ export default function ProjectPanoramasModal({
                 <div className="lb-inn-panoramas-modal__eyebrow">
                   <span className="lb-inn-panoramas-modal__eyebrow-light">Ubicación</span>
                   <span className="lb-inn-panoramas-modal__eyebrow-pipe">|</span>
-                  <span className="lb-inn-panoramas-modal__eyebrow-strong">Experiencias</span>
+                  <span className="lb-inn-panoramas-modal__eyebrow-strong">{eyebrow || 'Experiencias'}</span>
                 </div>
                 <h2 id="panoramasModalTitle" className="lb-inn-panoramas-modal__title">
-                  EL SUR, A TU MANERA
+                  {title || 'EL SUR, A TU MANERA'}
                 </h2>
                 <p className="lb-inn-panoramas-modal__desc">
-                  Desde {projectName}, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.
+                  {description
+                    ? description.replace(/\{projectName\}|\{proyecto\}/gi, projectName)
+                    : `Desde ${projectName}, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.`}
                 </p>
               </div>
 

@@ -571,7 +571,7 @@ export default function ProyectoDetalle() {
       descriptionHtml: projectContent?.map?.description || '',
       image: resolvedImage,
       logo: resolveUrl(projectContent?.map?.logo_url),
-      btnText: projectContent?.map?.btn_text || 'Experiencias',
+      btnText: projectContent?.panoramas?.eyebrow || projectContent?.map?.btn_text || 'Experiencias',
       address: projectContent?.map?.address || currentProject?.direccion || '',
       bgColor: projectContent?.map?.bg_color || projectContent?.entorno?.bg_color || null,
       pin: {
@@ -1176,6 +1176,9 @@ export default function ProyectoDetalle() {
           projectName={currentProject?.name || projectContent?.name || 'Proyecto'}
           categories={panoramasCategories}
           backgroundImage={projectContent?.panoramas?.bg_image_url}
+          eyebrow={projectContent?.panoramas?.eyebrow}
+          title={projectContent?.panoramas?.title}
+          description={projectContent?.panoramas?.description}
         />
       )}
 
