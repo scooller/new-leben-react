@@ -359,7 +359,7 @@ export default function ProjectPanoramasModal({
                               <a
                                 href={resolveUrl(card.image)}
                                 data-fancybox={`panoramas-${currentCategory?.id || 'cat'}`}
-                                data-caption={`${card.title}${card.description ? ` · ${card.description}` : ''} · a ${card.distance} de ${projectName}`}
+                                data-caption={`${card.title}${card.description ? ` · ${card.description}` : ''}${card.distance ? ` · a ${card.distance} de ${projectName}` : ''}`}
                                 className="d-block ratio ratio-16x9 text-decoration-none position-relative lb-img-trigger"
                                 style={{ cursor: 'zoom-in' }}
                               >
@@ -378,10 +378,12 @@ export default function ProjectPanoramasModal({
                                 {card.description && (
                                   <p className="lb-inn-panoramas-modal__card-desc">{card.description}</p>
                                 )}
-                                <div className="d-flex align-items-center text-secondary small">
-                                  <CarFrontIcon size={16} className="me-2" />
-                                  <span>a {card.distance} de {projectName}</span>
-                                </div>
+                                {Boolean(card.distance) && (
+                                  <div className="d-flex align-items-center text-secondary small">
+                                    <CarFrontIcon size={16} className="me-2" />
+                                    <span>a {card.distance} de {projectName}</span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
