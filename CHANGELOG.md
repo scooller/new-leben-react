@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.249] - 2026-11-26
+
+### Added
+- `src/components/proyecto/ProjectPanoramasModal.jsx`:
+  - Renderizado del título del modal con `dangerouslySetInnerHTML` para permitir etiquetas HTML enriquecidas (ej: `'UNA EXPERIENCIA <span>COTIDIANA</span>'`).
+- `src/styles/components/_inn.scss`:
+  - Añadido estilo destacado para `span` dentro del título `.lb-inn-panoramas-modal__title` (peso bold `700` y color blanco).
+
 ## [0.9.248] - 2026-11-26
 
 ### Added

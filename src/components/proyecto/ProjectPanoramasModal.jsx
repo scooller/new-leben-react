@@ -301,14 +301,19 @@ export default function ProjectPanoramasModal({
                   <span className="lb-inn-panoramas-modal__eyebrow-pipe">|</span>
                   <span className="lb-inn-panoramas-modal__eyebrow-strong">{eyebrow || 'Experiencias'}</span>
                 </div>
-                <h2 id="panoramasModalTitle" className="lb-inn-panoramas-modal__title">
-                  {title || 'EL SUR, A TU MANERA'}
-                </h2>
-                <p className="lb-inn-panoramas-modal__desc">
-                  {description
-                    ? description.replace(/\{projectName\}|\{proyecto\}/gi, projectName)
-                    : `Desde ${projectName}, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.`}
-                </p>
+                <h2
+                  id="panoramasModalTitle"
+                  className="lb-inn-panoramas-modal__title"
+                  dangerouslySetInnerHTML={{ __html: title || 'EL SUR, A TU MANERA' }}
+                />
+                <p
+                  className="lb-inn-panoramas-modal__desc"
+                  dangerouslySetInnerHTML={{
+                    __html: description
+                      ? description.replace(/\{projectName\}|\{proyecto\}/gi, projectName)
+                      : `Desde ${projectName}, descubre paisajes, sabores y escapadas que hacen de cada día una experiencia inolvidable.`,
+                  }}
+                />
               </div>
 
               {/* Categorías / Tabs */}

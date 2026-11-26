@@ -1512,6 +1512,10 @@ $inn-map-card-bg: #f6f1eb;
     margin-bottom: 0.65rem;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 
+    span {
+      color: #fff;
+    }
+
     @include bs.media-breakpoint-down(md) {
       font-size: 1.6rem;
     }
