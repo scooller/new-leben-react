@@ -20,8 +20,8 @@ function MultiselectPill({ label, options = [], selected = [], onToggle, onClear
         setOpen(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('pointerdown', handleClickOutside)
+    return () => document.removeEventListener('pointerdown', handleClickOutside)
   }, [])
 
   const selectedCount = selected.length
@@ -52,7 +52,7 @@ function MultiselectPill({ label, options = [], selected = [], onToggle, onClear
       {open && (
         <div
           className="position-absolute start-0 top-100 mt-1 bg-white rounded-3 shadow border p-2 lb-multiselect-menu"
-          style={{ minWidth: '190px', maxHeight: '250px', overflowY: 'auto', zIndex: 1050 }}
+          style={{ minWidth: '190px', maxWidth: 'calc(100vw - 2rem)', maxHeight: '250px', overflowY: 'auto', zIndex: 1050 }}
         >
           {selectedCount > 0 && (
             <div className="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom px-2">
@@ -214,6 +214,7 @@ export default function Diferenciadores() {
           <div className="lb-search-pill d-inline-flex align-items-center gap-1 bg-white rounded-pill">
             <select
               className="form-select border-0 bg-transparent lb-search-select"
+              aria-label="Filtrar por precio UF"
               value={reduxFilters.precio || ''}
               onChange={(e) => dispatch(setFilterField({ field: 'precio', value: e.target.value }))}
             >

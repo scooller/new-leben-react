@@ -314,8 +314,8 @@ function FilterDropdown({ label, placeholder, options = [], selected, isMulti = 
 
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    document.addEventListener('pointerdown', handler)
+    return () => document.removeEventListener('pointerdown', handler)
   }, [])
 
   const defaultText = placeholder || label
@@ -348,11 +348,11 @@ function FilterDropdown({ label, placeholder, options = [], selected, isMulti = 
         {open && isMulti && (
           <div
             className="dropdown-menu show lb-proj-det-filter-menu p-2 shadow-sm"
-            style={{ maxHeight: '280px', overflowY: 'auto', minWidth: '190px', zIndex: 1050 }}
+            style={{ maxHeight: '280px', overflowY: 'auto', minWidth: '190px', maxWidth: 'calc(100vw - 2rem)', zIndex: 1050 }}
           >
             {selectedList.length > 0 && (
               <div className="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom px-2">
-                <span className="small text-muted">{selectedList.length} elegid${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}</span>
+                <span className="small text-muted">{`${selectedList.length} elegid${label === 'Comuna' || label === 'Tipología' ? 'as' : 'os'}`}</span>
                 <button
                   type="button"
                   className="btn btn-link btn-sm text-danger text-decoration-none p-0 small"
@@ -1276,7 +1276,19 @@ export default function Cotizador({
               </div>
             </div>
           ) : (
-            <div onClick={openGallery} className="lb-img-trigger d-block" style={{ cursor: mainImage ? 'zoom-in' : 'default' }} role="button" tabIndex={0}>
+            <div
+              onClick={openGallery}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  openGallery()
+                }
+              }}
+              className="lb-img-trigger d-block"
+              style={{ cursor: mainImage ? 'zoom-in' : 'default' }}
+              role="button"
+              tabIndex={0}
+            >
               {switching && <div className="lb-skeleton lb-proj-det-cot-plan-loading" aria-hidden="true" />}
               <img
                 src={mainImage || PLACEHOLDER_FLOORPLAN}

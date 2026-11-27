@@ -60,6 +60,8 @@ export default function Login() {
             <Mail size={18} />
             <input
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -71,6 +73,7 @@ export default function Login() {
             <Lock size={18} />
             <input
               type={showPass ? 'text' : 'password'}
+              autoComplete="current-password"
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

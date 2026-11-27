@@ -7,6 +7,7 @@ import Tooltip from 'bootstrap/js/dist/tooltip'
  */
 export function useBsTooltips(deps = []) {
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches) return
     document
       .querySelectorAll('[data-bs-toggle="tooltip"]:not([data-bs-tooltip-ready])')
       .forEach((el) => {

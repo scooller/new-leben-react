@@ -216,8 +216,9 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
               <form onSubmit={handleSchedule}>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <label className="form-label small text-muted">Asesor</label>
+                    <label htmlFor="schedule-agent" className="form-label small text-muted">Asesor</label>
                     <select
+                      id="schedule-agent"
                       className="form-select"
                       value={selectedAgent}
                       onChange={(e) => setSelectedAgent(e.target.value)}
@@ -229,8 +230,9 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
                     </select>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label small text-muted">Fecha de visita</label>
+                    <label htmlFor="schedule-date" className="form-label small text-muted">Fecha de visita</label>
                     <input
+                      id="schedule-date"
                       type="date"
                       className="form-control"
                       min={today}
@@ -246,7 +248,7 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
                         <button
                           key={time}
                           type="button"
-                          className={`btn btn-sm ${selectedTime === time ? 'btn-primary' : 'btn-outline-secondary'}`}
+                          className={`btn py-2 px-3 ${selectedTime === time ? 'btn-primary' : 'btn-outline-secondary'}`}
                           onClick={() => setSelectedTime(time)}
                         >
                           {time}

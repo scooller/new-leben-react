@@ -59,6 +59,28 @@ html {
   }
 }
 
+@media (pointer: coarse) {
+  .lb-proj-det-filter-btn,
+  .lb-filter-pill,
+  .lb-inn-hero-tabs__inner .nav-link,
+  .lb-brokers-tiers__tab,
+  .lb-login__pass-toggle {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .lb-inn-map__pin-inn,
+  .lb-inn-gallery__zoom {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+    }
+  }
+}
+
 body {
   font-family: $font-primary;
   color: $lb-body;

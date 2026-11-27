@@ -447,12 +447,15 @@ export default function Brokers() {
                 <div className="row g-3">
                   {data.registration.fields.map((field) => (
                     <div key={field.name} className={field.col === 2 ? 'col-md-6' : 'col-12'}>
-                      <label className="form-label text-light text-opacity-75 small fw-semibold mb-1">{field.label}</label>
+                      <label htmlFor={`broker-${field.name}`} className="form-label text-light text-opacity-75 small fw-semibold mb-1">{field.label}</label>
                       {field.name === 'whatsapp' ? (
                         <div className="input-group">
                           <span className="input-group-text bg-white text-secondary fw-semibold border-end-0 rounded-start-2">+56</span>
                           <input
+                            id={`broker-${field.name}`}
                             type="tel"
+                            inputMode="tel"
+                            autoComplete="tel-national"
                             maxLength={9}
                             name={field.name}
                             className="form-control bg-white text-dark rounded-end-2 py-2 px-3"
@@ -464,7 +467,18 @@ export default function Brokers() {
                         </div>
                       ) : (
                         <input
+                          id={`broker-${field.name}`}
                           type={field.type}
+                          inputMode={field.type === 'email' ? 'email' : undefined}
+                          autoComplete={
+                            field.type === 'email'
+                              ? 'email'
+                              : field.name === 'nombre'
+                                ? 'name'
+                                : field.name === 'empresa'
+                                  ? 'organization'
+                                  : undefined
+                          }
                           name={field.name}
                           className="form-control bg-white text-dark rounded-2 py-2 px-3"
                           placeholder={field.placeholder}
@@ -563,20 +577,25 @@ export default function Brokers() {
 
               {/* Pagination Dots */}
               {totalEventSlides > 1 && (
-                <div className="d-flex justify-content-center align-items-center gap-2 mt-4 pt-2">
+                <div className="d-flex justify-content-center align-items-center gap-1 mt-4 pt-2">
                   {Array.from({ length: totalEventSlides }).map((_, idx) => (
                     <button
                       key={idx}
                       type="button"
-                      className={`btn p-0 border-0 rounded-pill ${idx === eventSlideIndex ? 'bg-danger' : 'bg-secondary bg-opacity-25'}`}
-                      style={{
-                        width: idx === eventSlideIndex ? '26px' : '10px',
-                        height: '10px',
-                        transition: 'all 0.25s ease',
-                      }}
+                      className="btn p-0 border-0 bg-transparent d-inline-flex align-items-center justify-content-center"
+                      style={{ minWidth: '44px', minHeight: '44px' }}
                       onClick={() => setEventSlideIndex(idx)}
                       aria-label={`Ir a grupo ${idx + 1}`}
-                    />
+                    >
+                      <span
+                        className={`d-block rounded-pill ${idx === eventSlideIndex ? 'bg-danger' : 'bg-secondary bg-opacity-25'}`}
+                        style={{
+                          width: idx === eventSlideIndex ? '26px' : '10px',
+                          height: '10px',
+                          transition: 'all 0.25s ease',
+                        }}
+                      />
+                    </button>
                   ))}
                 </div>
               )}

@@ -231,9 +231,11 @@ export default function Invest() {
                 <div className="row g-3">
                   {/* Row 1 */}
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Nombre*</label>
+                    <label htmlFor="inv-nombre" className="form-label text-light text-opacity-75 small fw-medium mb-1">Nombre*</label>
                     <input
+                      id="inv-nombre"
                       type="text"
+                      autoComplete="given-name"
                       className="form-control rounded-2 bg-white text-dark"
                       value={formData.nombre}
                       onChange={(e) => handleFieldChange('nombre', e.target.value)}
@@ -242,9 +244,11 @@ export default function Invest() {
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Apellido*</label>
+                    <label htmlFor="inv-apellido" className="form-label text-light text-opacity-75 small fw-medium mb-1">Apellido*</label>
                     <input
+                      id="inv-apellido"
                       type="text"
+                      autoComplete="family-name"
                       className="form-control rounded-2 bg-white text-dark"
                       value={formData.apellido}
                       onChange={(e) => handleFieldChange('apellido', e.target.value)}
@@ -253,9 +257,11 @@ export default function Invest() {
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">RUT*</label>
+                    <label htmlFor="inv-rut" className="form-label text-light text-opacity-75 small fw-medium mb-1">RUT*</label>
                     <input
+                      id="inv-rut"
                       type="text"
+                      autoComplete="off"
                       maxLength={12}
                       className="form-control rounded-2 bg-white text-dark"
                       placeholder="12.345.678-9"
@@ -267,9 +273,12 @@ export default function Invest() {
 
                   {/* Row 2 */}
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Correo Electrónico*</label>
+                    <label htmlFor="inv-email" className="form-label text-light text-opacity-75 small fw-medium mb-1">Correo Electrónico*</label>
                     <input
+                      id="inv-email"
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       className="form-control rounded-2 bg-white text-dark"
                       value={formData.email}
                       onChange={(e) => handleFieldChange('email', e.target.value)}
@@ -278,11 +287,14 @@ export default function Invest() {
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Teléfono*</label>
+                    <label htmlFor="inv-telefono" className="form-label text-light text-opacity-75 small fw-medium mb-1">Teléfono*</label>
                     <div className="input-group">
                       <span className="input-group-text bg-white text-secondary fw-semibold border-end-0">+56</span>
                       <input
+                        id="inv-telefono"
                         type="tel"
+                        inputMode="tel"
+                        autoComplete="tel-national"
                         maxLength={9}
                         className="form-control rounded-2 bg-white text-dark"
                         placeholder="9 1234 5678"
@@ -294,10 +306,11 @@ export default function Invest() {
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">
+                    <label htmlFor="inv-renta" className="form-label text-light text-opacity-75 small fw-medium mb-1">
                       ¿En qué rango se encuentra tu renta líquida?*
                     </label>
                     <select
+                      id="inv-renta"
                       className="form-select rounded-2 bg-white text-dark"
                       value={formData.renta}
                       onChange={(e) => handleFieldChange('renta', e.target.value)}
@@ -314,8 +327,9 @@ export default function Invest() {
 
                   {/* Row 3 */}
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Comuna*</label>
+                    <label htmlFor="inv-comuna" className="form-label text-light text-opacity-75 small fw-medium mb-1">Comuna*</label>
                     <select
+                      id="inv-comuna"
                       className="form-select rounded-2 bg-white text-dark"
                       value={formData.comuna}
                       onChange={(e) => handleFieldChange('comuna', e.target.value)}
@@ -331,8 +345,9 @@ export default function Invest() {
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label text-light text-opacity-75 small fw-medium mb-1">Proyecto*</label>
+                    <label htmlFor="inv-proyecto" className="form-label text-light text-opacity-75 small fw-medium mb-1">Proyecto*</label>
                     <select
+                      id="inv-proyecto"
                       className="form-select rounded-2 bg-white text-dark"
                       value={formData.proyecto}
                       onChange={(e) => handleFieldChange('proyecto', e.target.value)}
@@ -411,7 +426,7 @@ export default function Invest() {
               <div className="d-flex align-items-center gap-2">
                 <button
                   type="button"
-                  className={`btn btn-link p-0 text-decoration-none fs-5 ${activeFilter === 'SANTIAGO' ? 'text-dark fw-bold' : 'text-secondary'}`}
+                  className={`btn btn-link py-2 px-2 text-decoration-none fs-5 ${activeFilter === 'SANTIAGO' ? 'text-dark fw-bold' : 'text-secondary'}`}
                   onClick={() => setActiveFilter('SANTIAGO')}
                 >
                   SANTIAGO
@@ -419,7 +434,7 @@ export default function Invest() {
                 <span className="text-danger fw-bold fs-5 user-select-none">I</span>
                 <button
                   type="button"
-                  className={`btn btn-link p-0 text-decoration-none fs-5 ${activeFilter === 'REGIONES' ? 'text-dark fw-bold' : 'text-secondary'}`}
+                  className={`btn btn-link py-2 px-2 text-decoration-none fs-5 ${activeFilter === 'REGIONES' ? 'text-dark fw-bold' : 'text-secondary'}`}
                   onClick={() => setActiveFilter('REGIONES')}
                 >
                   REGIONES

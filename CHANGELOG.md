@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.253] - 2026-11-27
+
+### Fixed
+- `index.html`, `src/styles/components/_chat-widget.scss`, `src/styles/components/_cookies.scss`:
+  - Agregado `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` + `100dvh` en `ChatWidget` y `CookieSettingsTrigger` para respetar la barra Home de iOS y evitar recortes con teclado virtual o landscape.
+- `src/hooks/useBsTooltips.js`, `src/components/layout/Footer.jsx`, `src/styles/components/_footer.scss`:
+  - Desactivados tooltips hover-only en dispositivos `(hover: none)`, centrado de links corporativos en `< md` (`ms-md-auto`) y ampliado padding táctil de `.lb-footer-link`.
+- `src/components/sections/Diferenciadores.jsx`, `src/components/proyecto/Cotizador.jsx`, `src/components/cotizador/BuscadorDepartamentos.jsx`, `src/styles/components/_cotizador-general.scss`:
+  - Cambiado `mousedown` a `pointerdown` para cierre de dropdowns en iOS Safari, acotado ancho máximo de menús en 320px, agregado `aria-label` y `onKeyDown` en planta, y corregido literal `$` (`elegid$as`).
+- `src/styles/components/_inn-team-agents.scss`, `src/styles/components/_static-page.scss`, `src/pages/ProyectoDetalle.jsx`:
+  - Encapsulados hovers destructivos en `@media (hover: hover)`, agregado `overflow-wrap: anywhere` en email de asesores, ampliado botón WhatsApp a `44x44px` en mobile y eliminado `onPointerDown` duplicado en pines del mapa.
+- `src/styles/global.scss`, `src/pages/Brokers.jsx`, `src/pages/Invest.jsx`, `src/components/cookies/CookieConsentModal.jsx`, `src/components/proyecto/CotizadorForm.jsx`, `src/components/TrabajaForm.jsx`, `src/pages/Login.jsx`, `src/components/proyecto/ProjectTeamAgents.jsx`:
+  - Asegurada área táctil mínima `44x44px` en `@media (pointer: coarse)`, dots/controles móviles y agregados `htmlFor`/`id`, `autoComplete` e `inputMode` en todos los formularios.
+
 ## [0.9.252] - 2026-11-27
 
 ### Changed

@@ -249,7 +249,7 @@ export default function CookieConsentModal() {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-link text-secondary btn-sm text-decoration-underline p-0 mt-1"
+                  className="btn btn-link text-secondary btn-sm text-decoration-underline py-2 px-2 mt-1"
                   onClick={() => setView('details')}
                 >
                   Personalizar cookies por finalidad

@@ -101,9 +101,10 @@ export default function CotizadorForm({
                 />
               </div>
               <div className="col-md-7">
-                <label className="form-label fw-semibold">Planta</label>
+                <label htmlFor="cf-planta" className="form-label fw-semibold">Planta</label>
                 {thumbnails.length > 1 ? (
                   <select
+                    id="cf-planta"
                     className="form-select"
                     aria-label="Seleccionar tipología de planta"
                     value={selected}
@@ -114,7 +115,7 @@ export default function CotizadorForm({
                     ))}
                   </select>
                 ) : (
-                  <select className="form-select" aria-label="Planta seleccionada" disabled value="0">
+                  <select id="cf-planta" className="form-select" aria-label="Planta seleccionada" disabled value="0">
                     <option value="0">{plantaName || 'Planta seleccionada'}</option>
                   </select>
                 )}
@@ -144,17 +145,18 @@ export default function CotizadorForm({
               <div className="row g-3">
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarNombre">Nombre</label>
-                  <input id="cotizarNombre" type="text" className="form-control" required />
+                  <input id="cotizarNombre" type="text" autoComplete="given-name" className="form-control" required />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarApellido">Apellido</label>
-                  <input id="cotizarApellido" type="text" className="form-control" required />
+                  <input id="cotizarApellido" type="text" autoComplete="family-name" className="form-control" required />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarRut">RUT</label>
                   <input
                     id="cotizarRut"
                     type="text"
+                    autoComplete="off"
                     className={`form-control ${rutTouched && rutError ? 'is-invalid' : rutTouched && !rutError && rut ? 'is-valid' : ''}`}
                     placeholder="12.345.678-9"
                     value={rut}
@@ -169,11 +171,11 @@ export default function CotizadorForm({
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarTelefono">Teléfono</label>
-                  <input id="cotizarTelefono" type="tel" className="form-control" placeholder="9 1234 5678" required />
+                  <input id="cotizarTelefono" type="tel" inputMode="tel" autoComplete="tel" className="form-control" placeholder="9 1234 5678" required />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarEmail">Email</label>
-                  <input id="cotizarEmail" type="email" className="form-control" placeholder="nombre@correo.cl" required />
+                  <input id="cotizarEmail" type="email" inputMode="email" autoComplete="email" className="form-control" placeholder="nombre@correo.cl" required />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold" htmlFor="cotizarRenta">Rango de renta</label>

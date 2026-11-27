@@ -70,8 +70,8 @@ export default function BuscadorDepartamentos({
         setOpenDropdown(null)
       }
     }
-    document.addEventListener('mousedown', handleOutside)
-    return () => document.removeEventListener('mousedown', handleOutside)
+    document.addEventListener('pointerdown', handleOutside)
+    return () => document.removeEventListener('pointerdown', handleOutside)
   }, [])
 
   // Filter projects by intent / category

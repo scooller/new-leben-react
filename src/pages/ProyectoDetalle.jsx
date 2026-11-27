@@ -1072,11 +1072,6 @@ export default function ProyectoDetalle() {
                           e.preventDefault()
                           handleSelectLocation(projectPoiIndex)
                         }}
-                        onPointerDown={(e) => {
-                          if (e.button === 0) {
-                            handleSelectLocation(projectPoiIndex)
-                          }
-                        }}
                         className={`lb-inn-map__pin-inn position-absolute ${activeLocationIndex === projectPoiIndex ? 'active lb-inn-map__pin-inn--active' : ''}`}
                         style={{ left: `${mapData.pin.x}%`, top: `${mapData.pin.y}%` }}
                         title={mapData.pin.name || currentProject?.name || 'PROYECTO'}
@@ -1103,11 +1098,6 @@ export default function ProyectoDetalle() {
                             onClick={(e) => {
                               e.preventDefault()
                               handleSelectLocation(index)
-                            }}
-                            onPointerDown={(e) => {
-                              if (e.button === 0) {
-                                handleSelectLocation(index)
-                              }
                             }}
                             className={`lb-inn-map__pin lb-inn-map__pin--${dir} position-absolute ${isSelected ? 'active' : ''}`}
                             style={{ left: `${point.x}%`, top: `${point.y}%` }}

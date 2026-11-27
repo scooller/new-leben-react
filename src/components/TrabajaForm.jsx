@@ -253,6 +253,7 @@ export default function TrabajaForm() {
               type="text"
               name="nombre"
               id="tf-nombre"
+              autoComplete="given-name"
               className={`form-control ${fieldErrors.nombre ? 'is-invalid' : ''}`}
               placeholder="Tu nombre"
               value={formData.nombre}
@@ -270,6 +271,7 @@ export default function TrabajaForm() {
               type="text"
               name="apellido"
               id="tf-apellido"
+              autoComplete="family-name"
               className={`form-control ${fieldErrors.apellido ? 'is-invalid' : ''}`}
               placeholder="Tu apellido"
               value={formData.apellido}
@@ -307,6 +309,8 @@ export default function TrabajaForm() {
               <span className="input-group-text bg-light text-secondary fw-semibold">+56</span>
               <input
                 type="tel"
+                inputMode="tel"
+                autoComplete="tel-national"
                 name="telefono"
                 id="tf-telefono"
                 maxLength={9}
@@ -328,6 +332,8 @@ export default function TrabajaForm() {
             </label>
             <input
               type="email"
+              inputMode="email"
+              autoComplete="email"
               name="email"
               id="tf-email"
               className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
@@ -386,6 +392,7 @@ export default function TrabajaForm() {
             </label>
             <input
               type="number"
+              inputMode="numeric"
               min="0"
               max="50"
               name="experiencia"
@@ -425,6 +432,7 @@ export default function TrabajaForm() {
               type="text"
               name="ultimaempresa"
               id="tf-ultimaempresa"
+              autoComplete="organization"
               className={`form-control ${fieldErrors.ultimaempresa ? 'is-invalid' : ''}`}
               placeholder="Nombre de la empresa"
               value={formData.ultimaempresa}
@@ -443,6 +451,8 @@ export default function TrabajaForm() {
             </label>
             <input
               type="url"
+              inputMode="url"
+              autoComplete="url"
               name="linkedin"
               id="tf-linkedin"
               className={`form-control ${fieldErrors.linkedin ? 'is-invalid' : ''}`}

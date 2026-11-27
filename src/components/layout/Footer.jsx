@@ -185,7 +185,7 @@ export default function Footer() {
 
         {/* Información Corporativa */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 px-3 px-md-5 py-3 border-top border-secondary border-opacity-10 lb-corporate-strip text-center text-md-start">
-          <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 ms-auto">
+          <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 ms-md-auto">
             {corporateLinks.map((link) =>
               link.to ? (
                 <Link

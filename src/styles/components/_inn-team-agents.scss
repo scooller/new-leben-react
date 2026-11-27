@@ -47,13 +47,21 @@ $inn-wa: var(--lb-project-accent, #d1b578);
     // max-width: 440px;
     margin-bottom: 0.5rem;
 
-    // Al hacer hover sobre la fila, el avatar se expande
-    &:hover .lb-inn-team-agents__avatar-wrapper {
-      width: 180px;
+    @media (hover: hover) {
+      // Al hacer hover sobre la fila, el avatar se expande
+      &:hover .lb-inn-team-agents__avatar-wrapper {
+        width: 180px;
+      }
+
+      &:hover .lb-inn-team-agents__avatar {
+        filter: grayscale(0);
+      }
     }
 
-    &:hover .lb-inn-team-agents__avatar {
-      filter: grayscale(0);
+    @media (hover: none) {
+      .lb-inn-team-agents__avatar {
+        filter: grayscale(0);
+      }
     }
   }
 
@@ -130,6 +138,8 @@ $inn-wa: var(--lb-project-accent, #d1b578);
     font-size: $lb-fs-md;
     color: #0066cc; // Azul
     text-decoration: none; // En la imagen no se ve subrayado
+    overflow-wrap: anywhere;
+    word-break: break-word;
 
     &:hover {
       text-decoration: underline;
@@ -145,7 +155,6 @@ $inn-wa: var(--lb-project-accent, #d1b578);
     width: 36px;
     height: 36px;
     color: $inn-wa; // Color dorado
-    margin-right: -0.5rem; // Acercar al avatar
     transition: transform 0.3s ease;
     z-index: 2; // Asegurar que esté sobre el fondo
     margin-right: 0.5rem;
@@ -270,8 +279,8 @@ $inn-wa: var(--lb-project-accent, #d1b578);
     }
 
     &__wa-btn {
-      width: 30px;
-      height: 30px;
+      width: 44px;
+      height: 44px;
     }
   }
 }
