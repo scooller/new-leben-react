@@ -522,7 +522,7 @@ export default function Brokers() {
                   <button
                     type="button"
                     className="btn btn-danger position-absolute top-50 start-0 translate-middle-y rounded-circle d-flex align-items-center justify-content-center shadow z-2"
-                    style={{ width: '42px', height: '42px', marginLeft: '-10px' }}
+                    style={{ width: '44px', height: '44px' }}
                     onClick={handlePrevEvent}
                     aria-label="Anterior"
                   >
@@ -532,7 +532,7 @@ export default function Brokers() {
                   <button
                     type="button"
                     className="btn btn-danger position-absolute top-50 end-0 translate-middle-y rounded-circle d-flex align-items-center justify-content-center shadow z-2"
-                    style={{ width: '42px', height: '42px', marginRight: '-10px' }}
+                    style={{ width: '44px', height: '44px' }}
                     onClick={handleNextEvent}
                     aria-label="Siguiente"
                   >

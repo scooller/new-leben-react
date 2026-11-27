@@ -89,7 +89,7 @@ export default function StaticPage({ slug: propSlug }) {
                 <div className="mb-5">
                   {apiPage.sections.map((sec) =>
                     sec.content && sec.is_active !== false ? (
-                      <div key={sec.key} className="fs-5 lh-lg text-secondary mb-4 lb-wysiwyg-content" dangerouslySetInnerHTML={{ __html: sec.content }} />
+                      <div key={sec.key} className="fs-6 lh-base lh-md-lg text-secondary mb-4 lb-wysiwyg-content" dangerouslySetInnerHTML={{ __html: sec.content }} />
                     ) : null
                   )}
                 </div>
@@ -98,7 +98,7 @@ export default function StaticPage({ slug: propSlug }) {
                 page.paragraphs && page.paragraphs.length > 0 && (
                   <div className="mb-5">
                     {page.paragraphs.map((p, idx) => (
-                      <p key={idx} className="fs-5 lh-lg text-secondary mb-3" dangerouslySetInnerHTML={{ __html: p }}></p>
+                      <p key={idx} className="fs-6 lh-base text-secondary mb-3" dangerouslySetInnerHTML={{ __html: p }}></p>
                     ))}
                   </div>
                 )

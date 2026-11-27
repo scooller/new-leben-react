@@ -523,7 +523,7 @@ export default function Invest() {
                 <div className="p-4 p-md-5 d-flex flex-column justify-content-center">
                   <p className="lb-invest-eyebrow">{data.smartBanner.eyebrow}</p>
                   <h2 className="display-6 fw-bold text-white mb-3" dangerouslySetInnerHTML={{ __html: data.smartBanner.title }}></h2>
-                  <p className="xs-small fw-bold text-white text-opacity-75 mb-2">{data.smartBanner.disclaimer}</p>
+                  <p className="small fw-bold text-white text-opacity-75 mb-2">{data.smartBanner.disclaimer}</p>
                   <p className="text-white text-opacity-90 mb-4">{data.smartBanner.description}</p>
                   <div>
                     <a href={data.smartBanner.ctaHref} className="btn btn-danger rounded-pill px-4 py-2 fw-semibold w-100">

@@ -28,7 +28,7 @@
 .lb-proj-det-tabs-bar {
   background: $lb-white;
   z-index: 80;
-  top: $lb-navbar-height;
+  top: var(--lb-nav-h, $lb-navbar-height);
   border-bottom: 1px solid $lb-gray-300;
   box-shadow: $lb-shadow-soft;
 }
@@ -47,6 +47,10 @@
 .lb-proj-det-tab {
   flex: 1;
   min-width: 0;
+
+  @include bs.media-breakpoint-down(md) {
+    flex: 0 0 auto;
+  }
 }
 
 .lb-proj-det-tab-label {
@@ -192,6 +196,10 @@
   border-radius: $lb-radius-md;
   background: $lb-cream;
   padding: 2.5rem;
+
+  @include bs.media-breakpoint-down(md) {
+    padding: 1rem;
+  }
 }
 
 .lb-proj-det-blueprint {
@@ -222,6 +230,7 @@
 
 .lb-proj-det-vista360-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0;
   border-bottom: 1px solid $lb-gray-300;
 }
@@ -229,6 +238,12 @@
 .lb-proj-det-vista-tab {
   height: 3.5rem;
   padding: 0 2rem;
+
+  @include bs.media-breakpoint-down(md) {
+    height: auto;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+  }
   border: none;
   border-bottom: 2px solid transparent;
   background: transparent;
@@ -528,6 +543,10 @@
   grid-template-columns: auto auto;
   justify-content: space-between;
   gap: 1rem;
+
+  @include bs.media-breakpoint-down(sm) {
+    grid-template-columns: 1fr;
+  }
 
   .lb-proj-det-cot-detail-item--project {
     grid-column: 1 / -1;
@@ -850,7 +869,7 @@
   }
 
   .lb-proj-det-space-slide {
-    flex: 0 0 calc(33.333% - 0.375rem);
+    flex: 0 0 80%;
   }
 
   .lb-proj-det-team {
@@ -879,6 +898,10 @@
 .lb-proj-det-location-checklist {
   columns: 2;
   column-gap: 2rem;
+
+  @include bs.media-breakpoint-down(md) {
+    columns: 1;
+  }
 
   li {
     break-inside: avoid;

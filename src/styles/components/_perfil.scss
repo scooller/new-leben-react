@@ -42,6 +42,10 @@
     max-width: 420px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     text-align: center;
+
+    @include bs.media-breakpoint-down(sm) {
+      padding: 1.5rem;
+    }
   }
 
   &__logo img {
@@ -443,6 +447,10 @@
     flex: 1;
     padding: 1.5rem;
     overflow-y: auto;
+
+    @include bs.media-breakpoint-down(sm) {
+      padding: 1rem;
+    }
   }
 
   &__overlay {
@@ -471,6 +479,14 @@
 
     &--profile {
       padding: 2rem;
+    }
+
+    @include bs.media-breakpoint-down(sm) {
+      padding: 1rem;
+
+      &--profile {
+        padding: 1.25rem;
+      }
     }
 
     &--kam {

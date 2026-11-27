@@ -109,7 +109,7 @@ export default function CookiesPage() {
                       Contacto de Privacidad
                     </h3>
                     <p className="fw-medium text-dark mb-0">
-                      <a href={`mailto:${responsible.emailContacto}`} className="text-danger text-decoration-none">
+                      <a href={`mailto:${responsible.emailContacto}`} className="text-danger text-decoration-none text-break">
                         {responsible.emailContacto}
                       </a>
                     </p>
@@ -154,8 +154,7 @@ export default function CookiesPage() {
                                   cat.status.includes('Siempre')
                                     ? 'bg-secondary'
                                     : 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25'
-                                } px-3 py-2 rounded-pill`}
-                                style={{ fontSize: '0.75rem' }}
+                                } px-3 py-2 rounded-pill small`}
                               >
                                 {cat.status}
                               </span>

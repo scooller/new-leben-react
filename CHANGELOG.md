@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.252] - 2026-11-27
+
+### Changed
+- `src/styles/global.scss`, `src/styles/components/_proyecto-detalle.scss`, `src/styles/components/_inn.scss`:
+  - Definida escala tipográfica mobile `< 768px` (`.display-4/.display-5/.display-6`, `.lead`), prevención de auto-zoom iOS Safari (`font-size >= 16px` en inputs/selects/textareas), `overflow-wrap: break-word` en `.lb-split-word` y variable `--lb-nav-h` (`52px` mobile / `72px` desktop) para alinear barras sticky.
+- `src/pages/StaticPage.jsx`, `src/pages/CookiesPage.jsx`, `src/pages/Invest.jsx`, `src/pages/PerfilComprador.jsx`, `src/styles/components/_static-page.scss`:
+  - Ajustado cuerpo de texto a `fs-6`, agregado `text-break` en emails/contactos, removida clase inexistente `xs-small` y asegurado wrapper responsivo en `.lb-wysiwyg-content`.
+- `src/components/sections/Diferenciadores.jsx`, `src/components/sections/Testimonials.jsx`, `src/components/sections/VideosSection.jsx`, `src/components/sections/ProjectsCatalog.jsx`, `src/pages/Brokers.jsx`:
+  - Agregado `flex-wrap`, `ms-0 ms-md-4`, `w-100 w-sm-auto` y `aria-label` en selectores, botones de carrusel `44x44px` sin márgenes negativos y ajuste de espaciados en `_videos.scss`, `_project-of-month.scss`, `_not-found.scss`, `_brokers.scss`, `_cotizador-general.scss`, `_inn.scss`, `_perfil.scss` y `_proyecto-detalle.scss`.
+
 ## [0.9.251] - 2026-11-27
 
 ### Fixed

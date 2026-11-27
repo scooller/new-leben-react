@@ -44,11 +44,11 @@ $table-width-tablet: 900px;
 
     @include bs.media-breakpoint-down(md) {
       .container {
-        padding-top: 120px;
-        padding-bottom: 3rem;
+        padding-top: 96px;
+        padding-bottom: 2.5rem;
       }
 
-      min-height: 600px;
+      min-height: 440px;
     }
 
     &__bg {
@@ -84,6 +84,10 @@ $table-width-tablet: 900px;
   &-tiers {
     padding: 5rem 0;
     background: #faf9f6;
+
+    @include bs.media-breakpoint-down(md) {
+      padding: 3rem 0;
+    }
 
     &__wrapper {
       position: relative;

@@ -25,6 +25,22 @@
 }
 
 .lb-static-page {
+  .lb-wysiwyg-content {
+    overflow-wrap: break-word;
+
+    table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    img,
+    iframe,
+    video {
+      max-width: 100%;
+      height: auto;
+    }
+  }
 
   .lb-anteriores-section {
     .lb-anteriores-item {

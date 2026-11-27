@@ -76,7 +76,7 @@ export default function VideosSection() {
 
             <div className="d-flex gap-3 lb-video-row">
               <div className="lb-video-main d-flex flex-column gap-2 flex-shrink-0 lb-img-trigger" tabIndex={0}>
-                <ScrollAnim animation='fade-right' className="d-flex gap-4 pb-2">
+                <ScrollAnim animation='fade-right' className="d-flex flex-wrap gap-3 gap-md-4 pb-2">
                   {meta.map((m) => (
                     <div className="d-flex flex-column" key={m.label}>
                       <div className="d-flex align-items-center gap-1 lb-meta-label">
@@ -116,9 +116,9 @@ export default function VideosSection() {
               <p className="lb-gallery-subtitle mb-0">{gallery.subtitle}</p> */}
               </ScrollAnim>
               <ScrollAnim className="col-md-6 col-12 d-flex justify-content-md-end justify-content-start">
-                <div className="btn-group">
-                  <Link to={buttonLink} className="btn btn-outline-dark text-decoration-none">Ver proyecto</Link>
-                  <Link to="/cotizador#proyectos" className="btn btn-dark text-decoration-none">{gallery.buttonText}</Link>
+                <div className="d-flex flex-wrap gap-2 w-100 w-sm-auto justify-content-md-end">
+                  <Link to={buttonLink} className="btn btn-outline-dark text-decoration-none flex-fill flex-sm-grow-0">Ver proyecto</Link>
+                  <Link to="/cotizador#proyectos" className="btn btn-dark text-decoration-none flex-fill flex-sm-grow-0">{gallery.buttonText}</Link>
                 </div>
               </ScrollAnim>
             </div>

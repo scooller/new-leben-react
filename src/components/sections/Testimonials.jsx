@@ -51,8 +51,8 @@ export default function Testimonials() {
         <SplitTitle as="h2" className="text-center mb-0 lb-testimonials-title" text={title} />
 
         {/* Certification banner */}
-        <div className="bg-white rounded-3 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 lb-cert p-3 px-4">
-          <div className="d-flex align-items-center gap-3">
+        <div className="bg-white rounded-3 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 lb-cert p-3 p-md-4">
+          <div className="d-flex flex-wrap align-items-center gap-3">
             <div className="lb-bptl d-flex flex-column align-items-center justify-content-center rounded text-white">
               <span className="lb-bptl-line">Best</span>
               <span className="lb-bptl-line">Place</span>
@@ -68,7 +68,7 @@ export default function Testimonials() {
               </div>
             </div>
           </div>
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex flex-wrap align-items-center gap-2">
             <span className="fs-6 text-muted">{ratingLabel}</span>
             <div className="d-flex align-items-center gap-2 lb-rating-badge rounded">
               <div className="d-flex align-items-center justify-content-center text-white fw-bold lb-score rounded">{ratingScore}</div>

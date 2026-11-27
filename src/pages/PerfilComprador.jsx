@@ -52,7 +52,7 @@ export default function PerfilComprador({ user, activeTab }) {
               <div className="lb-dashboard__avatar-sm">{user.assignedBroker.name.charAt(0)}</div>
               <div>
                 <p className="lb-dashboard__value">{user.assignedBroker.name}</p>
-                <p className="lb-dashboard__muted">{user.assignedBroker.phone} · {user.assignedBroker.email}</p>
+                <p className="lb-dashboard__muted text-break">{user.assignedBroker.phone} · {user.assignedBroker.email}</p>
               </div>
             </div>
           </div>

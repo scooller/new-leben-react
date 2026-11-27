@@ -108,22 +108,26 @@ $inn-map-card-bg: #f6f1eb;
 
   &__title {
     color: $lb-white;
-    font-size: clamp(2rem, 4.6vw, 4.2rem);
+    font-size: clamp(1.65rem, 4.6vw, 4.2rem);
     font-family: $font-title;
     margin: 0;
     padding-inline: 1rem;
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
-    font-weight: 100;
-    line-height: 1;
+    font-weight: 300;
+    line-height: 1.1;
     margin-top: 1.5rem;
     margin-bottom: 8rem;
+
+    @include bs.media-breakpoint-down(md) {
+      margin-bottom: 2.5rem;
+    }
   }
 }
 
 // Botonera flotante (card + nav-pills de Bootstrap; solo skin dorada)
 .lb-inn-hero-tabs {
   position: sticky;
-  top: $lb-navbar-height;
+  top: var(--lb-nav-h, $lb-navbar-height);
   z-index: 80;
   // Ancho según contenido para que ningún botón quede fuera (ej: Contacto)
   width: fit-content;
@@ -218,7 +222,7 @@ $inn-map-card-bg: #f6f1eb;
   }
 
   @include bs.media-breakpoint-down(lg) {
-    top: 3.5rem;
+    top: var(--lb-nav-h, 3.5rem);
     margin-top: -1.75rem;
     max-width: 96%;
 
@@ -285,7 +289,7 @@ $inn-map-card-bg: #f6f1eb;
 // Selector de secciones para Mobile en INN
 .lb-inn-mobile-nav {
   position: sticky;
-  top: 3.5rem;
+  top: var(--lb-nav-h, 3.5rem);
   z-index: 85;
   margin-top: -1.25rem;
   margin-bottom: 1.5rem;
@@ -302,7 +306,7 @@ $inn-map-card-bg: #f6f1eb;
   &__badge {
     background: $inn-gradient;
     color: $lb-white;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     padding: 0.25rem 0.6rem;
@@ -790,6 +794,10 @@ $inn-map-card-bg: #f6f1eb;
     width: auto;
     height: 9rem;
     flex-shrink: 0;
+
+    @include bs.media-breakpoint-down(md) {
+      height: 5rem;
+    }
   }
 
   &__titulos-right {

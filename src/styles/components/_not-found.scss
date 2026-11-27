@@ -5,9 +5,13 @@
   padding: 6rem 1rem;
   background: linear-gradient(135deg, $lb-cream 0%, $lb-white 55%, #eadfc8 100%);
 
+  @media (max-width: 767.98px) {
+    padding: 3rem 1rem;
+  }
+
   &__code {
     color: $lb-red;
-    font-size: clamp(5rem, 16vw, 11rem);
+    font-size: clamp(3.75rem, 16vw, 11rem);
     font-weight: 800;
     line-height: 0.9;
   }

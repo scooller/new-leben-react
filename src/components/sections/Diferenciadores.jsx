@@ -252,12 +252,12 @@ export default function Diferenciadores() {
           </div>
           <ScrollAnim as="div" className="col-md-7 order-md-1 order-0 d-flex flex-column gap-3 lb-diff-list" animation="fade-left" stagger={0.12}>
             {/* Title */}
-            <ScrollAnim as="div" className="position-relative w-md-80 ms-4" animation="fade-right">
+            <ScrollAnim as="div" className="position-relative w-md-80 ms-0 ms-md-4" animation="fade-right">
               <SplitTitle as="h2" className="lb-diff-title mb-4 mx-auto" text={diferenciadoresTitle.part1 + ' ' + diferenciadoresTitle.highlight + ' ' + diferenciadoresTitle.part2} />
             </ScrollAnim>
             {diferenciadores.map((item, i) => (
               <div
-                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-md-80 ms-4 me-auto"
+                className="lb-diff-row d-flex align-items-center gap-3 rounded-3 lb-img-trigger w-md-80 ms-0 ms-md-4 me-auto"
                 key={i}
                 tabIndex={0}
               >

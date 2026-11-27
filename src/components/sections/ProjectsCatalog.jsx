@@ -117,8 +117,8 @@ export default function ProjectsCatalog({
             {dynamicFilters.map((f) => (
               <select
                 key={f.id}
-                className="form-select form-select-sm border-0 bg-transparent"
-                style={{ width: 'auto' }}
+                className="form-select form-select-sm border-0 bg-transparent w-100 w-sm-auto"
+                aria-label={f.label}
                 value={searchParams.get(f.id) || ''}
                 onChange={(e) => {
                   const next = new URLSearchParams(searchParams)
