@@ -6,7 +6,7 @@
 $inn-gold: var(--lb-project-accent, #d8b35c);
 $inn-gold-dark: var(--lb-project-accent-dark, #422c15);
 $inn-gold-light: var(--lb-project-accent-light, #f9f2e7);
-$inn-gris: #808080;
+$inn-gris: #595959;
 $inn-gris-dark: #101010;
 $inn-celeste: rgb(226, 237, 249);
 $inn-gold-bg: var(--lb-project-accent-bg, #faf4e8);
@@ -41,7 +41,7 @@ $inn-map-card-bg: #f6f1eb;
   text-transform: uppercase;
   white-space: nowrap;
   padding: 0.65rem 1.75rem;
-  color: $lb-white !important;
+  color: $lb-dark !important;
   text-decoration: none;
   transition: background-color 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
@@ -172,7 +172,7 @@ $inn-map-card-bg: #f6f1eb;
       &:hover,
       &.active {
         background: $inn-gradient;
-        color: $lb-white;
+        color: $lb-dark;
         border-color: $inn-gold;
 
         img {
@@ -258,11 +258,11 @@ $inn-map-card-bg: #f6f1eb;
       &:hover,
       &.active {
         background: $inn-gradient;
-        color: $lb-white;
+        color: $lb-dark;
         border-color: $inn-gold;
 
         img {
-          filter: brightness(0) invert(1);
+          filter: none;
         }
       }
 
@@ -305,7 +305,7 @@ $inn-map-card-bg: #f6f1eb;
 
   &__badge {
     background: $inn-gradient;
-    color: $lb-white;
+    color: $lb-dark;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -313,6 +313,7 @@ $inn-map-card-bg: #f6f1eb;
 
     &--primary {
       background: $lb-red;
+      color: $lb-white;
     }
   }
 
@@ -1291,7 +1292,7 @@ $inn-map-card-bg: #f6f1eb;
       &:hover,
       &.active {
         background: $inn-gradient;
-        color: $lb-white;
+        color: $lb-dark;
         border-color: $inn-gold;
       }
 

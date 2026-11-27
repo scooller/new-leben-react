@@ -25,7 +25,7 @@ export default function ProjectCard({ project, to, onClick, ctaLabel = 'Ver Proy
     <CardTag {...cardProps} className={`card lb-proj-card h-100 text-decoration-none ${className}`}>
       {imgSrc && (
         <div className="lb-proj-img-wrap position-relative">
-          <img src={imgSrc} alt={project.name} className="card-img-top lb-proj-img" loading="lazy" />
+          <img src={imgSrc} alt={project.name} className="card-img-top lb-proj-img" loading="lazy" decoding="async" />
           {project.entrega && (
             <span className="badge bg-danger lb-proj-badge position-absolute top-0 start-0 m-2">
               {project.entrega}

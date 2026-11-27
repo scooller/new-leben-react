@@ -228,10 +228,12 @@ $inn-wa: var(--lb-project-accent, #d1b578);
     .btn-dark {
       background-color: $inn-gold;
       border-color: $inn-gold;
+      color: $lb-dark;
 
       &:hover {
         background-color: $inn-gold-dark;
         border-color: $inn-gold-dark;
+        color: $lb-white;
       }
     }
 

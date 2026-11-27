@@ -8,6 +8,7 @@
 export default function HeroShell({
   className = '',
   video,                       // src de video (si hay, usa video; si no, image)
+  poster,
   image,
   bgWrapClassName = '',
   bgClassName = '',
@@ -21,6 +22,7 @@ export default function HeroShell({
         {video ? (
           <video
             src={video}
+            poster={poster}
             autoPlay
             muted
             loop

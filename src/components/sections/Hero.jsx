@@ -9,6 +9,7 @@ export default function Hero({ title, bottom }) {
       id="inicio"
       className="lb-hero container-fluid d-flex flex-column align-items-center justify-content-end"
       video={videos.hero}
+      poster={`${import.meta.env.BASE_URL}images/home/hero-institucional.jpg`}
       bgWrapClassName="lb-hero-bg-wrap"
       bgClassName="lb-hero-bg"
       overlayClassName="lb-hero-overlay"

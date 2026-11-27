@@ -256,6 +256,12 @@ $table-width-tablet: 900px;
 
       &--1 {
         background: #c5a059;
+        color: $lb-dark;
+
+        .lb-brokers-tiers__tier-name,
+        .lb-brokers-tiers__tier-sub {
+          color: $lb-dark;
+        }
       }
 
       &--2 {
@@ -395,7 +401,7 @@ $table-width-tablet: 900px;
 
     &__na {
       font-size: 10px;
-      color: #94a3b8;
+      color: #595959;
       font-weight: 700;
       letter-spacing: 0.05em;
     }
@@ -588,6 +594,10 @@ $table-width-tablet: 900px;
     display: flex;
     width: max-content;
     animation: scrollAlliances 40s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
 
     &:hover {
       animation-play-state: paused;

@@ -114,6 +114,7 @@ export default function SplitTitle({
 
   useEffect(() => {
     if (!isLoaded || !ref.current || !hasSplit) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     const ctx = gsap.context(() => {
       gsap.from(ref.current.querySelectorAll('.lb-split-word'), {
         opacity: 0,

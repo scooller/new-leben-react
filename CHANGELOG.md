@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.254] - 2026-11-27
+
+### Fixed
+- `src/styles/variables.scss`, `src/styles/components/_inn.scss`, `src/styles/components/_inn-team-agents.scss`, `src/styles/components/_brokers.scss`:
+  - Mejorado contraste WCAG AA (`>= 4.5:1`) oscureciendo `$lb-text-muted`, `$lb-text-light`, `$inn-gris` y `&__na`, y conservando el degradado dorado de marca con texto oscuro `#1a1a1a` (`$lb-dark`) en botones/badges dorados y columna Gold de Brokers.
+- `src/components/SplitTitle.jsx`, `src/components/ScrollAnim.jsx`, `src/styles/components/_brokers.scss`:
+  - Agregado soporte para `prefers-reduced-motion: reduce` evitando animaciones GSAP/marquee bloqueantes.
+- `src/components/sections/HeroShell.jsx`, `src/components/sections/Hero.jsx`, `src/components/sections/ProjectOfMonthSection.jsx`, `src/components/ProjectCard.jsx`, `src/components/layout/Footer.jsx`:
+  - Agregado `poster` de respaldo en `<video>` (iOS Low Power Mode), `img-fluid`, `loading="lazy"` y `decoding="async"` en imágenes.
+
 ## [0.9.253] - 2026-11-27
 
 ### Fixed

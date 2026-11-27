@@ -92,7 +92,7 @@ export default function ProjectOfMonthSection() {
         <div className="row align-items-center gy-4">
           <div className="col-lg-4">
             <ScrollAnim as="div" animation="fade-left" duration={1} className="lb-project-month-photo">
-              <img src={content.photo} alt={content.title} className='rounded-4' />
+              <img src={content.photo} alt={content.title} className="rounded-4 img-fluid" loading="lazy" decoding="async" />
             </ScrollAnim>
           </div>
 
@@ -133,6 +133,7 @@ export default function ProjectOfMonthSection() {
               <div className="lb-iphone-video-shell">
                 <video
                   src={content.video}
+                  poster={content.photo}
                   muted
                   autoPlay
                   loop
@@ -140,7 +141,7 @@ export default function ProjectOfMonthSection() {
                   className="lb-iphone-video"
                 />
               </div>
-              <img src={`${import.meta.env.BASE_URL}images/home/iphone-container.png`} alt="" className="lb-iphone-frame" />
+              <img src={`${import.meta.env.BASE_URL}images/home/iphone-container.png`} alt="" className="lb-iphone-frame" loading="lazy" decoding="async" />
             </ScrollAnim>
           </div>
         </div>
