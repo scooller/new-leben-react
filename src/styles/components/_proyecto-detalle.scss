@@ -606,9 +606,26 @@
 }
 
 @include bs.media-breakpoint-down(md) {
+  .lb-proj-det-cot-pricing {
+    margin-top: 1.25rem !important;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .lb-proj-det-cot-price-label {
+    font-size: 0.9rem;
+    color: $lb-text-muted;
+    font-weight: 600;
+  }
+
   .lb-proj-det-cot-cta {
     padding: 0.55rem 1.25rem;
     font-size: 0.875rem;
+  }
+
+  .lb-proj-det-related,
+  .lb-proj-det-alternatives {
+    padding-block: 1.25rem !important;
   }
 }
 

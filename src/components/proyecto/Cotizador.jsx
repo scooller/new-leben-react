@@ -1360,10 +1360,13 @@ export default function Cotizador({
           {/* Pricing */}
           <ScrollAnim as="div" className="lb-proj-det-cot-pricing mt-4">
             <div className="row align-items-end">
-              <div className="col-md">
-                <span className="lb-proj-det-cot-price-label">{displayData.pricing?.label || 'Precio'}</span>
+              <div className="col-md d-flex d-md-block align-items-baseline justify-content-between gap-2 mb-2 mb-md-0">
+                <span className="lb-proj-det-cot-price-label">
+                  {displayData.pricing?.label || 'Precio'}
+                  <span className="d-md-none">:</span>
+                </span>
                 <div className="lb-proj-det-cot-price-row d-flex justify-content-between align-items-center">
-                  <h2 className="lb-proj-det-cot-price">{displayData.pricing?.price || 'UF -'}</h2>
+                  <h2 className="lb-proj-det-cot-price mb-0">{displayData.pricing?.price || 'UF -'}</h2>
                 </div>
               </div>
               <div className="col-md">

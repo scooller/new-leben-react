@@ -250,7 +250,8 @@ $inn-map-card-bg: #f6f1eb;
     margin-bottom: 4rem;
 
     @include bs.media-breakpoint-down(md) {
-      margin-bottom: 1.25rem;
+      margin-top: 0 !important;
+      margin-bottom: 0.75rem !important;
     }
 
     .nav-link {
@@ -480,23 +481,32 @@ $inn-map-card-bg: #f6f1eb;
   padding-right: 0;
 
   @include bs.media-breakpoint-down(md) {
-    padding-top: 1rem;
-    padding-bottom: 1rem !important;
-    margin-bottom: 1.25rem !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0 !important;
+    margin-bottom: 0.5rem !important;
 
     .container.lb-shadow-box {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem !important;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-      padding-top: 1.25rem !important;
-      padding-bottom: 1.25rem !important;
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
     }
 
     .row.g-5 {
-      --bs-gutter-y: 1.25rem;
+      --bs-gutter-y: 1rem;
     }
 
     &__text-column > div.pe-4 {
       padding-right: 0 !important;
+    }
+
+    &__spaces-btn-wrap {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    & + .lb-inn-hero-tabs--plain {
+      margin-top: -0.25rem !important;
     }
   }
 
@@ -716,7 +726,7 @@ $inn-map-card-bg: #f6f1eb;
   background-color: $inn-gold-bg;
 
   @include bs.media-breakpoint-down(md) {
-    padding-block: 1.75rem 2rem;
+    padding-block: 1.25rem 1.5rem;
   }
 
   .card.lb-inn-hero-tabs__inner {

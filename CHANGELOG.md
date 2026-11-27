@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.256] - 2026-11-27
+
+### Fixed
+- `src/components/proyecto/Cotizador.jsx`, `src/styles/components/_proyecto-detalle.scss`:
+  - Separado visualmente el bloque de precio respecto a los datos del departamento (borde superior y `margin-top`) y alineado `Precio: UF XX` en una sola línea en `< 768px` (manteniendo desktop intacto).
+- `src/styles/components/_inn.scss`, `src/styles/components/_proyecto-detalle.scss`:
+  - Reducido aún más el espacio vertical entre secciones de proyecto (`.lb-inn-proyecto`, `.lb-inn-360`, `.lb-proj-det-related`, `.lb-proj-det-alternatives`) y entre las secciones y las botoneras `.lb-inn-hero-tabs--plain` en `< 768px`.
+
 ## [0.9.255] - 2026-11-27
 
 ### Fixed
