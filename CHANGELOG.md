@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.255] - 2026-11-27
+
+### Fixed
+- `src/styles/components/_inn.scss`:
+  - Ajustados tamaños de botones dorados y tabs/subtabs de Recorridos 360 en `< 768px` (conservando texto `#1a1a1a` sobre dorado), convertida botonera apilada de Espacios a grilla de 2 columnas legible con `text-wrap: balance`, ocultas etiquetas de pines no activos del mapa en mobile para evitar superposiciones y reducido espaciado vertical entre secciones de proyecto.
+- `src/styles/components/_proyecto-detalle.scss`:
+  - Configurado detalle del cotizador en 2 columnas (`repeat(2, minmax(0, 1fr))`) y compactados textos, precio y botón en `< 768px`.
+- `src/styles/components/_inn-team-agents.scss`:
+  - Rediseñadas tarjetas de asesoras en `< 768px` con contenedor limpio, avatar circular de `52px`, tipografía compacta y botón WhatsApp circular de `40px`.
+
 ## [0.9.254] - 2026-11-27
 
 ### Fixed

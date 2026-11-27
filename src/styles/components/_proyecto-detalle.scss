@@ -544,8 +544,9 @@
   justify-content: space-between;
   gap: 1rem;
 
-  @include bs.media-breakpoint-down(sm) {
-    grid-template-columns: 1fr;
+  @include bs.media-breakpoint-down(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem 0.75rem;
   }
 
   .lb-proj-det-cot-detail-item--project {
@@ -557,29 +558,58 @@
     .lb-proj-det-cot-detail-value {
       font-size: 1.25rem;
       word-break: break-word;
+
+      @include bs.media-breakpoint-down(md) {
+        font-size: 1rem;
+      }
     }
   }
 }
 
 .lb-proj-det-cot-detail-icon svg {
   color: $lb-green;
+
+  @include bs.media-breakpoint-down(md) {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .lb-proj-det-cot-detail-label {
   font-size: 0.8rem;
   color: $lb-text-muted;
+
+  @include bs.media-breakpoint-down(md) {
+    font-size: 0.72rem;
+  }
 }
 
 .lb-proj-det-cot-detail-value {
   font-size: $lb-fs-xl;
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
+
+  @include bs.media-breakpoint-down(md) {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
 }
 
 .lb-proj-det-cot-price {
   font-weight: $lb-heading-weight;
   color: $lb-heading-color;
   line-height: 1;
+
+  @include bs.media-breakpoint-down(md) {
+    font-size: 1.35rem;
+  }
+}
+
+@include bs.media-breakpoint-down(md) {
+  .lb-proj-det-cot-cta {
+    padding: 0.55rem 1.25rem;
+    font-size: 0.875rem;
+  }
 }
 
 // --- Related Projects Table ---
