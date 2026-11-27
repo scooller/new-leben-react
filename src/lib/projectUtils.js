@@ -1,8 +1,8 @@
 const etapaLabel = (etapa) =>
-  /venta|recepcion/.test(etapa) ? 'Entrega Inmediata'
-  : /obra/.test(etapa) ? 'En Construcción'
-  : /terminacion/.test(etapa) ? 'Próxima Entrega'
-  : etapa
+  /venta|recepcion/.test(etapa) ? 'Entrega Futurta'
+    : /obra/.test(etapa) ? 'En Construcción'
+      : /terminacion/.test(etapa) ? 'Próxima Entrega'
+        : etapa
 
 /** Format number with Chilean locale and up to maxDecimals (default 2) */
 export function formatNumber(val, maxDecimals = 2) {
