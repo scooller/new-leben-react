@@ -7,7 +7,6 @@
 // Disallow background scrolling when consent blocking is active
 body.lb-cookie-blocking-active {
   overflow: hidden !important;
-  touch-action: none;
 }
 
 // Floating Trigger for Consent Revocation (Lower Left Corner)

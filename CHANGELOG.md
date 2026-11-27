@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.251] - 2026-11-27
+
+### Fixed
+- `src/styles/components/_perfil.scss`, `src/pages/Perfil.jsx`, `src/pages/PerfilBroker.jsx`, `src/pages/PerfilComprador.jsx`:
+  - Corregido bug de anidación SCSS en media query `< lg` de `.lb-perfil` que impedía colapsar el sidebar móvil (`margin-left: 260px` en `< 992px`), unificado `100dvh`, limitado ancho de dropdown de notificaciones y grid, envueltas tablas en `.table-responsive` y agregados `aria-label` faltantes.
+- `src/components/common/Turnstile.jsx`:
+  - Agregado `size: 'flexible'` en `turnstile.render()` para evitar desbordes horizontales en 320px (`Brokers`, `Invest`, `TrabajaForm`).
+- `src/components/layout/Navbar.jsx`, `src/styles/components/_navbar.scss`:
+  - Migrado menú móvil `< lg` a Bootstrap `offcanvas offcanvas-end` (vía portal) sin afectar desktop, cambiado enlace CTA móvil junto al menú hamburguesa de `"Invest"` a `"Cotizar"` (`/cotizador`), eliminada clase `g-5` en flex y asegurado target táctil `44x44px` en `.lb-hamburger`.
+- `src/components/proyecto/CotizadorForm.jsx`, `src/components/proyecto/Cotizador.jsx`, `src/components/cookies/CookieConsentModal.jsx`, `src/components/announcement/AnnouncementModal.jsx`, `src/components/proyecto/ProjectTeamAgents.jsx`, `src/components/ChatWidget.jsx`:
+  - Agregado `modal-fullscreen-sm-down`, `modal-dialog-scrollable`, atributos `role="dialog"` / `aria-modal="true"` y `aria-label` en botones solo-ícono y switches de cookies.
+- `src/styles/components/_brokers.scss`, `src/pages/Brokers.jsx`, `src/components/proyecto/WindowPanViewer.jsx`:
+  - Ajustada tabla de categorías Brokers en `< md` (`160px` + 3 columnas visibles con scroll), reemplazada clase inválida `border-start-lg`, y corregida superposición de badges y altura mínima en `WindowPanViewer` (`clamp(260px, 65dvh, 760px)`).
+- `src/styles/components/_cotizador-general.scss`, `src/styles/components/_inn.scss`, `src/styles/components/_proyectos.scss`, `src/styles/components/_invest.scss`, `src/styles/components/_cookies.scss`:
+  - Corregidos `clamp()` invertidos, reemplazado `vh` por `dvh`, desactivado `background-attachment: fixed` en `< lg`, encapsulada regla `.rounded-circle.bg-danger` en `.lb-invest-page` y removido `touch-action: none` de `body.lb-cookie-blocking-active`.
+
 ## [0.9.250] - 2026-11-26
 
 ### Changed

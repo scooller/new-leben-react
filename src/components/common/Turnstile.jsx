@@ -77,6 +77,7 @@ export default function Turnstile({
           widgetIdRef.current = turnstile.render(containerRef.current, {
             sitekey: siteKey,
             theme,
+            size: 'flexible',
             callback: (token) => {
               if (isMounted) {
                 setFallbackMode(null)

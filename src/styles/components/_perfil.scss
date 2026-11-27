@@ -7,7 +7,7 @@
 
 // --- Login ---
 .lb-login {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +169,7 @@
 // --- Portal Layout ---
 .lb-perfil {
   display: flex;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: $lb-cream;
 
   // --- Sidebar ---
@@ -320,7 +320,7 @@
     margin-left: 260px;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   &__topbar {
@@ -392,6 +392,7 @@
     top: 100%;
     right: 0;
     width: 320px;
+    max-width: calc(100vw - 2rem);
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
@@ -545,7 +546,7 @@
 
   &__data-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
     gap: 1rem;
   }
 
@@ -1152,34 +1153,35 @@
     color: $lb-heading-color;
     line-height: 1;
   }
+}
 
-  // --- Responsive ---
-  @include bs.media-breakpoint-down(lg) {
-    .lb-perfil {
-      &__sidebar {
-        transform: translateX(-100%);
+// --- Responsive ---
+@include bs.media-breakpoint-down(lg) {
+  .lb-perfil {
+    &__sidebar {
+      transform: translateX(-100%);
 
-        &.open {
-          transform: translateX(0);
-        }
+      &.open {
+        transform: translateX(0);
       }
+    }
 
-      &__sidebar-close {
-        display: flex;
-      }
+    &__sidebar-close,
+    &__menu-btn {
+      display: flex;
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
 
-      &__main {
-        margin-left: 0;
-      }
+    &__main {
+      margin-left: 0;
+    }
 
-      &__menu-btn {
-        display: flex;
-      }
-
-      &__overlay {
-        &.show {
-          display: block;
-        }
+    &__overlay {
+      &.show {
+        display: block;
       }
     }
   }

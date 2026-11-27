@@ -184,9 +184,7 @@ export default function WindowPanViewer({ planta = null }) {
       <div
         className="d-flex flex-column align-items-center justify-content-center text-center p-4"
         style={{
-          height: '70vh',
-          minHeight: '420px',
-          maxHeight: '760px',
+          height: 'clamp(260px, 65dvh, 760px)',
           background: '#090d16',
           color: '#fff',
         }}
@@ -234,9 +232,7 @@ export default function WindowPanViewer({ planta = null }) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       style={{
-        height: '70vh',
-        minHeight: '420px',
-        maxHeight: '760px',
+        height: 'clamp(260px, 65dvh, 760px)',
         background: '#090d16',
         cursor: isTouchDevice ? 'grab' : 'crosshair',
         touchAction: 'none',
@@ -272,68 +268,73 @@ export default function WindowPanViewer({ planta = null }) {
         }}
       />
 
-      {/* Badge informativo superior izquierdo */}
+      {/* Barra superior responsiva (evita colisión entre info y selector en 320-414px) */}
       <div
-        className="position-absolute top-0 start-0 m-3 p-2 px-3 rounded-3 text-white"
-        style={{
-          background: 'rgba(11, 15, 25, 0.8)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.14)',
-          zIndex: 5,
-        }}
+        className="position-absolute top-0 start-0 end-0 p-2 p-md-3 d-flex flex-wrap align-items-start justify-content-between gap-2"
+        style={{ zIndex: 5, pointerEvents: 'none' }}
       >
-        <div className="d-flex align-items-center gap-2">
-          <span
-            className={`badge ${vistaInfo.isExact ? 'bg-primary' : 'bg-warning text-dark'} px-2 py-1`}
-            style={{ fontSize: '0.75rem', fontWeight: 600 }}
-          >
-            Piso {vistaInfo.floor}
-          </span>
-          <span className="fw-semibold" style={{ fontSize: '0.9rem' }}>
-            Dpto. {vistaInfo.unit}
-          </span>
-        </div>
         <div
-          className="small mt-1"
+          className="p-2 px-3 rounded-3 text-white"
           style={{
-            fontSize: '0.75rem',
-            color: vistaInfo.isExact ? 'rgba(255,255,255,0.65)' : '#ffc107',
-            fontWeight: vistaInfo.isExact ? 400 : 500,
-          }}
-        >
-          {vistaInfo.isExact
-            ? '✓ Vista real desde ventanal'
-            : `⚠ Vista referencial Piso ${vistaInfo.floor} (ref. Dpto. ${vistaInfo.referenceUnit})`}
-        </div>
-      </div>
-
-      {/* Selector de ángulos / tomas si hay más de 1 imagen */}
-      {currentImages.length > 1 && (
-        <div
-          className="position-absolute top-0 end-0 m-3 p-1 rounded-pill d-flex gap-1"
-          style={{
-            background: 'rgba(11, 15, 25, 0.75)',
+            background: 'rgba(11, 15, 25, 0.8)',
             backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            zIndex: 5,
+            border: '1px solid rgba(255,255,255,0.14)',
+            pointerEvents: 'auto',
           }}
         >
-          {currentImages.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              className={`btn btn-sm rounded-pill px-3 py-1 border-0 ${shotIndex === idx ? 'btn-light text-dark fw-bold shadow-sm' : 'text-white-50 bg-transparent'}`}
-              style={{ fontSize: '0.75rem' }}
-              onClick={(e) => {
-                e.stopPropagation()
-                setShotIndex(idx)
-              }}
+          <div className="d-flex align-items-center gap-2">
+            <span
+              className={`badge ${vistaInfo.isExact ? 'bg-primary' : 'bg-warning text-dark'} px-2 py-1`}
+              style={{ fontSize: '0.75rem', fontWeight: 600 }}
             >
-              Ángulo {idx + 1}
-            </button>
-          ))}
+              Piso {vistaInfo.floor}
+            </span>
+            <span className="fw-semibold" style={{ fontSize: '0.9rem' }}>
+              Dpto. {vistaInfo.unit}
+            </span>
+          </div>
+          <div
+            className="small mt-1"
+            style={{
+              fontSize: '0.75rem',
+              color: vistaInfo.isExact ? 'rgba(255,255,255,0.65)' : '#ffc107',
+              fontWeight: vistaInfo.isExact ? 400 : 500,
+            }}
+          >
+            {vistaInfo.isExact
+              ? '✓ Vista real desde ventanal'
+              : `⚠ Vista referencial Piso ${vistaInfo.floor} (ref. Dpto. ${vistaInfo.referenceUnit})`}
+          </div>
         </div>
-      )}
+
+        {/* Selector de ángulos / tomas si hay más de 1 imagen */}
+        {currentImages.length > 1 && (
+          <div
+            className="p-1 rounded-pill d-flex gap-1 ms-auto"
+            style={{
+              background: 'rgba(11, 15, 25, 0.75)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              pointerEvents: 'auto',
+            }}
+          >
+            {currentImages.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`btn btn-sm rounded-pill px-3 py-1 border-0 ${shotIndex === idx ? 'btn-light text-dark fw-bold shadow-sm' : 'text-white-50 bg-transparent'}`}
+                style={{ fontSize: '0.75rem' }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShotIndex(idx)
+                }}
+              >
+                Ángulo {idx + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Indicador de ayuda en la parte inferior */}
       <div

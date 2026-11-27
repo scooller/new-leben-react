@@ -5,16 +5,16 @@
 @use '../variables' as *;
 @use 'bootstrap/scss/bootstrap' as bs;
 
-.rounded-circle.bg-danger {
-  border: 2px solid $lb-white;
-}
-
 .lb-invest-page {
   font-family: 'Lexend Deca', sans-serif;
   position: relative;
   background-color: $lb-white;
   color: $lb-dark;
   overflow-x: hidden;
+
+  .rounded-circle.bg-danger {
+    border: 2px solid $lb-white;
+  }
 
   // Eyebrow badge
   .lb-invest-eyebrow {

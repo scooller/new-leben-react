@@ -78,7 +78,7 @@ export default function CookieConsentModal() {
       style={{ zIndex: 1060 }}
     >
       <div
-        className="modal-dialog modal-dialog-centered"
+        className="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-dialog-scrollable"
         style={{ maxWidth: '620px' }}
       >
         <div className="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
@@ -112,7 +112,7 @@ export default function CookieConsentModal() {
           </div>
 
           {/* Body */}
-          <div className="modal-body p-4" style={{ maxHeight: '68vh', overflowY: 'auto' }}>
+          <div className="modal-body p-3 p-md-4">
             {view === 'summary' ? (
               <>
                 <p className="text-secondary small lh-base mb-3">
@@ -159,6 +159,7 @@ export default function CookieConsentModal() {
                         type="checkbox"
                         role="switch"
                         id="cookie-switch-analytics"
+                        aria-label="Activar cookies analíticas y de medición"
                         checked={localCustom.analytics}
                         onChange={(e) =>
                           setLocalCustom((prev) => ({ ...prev, analytics: e.target.checked }))
@@ -184,6 +185,7 @@ export default function CookieConsentModal() {
                         type="checkbox"
                         role="switch"
                         id="cookie-switch-marketing"
+                        aria-label="Activar cookies de publicidad y remarketing"
                         checked={localCustom.marketing}
                         onChange={(e) =>
                           setLocalCustom((prev) => ({ ...prev, marketing: e.target.checked }))
@@ -209,6 +211,7 @@ export default function CookieConsentModal() {
                         type="checkbox"
                         role="switch"
                         id="cookie-switch-mailing"
+                        aria-label="Activar cookies de mailing y ofertas comerciales"
                         checked={localCustom.mailing}
                         onChange={(e) =>
                           setLocalCustom((prev) => ({ ...prev, mailing: e.target.checked }))

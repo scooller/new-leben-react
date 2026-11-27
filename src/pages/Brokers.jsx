@@ -373,7 +373,7 @@ export default function Brokers() {
                       </p>
                     </div>
                     {data.kam.manager && (
-                      <div className="col-lg-5 border-start-lg ps-lg-4">
+                      <div className="col-lg-5 ps-lg-4">
                         <div className="d-flex flex-column">
                           <span className="text-muted small text-uppercase fw-bold" style={{ fontSize: '0.75rem' }}>KAM a cargo</span>
                           <span className="fw-bold text-dark fs-6">{data.kam.manager.name}</span>

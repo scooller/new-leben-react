@@ -72,7 +72,7 @@ export default function AnnouncementModal() {
       onClick={handleDismiss}
     >
       <div
-        className="modal-dialog modal-dialog-centered"
+        className="modal-dialog modal-dialog-centered modal-dialog-scrollable"
         style={{ maxWidth: '460px' }}
         onClick={(e) => e.stopPropagation()}
       >

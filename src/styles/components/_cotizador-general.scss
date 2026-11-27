@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   padding-top: $lb-navbar-height;
-  min-height: clamp(24rem, 28vh, 22rem);
+  min-height: clamp(16rem, 28dvh, 22rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,13 +19,13 @@
 
   // Banner ampliado para formulario tipo LATAM
   &--expanded {
-    min-height: clamp(32rem, 52vh, 42rem);
+    min-height: clamp(32rem, 52dvh, 42rem);
     padding-bottom: 7.5rem;
     align-items: flex-start;
     padding-top: calc(#{$lb-navbar-height} + 3rem);
 
     @include bs.media-breakpoint-down(lg) {
-      min-height: clamp(26rem, 45vh, 34rem);
+      min-height: clamp(26rem, 45dvh, 34rem);
       padding-bottom: 5.5rem;
       padding-top: calc(#{$lb-navbar-height} + 2rem);
     }

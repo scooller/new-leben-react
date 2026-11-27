@@ -1451,11 +1451,11 @@ export default function Cotizador({
       {content}
 
       {showShare && createPortal(
-        <div className="modal d-block" tabIndex="-1" onClick={() => setShowShare(false)}>
-          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+        <div className="modal d-block" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="lb-share-title" onClick={() => setShowShare(false)}>
+          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content lb-share-modal">
               <div className="modal-header border-0">
-                <h5 className="modal-title">Compartir</h5>
+                <h5 id="lb-share-title" className="modal-title">Compartir</h5>
                 <button type="button" className="btn-close" onClick={() => setShowShare(false)} aria-label="Cerrar" />
               </div>
               <div className="modal-body">
@@ -1484,11 +1484,11 @@ export default function Cotizador({
 
       {/* MODAL VISTAS POR PISO */}
       {showVistas && createPortal(
-        <div className="modal d-block" tabIndex="-1" onClick={() => setShowVistas(false)}>
-          <div className="modal-dialog modal-xl modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+        <div className="modal d-block" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="lb-vistas-title" onClick={() => setShowVistas(false)}>
+          <div className="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-sm-down modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content overflow-hidden">
               <div className="modal-header">
-                <h5 className="modal-title">
+                <h5 id="lb-vistas-title" className="modal-title">
                   Vista por piso — Piso {activePlanta?.piso ?? '—'} · {activePlanta?.name || displayData.title}
                 </h5>
                 <button type="button" className="btn-close" onClick={() => setShowVistas(false)} aria-label="Cerrar" />
@@ -1499,14 +1499,14 @@ export default function Cotizador({
                     src={activePlanta.vista_360_url}
                     title={`Vista 360 piso ${activePlanta?.piso}`}
                     className="w-100"
-                    style={{ height: '70vh', border: 0 }}
+                    style={{ height: 'min(70dvh, 760px)', border: 0 }}
                     allowFullScreen
                     allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
                   />
                 ) : (
                   <Suspense
                     fallback={(
-                      <div className="d-flex flex-column align-items-center justify-content-center gap-3" style={{ height: '70vh', background: '#090d16' }}>
+                      <div className="d-flex flex-column align-items-center justify-content-center gap-3" style={{ height: 'min(70dvh, 760px)', background: '#090d16' }}>
                         <span className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                         <span className="small text-white-50">Cargando vista…</span>
                       </div>

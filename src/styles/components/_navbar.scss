@@ -156,6 +156,11 @@
   gap: 0.3125rem;
   cursor: pointer;
 
+  @include bs.media-breakpoint-down(lg) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
   .lb-burger-line {
     display: block;
     width: 1.25rem;

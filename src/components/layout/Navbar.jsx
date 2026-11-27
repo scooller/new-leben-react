@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import { images } from '../../data/content.js'
 import { apiFetch } from '../../lib/apiFetch.js'
@@ -184,7 +185,12 @@ export default function Navbar({ className = '' }) {
   }, [])
 
   const mainLinks = apiMainLinks
-  const mainMobileLinks = useMemo(() => mainLinks.slice(0, 1), [mainLinks])
+  const mainMobileLinks = useMemo(() => {
+    const cotizar = mainLinks.find(
+      (l) => l.to === '/cotizador' || /cotizar/i.test(l.label || '')
+    )
+    return [cotizar || { label: 'Cotizar', to: '/cotizador', featured: true }]
+  }, [mainLinks])
   const menuLinks = dropdownData.flat
   const menuGroups = dropdownData.groups
 
@@ -195,9 +201,14 @@ export default function Navbar({ className = '' }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.querySelector('#lbMobileNav.show [data-bs-dismiss="offcanvas"]')?.click()
+  }, [location.pathname, location.hash])
+
   return (
-    <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}${className ? ` ${className}` : ''}`} style={{ zIndex: 90 }}>
-      <div className="container d-flex align-items-center justify-content-between g-5">
+    <>
+      <nav className={`lb-navbar position-fixed top-0 start-0 end-0${scrolled ? ' lb-navbar-scrolled' : ''}${className ? ` ${className}` : ''}`} style={{ zIndex: 90 }}>
+        <div className="container d-flex align-items-center justify-content-between">
         {/* Logo group */}
         <Link className="lb-navbar__logo d-flex align-items-center gap-2 text-decoration-none" to="/">
           <img src={images.logoIcon} alt="" width="23" height="22" className="flex-shrink-0" fetchPriority="high" />
@@ -224,10 +235,22 @@ export default function Navbar({ className = '' }) {
 
         {/* Right side */}
         <div className="d-flex align-items-center gap-3">
-          {/* <Link to="/" className="btn btn-danger btn-sm rounded-pill lb-nav-cta text-decoration-none">COTIZAR</Link> */}
+          {/* Mobile offcanvas trigger (< lg) */}
+          <button
+            type="button"
+            className="btn lb-hamburger d-lg-none"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#lbMobileNav"
+            aria-controls="lbMobileNav"
+            aria-label="Abrir menú de navegación"
+          >
+            <span className="lb-burger-line" />
+            <span className="lb-burger-line" />
+            <span className="lb-burger-line" />
+          </button>
 
-          {/* Hamburger dropdown — Bootstrap native */}
-          <div className="dropdown">
+          {/* Desktop hamburger dropdown (>= lg) — Bootstrap native */}
+          <div className="dropdown d-none d-lg-block">
             <button
               className="btn btn-sm lb-hamburger dropdown-toggle"
               data-bs-toggle="dropdown"
@@ -240,14 +263,6 @@ export default function Navbar({ className = '' }) {
             </button>
 
             <div className="dropdown-menu lb-dropdown end-0 rounded-3 shadow overflow-hidden">
-              {/* Mobile: show main links first */}
-              <div className="d-lg-none">
-                {mainLinks.map((link) =>
-                  <Navlink key={link.label} link={link} className={`lb-dropdown-link dropdown-item text-decoration-none ${link.class ? link.class : ''}`} />,
-                )}
-                {/* {dropdownLinks.length > 0 && <hr className="lb-dropdown-divider my-1" />} */}
-                <hr className="lb-dropdown-divider my-1" />
-              </div>
               {/* Flat links */}
               {menuLinks.map((link) =>
                 <Navlink key={link.label} link={link} className="lb-dropdown-link dropdown-item text-decoration-none" />,
@@ -276,5 +291,49 @@ export default function Navbar({ className = '' }) {
         </div>
       </div>
     </nav>
+    {typeof document !== 'undefined' && createPortal(
+      <div className="offcanvas offcanvas-end d-lg-none" tabIndex="-1" id="lbMobileNav" aria-labelledby="lbMobileNavLabel">
+        <div className="offcanvas-header border-bottom">
+          <span id="lbMobileNavLabel" className="fw-bold">Menú</span>
+          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar menú" />
+        </div>
+        <div className="offcanvas-body d-flex flex-column gap-1 py-3">
+          {mainLinks.map((link) => (
+            <div key={link.label} data-bs-dismiss="offcanvas">
+              <Navlink link={link} className={`lb-dropdown-link dropdown-item py-2 text-decoration-none ${link.class ? link.class : ''}`} />
+            </div>
+          ))}
+          {mainLinks.length > 0 && <hr className="lb-dropdown-divider my-2" />}
+          {menuLinks.map((link) => (
+            <div key={link.label} data-bs-dismiss="offcanvas">
+              <Navlink link={link} className="lb-dropdown-link dropdown-item py-2 text-decoration-none" />
+            </div>
+          ))}
+          {menuLinks.length > 0 && <hr className="lb-dropdown-divider my-2" />}
+          {menuGroups.map((group) => (
+            <div key={group.title} className="lb-dropdown-group">
+              <span className="lb-dropdown-header-text">{group.title}</span>
+              {group.items.map((link) => (
+                <div key={link.label} data-bs-dismiss="offcanvas">
+                  <Navlink link={link} className="lb-dropdown-link dropdown-item py-2 text-decoration-none" />
+                </div>
+              ))}
+            </div>
+          ))}
+          {pageLinks.length > 0 && (
+            <div className="lb-dropdown-group">
+              <span className="lb-dropdown-header-text">Navegación</span>
+              {pageLinks.map((link) => (
+                <div key={link.label} data-bs-dismiss="offcanvas">
+                  <Navlink link={link} className="lb-dropdown-link dropdown-item py-2 text-decoration-none" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>,
+      document.body
+    )}
+    </>
   )
 }

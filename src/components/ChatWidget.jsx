@@ -76,7 +76,7 @@ export default function ChatWidget() {
                   <small className="opacity-75">Asistente IA • En línea</small>
                 </div>
               </div>
-              <button type="button" className="btn-close btn-close-white" onClick={() => setOpen(false)} />
+              <button type="button" className="btn-close btn-close-white" onClick={() => setOpen(false)} aria-label="Cerrar chat" />
             </div>
 
             {/* Body — chat messages */}
@@ -102,10 +102,12 @@ export default function ChatWidget() {
                   type="text"
                   className="form-control"
                   placeholder="Escribe tu mensaje..."
+                  aria-label="Escribe tu mensaje"
+                  autoComplete="off"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                 />
-                <button type="submit" className="btn btn-danger px-3" {...hover(sendIconRef)}>
+                <button type="submit" className="btn btn-danger px-3" aria-label="Enviar mensaje" {...hover(sendIconRef)}>
                   <SendIcon ref={sendIconRef} size={18} />
                 </button>
               </form>

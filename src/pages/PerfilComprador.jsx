@@ -175,8 +175,8 @@ export default function PerfilComprador({ user, activeTab }) {
               </div>
             </div>
             <div className="lb-dashboard__chat-input">
-              <input type="text" placeholder="Escribe un mensaje..." />
-              <button><Send size={18} /></button>
+              <input type="text" placeholder="Escribe un mensaje..." aria-label="Escribe un mensaje" />
+              <button type="button" aria-label="Enviar mensaje"><Send size={18} /></button>
             </div>
           </div>
         </div>

@@ -153,7 +153,7 @@ export default function PerfilBroker({ user, activeTab }) {
         <div className="lb-dashboard__section">
           <div className="lb-dashboard__card">
             <h4 className="lb-dashboard__card-title"><HomeIcon size={20} /> Historial de ventas</h4>
-            <div className="lb-dashboard__table-wrap">
+            <div className="lb-dashboard__table-wrap table-responsive">
               <table className="lb-dashboard__table">
                 <thead>
                   <tr>
@@ -338,7 +338,7 @@ export default function PerfilBroker({ user, activeTab }) {
           </div>
 
           <div className="lb-dashboard__card">
-            <div className="lb-dashboard__table-wrap">
+            <div className="lb-dashboard__table-wrap table-responsive">
               <table className="lb-dashboard__table">
                 <thead>
                   <tr>
@@ -448,7 +448,7 @@ export default function PerfilBroker({ user, activeTab }) {
               </div>
             </div>
 
-            <div className="lb-dashboard__table-wrap">
+            <div className="lb-dashboard__table-wrap table-responsive">
               <table className="lb-dashboard__table">
                 <thead>
                   <tr>

@@ -76,12 +76,12 @@ export default function CotizadorForm({
   }
 
   return createPortal(
-    <div className="modal d-block" tabIndex="-1" onClick={onClose}>
-      <div className="modal-dialog modal-lg modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+    <div className="modal d-block" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="lb-cotizar-title" onClick={onClose}>
+      <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content lb-cotizar-modal">
           <div className="modal-header border-0 pb-0">
             <div>
-              <h5 className="modal-title mb-0">Cotizar departamento</h5>
+              <h5 id="lb-cotizar-title" className="modal-title mb-0">Cotizar departamento</h5>
               {projectName && <small className="text-muted fw-semibold">{projectName}</small>}
             </div>
             <button type="button" className="btn-close" onClick={onClose} aria-label="Cerrar" />

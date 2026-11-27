@@ -67,6 +67,11 @@ $inn-map-card-bg: #f6f1eb;
   display: flex;
   flex-direction: column;
 
+  @include bs.media-breakpoint-down(md) {
+    height: 70dvh;
+    min-height: 22rem;
+  }
+
   &__bg-wrap {
     position: absolute;
     inset: 0;
@@ -98,7 +103,7 @@ $inn-map-card-bg: #f6f1eb;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: clamp(2rem, 6vh, 4.5rem);
+    padding-bottom: clamp(2rem, 6dvh, 4.5rem);
   }
 
   &__title {
@@ -574,7 +579,7 @@ $inn-map-card-bg: #f6f1eb;
 .lb-inn-video-banner {
   color: rgba($lb-white, 0.94);
   position: relative;
-  min-height: clamp(34rem, 120dvh, 52dvh);
+  min-height: clamp(18rem, 52dvh, 34rem);
   font-family: $font-primary;
   display: flex;
   align-items: center;
@@ -614,7 +619,7 @@ $inn-map-card-bg: #f6f1eb;
 
   &__content {
     margin: 0 auto;
-    padding-block: clamp(2rem, 6vh, 4rem);
+    padding-block: clamp(2rem, 6dvh, 4rem);
     text-align: center;
     color: rgba($lb-white, 0.96);
     text-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
@@ -1259,7 +1264,7 @@ $inn-map-card-bg: #f6f1eb;
 
   &__tabs {
     background: $inn-celeste;
-    max-height: 75vh;
+    max-height: 75dvh;
     overflow-y: auto;
 
     .nav-link {
@@ -1293,7 +1298,7 @@ $inn-map-card-bg: #f6f1eb;
 
   &__gallery {
     // Altura definida + overflow para que object-fit-cover respete el contenedor
-    height: 75vh;
+    height: 75dvh;
     overflow: hidden;
     display: block;
 
@@ -1318,7 +1323,7 @@ $inn-map-card-bg: #f6f1eb;
   &__list {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba($inn-gold, 0.2);
-    max-height: 70vh;
+    max-height: 70dvh;
     overflow-y: auto;
   }
 

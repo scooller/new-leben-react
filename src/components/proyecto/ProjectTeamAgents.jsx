@@ -206,12 +206,12 @@ export default function ProjectTeamAgents({ data = {}, apiId }) {
 
       {/* Modal para agendar */}
       {showModal && (
-        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
+        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="lb-schedule-title">
+          <div className="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-dialog-scrollable">
             <div className="modal-content border-0 shadow">
               <div className="modal-header border-0 pb-0">
-                <h5 className="modal-title fw-bold">Agenda tu Visita</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <h5 id="lb-schedule-title" className="modal-title fw-bold">Agenda tu Visita</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Cerrar"></button>
               </div>
               <form onSubmit={handleSchedule}>
                 <div className="modal-body">

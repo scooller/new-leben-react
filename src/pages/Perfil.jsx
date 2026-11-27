@@ -39,7 +39,7 @@ export default function Perfil() {
       <aside className={`lb-perfil__sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="lb-perfil__sidebar-header">
           <Link to="/"><img src={images.logoText} alt="Leben" className="lb-perfil__sidebar-logo" /></Link>
-          <button className="lb-perfil__sidebar-close" onClick={() => setSidebarOpen(false)}>
+          <button type="button" className="lb-perfil__sidebar-close" onClick={() => setSidebarOpen(false)} aria-label="Cerrar menú">
             <X size={20} />
           </button>
         </div>
@@ -90,12 +90,12 @@ export default function Perfil() {
       {/* Main */}
       <div className="lb-perfil__main">
         <header className="lb-perfil__topbar">
-          <button className="lb-perfil__menu-btn" onClick={() => setSidebarOpen(true)}>
+          <button type="button" className="lb-perfil__menu-btn" onClick={() => setSidebarOpen(true)} aria-label="Abrir menú">
             <Menu size={22} />
           </button>
           <h2 className="lb-perfil__topbar-title">{tabs[activeTab]}</h2>
           <div className="lb-perfil__topbar-right">
-            <button className="lb-perfil__bell" onClick={() => setShowNotif((v) => !v)}>
+            <button type="button" className="lb-perfil__bell" onClick={() => setShowNotif((v) => !v)} aria-label="Ver notificaciones">
               <Bell size={20} />
               {unreadCount > 0 && <span className="lb-perfil__bell-badge">{unreadCount}</span>}
             </button>
