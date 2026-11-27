@@ -300,7 +300,7 @@ $inn-map-card-bg: #f6f1eb;
 // Selector de secciones para Mobile en INN
 .lb-inn-mobile-nav {
   position: sticky;
-  top: var(--lb-nav-h, 3.5rem);
+  top: calc(var(--lb-nav-h, 62px) + 0.5rem);
   z-index: 85;
   margin-top: -1.25rem;
   margin-bottom: 1.5rem;
@@ -479,6 +479,17 @@ $inn-map-card-bg: #f6f1eb;
   padding-top: 2rem;
   padding-left: 0;
   padding-right: 0;
+
+  @include bs.media-breakpoint-down(lg) {
+    .col-lg-7 {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    &__text p:last-child {
+      margin-bottom: 0;
+    }
+  }
 
   @include bs.media-breakpoint-down(md) {
     padding-top: 0.5rem;

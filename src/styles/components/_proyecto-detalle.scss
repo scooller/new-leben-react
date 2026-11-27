@@ -547,6 +547,7 @@
   @include bs.media-breakpoint-down(md) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.65rem 0.75rem;
+    padding-bottom: 1rem;
   }
 
   .lb-proj-det-cot-detail-item--project {
@@ -607,8 +608,8 @@
 
 @include bs.media-breakpoint-down(md) {
   .lb-proj-det-cot-pricing {
-    margin-top: 1.25rem !important;
-    padding-top: 0.85rem;
+    margin-top: 0.25rem !important;
+    padding-top: 1rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 

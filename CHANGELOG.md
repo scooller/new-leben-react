@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.257] - 2026-11-27
+
+### Fixed
+- `src/styles/components/_proyecto-detalle.scss`:
+  - Agregado `padding-bottom: 1rem` a `.lb-proj-det-cot-detail-grid` y ajustado `padding-top: 1rem` en `.lb-proj-det-cot-pricing` para separar Terraza/Superficie de la línea divisoria del precio en `< 768px`.
+- `src/styles/global.scss`, `src/styles/components/_inn.scss`:
+  - Ajustado `--lb-nav-h: 62px` y `top: calc(var(--lb-nav-h, 62px) + 0.5rem)` en `.lb-inn-mobile-nav` para dar margen superior limpio bajo el navbar móvil; neutralizado `padding-top`/`padding-bottom` inline de `carouselSpacing` en `.col-lg-7` y margen inferior de `&__text p:last-child` bajo `< 992px`.
+- `src/styles/components/_inn-team-agents.scss`:
+  - Ajustadas las fotos de asesoras en `< 768px` para ocupar todo el alto del borde derecho de la tarjeta (`width: 88px; align-self: stretch; object-fit: cover; object-position: top center`).
+
 ## [0.9.256] - 2026-11-27
 
 ### Fixed
